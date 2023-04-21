@@ -45,3 +45,7 @@ There are some additional commands that can be used:
     - `log lines [int]`: Change the number of lines that will be displayed.
     - `log clear`: Clears all messages.
     - `log toggle`: Shows/hides the messages.
+
+# Can I play ULTRAKILL randomizer without Archipelago?
+
+Not yet. I would like to make a standalone version of the randomizer eventually, but since the Archipelago version already works well enough, I'm releasing it now.

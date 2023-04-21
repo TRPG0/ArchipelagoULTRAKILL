@@ -79,12 +79,13 @@ namespace ArchipelagoULTRAKILL
                             GunSetter.Instance.ResetWeapons();
                             GunSetter.Instance.ForceWeapon(GetWeaponIdFromName(item.item_name));
                         }
-                        text = "UNLOCKED: ";
+                        text = "WEAPON: ";
                         break;
 
                     case Enums.UKItemType.WeaponAlt:
+                        //Core.logger.LogInfo("WeaponAlt: " + GetWeaponIdFromName(item.item_name));
                         GameProgressSaver.AddGear(GetWeaponIdFromName(item.item_name));
-                        text = "UNLOCKED: ";
+                        text = "WEAPON: ";
                         break;
 
                     case Enums.UKItemType.Arm:
@@ -108,7 +109,7 @@ namespace ArchipelagoULTRAKILL
                                 FistControl.Instance.ForceArm(int.Parse(GetWeaponIdFromName(item.item_name).Substring(3, 1)), false);
                             }
                         }
-                        text = "UNLOCKED: ";
+                        text = "ARM: ";
                         break;
 
                     case Enums.UKItemType.Ability:
@@ -116,7 +117,7 @@ namespace ArchipelagoULTRAKILL
                         else if (item.item_name == "Wall Jump" && Core.data.walljumps < 3) Core.data.walljumps++;
                         else if (item.item_name == "Slide") Core.data.canSlide = true;
                         else if (item.item_name == "Slam") Core.data.canSlam = true;
-                        text = "UNLOCKED: ";
+                        text = "ABILITY: ";
                         break;
 
                     case Enums.UKItemType.Skull:
@@ -157,7 +158,8 @@ namespace ArchipelagoULTRAKILL
                             if (item.item_name.Contains("Blue")) LevelManager.skulls["SkullBlue"].SetActive(true);
                             else if (item.item_name.Contains("Red")) LevelManager.skulls["SkullRed"].SetActive(true);
                         }
-                        text = "FOUND: ";
+                        if (sendingPlayer == null) text = "FOUND: ";
+                        else text = "GOT: ";
                         break;
 
                     case Enums.UKItemType.Level:
@@ -217,7 +219,8 @@ namespace ArchipelagoULTRAKILL
 
                     case Enums.UKItemType.Points:
                         GameProgressSaver.AddMoney(10000);
-                        text = "EARNED: ";
+                        if (sendingPlayer == null) text = "FOUND: ";
+                        else text = "GOT: ";
                         break;
 
                     case Enums.UKItemType.Powerup:
@@ -228,7 +231,8 @@ namespace ArchipelagoULTRAKILL
                         }
                         else if (item.item_name == "Dual Wield") powerupQueue.Add(Enums.Powerup.DualWield);
                         else if (item.item_name == "Infinite Stamina") powerupQueue.Add(Enums.Powerup.InfiniteStamina);
-                        text = "FOUND: ";
+                        if (sendingPlayer == null) text = "FOUND: ";
+                        else text = "GOT: ";
                         break;
 
                     case Enums.UKItemType.Trap:
@@ -240,13 +244,15 @@ namespace ArchipelagoULTRAKILL
                         else if (item.item_name == "Stamina Limiter") powerupQueue.Add(Enums.Powerup.StaminaLimiter);
                         else if (item.item_name == "Wall Jump Limiter") powerupQueue.Add(Enums.Powerup.WalljumpLimiter);
                         else if (item.item_name == "Empty Ammunition") powerupQueue.Add(Enums.Powerup.EmptyAmmo);
-                        text = "FOUND: ";
+                        if (sendingPlayer == null) text = "FOUND: ";
+                        else text = "GOT: ";
                         break;
 
                     case Enums.UKItemType.Soap:
                         if (Core.playerActive && Core.inLevel) Core.SpawnSoap();
                         else soapWaiting = true;
-                        text = "FOUND: ";
+                        if (sendingPlayer == null) text = "FOUND: ";
+                        else text = "GOT: ";
                         break;
 
                     case Enums.UKItemType.Fire2:
@@ -331,7 +337,7 @@ namespace ArchipelagoULTRAKILL
                 case "Feedbacker":
                 case "Knuckleblaster":
                 case "Whiplash":
-                    return "rev";
+                    return "arm";
                 case "Stamina Bar":
                     return "dash";
                 case "Wall Jump":
@@ -714,7 +720,7 @@ namespace ArchipelagoULTRAKILL
                 case "Revolver - Alternate":
                     return "revalt";
                 case "Nailgun - Alternate":
-                    return "naiait";
+                    return "naialt";
                 case "Knuckleblaster":
                     return "arm1";
                 case "Whiplash":
