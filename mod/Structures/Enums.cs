@@ -8,22 +8,29 @@ namespace ArchipelagoULTRAKILL.Structures
 {
     public class Enums
     {
-        public enum ItemType
-        {
-            UK,
-            AP
-        }
         public enum UKItemType
         {
             Weapon,
             WeaponAlt,
             Arm,
             Ability,
+            Skull,
             Level,
             Layer,
             Points,
             Powerup,
-            Trap
+            Trap,
+            Soap,
+            Fire2
+        }
+
+        public enum Powerup
+        {
+            DualWield,
+            InfiniteStamina,
+            StaminaLimiter,
+            WalljumpLimiter,
+            EmptyAmmo
         }
     }
 }

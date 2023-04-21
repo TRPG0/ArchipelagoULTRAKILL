@@ -2,7 +2,7 @@
 
 namespace ArchipelagoULTRAKILL.Powerups
 {
-    public class DashTrap : MonoBehaviour
+    public class StaminaPowerup : MonoBehaviour
     {
         private PowerUpMeter meter;
         public float juiceAmount;
@@ -17,9 +17,9 @@ namespace ArchipelagoULTRAKILL.Powerups
                 meter.latestMaxJuice = juiceAmount;
                 meter.juice = juiceAmount;
             }
-            meter.powerUpColor = new Color(0, 0, 0);
+            meter.powerUpColor = LocationManager.colors["lightblue"];
             juiceGiven = true;
-            APULTRAKILL.data.dashTrap = true;
+            Core.staminaPowerup = true;
         }
 
         private void Update()
@@ -33,7 +33,8 @@ namespace ArchipelagoULTRAKILL.Powerups
 
         public void EndPowerUp()
         {
-            APULTRAKILL.data.dashTrap = false;
+            Core.staminaPowerup = false;
+            if (LocationManager.powerupQueue.Count > 0) Core.AddPowerup();
             Destroy(gameObject);
         }
     }

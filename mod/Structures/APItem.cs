@@ -6,5 +6,6 @@ namespace ArchipelagoULTRAKILL.Structures
     {
         public string item_name;
         public ItemFlags type;
+        public string player_name;
     }
 }

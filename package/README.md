@@ -1,4 +1,4 @@
-# ArchipelagoULTRAKILL
+# Archipelago
 
 ## What is this?
 
