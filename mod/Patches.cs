@@ -226,7 +226,7 @@ namespace ArchipelagoULTRAKILL
             Core.playerActive = true;
             if (Core.DataExists())
             {
-                if (Core.currentScene.name == "Level 0-1")
+                if (SceneHelper.CurrentScene == "Level 0-1")
                 {
                     GunSetter.Instance.ResetWeapons();
                     GunControl.Instance.UpdateWeaponList();
@@ -234,7 +234,7 @@ namespace ArchipelagoULTRAKILL
                     FistControl.Instance.ResetFists();
                     if (!Core.CanBreakGlass()) LevelManager.DeactivateGlass();
                 }
-                else if (UIManager.skullLevels.Contains(Core.currentScene.name))
+                else if (UIManager.skullLevels.Contains(SceneHelper.CurrentScene))
                 {
                     LevelManager.FindSkulls();
                 }
@@ -425,6 +425,7 @@ namespace ArchipelagoULTRAKILL
                     case "rev":
                         if (GameProgressSaver.CheckGear("rev0") == 1) hasWeapon = true;
                         if (GameProgressSaver.CheckGear("rev2") == 1) hasWeapon = true;
+                        if (GameProgressSaver.CheckGear("rev1") == 1) hasWeapon = true;
                         break;
                     case "sho":
                         if (GameProgressSaver.CheckGear("sho0") == 1) hasWeapon = true;

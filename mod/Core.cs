@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using ArchipelagoULTRAKILL.Structures;
 using ArchipelagoULTRAKILL.Powerups;
 using BepInEx.Logging;
+using static UMM.UKAPI;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -17,7 +18,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string ModGUID = "trpg.archipelagoultrakill";
         public const string ModName = "Archipelago";
-        public const string ModVersion = "1.0.0";
+        public const string ModVersion = "1.1.0";
         public const string ModDescription = "Connect to an Archipelago server to play ULTRAKILL randomizer.";
 
         public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("Archipelago");
@@ -25,9 +26,8 @@ namespace ArchipelagoULTRAKILL
         public static GameObject obj;
         public static UIManager uim;
 
-        public static Scene currentScene;
-        public static UKAPI.UKLevelType currentLevelType;
-        public static bool inLevel;
+        public static bool inIntro => GameStateManager.Instance.IsStateActive("intro");
+        public static bool inLevel => !GameStateManager.Instance.IsStateActive("main-menu") && !GameStateManager.Instance.IsStateActive("intro");
 
         public static Data data = new Data();
         public static bool firstTimeLoad = false;
@@ -157,19 +157,7 @@ namespace ArchipelagoULTRAKILL
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            //if (UKAPI.CurrentLevelType == UKAPI.UKLevelType.MainMenu) Invoke("FindMenuObjects", 0.2f);
-            currentScene = scene;
-            currentLevelType = UKAPI.GetUKLevelType(scene.name);
-
-            inLevel = !(currentLevelType == UKAPI.UKLevelType.MainMenu || currentLevelType == UKAPI.UKLevelType.Intro || currentLevelType == UKAPI.UKLevelType.Intermission || currentLevelType == UKAPI.UKLevelType.Unknown);
-
-            //logger.LogInfo("SceneManager.sceneLoaded: " + currentLevelType);
-            ChangedLevel(UKAPI.GetUKLevelType(scene.name));
-        }
-
-        public static void ChangedLevel(UKAPI.UKLevelType levelType)
-        {
-            //logger.LogInfo("UKAPI.OnLevelChanged: " + UKAPI.CurrentLevelType.ToString());
+            if (SceneHelper.CurrentScene == "Intro" || SceneHelper.CurrentScene == null) return;
             obj.GetComponent<Core>().StopCoroutine("DisplayMessage");
             UIManager.displayingMessage = false;
             UIManager.levels.Clear();
@@ -181,7 +169,7 @@ namespace ArchipelagoULTRAKILL
             staminaPowerup = false;
             dashTrap = false;
             walljumpTrap = false;
-            if (levelType == UKAPI.UKLevelType.MainMenu)
+            if (SceneHelper.CurrentScene == "Main Menu")
             {
                 UIManager.FindMenuObjects();
                 if (UIManager.log == null) UIManager.CreateLogObject();
@@ -204,11 +192,11 @@ namespace ArchipelagoULTRAKILL
                 UIManager.CreateMessageUI();
                 LevelManager.FindShopObjects();
             }
-            if (currentScene.name != "Intro") OptionsManager.Instance.optionsMenu.gameObject.AddComponent<OptionsMenuState>();
+            if (!inIntro) OptionsManager.Instance.optionsMenu.gameObject.AddComponent<OptionsMenuState>();
 
             if (DataExists() && UIManager.log != null) UIManager.AdjustLogBounds();
-            if (DataExists() && currentScene.name == "Level 0-1" && HasNoArms()) LevelManager.DeactivatePlanks();
-            if (DataExists() && currentScene.name == "Level 1-2" && GameProgressSaver.GetGeneralProgress().nai0 == 0) LevelManager.DeactivateNailgun();
+            if (DataExists() && SceneHelper.CurrentScene == "Level 0-1" && HasNoArms()) LevelManager.DeactivatePlanks();
+            if (DataExists() && SceneHelper.CurrentScene == "Level 1-2" && GameProgressSaver.GetGeneralProgress().nai0 == 0) LevelManager.DeactivateNailgun();
         }
 
         public static bool DataExists()
@@ -302,6 +290,7 @@ namespace ArchipelagoULTRAKILL
                 {
                     case "Revolver - Piercer":
                     case "Revolver - Marksman":
+                    case "Revolver - Sharpshooter":
                     case "Shotgun - Core Eject":
                     case "Shotgun - Pump Charge":
                         if (data.randomizeFire2) return false;
@@ -390,6 +379,11 @@ namespace ArchipelagoULTRAKILL
                 if (data.randomizeFire2 && !data.unlockedFire2.Contains("rev2") && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
                 {
                     WeaponCharges.Instance.rev1charge = 0;
+                }
+
+                if (data.randomizeFire2 && !data.unlockedFire2.Contains("rev1") && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
+                {
+                    WeaponCharges.Instance.rev2charge = 0;
                 }
 
                 if (data.randomizeFire2 && !data.unlockedFire2.Contains("sho0") && GunControl.Instance.currentSlot == 2 && GunControl.Instance.currentVariation == 0 && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))

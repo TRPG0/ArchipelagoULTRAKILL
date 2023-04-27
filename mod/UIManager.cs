@@ -80,7 +80,7 @@ namespace ArchipelagoULTRAKILL
 
         public static void AdjustLogBounds()
         {
-            if (PrefsManager.Instance.GetInt("hudType") >= 2 && Core.currentScene.name != "Main Menu")
+            if (PrefsManager.Instance.GetInt("hudType") >= 2 && !Core.inLevel)
             {
                 log.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, ((float)Math.Round(Screen.height * 0.77f)));
             }
@@ -174,22 +174,10 @@ namespace ArchipelagoULTRAKILL
                         levels["0-5"] = component.gameObject;
                         break;
                     case "1-1 Panel":
-                        switch (component.gameObject.transform.parent.name)
+                        switch (component.gameObject.transform.parent.parent.name)
                         {
                             case "Layer 1 Limbo":
                                 if (!levels.ContainsKey("1-1")) levels["1-1"] = component.gameObject;
-                                break;
-                            case "Layer 2 Lust":
-                                levels["2-1"] = component.gameObject;
-                                break;
-                            case "Layer 3 Gluttony":
-                                levels["3-1"] = component.gameObject;
-                                break;
-                            case "Layer 4 Greed":
-                                levels["4-1"] = component.gameObject;
-                                break;
-                            case "Layer 5 Wrath":
-                                levels["5-1"] = component.gameObject;
                                 break;
                             case "Layer 6 Heresy":
                                 levels["6-1"] = component.gameObject;
@@ -199,22 +187,10 @@ namespace ArchipelagoULTRAKILL
                         }
                         break;
                     case "1-2 Panel":
-                        switch (component.gameObject.transform.parent.name)
+                        switch (component.gameObject.transform.parent.parent.name)
                         {
                             case "Layer 1 Limbo":
                                 if (!levels.ContainsKey("1-2")) levels["1-2"] = component.gameObject;
-                                break;
-                            case "Layer 2 Lust":
-                                levels["2-2"] = component.gameObject;
-                                break;
-                            case "Layer 3 Gluttony":
-                                levels["3-2"] = component.gameObject;
-                                break;
-                            case "Layer 4 Greed":
-                                levels["4-2"] = component.gameObject;
-                                break;
-                            case "Layer 5 Wrath":
-                                levels["5-2"] = component.gameObject;
                                 break;
                             case "Layer 6 Heresy":
                                 levels["6-2"] = component.gameObject;
@@ -224,42 +200,52 @@ namespace ArchipelagoULTRAKILL
                         }
                         break;
                     case "1-3 Panel":
-                        switch (component.gameObject.transform.parent.name)
-                        {
-                            case "Layer 1 Limbo":
-                                if (!levels.ContainsKey("1-3")) levels["1-3"] = component.gameObject;
-                                break;
-                            case "Layer 2 Lust":
-                                levels["2-3"] = component.gameObject;
-                                break;
-                            case "Layer 4 Greed":
-                                levels["4-3"] = component.gameObject;
-                                break;
-                            case "Layer 5 Wrath":
-                                levels["5-3"] = component.gameObject;
-                                break;
-                            default:
-                                break;
-                        }
+                        levels["1-3"] = component.gameObject;
                         break;
                     case "1-4 Panel":
-                        switch (component.gameObject.transform.parent.name)
-                        {
-                            case "Layer 1 Limbo":
-                                if (!levels.ContainsKey("1-4")) levels["1-4"] = component.gameObject;
-                                break;
-                            case "Layer 2 Lust":
-                                levels["2-4"] = component.gameObject;
-                                break;
-                            case "Layer 4 Greed":
-                                levels["4-4"] = component.gameObject;
-                                break;
-                            case "Layer 5 Wrath":
-                                levels["5-4"] = component.gameObject;
-                                break;
-                            default:
-                                break;
-                        }
+                        levels["1-4"] = component.gameObject;
+                        break;
+                    case "2-1 Panel":
+                        levels["2-1"] = component.gameObject;
+                        break;
+                    case "2-2 Panel":
+                        levels["2-2"] = component.gameObject;
+                        break;
+                    case "2-3 Panel":
+                        levels["2-3"] = component.gameObject;
+                        break;
+                    case "2-4 Panel":
+                        levels["2-4"] = component.gameObject;
+                        break;
+                    case "3-1 Panel":
+                        levels["3-1"] = component.gameObject;
+                        break;
+                    case "3-2 Panel":
+                        levels["3-2"] = component.gameObject;
+                        break;
+                    case "4-1 Panel":
+                        levels["4-1"] = component.gameObject;
+                        break;
+                    case "4-2 Panel":
+                        levels["4-2"] = component.gameObject;
+                        break;
+                    case "4-3 Panel":
+                        levels["4-3"] = component.gameObject;
+                        break;
+                    case "4-4 Panel":
+                        levels["4-4"] = component.gameObject;
+                        break;
+                    case "5-1 Panel":
+                        levels["5-1"] = component.gameObject;
+                        break;
+                    case "5-2 Panel":
+                        levels["5-2"] = component.gameObject;
+                        break;
+                    case "5-3 Panel":
+                        levels["5-3"] = component.gameObject;
+                        break;
+                    case "5-4 Panel":
+                        levels["5-4"] = component.gameObject;
                         break;
                     case "P-1 Panel":
                         levels["P-1"] = component.gameObject;
@@ -334,7 +320,8 @@ namespace ArchipelagoULTRAKILL
         {
             goalCount = new GameObject();
             goalCount.transform.SetParent(levels[Core.data.goal].transform);
-            goalCount.transform.localPosition = new Vector3(0, 22.5f, 0);
+            if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) goalCount.transform.localPosition = new Vector3(0, 90, 0);
+            else goalCount.transform.localPosition = new Vector3(0, 22.5f, 0);
             goalCount.layer = 5;
             goalCount.AddComponent<Text>().text = (Core.data.goalRequirement - Core.data.completedLevels.Count).ToString();
             goalCount.GetComponent<Text>().font = font;

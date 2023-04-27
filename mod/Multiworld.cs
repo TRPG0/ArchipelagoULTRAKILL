@@ -171,7 +171,7 @@ namespace ArchipelagoULTRAKILL
                 Core.logger.LogInfo("Successfully connected to server as player \"" + Core.data.slot_name + "\".");
                 UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["green"];
                 string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
-                UIManager.menuText.GetComponent<Text>().text = "Archipelago\npre" + Core.ModVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
+                UIManager.menuText.GetComponent<Text>().text = "Archipelago\n" + Core.ModVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
             }
             else if (loginResult is LoginFailure loginFailure)
             {
@@ -188,7 +188,7 @@ namespace ArchipelagoULTRAKILL
         public static void Disconnect()
         {
             if (Session != null && Session.Socket != null) Session.Socket.Disconnect();
-            if (Core.currentScene.name == "Main Menu") UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
+            if (SceneHelper.CurrentScene == "Main Menu") UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
             //GameConsole.Console.Instance.PrintLine("Disconnected from Archipelago server.");
             //Debug.Log("Disconnected from Archipelago server.");
             UIManager.log.GetComponent<Text>().text = "";

@@ -50,6 +50,6 @@ There are some additional commands that can be used:
 
 Not yet. I would like to make a standalone version of the randomizer eventually, but since the Archipelago version already works well enough, I'm releasing it now.
 
-# I can't get it to work! Help!
+# Something's not working!
 
-If you have trouble setting up ULTRAKILL randomizer, feel free to ask about it on the [GitHub discussions](https://github.com/TRPG0/ArchipelagoULTRAKILL/discussions) page, or you can DM me on Discord at `TRPG#8501`.
+If you have trouble setting up ULTRAKILL randomizer or have found any bugs that need fixing, feel free to ask about it on the [GitHub discussions](https://github.com/TRPG0/ArchipelagoULTRAKILL/discussions) page, or you can DM me on Discord at `TRPG#8501`.

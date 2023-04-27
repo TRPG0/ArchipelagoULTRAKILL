@@ -36,6 +36,9 @@ item_table: List[ItemDict] = [
     {'name': "Revolver - Marksman", #rev2 (green)
         'classification': ItemClassification.progression,
         'type': UKType.Weapon},
+    {'name': "Revolver - Sharpshooter", #rev1 (red)
+        'classification': ItemClassification.progression,
+        'type': UKType.Weapon},
     {'name': "Revolver - Alternate", #revalt
         'classification': ItemClassification.progression,
         'type': UKType.WeaponAlt},
@@ -78,6 +81,9 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.progression,
         'type': UKType.Fire2},
     {'name': "Secondary Fire - Marksman",
+        'classification': ItemClassification.progression,
+        'type': UKType.Fire2},
+    {'name': "Secondary Fire - Sharpshooter",
         'classification': ItemClassification.progression,
         'type': UKType.Fire2},
     {'name': "Secondary Fire - Core Eject",
@@ -408,6 +414,7 @@ group_table: Dict[str, Set[str]] = {
                "LAYER 6: HERESY"],
     "start_weapons": ["Revolver - Piercer",
                       "Revolver - Marksman",
+                      "Revolver - Sharpshooter",
                       "Shotgun - Core Eject",
                       "Shotgun - Pump Charge",
                       "Nailgun - Attractor",

@@ -3,18 +3,18 @@ from ..AutoWorld import LogicMixin
 
 
 class UltrakillLogic(LogicMixin):
-    def _ultrakill_good_weapon_new(self, player, fire2, arm):
+    def _ultrakill_good_weapon(self, player, fire2, arm):
         if fire2 and not arm:
-            return self.has_any({"Revolver - Piercer", "Revolver - Marksman"}, player) or \
+            return self.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player) or \
                 (self.has("Shotgun - Core Eject", player) and \
                     self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
                         (self.has("Shotgun - Pump Charge", player) and \
                             self.has_any({"Secondary Fire - Pump Charge", "Feedbacker"}, player))
         else:
-            return self.has_any({"Revolver - Piercer", "Revolver - Marksman", "Shotgun - Core Eject", \
-                "Shotgun - Pump Charge"}, player)
+            return self.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter", \
+                "Shotgun - Core Eject", "Shotgun - Pump Charge"}, player)
 
-    def _ultrakill_break_glass_new(self, player, fire2, arm):
+    def _ultrakill_break_glass(self, player, fire2, arm):
         if fire2 and not arm:
             return self.has_any({"Railcannon - Electric", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", \
                 "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player) or \
@@ -22,10 +22,12 @@ class UltrakillLogic(LogicMixin):
                         self.has_any({"Revolver - Alternate", "Secondary Fire - Piercer"}, player)) or \
                             (self.has("Revolver - Marksman", player) and \
                                 self.has_any({"Revolver - Alternate", "Secondary Fire - Marksman"}, player)) or \
-                                    (self.has("Shotgun - Core Eject", player) and \
-                                        self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                                            (self.has("Shotgun - Pump Charge", player) and \
-                                                self.has_any({"Secondary Fire - Pump Charge", "Feedbacker"}, player))
+                                    (self.has("Revolver - Sharpshooter", player) and \
+                                        self.has_any({"Revolver - Alternate", "Secondary Fire - Sharpshooter"}, player)) or \
+                                            (self.has("Shotgun - Core Eject", player) and \
+                                                self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
+                                                    (self.has("Shotgun - Pump Charge", player) and \
+                                                        self.has_any({"Secondary Fire - Pump Charge", "Feedbacker"}, player))
         elif fire2 and arm:
             return self.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Electric", \
                 "Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", \
@@ -33,15 +35,17 @@ class UltrakillLogic(LogicMixin):
                         (self.has("Revolver - Piercer", player) and \
                             self.has_any({"Revolver - Alternate", "Secondary Fire - Piercer"}, player)) or \
                                 (self.has("Revolver - Marksman", player) and \
-                                    self.has_any({"Revolver - Alternate", "Secondary Fire - Marksman"}, player))
+                                    self.has_any({"Revolver - Alternate", "Secondary Fire - Marksman"}, player)) or \
+                                        (self.has("Revolver - Sharpshooter", player) and \
+                                            self.has_any({"Revolver - Alternate", "Secondary Fire - Sharpshooter"}, player))
         else:
-            return self.has_any({"Revolver - Piercer", "Revolver - Marksman", "Shotgun - Core Eject", \
-                "Shotgun - Pump Charge", "Railcannon - Electric", "Railcannon - Malicious", \
+            return self.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter", \
+                "Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Electric", "Railcannon - Malicious", \
                     "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player)
 
-    def _ultrakill_break_walls_new(self, player, fire2, arm):
+    def _ultrakill_break_walls(self, player, fire2, arm):
         if not fire2:
-            return self.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge", "Nailgun - Overheat", "Railcannon - Electric", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player) or \
+            return self.has_any({"Revolver - Sharpshooter", "Shotgun - Core Eject", "Shotgun - Pump Charge", "Nailgun - Overheat", "Railcannon - Electric", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player) or \
                 (self.has_any({"Revolver - Piercer", "Revolver - Marksman"}, player) and \
                     self.has("Revolver - Alternate", player))
         elif fire2 and not arm:
@@ -51,13 +55,17 @@ class UltrakillLogic(LogicMixin):
                         self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
                             (self.has("Shotgun - Pump Charge", player) and \
                                 self.has_any({"Secondary Fire - Pump Charge", "Feedbacker"}, player)) or \
-                                    (self.has_any({"Revolver - Piercer", "Revolver - Marksman"}, player) and \
-                                        self.has("Revolver - Alternate", player))
+                                    (self.has("Revolver - Sharpshooter", player) and \
+                                        self.has_any({"Revolver - Alternate", "Secondary Fire - Sharpshooter"}, player)) or \
+                                            (self.has_any({"Revolver - Piercer", "Revolver - Marksman"}, player) and \
+                                                self.has("Revolver - Alternate", player))
         elif fire2 and arm:
             return self.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Electric", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player) or \
                 self.has_all({"Nailgun - Overheat", "Secondary Fire - Overheat"}, player) or \
-                    (self.has_any({"Revolver - Piercer", "Revolver - Marksman"}, player) and \
-                        self.has("Revolver - Alternate", player))
+                    (self.has("Revolver - Sharpshooter", player) and \
+                        self.has_any({"Revolver - Alternate", "Secondary Fire - Sharpshooter"}, player)) or \
+                            (self.has_any({"Revolver - Piercer", "Revolver - Marksman"}, player) and \
+                                self.has("Revolver - Alternate", player))
 
     def _ultrakill_generic_jump(self, player, walljumps, slam, fire2, arm):
         if slam:
@@ -76,7 +84,7 @@ class UltrakillLogic(LogicMixin):
 
 
 
-    def _ultrakill_0_1c_new(self, player, fire2, arm):
+    def _ultrakill_0_1c(self, player, fire2, arm):
         if fire2 and not arm:
             return self.has_any({"Railcannon - Electric", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", \
                 "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player) or \
@@ -472,19 +480,6 @@ def rules(ultrakillworld):
     walljump2: int = 2 - world.starting_walljumps[player].value
     walljump3: int = 3 - world.starting_walljumps[player].value
 
-    #if dash1 < 0:
-    #    dash1 = 0
-    #if dash2 < 0:
-    #    dash2 = 0
-    #if dash3 < 0:
-    #    dash3 = 0
-    #if walljump1 < 0:
-    #    walljump1 = 0
-    #if walljump2 < 0:
-    #    walljump2 = 0
-    #if walljump3 < 0:
-    #    walljump3 = 0
-
     # goal
     set_rule(world.get_entrance("To " + ultrakillworld.goal_name, player), \
         lambda state: state.has("Level Completed", player, \
@@ -577,7 +572,7 @@ def rules(ultrakillworld):
 
     # 0-1
     set_rule(world.get_location("0-1: Secret #1", player),
-        lambda state: state._ultrakill_break_glass_new(player, fire2, arm))
+        lambda state: state._ultrakill_break_glass(player, fire2, arm))
         
     set_rule(world.get_location("0-1: Secret #3", player),
         lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
@@ -586,11 +581,11 @@ def rules(ultrakillworld):
 
     if world.challenge_rewards[player]:
         set_rule(world.get_location("0-1: Get 5 kills with a single glass panel", player),
-            lambda state: state._ultrakill_0_1c_new(player, fire2, arm))
+            lambda state: state._ultrakill_0_1c(player, fire2, arm))
 
     if world.p_rank_rewards[player]:
         set_rule(world.get_location("0-1: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm) or \
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm) or \
                 state.has("Knuckleblaster", player))
 
 
@@ -610,11 +605,11 @@ def rules(ultrakillworld):
 
     if world.challenge_rewards[player]:
         add_rule(world.get_location("0-2: Beat the secret encounter", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
             
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("0-2: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
             
     set_rule(world.get_location("Cleared 0-S", player),
         lambda state: state._ultrakill_0_2_secret(player, walljump2, slam, fire2, arm))
@@ -635,14 +630,14 @@ def rules(ultrakillworld):
         lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm))
         
     set_rule(world.get_location("0-3: Secret #3", player),
-        lambda state: state._ultrakill_break_walls_new(player, fire2, arm))
+        lambda state: state._ultrakill_break_walls(player, fire2, arm))
     set_rule(world.get_location("Cleared 0-3", player),
-        lambda state: state._ultrakill_break_walls_new(player, fire2, arm) or \
+        lambda state: state._ultrakill_break_walls(player, fire2, arm) or \
             state._ultrakill_0_3c(player, walljump3, slam, fire2, arm))
     
 
     set_rule(world.get_location("0-3: Weapon", player),
-        lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+        lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
     if world.challenge_rewards[player]:
         set_rule(world.get_location("0-3: Kill only 1 enemy", player),
@@ -650,15 +645,15 @@ def rules(ultrakillworld):
 
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("0-3: Perfect Rank", player),
-            lambda state: state._ultrakill_break_walls_new(player, fire2, arm) and \
-                state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_break_walls(player, fire2, arm) and \
+                state._ultrakill_good_weapon(player, fire2, arm))
 
     # 0-4
     set_rule(world.get_location("0-4: Secret #1", player),
         lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
 
     set_rule(world.get_location("0-4: Secret #2", player),
-        lambda state: state._ultrakill_break_glass_new(player, fire2, arm))
+        lambda state: state._ultrakill_break_glass(player, fire2, arm))
         
     if not world.start_with_slide[player]:
         set_rule(world.get_location("0-4: Secret #3", player),
@@ -669,7 +664,7 @@ def rules(ultrakillworld):
             
     if world.p_rank_rewards[player]:
         set_rule(world.get_location("0-4: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
 
     # 0-5
@@ -683,7 +678,7 @@ def rules(ultrakillworld):
     if world.p_rank_rewards[player]:
         set_rule(world.get_location("0-5: Perfect Rank", player),
             lambda state: state._ultrakill_0_5(player, walljump2, dash2, slide, fire2) and \
-                state._ultrakill_good_weapon_new(player, fire2, arm))
+                state._ultrakill_good_weapon(player, fire2, arm))
             
     
     # 1-1
@@ -744,7 +739,7 @@ def rules(ultrakillworld):
 
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("1-1: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
         
     
     # 1-2
@@ -787,12 +782,12 @@ def rules(ultrakillworld):
 
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("1-2: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
 
     # 1-3        
     set_rule(world.get_location("1-3: Secret #1", player),
-        lambda state: state._ultrakill_break_glass_new(player, fire2, arm))
+        lambda state: state._ultrakill_break_glass(player, fire2, arm))
         
     if not world.start_with_slide[player]:
         set_rule(world.get_location("1-3: Secret #4", player),
@@ -822,11 +817,11 @@ def rules(ultrakillworld):
 
     if world.challenge_rewards[player]:
         add_rule(world.get_location("1-3: Beat the secret encounter", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("1-3: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))    
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))    
 
     # 1-4
     set_rule(world.get_location("1-4: Secret Weapon", player),
@@ -836,8 +831,8 @@ def rules(ultrakillworld):
     
     add_rule(world.get_location("1-4: Secret Weapon", player),
         lambda state: state._ultrakill_1_1_jump(player, slam, fire2, arm) and \
-            state._ultrakill_break_glass_new(player, fire2, arm) and \
-                state._ultrakill_break_walls_new(player, fire2, arm))
+            state._ultrakill_break_glass(player, fire2, arm) and \
+                state._ultrakill_break_walls(player, fire2, arm))
 
     if world.randomize_skulls[player]:
         add_rule(world.get_location("1-4: Secret Weapon", player),
@@ -852,18 +847,18 @@ def rules(ultrakillworld):
 
     if world.challenge_rewards[player] and world.goal[player] != 0:
         add_rule(world.get_location("1-4: Do not pick up any skulls", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
         
     if world.p_rank_rewards[player] and world.goal[player] != 0:
         add_rule(world.get_location("1-4: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
 
     # 2-1
     set_rule(world.get_location("2-1: Secret #1", player),
         lambda state: state._ultrakill_2_1_s1(player, dash1, fire2, arm) and \
-            state._ultrakill_break_walls_new(player, fire2, arm))
+            state._ultrakill_break_walls(player, fire2, arm))
 
     set_rule(world.get_location("2-1: Secret #3", player),
         lambda state: state._ultrakill_2_1_s3(player, walljump1, dash2, fire2))
@@ -876,12 +871,12 @@ def rules(ultrakillworld):
     if world.challenge_rewards[player]:
         set_rule(world.get_location("2-1: Don't open any normal doors", player),
             lambda state: state._ultrakill_2_1c(player, walljump1, dash1, slam, fire2) and \
-                state._ultrakill_break_walls_new(player, fire2, arm))
+                state._ultrakill_break_walls(player, fire2, arm))
 
     if world.p_rank_rewards[player]:
         set_rule(world.get_location("2-1: Perfect Rank", player),
             lambda state: state._ultrakill_2_1_s5(player, walljump1, dash1, slam, fire2, arm) and \
-                state._ultrakill_good_weapon_new(player, fire2, arm))            
+                state._ultrakill_good_weapon(player, fire2, arm))            
 
     # 2-2
     if not world.start_with_slide[player]:
@@ -894,7 +889,7 @@ def rules(ultrakillworld):
         lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm))
         
     set_rule(world.get_location("2-2: Secret #5", player),
-        lambda state: state._ultrakill_break_walls_new(player, fire2, arm))
+        lambda state: state._ultrakill_break_walls(player, fire2, arm))
 
     if world.challenge_rewards[player]:
         if not world.start_with_slide[player]:
@@ -903,7 +898,7 @@ def rules(ultrakillworld):
             
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("2-2: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
         
 
 
@@ -978,7 +973,7 @@ def rules(ultrakillworld):
 
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("2-3: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
         
     
     # 2-4
@@ -1004,7 +999,7 @@ def rules(ultrakillworld):
             
     if world.p_rank_rewards[player] and world.goal[player] != 1:
         add_rule(world.get_location("2-4: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
 
     # 3-1
@@ -1014,7 +1009,7 @@ def rules(ultrakillworld):
         
     if world.p_rank_rewards[player]:
             add_rule(world.get_location("3-1: Perfect Rank", player),
-                lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+                lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
 
     # 3-2
@@ -1033,11 +1028,11 @@ def rules(ultrakillworld):
     if world.challenge_rewards[player] and world.goal[player] != 2:
         add_rule(world.get_location("3-2: Drop Gabriel in a pit", player),
             lambda state: state._ultrakill_3_2_jump(player, walljump1, dash1, slam, fire2, arm) and \
-                state._ultrakill_good_weapon_new(player, fire2, arm))
+                state._ultrakill_good_weapon(player, fire2, arm))
     if world.p_rank_rewards[player] and world.goal[player] != 2:
         add_rule(world.get_location("3-2: Perfect Rank", player),
             lambda state: state._ultrakill_3_2_jump(player, walljump1, dash1, slam, fire2, arm) and \
-                state._ultrakill_good_weapon_new(player, fire2, arm))
+                state._ultrakill_good_weapon(player, fire2, arm))
 
     # 4-1
     if world.randomize_secondary_fire[player]:
@@ -1079,7 +1074,7 @@ def rules(ultrakillworld):
                 
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("4-1: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
 
     # 4-2            
@@ -1112,7 +1107,7 @@ def rules(ultrakillworld):
             
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("4-2: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
             
     # either normal exit or secret exit
     if world.randomize_skulls[player]:
@@ -1143,7 +1138,7 @@ def rules(ultrakillworld):
         lambda state: state._ultrakill_4_3(player, fire2, arm))
     add_rule(world.get_location("4-3: Secret #4", player),
         lambda state: state._ultrakill_4_3(player, fire2, arm) and \
-            state._ultrakill_break_walls_new(player, fire2, arm))
+            state._ultrakill_break_walls(player, fire2, arm))
     add_rule(world.get_location("4-3: Secret #5", player),
         lambda state: state._ultrakill_4_3(player, fire2, arm))
     add_rule(world.get_location("Cleared 4-3", player),
@@ -1151,7 +1146,7 @@ def rules(ultrakillworld):
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("4-3: Perfect Rank", player),
             lambda state: state._ultrakill_4_3(player, fire2, arm) and \
-                state._ultrakill_good_weapon_new(player, fire2, arm))
+                state._ultrakill_good_weapon(player, fire2, arm))
 
     if not world.start_with_slide[player]:
         add_rule(world.get_location("4-3: Secret #2", player),
@@ -1193,11 +1188,11 @@ def rules(ultrakillworld):
     if world.p_rank_rewards[player] and world.goal[player] != 3:
         add_rule(world.get_location("4-4: Perfect Rank", player),
             lambda state: state._ultrakill_4_4(player, walljump2, dash1, skulls, slam, fire2) and \
-                state._ultrakill_good_weapon_new(player, fire2, arm))
+                state._ultrakill_good_weapon(player, fire2, arm))
                             
     if world.challenge_rewards[player] and world.goal[player] != 3:
         add_rule(world.get_location("4-4: Reach the boss room in 18 seconds", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
     # 5-1
     if world.challenge_rewards[player]:
@@ -1277,7 +1272,7 @@ def rules(ultrakillworld):
         
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("5-1: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
 
     # 5-2
@@ -1352,7 +1347,7 @@ def rules(ultrakillworld):
             
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("5-2: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
 
     # 5-3
@@ -1406,7 +1401,7 @@ def rules(ultrakillworld):
             
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("5-3: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
 
     # 5-4
@@ -1426,7 +1421,7 @@ def rules(ultrakillworld):
             
     if world.p_rank_rewards[player] and world.goal[player] != 4:
         add_rule(world.get_location("5-4: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
 
     # 6-1
@@ -1477,7 +1472,7 @@ def rules(ultrakillworld):
             
     if world.p_rank_rewards[player]:
         add_rule(world.get_location("6-1: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
         
     
     # 6-2
@@ -1507,11 +1502,11 @@ def rules(ultrakillworld):
         add_rule(world.get_location("6-2: Hit Gabriel into the ceiling", player),
             lambda state: (state.has("Rocket Launcher - Freezeframe", player) or \
                 state.has("Rocket Launcher - S.R.S. Cannon", player)) and \
-                    state._ultrakill_good_weapon_new(player, fire2, arm))
+                    state._ultrakill_good_weapon(player, fire2, arm))
         
     if world.p_rank_rewards[player] and world.goal[player] != 5:
         add_rule(world.get_location("6-2: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon_new(player, fire2, arm))
+            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
     add_rule(world.get_location("Cleared 6-2", player),
         lambda state: state.has("Stamina Bar", player, dash1))
@@ -1523,8 +1518,11 @@ def rules(ultrakillworld):
             lambda state: state.has("Stamina Bar", player, dash1))
 
     # shop
-    set_rule(world.get_location("Shop: Buy Revolver Variant", player),
-        lambda state: state.has_any({"Revolver - Piercer", "Revolver - Marksman"}, player))
+    set_rule(world.get_location("Shop: Buy Revolver Variant 1", player),
+        lambda state: state.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player))
+
+    set_rule(world.get_location("Shop: Buy Revolver Variant 2", player),
+        lambda state: state.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player))
     
     set_rule(world.get_location("Shop: Buy Shotgun Variant", player),
         lambda state: state.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge"}, player))

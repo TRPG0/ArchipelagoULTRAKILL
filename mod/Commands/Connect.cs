@@ -36,7 +36,7 @@ namespace ArchipelagoULTRAKILL.Commands
             }
             else
             {
-                if (Core.currentScene.name != "Main Menu")
+                if (SceneHelper.CurrentScene != "Main Menu")
                 {
                     con.PrintLine("Can't do that right now. Can only connect to an Archipelago server on the main menu.");
                     return;

@@ -146,9 +146,9 @@ namespace ArchipelagoULTRAKILL
                             Core.logger.LogInfo("Skull: " + skull);
                             Core.data.unlockedSkulls.Add(skull);
                         }
-                        if (Core.currentScene.name == "Level 1-4") LevelManager.skulls.ElementAt(Core.data.unlockedSkulls1_4 - 1).Value.SetActive(true);
-                        else if (Core.currentScene.name == "Level 5-1") LevelManager.skulls.ElementAt(Core.data.unlockedSkulls5_1 - 1).Value.SetActive(true);
-                        else if (Core.currentScene.name == "Level 0-S")
+                        if (SceneHelper.CurrentScene == "Level 1-4") LevelManager.skulls.ElementAt(Core.data.unlockedSkulls1_4 - 1).Value.SetActive(true);
+                        else if (SceneHelper.CurrentScene == "Level 5-1") LevelManager.skulls.ElementAt(Core.data.unlockedSkulls5_1 - 1).Value.SetActive(true);
+                        else if (SceneHelper.CurrentScene == "Level 0-S")
                         {
                             if (item.item_name.Contains("Blue")) LevelManager.skulls["SkullBlue"].SetActive(true);
                             else if (item.item_name.Contains("Red")) LevelManager.skulls["SkullRed"].SetActive(true);
@@ -307,8 +307,10 @@ namespace ArchipelagoULTRAKILL
             {
                 case "Revolver - Piercer":
                 case "Revolver - Marksman":
+                case "Revolver - Sharpshooter":
                 case "Secondary Fire - Piercer":
                 case "Secondary Fire - Marksman":
+                case "Secondary Fire - Sharpshooter":
                     return "rev";
                 case "Shotgun - Core Eject":
                 case "Shotgun - Pump Charge":
@@ -458,7 +460,9 @@ namespace ArchipelagoULTRAKILL
                 case "Secondary Fire - Overheat":
                 case "Secondary Fire - S.R.S. Cannon":
                     return ColorBlindSettings.Instance.variationColors[1]; // green
+                case "Revolver - Sharpshooter":
                 case "Railcannon - Malicious":
+                case "Secondary Fire - Sharpshooter":
                     return ColorBlindSettings.Instance.variationColors[2]; // red
                 case "Revolver - Alternate":
                 case "Nailgun - Alternate":
@@ -573,6 +577,7 @@ namespace ArchipelagoULTRAKILL
             {
                 case "Revolver - Piercer":
                 case "Revolver - Marksman":
+                case "Revolver - Sharpshooter":
                 case "Shotgun - Core Eject":
                 case "Shotgun - Pump Charge":
                 case "Nailgun - Attractor":
@@ -671,6 +676,7 @@ namespace ArchipelagoULTRAKILL
                     return Enums.UKItemType.Soap;
                 case "Secondary Fire - Piercer":
                 case "Secondary Fire - Marksman":
+                case "Secondary Fire - Sharpshooter":
                 case "Secondary Fire - Core Eject":
                 case "Secondary Fire - Pump Charge":
                 case "Secondary Fire - Attractor":
@@ -693,6 +699,9 @@ namespace ArchipelagoULTRAKILL
                 case "Revolver - Marksman":
                 case "Secondary Fire - Marksman":
                     return "rev2";
+                case "Revolver - Sharpshooter":
+                case "Secondary Fire - Sharpshooter":
+                    return "rev1";
                 case "Shotgun - Core Eject":
                 case "Secondary Fire - Core Eject":
                     return "sho0";

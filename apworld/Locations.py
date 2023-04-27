@@ -494,9 +494,12 @@ location_table: List[LocationDict] = [
         'game_id': "25_p"},
 
     # Shop
-    {'name': "Shop: Buy Revolver Variant",
+    {'name': "Shop: Buy Revolver Variant 1",
         'region': "shop",
         'game_id': "shop_rev2"},
+    {'name': "Shop: Buy Revolver Variant 2",
+        'region': "shop",
+        'game_id': "shop_rev1"},
     {'name': "Shop: Buy Shotgun Variant",
         'region': "shop",
         'game_id': "shop_sho1"},

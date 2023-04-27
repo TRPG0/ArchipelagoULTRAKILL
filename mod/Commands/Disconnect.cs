@@ -27,7 +27,7 @@ namespace ArchipelagoULTRAKILL.Commands
                 {
                     Multiworld.Disconnect();
 
-                    if (Core.currentScene.name == "Main Menu")
+                    if (SceneHelper.CurrentScene == "Main Menu")
                     {
                         UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
                     }

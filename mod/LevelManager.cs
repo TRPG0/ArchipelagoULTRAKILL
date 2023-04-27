@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace ArchipelagoULTRAKILL
@@ -19,6 +20,7 @@ namespace ArchipelagoULTRAKILL
         public static readonly Dictionary<string, int> shopPrices = new Dictionary<string, int>()
         {
             ["rev2"] = 7500,
+            ["rev1"] = 12500,
             ["sho1"] = 12500,
             ["nai1"] = 25000,
             ["rai1"] = 100000,
@@ -32,7 +34,7 @@ namespace ArchipelagoULTRAKILL
         {
             foreach (VariationInfo vi in Resources.FindObjectsOfTypeAll<VariationInfo>())
             {
-                if (vi.gameObject.scene.name == Core.currentScene.name && vi.equipSprites.Count() > 0) shopPanels.Add(vi.gameObject);
+                if (vi.gameObject.scene.name == SceneManager.GetActiveScene().name && vi.equipSprites.Count() > 0) shopPanels.Add(vi.gameObject);
             }
         }
 
@@ -140,7 +142,7 @@ namespace ArchipelagoULTRAKILL
             int i = 0;
             foreach (ItemIdentifier item in Resources.FindObjectsOfTypeAll<ItemIdentifier>())
             {
-                if ((item.itemType == ItemType.SkullBlue || item.itemType == ItemType.SkullRed) && item.gameObject.scene.name == Core.currentScene.name)
+                if ((item.itemType == ItemType.SkullBlue || item.itemType == ItemType.SkullRed) && item.gameObject.scene.name == SceneManager.GetActiveScene().name)
                 {
                     if (skulls.ContainsKey(item.itemType.ToString()))
                     {
@@ -154,7 +156,7 @@ namespace ArchipelagoULTRAKILL
             for (int j = 0; j < skulls.Count; j++)
             {
                 KeyValuePair<string, GameObject> pair = skulls.ElementAt(j);
-                switch (Core.currentScene.name)
+                switch (SceneHelper.CurrentScene)
                 {
                     case "Level 1-4":
                         if (j + 1 > Core.data.unlockedSkulls1_4) pair.Value.SetActive(false);
