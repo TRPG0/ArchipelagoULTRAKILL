@@ -320,7 +320,8 @@ namespace ArchipelagoULTRAKILL
         {
             goalCount = new GameObject();
             goalCount.transform.SetParent(levels[Core.data.goal].transform);
-            if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) goalCount.transform.localPosition = new Vector3(0, 90, 0);
+            if (Core.data.goal.Contains("P")) goalCount.transform.localPosition = new Vector3(0, 20, 0);
+            else if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) goalCount.transform.localPosition = new Vector3(0, 90, 0);
             else goalCount.transform.localPosition = new Vector3(0, 22.5f, 0);
             goalCount.layer = 5;
             goalCount.AddComponent<Text>().text = (Core.data.goalRequirement - Core.data.completedLevels.Count).ToString();
@@ -374,7 +375,8 @@ namespace ArchipelagoULTRAKILL
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        go.transform.localPosition = new Vector3(70 - (38 * skullsInLevel[level].FindIndex(a => a == skull)), 60, 0);
+                        if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(70 - (38 * skullsInLevel[level].FindIndex(a => a == skull)), 135, 0);
+                        else go.transform.localPosition = new Vector3(70 - (38 * skullsInLevel[level].FindIndex(a => a == skull)), 60, 0);
                         skullIcons.Add(go);
                     }
                 }
@@ -390,7 +392,9 @@ namespace ArchipelagoULTRAKILL
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        go.transform.localPosition = new Vector3(70 - (38 * i), 60, 0);
+                        if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(70 - (38 * i), 135, 0);
+                        else go.transform.localPosition = new Vector3(70 - (38 * i), 60, 0);
+
                         skullIcons.Add(go);
                     }
                 }
@@ -406,7 +410,8 @@ namespace ArchipelagoULTRAKILL
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        go.transform.localPosition = new Vector3(70 - (38 * i), 60, 0);
+                        if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(70 - (38 * i), 135, 0);
+                        else go.transform.localPosition = new Vector3(70 - (38 * i), 60, 0);
                         skullIcons.Add(go);
                     }
                 }
@@ -417,6 +422,9 @@ namespace ArchipelagoULTRAKILL
         {
             foreach (GameObject skull in skullIcons)
             {
+                if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) skull.transform.localPosition = new Vector3(skull.transform.localPosition.x, 135, skull.transform.localPosition.z);
+                else skull.transform.localPosition = new Vector3(skull.transform.localPosition.x, 60, skull.transform.localPosition.z);
+
                 if (skull.name.Contains("9") && !skull.name.Contains("19"))
                 {
                     if (Core.data.unlockedSkulls1_4 >= int.Parse(skull.name.Substring(skull.name.Length - 1, 1))) skull.GetComponent<Image>().color = LocationManager.colors["lightblue"];
