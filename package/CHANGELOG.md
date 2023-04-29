@@ -1,6 +1,12 @@
+## 1.1.2
+
+- Fixed: skulls disappearing even if `randomize_skulls` was disabled.
+- Fixed: receiving a skull without having `randomize_skulls` enabled (by using cheats) could cause a lot of lag.
+
+
 ## 1.1.1
 
-- Fixed skull icons not appearing in the correct position if level leaderboards are enabled.
+- Fixed: skull icons not appearing in the correct position if level leaderboards are enabled.
 - Logic: Sharpshooter can no longer break walls
 - Logic: Sharpshooter can fly with dual wield powerups to grab Secret #4 and use the secret exit in 4-2
 

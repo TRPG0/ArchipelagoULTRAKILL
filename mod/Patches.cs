@@ -234,7 +234,7 @@ namespace ArchipelagoULTRAKILL
                     FistControl.Instance.ResetFists();
                     if (!Core.CanBreakGlass()) LevelManager.DeactivateGlass();
                 }
-                else if (UIManager.skullLevels.Contains(SceneHelper.CurrentScene))
+                else if (UIManager.skullLevels.Contains(SceneHelper.CurrentScene) && Core.data.randomizeSkulls)
                 {
                     LevelManager.FindSkulls();
                 }

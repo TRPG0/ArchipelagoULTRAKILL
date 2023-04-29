@@ -121,7 +121,7 @@ namespace ArchipelagoULTRAKILL
                         break;
 
                     case Enums.UKItemType.Skull:
-                        // TO DO
+                        if (!Core.data.randomizeSkulls) return;
                         if (item.item_name.Contains("1-4"))
                         {
                             if (Core.data.unlockedSkulls1_4 == 4) return;
