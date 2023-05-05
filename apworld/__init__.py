@@ -6,6 +6,7 @@ from .Locations import location_table, event_table, challenge_locations
 from .Regions import region_table
 from .Rules import rules
 from .Options import ultrakill_options, Goal, UnlockType, StartingWeapon
+from .Music import multilayer_music, singlelayer_music
 from worlds.generic.Rules import set_rule
 
 
@@ -37,7 +38,7 @@ class UltrakillWorld(World):
 
     goal_name = "6-2"
     start_weapon = "Revolver - Piercer"
-
+    music: Dict[str, str] = {}
 
     def set_rules(self):    
         rules(self)
@@ -58,7 +59,7 @@ class UltrakillWorld(World):
         if self.multiworld.starting_weapon[self.player] != StartingWeapon.option_revolver:
             weapons: Set[str] = group_table["start_weapons"]
 
-            if not self.multiworld.starting_weapon[self.player] == StartingWeapon.option_revolver and not self.multiworld.start_with_arm[self.player]:
+            if self.multiworld.starting_weapon[self.player] != StartingWeapon.option_revolver and not self.multiworld.start_with_arm[self.player]:
                 if "Railcannon - Electric" in weapons:
                     weapons.remove("Railcannon - Electric")
                 if "Railcannon - Screwdriver" in weapons:
@@ -69,21 +70,73 @@ class UltrakillWorld(World):
                     weapons.remove("Rocket Launcher - Freezeframe")
 
             if self.multiworld.start_with_arm[self.player]:
-                weapons.remove("Feedbacker")
-
-            if not self.multiworld.start_with_arm[self.player] and not self.multiworld.starting_weapon[self.player] == StartingWeapon.option_any_weapon_or_arm:
                 if "Feedbacker" in weapons:
                     weapons.remove("Feedbacker")
 
-            if not self.multiworld.starting_weapon[self.player] == StartingWeapon.option_any_weapon_or_arm:
-                weapons.remove("Knuckleblaster")
+            if not self.multiworld.start_with_arm[self.player] and self.multiworld.starting_weapon[self.player] != StartingWeapon.option_any_weapon_or_arm:
+                if "Feedbacker" in weapons:
+                    weapons.remove("Feedbacker")
+
+            if self.multiworld.starting_weapon[self.player] != StartingWeapon.option_any_weapon_or_arm:
+                if "Knuckleblaster" in weapons:
+                    weapons.remove("Knuckleblaster")
 
             if self.multiworld.randomize_secondary_fire[self.player]:
                 if "Rocket Launcher - S.R.S. Cannon" in weapons:
                     weapons.remove("Rocket Launcher - S.R.S. Cannon")
             
             self.start_weapon = self.multiworld.random.choice(weapons)
+
+        if self.multiworld.music_randomizer[self.player]:
+            tempDict: Dict[str, str] = {}
+            multi1 = []
+            multi1.extend(multilayer_music.keys())
+            multi2 = [] 
+            multi2.extend(multilayer_music.keys())
+
+            while len(multi1) > 0:
+                id1 = self.multiworld.random.choice(multi1)
+                id2 = self.multiworld.random.choice(multi2)
+
+                tempDict[id1] = id2
+                multi1.remove(id1)
+                multi2.remove(id2)
+
+            single1 = []
+            single1.extend(singlelayer_music.keys())
+            single2 = []
+            single2.extend(singlelayer_music.keys())
+
+            while len(single1) > 0:
+                id1 = self.multiworld.random.choice(single1)
+                id2 = self.multiworld.random.choice(single2)
+
+                tempDict[id1] = id2
+                single1.remove(id1)
+                single2.remove(id2)
+            
+            tempKeys = list(tempDict.keys())
+            tempKeys.sort()
+            self.music = {i: tempDict[i] for i in tempKeys}
+            #print(self.music)
+
     
+    def write_spoiler(self, spoiler_handle):
+        if self.multiworld.music_randomizer[self.player]:
+            spoiler_handle.write("\nMusic:\n")
+            for i, j in self.music.items():
+                original: str
+                changed: str
+                if i in multilayer_music.keys():
+                    original = multilayer_music[i]
+                elif i in singlelayer_music.keys():
+                    original = singlelayer_music[i]
+                if j in multilayer_music.keys():
+                    changed = multilayer_music[j]
+                elif j in singlelayer_music.keys():
+                    changed = singlelayer_music[j]
+                spoiler_handle.write(f"({i}) {original} -> {changed}\n")
+
 
     def create_items(self):
         pool = []
@@ -102,6 +155,8 @@ class UltrakillWorld(World):
             if not self.multiworld.randomize_skulls[self.player] and "Skull" in item["name"]:
                 continue
             if not self.multiworld.randomize_secondary_fire[self.player] and "Secondary Fire" in item["name"]:
+                continue
+            if self.multiworld.start_with_arm[self.player] and item["name"] == "Feedbacker":
                 continue
             if self.multiworld.start_with_slide[self.player] and item["name"] == "Slide":
                 continue
@@ -249,7 +304,9 @@ class UltrakillWorld(World):
             "start_with_slam": bool(self.multiworld.start_with_slam[self.player]),
             "randomize_skulls": bool(self.multiworld.randomize_skulls[self.player]),
             "point_multiplier": self.multiworld.point_multiplier[self.player].value,
-            "death_link": bool(self.multiworld.death_link[self.player])
+            "death_link": bool(self.multiworld.death_link[self.player]),
+            "music_randomizer": bool(self.multiworld.music_randomizer[self.player]),
+            "music": self.music
         }
         return slot_data
 

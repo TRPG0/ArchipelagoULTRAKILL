@@ -106,6 +106,12 @@ class PointMultiplier(Range):
     default = 1
 
 
+class MusicRando(Toggle):
+    """Randomizes the music that plays in each level.
+    Some music is never randomized."""
+    display_name = "Music Randomizer"
+
+
 class UltrakillDeathLink(DeathLink):
     """When you die, everyone dies. The reverse is also true."""
 
@@ -126,5 +132,6 @@ ultrakill_options = {
     "start_with_slam": StartWithSlam,
     "randomize_skulls": RandomizeSkulls,
     "point_multiplier": PointMultiplier,
+    "music_randomizer": MusicRando,
     "death_link": UltrakillDeathLink
 }

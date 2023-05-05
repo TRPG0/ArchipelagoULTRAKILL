@@ -622,7 +622,7 @@ def rules(ultrakillworld):
          
     if not arm:
         add_rule(world.get_location("Cleared 0-S", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
 
 
     # 0-3
@@ -692,7 +692,7 @@ def rules(ultrakillworld):
             if not arm:
                 set_rule(world.get_location("Cleared 1-1", player),
                     lambda state: (state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)"}, player) and \
-                        state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player)) or \
+                        state.has_any({"Feedbacker", "Knuckleblaster"}, player)) or \
                             state.has_all({"Revolver - Marksman", "Secondary Fire - Marksman"}, player))
             else:
                 set_rule(world.get_location("Cleared 1-1", player),
@@ -702,7 +702,7 @@ def rules(ultrakillworld):
             if not arm:
                 set_rule(world.get_location("Cleared 1-1", player),
                     lambda state: (state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)"}, player) and \
-                        state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player)) or \
+                        state.has_any({"Feedbacker", "Knuckleblaster"}, player)) or \
                             state.has("Revolver - Marksman", player))
             else:    
                 set_rule(world.get_location("Cleared 1-1", player),
@@ -768,19 +768,19 @@ def rules(ultrakillworld):
         
     if not arm:
         add_rule(world.get_location("1-2: Secret #3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("1-2: Secret #4", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player) or \
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player) or \
                 state.has("Railcannon - Electric", player))
         add_rule(world.get_location("1-2: Secret #5", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player) or \
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player) or \
                 state.has("Railcannon - Electric", player))
         add_rule(world.get_location("Cleared 1-2", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player) or \
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player) or \
                 state.has("Railcannon - Electric", player))
         if prank:
             add_rule(world.get_location("1-2: Perfect Rank", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
 
     if prank:
         add_rule(world.get_location("1-2: Perfect Rank", player),
@@ -809,13 +809,13 @@ def rules(ultrakillworld):
 
     if not arm:
         add_rule(world.get_location("Cleared 1-3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if prank:
             add_rule(world.get_location("1-3: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if challenge:
             add_rule(world.get_location("1-3: Beat the secret encounter", player),
-                lambda state: state.has_all({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_all({"Feedbacker", "Knuckleblaster"}, player))
 
     if challenge:
         add_rule(world.get_location("1-3: Beat the secret encounter", player),
@@ -845,7 +845,7 @@ def rules(ultrakillworld):
     
     if not arm:
         add_rule(world.get_location("1-4: Secret Weapon", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
 
     if challenge and world.goal[player] != 0:
         add_rule(world.get_location("1-4: Do not pick up any skulls", player),
@@ -927,19 +927,19 @@ def rules(ultrakillworld):
     
     if not arm:
         add_rule(world.get_location("2-3: Secret #3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("2-3: Secret #4", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("Cleared 2-3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("Cleared 2-S", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if challenge:
             add_rule(world.get_location("2-3: Don't touch any water", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if prank:
             add_rule(world.get_location("2-3: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         
     if not slide:
         add_rule(world.get_location("Cleared 2-S", player),
@@ -991,13 +991,13 @@ def rules(ultrakillworld):
         
     if not arm:
         add_rule(world.get_location("Cleared 2-4", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if challenge and world.goal[player] != 1:
             add_rule(world.get_location("2-4: Parry a punch", player),
                 lambda state: state.has("Feedbacker", player))
         if prank and world.goal[player] != 1:
             add_rule(world.get_location("2-4: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
             
     if prank and world.goal[player] != 1:
         add_rule(world.get_location("2-4: Perfect Rank", player),
@@ -1099,15 +1099,15 @@ def rules(ultrakillworld):
         
     if not arm:
         add_rule(world.get_location("Cleared 4-2", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("Cleared 4-S", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if challenge:
             add_rule(world.get_location("4-2: Kill the Insurrectionist in under 10 seconds", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if prank:
             add_rule(world.get_location("4-2: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
             
     if prank:
         add_rule(world.get_location("4-2: Perfect Rank", player),
@@ -1169,7 +1169,7 @@ def rules(ultrakillworld):
         lambda state: state.has("Whiplash", player))
     if prank and world.goal[player] != 3:
         set_rule(world.get_location("4-4: Perfect Rank", player),
-            lambda state: state.has_any("Whiplash", player))
+            lambda state: state.has("Whiplash", player))
             
     if challenge and world.goal[player] != 3:
         set_rule(world.get_location("4-4: Reach the boss room in 18 seconds", player),
@@ -1263,17 +1263,17 @@ def rules(ultrakillworld):
 
     if not arm:
         add_rule(world.get_location("5-1: Secret #5", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("Cleared 5-1", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("Cleared 5-S", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if challenge:
             add_rule(world.get_location("5-1: Don't touch any water", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if prank:
             add_rule(world.get_location("5-1: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         
     if prank:
         add_rule(world.get_location("5-1: Perfect Rank", player),
@@ -1378,23 +1378,23 @@ def rules(ultrakillworld):
         
     if not arm:
         add_rule(world.get_location("5-3: Secret #1", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("5-3: Secret #3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("5-3: Weapon", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("5-3: Secret #4", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("5-3: Secret #5", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("Cleared 5-3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if challenge:
             add_rule(world.get_location("5-3: Don't touch any water", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if prank:
             add_rule(world.get_location("5-3: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
             
     if challenge:
         if not slam:
@@ -1432,6 +1432,8 @@ def rules(ultrakillworld):
     # 6-1
     set_rule(world.get_location("6-1: Secret #4", player),
         lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
+    set_rule(world.get_location("6-1: Secret #5", player),
+        lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm))
     if challenge:
         set_rule(world.get_location("6-1: Beat the secret encounter", player),
             lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
@@ -1459,21 +1461,21 @@ def rules(ultrakillworld):
 
     if not arm:
         add_rule(world.get_location("6-1: Secret #2", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("6-1: Secret #3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("6-1: Secret #4", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("6-1: Secret #5", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("Cleared 6-1", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if challenge:
             add_rule(world.get_location("6-1: Beat the secret encounter", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if prank:
             add_rule(world.get_location("6-1: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster", "Whiplash"}, player))
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
             
     if prank:
         add_rule(world.get_location("6-1: Perfect Rank", player),
