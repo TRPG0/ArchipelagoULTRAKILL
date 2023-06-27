@@ -12,12 +12,13 @@ using UnityEngine;
 using ArchipelagoULTRAKILL.Structures;
 using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
+using Newtonsoft.Json;
 
 namespace ArchipelagoULTRAKILL
 {
     public static class Multiworld
     {
-        public static int[] AP_VERSION = new int[] { 0, 4, 0 };
+        public static int[] AP_VERSION = new int[] { 0, 4, 1 };
         public static DeathLinkService DeathLinkService = null;
         public static bool DeathLinkKilling = false;
 
@@ -108,6 +109,8 @@ namespace ArchipelagoULTRAKILL
                     Core.data.canSlide = bool.Parse(success.SlotData["start_with_slide"].ToString());
                     Core.data.canSlam = bool.Parse(success.SlotData["start_with_slam"].ToString());
                     Core.data.multiplier = int.Parse(success.SlotData["point_multiplier"].ToString());
+                    Core.data.musicRandomizer = bool.Parse(success.SlotData["music_randomizer"].ToString());
+                    if (Core.data.musicRandomizer) Core.data.music = JsonConvert.DeserializeObject<Dictionary<string, string>>(success.SlotData["music"].ToString());
 
                     PrefsManager.Instance.SetInt("difficulty", 3);
                     GameProgressSaver.SetIntro(true);
@@ -158,6 +161,7 @@ namespace ArchipelagoULTRAKILL
                         });
                     }
                 }
+
                 if (Core.DataExists())
                 {
                     if (Core.data.@checked.Count > 0)
@@ -168,6 +172,7 @@ namespace ArchipelagoULTRAKILL
                         }
                     }
                 }
+
                 Core.logger.LogInfo("Successfully connected to server as player \"" + Core.data.slot_name + "\".");
                 UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["green"];
                 string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
@@ -178,7 +183,7 @@ namespace ArchipelagoULTRAKILL
                 Authenticated = false;
                 //GameConsole.Console.Instance.PrintLine(String.Join("\n", loginFailure.Errors));
                 Core.logger.LogError(String.Join("\n", loginFailure.Errors));
-                Session.Socket.Disconnect();
+                Session.Socket.DisconnectAsync();
                 Session = null;
                 UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
             }
@@ -187,7 +192,7 @@ namespace ArchipelagoULTRAKILL
 
         public static void Disconnect()
         {
-            if (Session != null && Session.Socket != null) Session.Socket.Disconnect();
+            if (Session != null && Session.Socket != null) Session.Socket.DisconnectAsync();
             if (SceneHelper.CurrentScene == "Main Menu") UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
             //GameConsole.Console.Instance.PrintLine("Disconnected from Archipelago server.");
             //Debug.Log("Disconnected from Archipelago server.");

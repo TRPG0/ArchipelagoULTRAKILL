@@ -34,8 +34,8 @@
     <Reference Include="0Harmony">
       <HintPath>D:\steam games\steamapps\common\ULTRAKILL\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Archipelago.MultiClient.Net, Version=4.2.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Archipelago.MultiClient.Net.4.2.4\lib\net40\Archipelago.MultiClient.Net.dll</HintPath>
+    <Reference Include="Archipelago.MultiClient.Net, Version=5.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Archipelago.MultiClient.Net.5.0.5\lib\net45\Archipelago.MultiClient.Net.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>D:\steam games\steamapps\common\ULTRAKILL\ULTRAKILL_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -74,7 +74,7 @@
       <HintPath>D:\steam games\steamapps\common\ULTRAKILL\BepInEx\core\MonoMod.Utils.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Archipelago.MultiClient.Net.4.2.4\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Archipelago.MultiClient.Net.5.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -90,6 +90,14 @@
     <Reference Include="UMM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\steam games\steamapps\common\ULTRAKILL\BepInEx\plugins\UMM\UMM.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\steam games\steamapps\common\ULTRAKILL\ULTRAKILL_Data\Managed\Unity.Addressables.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\steam games\steamapps\common\ULTRAKILL\ULTRAKILL_Data\Managed\Unity.ResourceManager.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>D:\steam games\steamapps\common\ULTRAKILL\ULTRAKILL_Data\Managed\UnityEngine.dll</HintPath>
@@ -292,22 +300,38 @@
     <Reference Include="UnityUIExtensions">
       <HintPath>D:\steam games\steamapps\common\ULTRAKILL\ULTRAKILL_Data\Managed\UnityUIExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="websocket-sharp, Version=1.0.2.34775, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
-      <HintPath>packages\Archipelago.MultiClient.Net.4.2.4\lib\net40\websocket-sharp.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChapterSelectState.cs" />
+    <Compile Include="AudioManager.cs" />
+    <Compile Include="Components\ChapterSelectState.cs" />
     <Compile Include="Commands\Log.cs" />
     <Compile Include="Commands\Say.cs" />
     <Compile Include="Commands\Disconnect.cs" />
     <Compile Include="Commands\Connect.cs" />
+    <Compile Include="Components\GlassDisabler.cs" />
+    <Compile Include="Components\ReverseDoorCloser.cs" />
     <Compile Include="LevelManager.cs" />
     <Compile Include="Multiworld.cs" />
     <Compile Include="LocationManager.cs" />
-    <Compile Include="OptionsMenuState.cs" />
+    <Compile Include="Components\OptionsMenuState.cs" />
+    <Compile Include="Patches\AltPickUp.cs" />
+    <Compile Include="Patches\ChallengeManager.cs" />
+    <Compile Include="Patches\DualWield.cs" />
+    <Compile Include="Patches\FinalPit.cs" />
+    <Compile Include="Patches\FinalRank.cs" />
+    <Compile Include="Patches\GameProgressSaver.cs" />
+    <Compile Include="Patches\NewMovement.cs" />
+    <Compile Include="Patches\PlayerActivatorRelay.cs" />
+    <Compile Include="Patches\RocketLauncher.cs" />
+    <Compile Include="Patches\SecretMissionPit.cs" />
+    <Compile Include="Patches\ShopButton.cs" />
+    <Compile Include="Patches\ShopCategory.cs" />
+    <Compile Include="Patches\ShopZone.cs" />
+    <Compile Include="Patches\Shotgun.cs" />
+    <Compile Include="Patches\StatsManager.cs" />
+    <Compile Include="Patches\VariationInfo.cs" />
+    <Compile Include="Patches\WeaponPickUp.cs" />
     <Compile Include="Powerups\StaminaPowerup.cs" />
-    <Compile Include="Patches.cs" />
     <Compile Include="Powerups\WalljumpTrap.cs" />
     <Compile Include="Powerups\DashTrap.cs" />
     <Compile Include="Data.cs" />
@@ -325,6 +349,7 @@
     <Compile Include="Structures\Enums.cs" />
     <Compile Include="Structures\UKItem.cs" />
     <Compile Include="UIManager.cs" />
+    <Compile Include="VersionChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

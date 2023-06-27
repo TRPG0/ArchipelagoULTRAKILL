@@ -283,7 +283,7 @@ namespace ArchipelagoULTRAKILL
                 });
             }
             if (!UIManager.displayingMessage && Core.playerActive) Core.uim.StartCoroutine("DisplayMessage");
-            if (powerupQueue.Count > 0 && Core.playerActive && Core.inLevel && !Core.poweredUp) Core.AddPowerup();
+            if (powerupQueue.Count > 0 && Core.playerActive && Core.inLevel && !Core.poweredUp) Core.obj.GetComponent<Core>().Invoke("AddPowerup", 1f);
         }
 
         public static void AddAPItemMessage(APItem item)

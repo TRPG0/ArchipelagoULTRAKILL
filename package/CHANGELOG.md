@@ -1,3 +1,14 @@
+## 1.1.3
+
+- New: The mod will now check if a new version is available, and output the result to the console.
+- Fixed: The Archipelago logo on the title screen wouldn't retain its color after connecting.
+- Fixed: Logic for 0-3 Secret #2 was incorrect.
+- Fixed: Some secondary fire unlocks would not work correctly if the order of weapons was changed.
+- Fixed: Extra piercer revolvers from picking up Dual Wield powerups could use secondary fire without having it unlocked.
+- Fixed: Removing the glass in 0-1 sometimes wouldn't work, softlocking the player.
+- Fixed: Some reverse skull doors weren't closing themselves.
+- Fixed: Parts of 1-2 would sometimes unload if skulls were randomized, allowing the player to skip most of the level.
+
 ## 1.1.2
 
 - Fixed: skulls disappearing even if `randomize_skulls` was disabled.

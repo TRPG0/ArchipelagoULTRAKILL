@@ -33,5 +33,8 @@ namespace ArchipelagoULTRAKILL
         public HashSet<string> unlockedSkulls = new HashSet<string>();
         public int unlockedSkulls1_4 = 0;
         public int unlockedSkulls5_1 = 0;
+
+        public bool musicRandomizer = false;
+        public Dictionary<string, string> music = new Dictionary<string, string>();
     }
 }

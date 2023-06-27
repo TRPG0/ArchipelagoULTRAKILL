@@ -1,0 +1,1558 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Archipelago.MultiClient.Net</name>
+    </assembly>
+    <members>
+        <member name="M:Archipelago.MultiClient.Net.ArchipelagoPacketBase.ToJObject">
+            <summary>
+            Retreive the basic jobject that was send by the server.
+            Its not recommended to use this however the JObject allows accessing properties are not available in the library
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.ArchipelagoSession">
+            <summary>
+            `ArchipelagoSession` is the overarching class to access and modify and respond to the multiworld state
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.ArchipelagoSession.Socket">
+            <summary>
+            Provides access to the underlying websocket, so send or receive messages
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.ArchipelagoSession.Items">
+            <summary>
+            Provides simplified methods to receive items
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.ArchipelagoSession.Locations">
+            <summary>
+            Provides way to mark locations as checked
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.ArchipelagoSession.Players">
+            <summary>
+            Provides information about all players in the multiworld
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.ArchipelagoSession.DataStorage">
+            <summary>
+            Provides access to a server side data storage to share and store values across sessions and players
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.ArchipelagoSession.ConnectionInfo">
+            <summary>
+            Provides information about your current connection
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.ArchipelagoSession.RoomState">
+            <summary>
+            Provides information about the current state of the server
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.ArchipelagoSession.MessageLog">
+            <summary>
+            Provides simplified handlers to receive messages about events that happen in the multiworld
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.ArchipelagoSession.TryConnectAndLogin(System.String,System.String,Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags,System.Version,System.String[],System.String,System.String,System.Boolean)">
+            <summary>
+                Attempt to log in to the Archipelago server by opening a websocket connection and sending a Connect packet.
+                Determining success for this attempt is done by attaching a listener to Socket.PacketReceived and listening for a Connected packet.
+            </summary>
+            <param name="game">The game this client is playing.</param>
+            <param name="name">The slot name of this client.</param>
+            <param name="version">The minimum AP protocol version this client supports.</param>
+            <param name="itemsHandlingFlags">Informs the AP server how you want ReceivedItem packets to be sent to you.</param>
+            <param name="tags">The tags this client supports.</param>
+            <param name="uuid">The uuid of this client.</param>
+            <param name="password">The password to connect to this AP room.</param>
+            <param name="requestSlotData">Decides if the <see cref="T:Archipelago.MultiClient.Net.LoginSuccessful"/> result will contain any slot data</param>
+            <returns>
+                <see cref="T:Archipelago.MultiClient.Net.LoginSuccessful"/> if the connection is succeeded and the server accepted the login attempt.
+                <see cref="T:Archipelago.MultiClient.Net.LoginFailure"/> if the connection to the server failed in some way.
+            </returns>
+            <remarks>
+                The connect attempt is synchronous and will lock for up to 5 seconds as it attempts to connect to the server. 
+                Most connections are instantaneous however the timeout is 5 seconds before it returns <see cref="T:Archipelago.MultiClient.Net.LoginFailure"/>.
+            </remarks>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.ArchipelagoSessionFactory">
+            <summary>
+            Factory to initiate a new ArchipelagoSession, the base object to communicate with an Archipelago Server
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.ArchipelagoSessionFactory.CreateSession(System.Uri)">
+            <summary>
+                Creates an <see cref="T:Archipelago.MultiClient.Net.ArchipelagoSession"/> object which facilitates all communication to the Archipelago server.
+            </summary>
+            <param name="uri">
+                The full URI to the Archipelago server, including scheme, hostname, and port.
+            </param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.ArchipelagoSessionFactory.CreateSession(System.String,System.Int32)">
+            <summary>
+                Creates an <see cref="T:Archipelago.MultiClient.Net.ArchipelagoSession"/> object which facilitates all communication to the Archipelago server.            
+            </summary>
+            <param name="hostname">
+                The hostname of the Archipelago server, can include protocol and port.
+            		Ex: `archipelago.gg`, `localhost`, `localhost:38281` or `ws://archipelago.gg:46376`
+            </param>
+            <param name="port">
+                (Optional) The port number which the Archipelago server is hosted on. Defaults to: 38281,
+            		will be ignored if the port is added to the hostname
+            </param>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLink.Timestamp">
+            <summary>
+            The Timestamp of the created DeathLink object
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLink.Source">
+            <summary>
+            The name of the player who sent the DeathLink
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLink.Cause">
+            <summary>
+            The full text to print for players receiving the DeathLink. Can be null
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLink.#ctor(System.String,System.String)">
+            <summary>
+            A DeathLink object that gets sent and received via bounce packets.
+            </summary>
+            <param name="sourcePlayer">Name of the player sending the DeathLink</param>
+            <param name="cause">Optional reason for the DeathLink. Since this is optional it should generally include
+            a name as if this entire text is what will be displayed</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLinkProvider.CreateDeathLinkService(Archipelago.MultiClient.Net.ArchipelagoSession)">
+            <summary>
+                creates and returns a <see cref="T:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLinkService"/> for this <paramref name="session"/>.
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLinkService.DeathLinkReceivedHandler">
+            <summary>
+            Creates <see cref="E:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLinkService.OnDeathLinkReceived"/> event for clients to hook into and decide what to do with the
+            received <see cref="T:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLink"/>
+            </summary>
+        </member>
+        <member name="E:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLinkService.OnDeathLinkReceived">
+            <summary>
+            Delegate event that supplies the created <see cref="T:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLink"/> whenever one is received from the server
+            as a bounce packet.
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLinkService.SendDeathLink(Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLink)">
+            <summary>
+                Formats and sends a Bounce packet using the provided <paramref name="deathLink"/> object.
+            </summary>
+            <param name="deathLink">
+                <see cref="T:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLink"/> object containing the information of the death which occurred.
+                Must at least contain the <see cref="P:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLink.Source"/>.
+            </param>
+            <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                The websocket connection is not alive
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLinkService.EnableDeathLink">
+            <summary>
+            Adds "DeathLink" to your <see cref="T:Archipelago.MultiClient.Net.ArchipelagoSession"/>'s tags and opts you in to receiving
+            <see cref="E:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLinkService.OnDeathLinkReceived"/> events
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLinkService.DisableDeathLink">
+            <summary>
+            Removes the "DeathLink" tag from your <see cref="T:Archipelago.MultiClient.Net.ArchipelagoSession"/> and opts out of further
+            <see cref="E:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLinkService.OnDeathLinkReceived"/> events
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Converters.ArchipelagoPacketConverter">
+            <summary>
+            Json Converter for archipelago packets
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Converters.ArchipelagoPacketConverter.CanWrite">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Converters.ArchipelagoPacketConverter.CanConvert(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Converters.ArchipelagoPacketConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Converters.ArchipelagoPacketConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <inheritdoc/>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ConnectionRefusedError.InvalidSlot">
+            <summary>
+            Indicates that the sent 'name' field did not match any auth entry on the server.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ConnectionRefusedError.InvalidGame">
+            <summary>
+            Indicates that a correctly named slot was found, but the game for it mismatched.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ConnectionRefusedError.SlotAlreadyTaken">
+            <summary>
+            Indicates a connection with a different uuid is already established.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ConnectionRefusedError.IncompatibleVersion">
+            <summary>
+            IncompatibleVersion indicates a version mismatch.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ConnectionRefusedError.InvalidPassword">
+            <summary>
+            InvalidPassword indicates the wrong, or no password when it was required, was sent.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ConnectionRefusedError.InvalidItemsHandling">
+            <summary>
+            InvalidItemsHandling indicates a wrong value type or flag combination was sent.
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Enums.Scope">
+            <summary>
+            Scope for DataStorage keys
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.Scope.Global">
+            <summary>
+            Keys in this scope are shared with all clients
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.Scope.Game">
+            <summary>
+            Keys in this scope are with shared with clients that connect under the same game as you connected with
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.Scope.Team">
+            <summary>
+            Keys in this scope are with shared with clients on your team
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.Scope.Slot">
+            <summary>
+            Keys in this scope are with shared with clients connected to your slot
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.Scope.ReadOnly">
+            <summary>
+            Keys in this scope are read-only and can only be updated by the server
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Enums.ItemFlags">
+            <summary>
+            Enum flags that describe special properties of the Item
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ItemFlags.None">
+            <summary>
+            Nothing special about this item
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ItemFlags.Advancement">
+            <summary>
+            Indicates the item can unlock logical advancement
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ItemFlags.NeverExclude">
+            <summary>
+            Indicates the item is important but not in a way that unlocks advancement
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ItemFlags.Trap">
+            <summary>
+            Indicates the item is a trap
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags">
+            <summary>
+            Indicates to the server how the client would like to get ReceivedItems packets.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags.NoItems">
+            <summary>
+            Don't get any ReceivedItems packets from the server.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags.RemoteItems">
+            <summary>
+            Get ReceivedItems packets for items being granted to you by others.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags.IncludeOwnItems">
+            <summary>
+            Get ReceivedItems packets for items which you picked up in your own world. Automatically includes RemoteItems option as it is required to set this.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags.IncludeStartingInventory">
+            <summary>
+            Get ReceivedItems packets for your starting inventory. Automatically includes RemoteItems option as it is required to set this.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags.AllItems">
+            <summary>
+            Get ReceivedItems packets for all remote items, items in your world, and starting inventory granted to you.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.JsonMessagePartType.Text">
+            <summary>
+            Regular text content. this is the default type and as such may be omitted.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.JsonMessagePartType.PlayerId">
+            <summary>
+            Player ID of someone on your team, should be resolved to Player Name
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.JsonMessagePartType.PlayerName">
+            <summary>
+            Player Name, could be a player within a multiplayer game or from another team, not ID resolvable
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.JsonMessagePartType.ItemId">
+            <summary>
+            Item ID, should be resolved to Item Name
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.JsonMessagePartType.ItemName">
+            <summary>
+            Item Name, not currently used over network, but supported by reference Clients.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.JsonMessagePartType.LocationId">
+            <summary>
+            Location ID, should be resolved to Location Name
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.JsonMessagePartType.LocationName">
+            <summary>
+            Location Name, not currently used over network, but supported by reference Clients.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.JsonMessagePartType.EntranceName">
+            <summary>
+            Entrance Name. No ID mapping exists.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.JsonMessagePartType.Color">
+            <summary>
+            Regular text that should be colored. Only type that will contain color data.
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Enums.OperationType">
+            <summary>
+            The type of DataStorage operation
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.Uri">
+            <summary>
+                The URL of the host that the socket is connected to.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.Connected">
+            <summary>
+                Returns true if the socket believes it is connected to the host.
+                Does not emit a ping to determine if the connection is stable.
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.Connect">
+            <summary>
+                Initiates a connection to the host.
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.Disconnect">
+            <summary>
+                Disconnect from the host.
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.DisconnectAsync">
+            <summary>
+                Disconnect from the host asynchronously.
+                Handle the <see cref="E:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SocketClosed"/> event to add a callback.
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SendPacket(Archipelago.MultiClient.Net.ArchipelagoPacketBase)">
+            <summary>
+                Send a single <see cref="T:Archipelago.MultiClient.Net.ArchipelagoPacketBase"/> derived packet.
+            </summary>
+            <param name="packet">
+                The packet to send to the server.
+            </param>
+            <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                The websocket connection is not alive.
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SendMultiplePackets(System.Collections.Generic.List{Archipelago.MultiClient.Net.ArchipelagoPacketBase})">
+            <summary>
+                Send multiple <see cref="T:Archipelago.MultiClient.Net.ArchipelagoPacketBase"/> derived packets.
+            </summary>
+            <param name="packets">
+                The packets to send to the server.
+            </param>
+            <remarks>
+                The packets will be sent in the order they are provided in the list.
+            </remarks>
+            <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                The websocket connection is not alive.
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SendMultiplePackets(Archipelago.MultiClient.Net.ArchipelagoPacketBase[])">
+            <summary>
+                Send multiple <see cref="T:Archipelago.MultiClient.Net.ArchipelagoPacketBase"/> derived packets.
+            </summary>
+            <param name="packets">
+                The packets to send to the server.
+            </param>
+            <remarks>
+                The packets will be sent in the order they are provided as arguments.
+            </remarks>
+            <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                The websocket connection is not alive.
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SendPacketAsync(Archipelago.MultiClient.Net.ArchipelagoPacketBase,System.Action{System.Boolean})">
+            <summary>
+                Send a single <see cref="T:Archipelago.MultiClient.Net.ArchipelagoPacketBase"/> derived packet asynchronously.
+            </summary>
+            <param name="onComplete">
+                A callback function to run after the send is complete.
+                The <see cref="T:System.Boolean"/> argument for the callback indicates whether the send was successful.
+            </param>
+            <param name="packet">
+                The packet to send to the server.
+            </param>
+            <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                The websocket connection is not alive.
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SendMultiplePacketsAsync(System.Collections.Generic.List{Archipelago.MultiClient.Net.ArchipelagoPacketBase},System.Action{System.Boolean})">
+            <summary>
+                Send a single <see cref="T:Archipelago.MultiClient.Net.ArchipelagoPacketBase"/> derived packet asynchronously.
+            </summary>
+            <param name="onComplete">
+                A callback function to run after the send is complete.
+                The <see cref="T:System.Boolean"/> argument for the callback indicates whether the send was successful.
+            </param>
+            <param name="packets">
+                The packets to send to the server.
+            </param>
+            <remarks>
+                The packets will be sent in the order they are provided in the list.
+            </remarks>
+            <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                The websocket connection is not alive.
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SendMultiplePacketsAsync(System.Action{System.Boolean},Archipelago.MultiClient.Net.ArchipelagoPacketBase[])">
+            <summary>
+                Send a single <see cref="T:Archipelago.MultiClient.Net.ArchipelagoPacketBase"/> derived packet asynchronously.
+            </summary>
+            <param name="onComplete">
+                A callback function to run after the send is complete.
+                The <see cref="T:System.Boolean"/> argument for the callback indicates whether the send was successful.
+            </param>
+            <param name="packets">
+                The packets to send to the server.
+            </param>
+            <remarks>
+                The packets will be sent in the order they are provided as arguments.
+            </remarks>
+            <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                The websocket connection is not alive.
+            </exception>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider">
+            <summary>
+            Provides information about your current connection
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider.Game">
+            <summary>
+            The game you are connected to or an empty string otherwise
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider.Team">
+            <summary>
+            The team you are connected to or -1 otherwise
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider.Slot">
+            <summary>
+            The slot you are connected to or -1 otherwise
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider.Tags">
+            <summary>
+            The tags under which you client is connected or an empty array otherwise
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider.ItemsHandlingFlags">
+            <summary>
+            The Item Handling Flags which your connection is currently using, defaults to NoItems
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider.Uuid">
+            <summary>
+            The Uniquely Identifiable string under which you client is connected or an empty string otherwise
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider.UpdateConnectionOptions(System.String[])">
+            <summary>
+            Send a ConnectUpdate packet and set the tags and ItemsHandlingFlags for the current connection to the provided params.
+            </summary>
+            <param name="tags">New tags for the current connection.</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider.UpdateConnectionOptions(Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags)">
+            <summary>
+            Send a ConnectUpdate packet and set the tags and ItemsHandlingFlags for the current connection to the provided params.
+            </summary>
+            <param name="itemsHandlingFlags">New ItemsHandlingFlags for the current connection.</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider.UpdateConnectionOptions(System.String[],Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags)">
+            <summary>
+            Send a ConnectUpdate packet and set the tags and ItemsHandlingFlags for the current connection to the provided params.
+            </summary>
+            <param name="tags">New tags for the current connection.</param>
+            <param name="itemsHandlingFlags">New ItemsHandlingFlags for the current connection.</param>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.ConnectionInfoHelper">
+            <inheritdoc/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.ConnectionInfoHelper.Game">
+            <inheritdoc/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.ConnectionInfoHelper.Team">
+            <inheritdoc/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.ConnectionInfoHelper.Slot">
+            <inheritdoc/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.ConnectionInfoHelper.Tags">
+            <inheritdoc/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.ConnectionInfoHelper.ItemsHandlingFlags">
+            <inheritdoc/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.ConnectionInfoHelper.Uuid">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ConnectionInfoHelper.UpdateConnectionOptions(System.String[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ConnectionInfoHelper.UpdateConnectionOptions(Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ConnectionInfoHelper.UpdateConnectionOptions(System.String[],Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.DataStorageHelper">
+            <summary>
+            Provides access to a server side data storage to share and store values across sessions and players
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.Item(Archipelago.MultiClient.Net.Enums.Scope,System.String)">
+            <summary>
+            Stored or retrieves a value from the server side data storage.
+            Assignment operations like = or *= will run asynchronously on server only
+            The retrievals are done synchronously however this storage is implemented using deferred execution.
+            </summary>
+            <param name="scope">The scope of the key</param>
+            <param name="key">The key for which the value should be stored or retrieved</param>
+            <returns>A value </returns>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.Item(System.String)">
+            <summary>
+            Stored or retrieves a value from the server side data storage.
+            Assignment operations like = or *= will run asynchronously on server only
+            The retrievals are done synchronously however this storage is implemented using deferred execution.
+            </summary>
+            <param name="key">The key under which the value should be stored or retrieved</param>
+            <returns>A value </returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetHints(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Retrieves all unlocked hints for the specified player slot and team
+            </summary>
+            <param name="slot">the slot id of the player to request hints for, defaults to the current player's slot if left empty</param>
+            <param name="team">the team id of the player to request hints for, defaults to the current player's team if left empty</param>
+            <returns>An array of unlocked hints or null if the slot or team does not exist</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetHintsAsync(System.Action{Archipelago.MultiClient.Net.Models.Hint[]},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Retrieves all unlocked hints for the specified player slot and team
+            </summary>
+            <param name="onHintsRetrieved">the method to call with the retrieved hints</param>
+            <param name="slot">the slot id of the player to request hints for, defaults to the current player's slot if left empty</param>
+            <param name="team">the team id of the player to request hints for, defaults to the current player's team if left empty</param>
+            <returns>An array of unlocked hints or null if the slot or team does not exist</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.TrackHints(System.Action{Archipelago.MultiClient.Net.Models.Hint[]},System.Boolean,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Sets a callback to be called with all updates to the unlocked hints for the specified player slot and team
+            </summary>
+            <param name="onHintsUpdated">the method to call with the updated hints</param>
+            <param name="retrieveCurrentlyUnlockedHints">should the currently unlocked hints be retrieved or just the updates</param>
+            <param name="slot">the slot id of the player to request hints for, defaults to the current player's slot if left empty</param>
+            <param name="team">the team id of the player to request hints for, defaults to the current player's team if left empty</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetSlotData(System.Nullable{System.Int32})">
+            <summary>
+            Retrieves the custom slot data for the specified slot
+            </summary>
+            <param name="slot">the slot id of the player to request slot data for, defaults to the current player's slot if left empty</param>
+            <returns>An Dictionary with string keys, and custom defined values, the keys and values differ per game</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetSlotDataAsync(System.Action{System.Collections.Generic.Dictionary{System.String,System.Object}},System.Nullable{System.Int32})">
+            <summary>
+            Retrieves the custom slot data for the specified slot
+            </summary>
+            <param name="onSlotDataRetrieved">the method to call with the retrieved slot data</param>
+            <param name="slot">the slot id of the player to request slot data for, defaults to the current player's slot if left empty</param>
+            <returns>An Dictionary with string keys, and custom defined values, the keys and values differ per game</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetItemNameGroups(System.String)">
+            <summary>
+            Retrieves the defined item name groups for the specified game
+            </summary>
+            <param name="game">the game name to request item name groups for, defaults to the current player's game if left empty</param>
+            <returns>An Dictionary with item group names for keys and an array of item names as value</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetItemNameGroupsAsync(System.Action{System.Collections.Generic.Dictionary{System.String,System.String[]}},System.String)">
+            <summary>
+            Retrieves the defined item name groups for the specified game
+            </summary>
+            <param name="onItemNameGroupsRetrieved">the method to call with the retrieved item name groups</param>
+            <param name="game">the game name to request item name groups for, defaults to the current player's game if left empty</param>
+            <returns>An Dictionary with item group names for keys and an array of item names as value</returns>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.IArchipelagoSocketHelper">
+            <summary>
+            Provides access to the underlying websocket, so send or receive messages
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.ILocationCheckHelper">
+            <summary>
+            Provides way to mark locations as checked
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.CompleteLocationChecks(System.Int64[])">
+            <summary>
+                Submit the provided location ids as checked locations.
+            </summary>
+            <param name="ids">
+                Location ids which have been checked.
+            </param>
+            <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                The websocket connection is not alive.
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.CompleteLocationChecksAsync(System.Action{System.Boolean},System.Int64[])">
+            <summary>
+                Submit the provided location ids as checked locations.
+            </summary>
+            <param name="onComplete">
+                Action to be called when the async send is completed.
+            </param>
+            <param name="ids">
+                Location ids which have been checked.
+            </param>
+            <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                The websocket connection is not alive.
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.ScoutLocationsAsync(System.Action{Archipelago.MultiClient.Net.Packets.LocationInfoPacket},System.Boolean,System.Int64[])">
+            <summary>
+                Ask the server for the items which are present in the provided location ids.
+            </summary>
+            <param name="callback">
+                An action to run once the server responds to the scout packet.
+                If the argument to the action is null then the server responded with an InvalidPacket response.
+            </param>
+            <param name="createAsHint">
+                If true, creates a free hint for these locations.
+            </param>
+            <param name="ids">
+                The locations ids which are to be scouted.
+            </param>
+            <remarks>
+                Repeated calls of this method before a LocationInfo packet is received will cause the stored
+                callback to be overwritten with the most recent call. It is recommended you chain calls to this method
+                within the callbacks themselves or call this only once.
+            </remarks>
+            <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                The websocket connection is not alive.
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.ScoutLocationsAsync(System.Action{Archipelago.MultiClient.Net.Packets.LocationInfoPacket},System.Int64[])">
+            <summary>
+                Ask the server for the items which are present in the provided location ids.
+            </summary>
+            <param name="callback">
+                An action to run once the server responds to the scout packet.
+                If the argument to the action is null then the server responded with an InvalidPacket response.
+            </param>
+            <param name="ids">
+                The locations ids which are to be scouted.
+            </param>
+            <remarks>
+                Repeated calls of this method before a LocationInfo packet is received will cause the stored
+                callback to be overwritten with the most recent call. It is recommended you chain calls to this method
+                within the callbacks themselves or call this only once.
+            </remarks>
+            <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                The websocket connection is not alive.
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.GetLocationIdFromName(System.String,System.String)">
+            <summary>
+                Get the Id of a location from its name. Useful when a game knows its locations by name but not by Archipelago Id.
+            </summary>
+            <param name="game">
+                The game to look up the locations from
+            </param>
+            <param name="locationName">
+                The name of the location to check the Id for. Must match the contents of the datapackage.
+            </param>
+            <returns>
+                Returns the locationId for the location name that was given or -1 if no location was found.
+            </returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.GetLocationNameFromId(System.Int64)">
+            <summary>
+                Get the name of a location from its id. Useful when receiving a packet and it is necessary to find the name of the location.
+            </summary>
+            <param name="locationId">
+                The Id of the location to look up the name for. Must match the contents of the datapackage.
+            </param>
+            <returns>
+                Returns the locationName for the provided locationId, or null if no such location is found.
+            </returns>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.MessageLogHelper">
+            <summary>
+            Allows clients to easily subscribe to incoming messages and helps formulating those messages correctly
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.MessageLogHelper.MessageReceivedHandler">
+            <inheritdoc />
+        </member>
+        <member name="E:Archipelago.MultiClient.Net.Helpers.MessageLogHelper.OnMessageReceived">
+            <summary>
+            Triggered for each message that should be presented to the player
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.IPlayerHelper">
+            <summary>
+            A helper class containing information about all players in the current multiworld
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.IPlayerHelper.Players">
+            <summary>
+            A dictionary of all team's containing all their PlayerInfo's index by their slot
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.IPlayerHelper.AllPlayers">
+            <summary>
+            A enumerable of PlayerInfo's for all players in the multiworld
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IPlayerHelper.GetPlayerAlias(System.Int32)">
+            <summary>
+            Returns the Alias corresponding to the provided player slot
+            Alias defaults to the player's name until a different alias is specifically set
+            </summary>
+            <param name="slot">The slot of which to retrieve the alias</param>
+            <returns>The player's alias, or null if no such player is found</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IPlayerHelper.GetPlayerName(System.Int32)">
+            <summary>
+            Returns the Name corresponding to the provided player slot
+            </summary>
+            <param name="slot">The slot of which to retrieve the name</param>
+            <returns>The player's name, or null if no such player is found</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IPlayerHelper.GetPlayerAliasAndName(System.Int32)">
+            <summary>
+            Returns the Alias and Name corresponding to the provided player slot
+            Alias defaults to the player's name until a different alias is specifically set
+            The result is returned in the format of "Alias (Name)"
+            </summary>
+            <param name="slot">The slot of which to retrieve the alias</param>
+            <returns>The player's alias and name in the following format of "Alias (Name)", or null if no such player is found</returns>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.PlayerHelper">
+            <inheritdoc/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.PlayerHelper.Players">
+            <inheritdoc/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.PlayerHelper.AllPlayers">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.PlayerHelper.GetPlayerAlias(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.PlayerHelper.GetPlayerName(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.PlayerHelper.GetPlayerAliasAndName(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.PlayerInfo">
+            <summary>
+            Information about a specific player
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.PlayerInfo.Team">
+            <summary>
+            The team of this player
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.PlayerInfo.Slot">
+            <summary>
+            The slot of this player
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.PlayerInfo.Alias">
+            <summary>
+            A custom name Alias for this player, that can optionally set with !alias, if no alias is set will return Name instead
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.PlayerInfo.Name">
+            <summary>
+            The name of that player
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.PlayerInfo.Game">
+            <summary>
+            The game the player is playing
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.PlayerInfo.Groups">
+            <summary>
+            A array of groups this player is part of
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.PlayerInfo.IsSharingGroupWith(System.Int32,System.Int32)">
+            <summary>
+            Checks if the provided team and slot, are sharing any slot groups with this player
+            </summary>
+            <param name="team">The team to check</param>
+            <param name="slot">The slot to check</param>
+            <returns></returns>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.IReceivedItemsHelper">
+            <summary>
+            Provides simplified methods to receive items
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IReceivedItemsHelper.GetItemName(System.Int64)">
+            <summary>
+                Perform a lookup using the DataPackage sent as a source of truth to lookup a particular item id for a particular game.
+            </summary>
+            <param name="id">
+                Id of the item to lookup.
+            </param>
+            <returns>
+                The name of the item as a string, or null if no such item is found.
+            </returns>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.ReceivedItemsHelper">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ReceivedItemsHelper.Any">
+            <summary>
+                Check whether there are any items in the queue. 
+            </summary>
+            <returns>
+                True if the queue is not empty, otherwise false.
+            </returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ReceivedItemsHelper.PeekItem">
+            <summary>
+                Peek the next item on the queue to be handled. 
+                The item will remain on the queue until dequeued with <see cref="M:Archipelago.MultiClient.Net.Helpers.ReceivedItemsHelper.DequeueItem"/>.
+            </summary>
+            <returns>
+                The next item to be handled as a <see cref="T:Archipelago.MultiClient.Net.Models.NetworkItem"/>, or null if no such item is found.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">
+                The <see cref="T:System.Collections.Generic.Queue`1" /> is empty.
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ReceivedItemsHelper.PeekItemName">
+            <summary>
+                Peek the name of next item on the queue to be handled.
+            </summary>
+            <returns>
+                The name of the item as a string, or null if no such item is found.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">
+                The <see cref="T:System.Collections.Generic.Queue`1" /> is empty.
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ReceivedItemsHelper.DequeueItem">
+            <summary>
+                Dequeues and returns the next item on the queue to be handled.
+            </summary>
+            <returns>
+                The next item to be handled as a <see cref="T:Archipelago.MultiClient.Net.Models.NetworkItem"/>.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">
+                The <see cref="T:System.Collections.Generic.Queue`1" /> is empty.
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ReceivedItemsHelper.GetItemName(System.Int64)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.RoomStateHelper">
+            <summary>
+            Provides information about the current state of the server
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.HintCost">
+            <summary>
+            The amount of points it costs to receive a hint from the server.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.HintCostPercentage">
+            <summary>
+            The percentage of total locations that need to be checked to receive a hint from the server.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.LocationCheckPoints">
+            <summary>
+            The amount of hint points you receive per item/location check completed.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.HintPoints">
+            <summary>
+            The client's current hint points.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.Version">
+            <summary>
+            The version of Archipelago which the server is running.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.HasPassword">
+            <summary>
+            Denoted whether a password is required to join this room.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.ReleasePermissions">
+            <summary>
+            An enumeration containing the possible release command permission.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.ForfeitPermissions">
+            <summary>
+            An enumeration containing the possible forfeit command permission. 
+            Deprecated, use Release Permissions instead
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.CollectPermissions">
+            <summary>
+            An enumeration containing the possible collect command permission.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.RemainingPermissions">
+            <summary>
+            An enumeration containing the possible remaining command permission.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.Seed">
+            <summary>
+            Uniquely identifying name of this generation
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.RoomInfoSendTime">
+            <summary>
+            Time stamp of we first connected to the server, and the server send us the RoomInfoPacker.
+            Send for time synchronization if wanted for things like the DeathLink Bounce.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.RoomStateHelper.ServerTags">
+            <summary>
+            Denotes special features or capabilities that the server is capable of.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.LoginSuccessful.Team">
+            <summary>
+            Your team number.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.LoginSuccessful.Slot">
+            <summary>
+            Your slot number on your team.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.LoginSuccessful.SlotData">
+            <summary>
+            Contains a slot data, differs per game
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.AdminCommandResultLogMessage">
+            <summary>
+            An admin command result message to display to the user, consisting of an array of message parts to form a sentence.
+            The `AdminCommandResultLogMessage` is send in response to a client using `!admin` command
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.ChatLogMessage">
+            <summary>
+            An chat message to display to the user, consisting of an array of message parts to form a sentence.
+            The `ChatLogMessage` is send in response to a client chatting some message
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Messages.PlayerSpecificLogMessage"/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.ChatLogMessage.Message">
+            <summary>
+            The message that was chatted
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.CollectLogMessage">
+            <summary>
+            An collect message to display to the user, consisting of an array of message parts to form a sentence.
+            The `CollectLogMessage` is send in response to a client collecting their items
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Messages.PlayerSpecificLogMessage"/>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.CommandResultLogMessage">
+            <summary>
+            An command result message to display to the user, consisting of an array of message parts to form a sentence.
+            The `CommandResultLogMessage` is send in response to a client using an `!` command (e.g. !status)
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.CountdownLogMessage">
+            <summary>
+            A countdown message to display to the user, consisting of an array of message parts to form a sentence
+            countdown message also contains the remaining seconds for the countdown for more specific processing
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.GoalLogMessage">
+            <summary>
+            An goal message to display to the user, consisting of an array of message parts to form a sentence.
+            The `GoalLogMessage` is send in response to a client completing their goal
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Messages.PlayerSpecificLogMessage"/>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.HintItemSendLogMessage">
+            <summary>
+            An item hint message to display to the user, consisting of an array of message parts to form a sentence.
+            The `HintItemSendLogMessage` is send in response to a client hinting for an item.
+            Item hint messages contain additional information about the item that was sent for more specific processing
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Messages.ItemSendLogMessage"/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.HintItemSendLogMessage.IsFound">
+            <summary>
+            Indicates if the location of this item was already checked
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.ItemCheatLogMessage">
+            <summary>
+            An item cheat message to display to the user, consisting of an array of message parts to form a sentence.
+            Item cheat messages contain additional information about the item that was in response to an `!getitem` command
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Messages.ItemSendLogMessage"/>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Archipelago.MultiClient.Net.MessageLog.Messages.ItemSendLogMessage" -->
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.ItemSendLogMessage.ReceivingPlayerSlot">
+            <summary>
+            The player slot number of the player who received the item
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.ItemSendLogMessage.SendingPlayerSlot">
+            <summary>
+            The player slot number of the player who sent the item
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.ItemSendLogMessage.Receiver">
+            <summary>
+            The player who received the item
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.ItemSendLogMessage.Sender">
+            <summary>
+            The player who sent the item
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.ItemSendLogMessage.IsReceiverTheActivePlayer">
+            <summary>
+            Checks if the Receiver is the current connected player
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.ItemSendLogMessage.IsSenderTheActivePlayer">
+            <summary>
+            True if the Sender is the current connected player
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.ItemSendLogMessage.IsRelatedToActivePlayer">
+            <summary>
+            True if either the Receiver or Sender share any slot groups (e.g. itemlinks) with the current connected player
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.ItemSendLogMessage.Item">
+            <summary>
+            The Item that was send
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.JoinLogMessage">
+            <summary>
+            An join message to display to the user, consisting of an array of message parts to form a sentence.
+            The `JoinLogMessage` is send in response to a client joining the multiworld
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Messages.PlayerSpecificLogMessage"/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.JoinLogMessage.Tags">
+            <summary>
+            The tags used by the client, tags are used for certain functionality that is shared across the mutliworld (e.g. DeathLink)
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.LeaveLogMessage">
+            <summary>
+            An leave message to display to the user, consisting of an array of message parts to form a sentence.
+            The `LeaveLogMessage` is send in response to a client disconnecting from the multiworld
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Messages.PlayerSpecificLogMessage"/>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.LogMessage">
+            <summary>
+            A message to display to the user, consisting of an array of message parts to form a sentence
+            This is the base class for all LogMessage's
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.LogMessage.Parts">
+            <summary>
+            Different part of a message that should be used to build a sentence
+            The order of the parts is the order the different sections should appear in
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.MessageLog.Messages.LogMessage.ToString">
+            <summary>
+            Uses the Parts to form a correct sentence
+            </summary>
+            <returns>the sentence this LogMessage is representing</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Archipelago.MultiClient.Net.MessageLog.Messages.PlayerSpecificLogMessage" -->
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.PlayerSpecificLogMessage.Player">
+            <summary>
+            The player information about the player this message is concerning
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.PlayerSpecificLogMessage.IsActivePlayer">
+            <summary>
+            True if the player this message is concerning is the current connected player
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.PlayerSpecificLogMessage.IsRelatedToActivePlayer">
+            <summary>
+            True if the player this message is concerning shares any slot groups (e.g. itemlinks) with the current connected player
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.ReleaseLogMessage">
+            <summary>
+            An release message to display to the user, consisting of an array of message parts to form a sentence.
+            The `ReleaseLogMessage` is send in response to a client releasing their items
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Messages.PlayerSpecificLogMessage"/>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.ServerChatLogMessage">
+            <summary>
+            An chat message to display to the user, consisting of an array of message parts to form a sentence.
+            The `ServerChatLogMessage` is send in response to the server chatting some message
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Messages.PlayerSpecificLogMessage"/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.ServerChatLogMessage.Message">
+            <summary>
+            The message that was chatted
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.TagsChangedLogMessage">
+            <summary>
+            An tags changed message to display to the user, consisting of an array of message parts to form a sentence.
+            The `TagsChangedLogMessage` is send in response to a client changing their tags
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Messages.PlayerSpecificLogMessage"/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Messages.TagsChangedLogMessage.Tags">
+            <summary>
+            The tags used by the client, tags are used for certain functionality that is shared across the mutliworld (e.g. DeathLink)
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Messages.TutorialLogMessage">
+            <summary>
+            An tutorial message to display to the user, consisting of an array of message parts to form a sentence.
+            The `TutorialLogMessage` is send in response to a client joining a multiworld (e.g. "Now that you are connected...")
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Parts.EntranceMessagePart">
+            <summary>
+            Part of a LogMessage that contains information about the entrance
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart"/>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Parts.ItemMessagePart">
+            <summary>
+            Part of a LogMessage that contains information about an item
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart"/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.ItemMessagePart.Flags">
+            <summary>
+            The flags that identify the items its special properties
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.ItemMessagePart.ItemId">
+            <summary>
+            The id of the item
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Parts.LocationMessagePart">
+            <summary>
+            Part of a LogMessage that contains information about an location
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart"/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.LocationMessagePart.LocationId">
+            <summary>
+            The name of the location
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart">
+            <summary>
+            Part of a LogMessage that contains information on how to display the piece of text
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.Text">
+            <summary>
+            The text to display
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.Type">
+            <summary>
+            The type of message part
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.Color">
+            <summary>
+            The specified or default color for this message part
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.IsBackgroundColor">
+            <summary>
+            The specified background color for this message part
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.ToString">
+            <summary>
+            The text to display of this message part
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePartType">
+            <summary>
+            The type of message part
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePartType.Text">
+            <inheritdoc cref="T:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart"/>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePartType.Player">
+            <inheritdoc cref="T:Archipelago.MultiClient.Net.MessageLog.Parts.PlayerMessagePart"/>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePartType.Item">
+            <inheritdoc cref="T:Archipelago.MultiClient.Net.MessageLog.Parts.ItemMessagePart"/>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePartType.Location">
+            <inheritdoc cref="T:Archipelago.MultiClient.Net.MessageLog.Parts.LocationMessagePart"/>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePartType.Entrance">
+            <inheritdoc cref="T:Archipelago.MultiClient.Net.MessageLog.Parts.EntranceMessagePart"/>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.MessageLog.Parts.PlayerMessagePart">
+            <summary>
+            Part of a LogMessage that contains information about an item
+            </summary>
+            <seealso cref="T:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart"/>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Models.Color">
+            <summary>
+            Polyfill for System.Drawing.Color for games on runtimes which do not supply a `System.Drawing.dll`.
+            Not focused on memory or computation efficiency, we just need something that works reasonably well.
+            Transparency/alpha channel is not handled.
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Models.Color.Red">
+            <summary>
+            Predefined Archipelago Color Red (used for not found hints)
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Models.Color.Green">
+            <summary>
+            Predefined Archipelago Color Green (used for found hints)
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Models.Color.Yellow">
+            <summary>
+            Predefined Archipelago Color Yellow (used for the local player)
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Models.Color.Blue">
+            <summary>
+            Predefined Archipelago Color Blue (used for entrances)
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Models.Color.Magenta">
+            <summary>
+            Predefined Archipelago Color Magenta (used for other players)
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Models.Color.Cyan">
+            <summary>
+            Predefined Archipelago Color Cyan (used for normal items)
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Models.Color.Black">
+            <summary>
+            Predefined Archipelago Color Black
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Models.Color.White">
+            <summary>
+            Predefined Archipelago Color White (default text color)
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Models.Color.SlateBlue">
+            <summary>
+            Predefined Archipelago Color SlateBlue (used for important items)
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Models.Color.Salmon">
+            <summary>
+            Predefined Archipelago Color Salmon (used for traps)
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Models.Color.Plum">
+            <summary>
+            Predefined Archipelago Color Plum (used for progression item)
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Models.Color.R">
+            <summary>
+            Red
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Models.Color.G">
+            <summary>
+            Green
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Models.Color.B">
+            <summary>
+            Blue
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Color.#ctor(System.Byte,System.Byte,System.Byte)">
+            <summary>
+            A color
+            </summary>
+            <param name="r">Red</param>
+            <param name="g">Green</param>
+            <param name="b">Blue</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Color.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Color.Equals(Archipelago.MultiClient.Net.Models.Color)">
+            <inheritdoc />
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Color.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Color.op_Equality(Archipelago.MultiClient.Net.Models.Color,Archipelago.MultiClient.Net.Models.Color)">
+            <summary>
+            Value Equality
+            </summary>
+            <param name="left">a color</param>
+            <param name="right">a color</param>
+            <returns>true, if both sides represent the same color</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Color.op_Inequality(Archipelago.MultiClient.Net.Models.Color,Archipelago.MultiClient.Net.Models.Color)">
+            <summary>
+            Value In-Equality
+            </summary>
+            <param name="left">a color</param>
+            <param name="right">a color</param>
+            <returns>true, if both sides represent an different color</returns>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Models.DataStorageElement">
+            <summary>
+            An entry in the DataStorage
+            </summary>
+        </member>
+        <member name="E:Archipelago.MultiClient.Net.Models.DataStorageElement.OnValueChanged">
+            <summary>
+            Event handler will be called when the server side value for this key changes
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.DataStorageElement.Initialize(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Initializes a value in the server side data storage
+            Will not override any existing value, only set the default value if none existed
+            </summary>
+            <param name="value">The default value for the key</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.DataStorageElement.Initialize(System.Collections.IEnumerable)">
+            <summary>
+            Initializes a value in the server side data storage
+            Will not override any existing value, only set the default value if none existed
+            </summary>
+            <param name="value">The default value for the key</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.DataStorageElement.GetAsync``1(System.Action{``0})">
+            <summary>
+            Retrieves the value of a certain key from server side data storage.
+            </summary>
+            <param name="callback">The callback that will be called when the value is retrieved</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.DataStorageElement.GetAsync(System.Action{Newtonsoft.Json.Linq.JToken})">
+            <summary>
+            Retrieves the value of a certain key from server side data storage.
+            </summary>
+            <param name="callback">The callback that will be called when the value is retrieved</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.DataStorageElement.To``1">
+            <summary>
+            Retrieves the value from the server and casts it to the given type
+            Cannot be used in combination with other operators
+            </summary>
+            <returns>The value from server as the given type</returns>
+            <exception cref="T:System.InvalidOperationException">
+                DataStorageElement.To() cannot be used together with other operations on the DataStorageElement
+                Other operations include =, +=, /=, + etc
+            </exception>
+            <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                The websocket connection is not alive
+            </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.DataStorageElement.ToString">
+            <summary>Returns a string that represents the current object.</summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Models.NetworkItem">
+            <summary>
+            Item information
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Models.NetworkItem.Item">
+            <summary>
+            The item id of the item. Item ids are in the range of ± (2^53)-1.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Models.NetworkItem.Location">
+            <summary>
+            The location id of the item inside the world. Location ids are in the range of ± (2^53)-1.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Models.NetworkItem.Player">
+            <summary>
+            The player slot of the world the item is located in, except when inside an LocationInfo Packet then it will be the slot of the player to receive the item
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Models.NetworkItem.Flags">
+            <summary>
+            Enum flags that describe special properties of the Item
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Models.OperationSpecification">
+            <summary>
+            An opperation to apply to the DataStorage
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Models.OperationSpecification.OperationType">
+            <inheritdoc cref="T:Archipelago.MultiClient.Net.Models.OperationType"/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Models.OperationSpecification.Value">
+            <summary>
+            The value related to this operation
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.OperationSpecification.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Models.Operation">
+            <summary>
+            Operations to apply to the DataStorage
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Operation.Min(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Performs a Math.Min() on the store its current value vs the provided value
+            </summary>
+            <param name="i">The value to compare to</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Operation.Max(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Performs a Math.Max() on the store its current value vs the provided value
+            </summary>
+            <param name="i">The value to compare to</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Operation.Remove(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Performs a List.Remove() to remove the first occurrence of the provided value
+            </summary>
+            <param name="value">The value to remove</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Operation.Pop(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Performs a List.RemoveAt() or Dictionary.Remove() to remove a specified index or key from a list or dictionary
+            </summary>
+            <param name="value">The index or key to remove</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Operation.Update(System.Collections.IDictionary)">
+            <summary>
+            Performs Dictionary merge, adding all keys from value to the original dict overriding existing keys
+            </summary>
+            <param name="dictionary">The dictionary to merge in</param>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Models.Bitwise">
+            <summary>
+            Bitwise operations to apply to the DataStorage
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Models.Callback">
+            <summary>
+            Provides a method to be called when a certain DataStorage operation completes
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Callback.Add(Archipelago.MultiClient.Net.Helpers.DataStorageHelper.DataStorageUpdatedHandler)">
+            <summary>
+            Adds a callback to the current sequence of operations.
+            This callback will be called only once after the server is done processing your operations.
+            This is useful in-case you need to know the results of your operations when they depend on the current state of the server
+            </summary>
+            <param name="callback">The method to be called with the oldValue at the start of your operation and the newValue after your operation completed</param>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Packets.RoomUpdatePacket">
+            <summary>
+            Sent when there is a need to update information about the present game session,
+            All arguments for this packet are nullable, only the properties that are not null contain changes.
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Packets.UnknownPacket">
+            <summary>
+            Packet is used whenever the server sends us a packet that we didnt implement in the library
+            </summary>
+        </member>
+    </members>
+</doc>

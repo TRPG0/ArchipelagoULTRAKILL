@@ -1,4 +1,5 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
+using ArchipelagoULTRAKILL.Components;
 using ArchipelagoULTRAKILL.Structures;
 using HarmonyLib;
 using System;
@@ -90,7 +91,7 @@ namespace ArchipelagoULTRAKILL
                         vi.varPage.transform.GetChild(3).GetComponent<Text>().text = description;
                     }
 
-                    if (int.Parse(field.GetValue(generalProgress).ToString()) != 0 && !weapon.Contains("0") && !Core.data.purchasedItems.Contains(weapon))
+                    if (int.Parse(field.GetValue(generalProgress).ToString()) == 1 && !weapon.Contains("0") && !Core.data.purchasedItems.Contains(weapon))
                     {
                         bool canAfford = false;
                         string cost;
@@ -125,7 +126,7 @@ namespace ArchipelagoULTRAKILL
                         vi.buyButton.gameObject.transform.GetChild(0).GetComponent<Text>().color = new Color(0.5882f, 0.5882f, 0.5882f);
                         vi.equipButton.gameObject.SetActive(false);
                     }
-                    else if (int.Parse(field.GetValue(generalProgress).ToString()) == 0 && weapon.Contains("0"))
+                    else if (int.Parse(field.GetValue(generalProgress).ToString()) == 0)
                     {
                         vi.costText.text = "<color=red>UNAVAILABLE</color>";
                         vi.buyButton.gameObject.transform.GetChild(0).GetComponent<Text>().text = "UNAVAILABLE";
@@ -192,6 +193,62 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
+        public static void AddDoorClosers()
+        {
+            foreach (ItemPlaceZone ipz in Resources.FindObjectsOfTypeAll<ItemPlaceZone>())
+            {
+                if (SceneHelper.CurrentScene == "Level 1-1")
+                {
+                    if (ipz.transform.parent.parent != null && ipz.transform.parent.parent.name == "11 Nonstuff")
+                    {
+                        if (!ipz.transform.parent.parent.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.parent.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                    }
+                }
+                else if (SceneHelper.CurrentScene == "Level 1-2")
+                {
+                    if (ipz.transform.parent.parent != null && ipz.transform.parent.parent.name == "3 Nonstuff")
+                    {
+                        if (!ipz.transform.parent.parent.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.parent.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                    }
+                }
+                else if (SceneHelper.CurrentScene == "Level 2-3")
+                {
+                    if (ipz.transform.parent != null && (ipz.transform.parent.name == "Altar" || ipz.transform.parent.name == "Altar (1)"))
+                    {
+                        if (!ipz.transform.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                    }
+                }
+                else if (SceneHelper.CurrentScene == "Level 4-4")
+                {
+                    if (ipz.transform.parent.parent != null && ipz.transform.parent.parent.name == "Secret Hall")
+                    {
+                        if (!ipz.transform.parent.parent.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.parent.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                    }
+                }
+                else if (SceneHelper.CurrentScene == "Level 5-2")
+                {
+                    if (ipz.transform.parent.parent != null && (ipz.transform.parent.parent.name == "6" || ipz.transform.parent.parent.name == "7B"))
+                    {
+                        if (!ipz.transform.parent.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                    }
+                }
+                else if (SceneHelper.CurrentScene == "Level 5-3")
+                {
+                    if (ipz.transform.parent.parent != null && ipz.transform.parent.parent.name == "2A4 - Skullway")
+                    {
+                        if (!ipz.transform.parent.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                    }
+                }
+                else if (SceneHelper.CurrentScene == "Level 6-1")
+                {
+                    if (ipz.transform.parent.parent != null && ipz.transform.parent.parent.name == "3 - Crossroads")
+                    {
+                        if (!ipz.transform.parent.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                    }
+                }
+            }
+        }
+
         public static void DeactivatePlanks()
         {
             GameObject room;
@@ -226,13 +283,19 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
-        public static void DeactivateGlass()
+        public static void AddGlassComponents()
         {
+            GameObject room5 = null;
+            GameObject room11 = null;
+
             foreach (Glass glass in Resources.FindObjectsOfTypeAll<Glass>())
             {
-                //logger.LogInfo(glass.name + " | " + glass.transform.parent.parent.name);
-                if (glass.transform.parent.parent.name == "5 Stuff(Clone)" || glass.transform.parent.parent.name == "11 Content(Clone)") glass.transform.parent.gameObject.SetActive(false);
+                if (glass.transform.parent.parent.name == "5 Stuff(Clone)") room5 = glass.transform.parent.parent.gameObject;
+                if (glass.transform.parent.parent.name == "11 Content(Clone)") room11 = glass.transform.parent.parent.gameObject;
             }
+
+            if (!room5.GetComponent<GlassDisabler>()) room5.AddComponent<GlassDisabler>();
+            if (!room11.GetComponent<GlassDisabler>()) room11.AddComponent<GlassDisabler>();
         }
     }
 }

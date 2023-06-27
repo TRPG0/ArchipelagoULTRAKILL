@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using UMM;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.IO;
 using Newtonsoft.Json;
 using ArchipelagoULTRAKILL.Structures;
+using ArchipelagoULTRAKILL.Components;
 using ArchipelagoULTRAKILL.Powerups;
 using BepInEx.Logging;
-using static UMM.UKAPI;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -18,7 +19,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string ModGUID = "trpg.archipelagoultrakill";
         public const string ModName = "Archipelago";
-        public const string ModVersion = "1.1.2";
+        public const string ModVersion = "1.1.3";
         public const string ModDescription = "Connect to an Archipelago server to play ULTRAKILL randomizer.";
 
         public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("Archipelago");
@@ -129,13 +130,6 @@ namespace ArchipelagoULTRAKILL
             SceneManager.sceneLoaded += OnSceneLoaded;
             //UKAPI.OnLevelChanged += ChangedLevel;
 
-            /*
-            foreach (KeyValuePair<string, string> pair in AssetManager.Instance.assetDependencies)
-            {
-                if (pair.Key.Contains("DualWield")) logger.LogMessage(pair.Key);
-            }
-            */
-
             UIManager.skullsInLevel["0-2"] = new List<string>{ "2_b" };
             UIManager.skullsInLevel["1-1"] = new List<string>{ "6_b", "6_r" };
             UIManager.skullsInLevel["1-2"] = new List<string> { "7_r", "7_b" };
@@ -153,16 +147,41 @@ namespace ArchipelagoULTRAKILL
             GameConsole.Console.Instance.RegisterCommand(new Commands.Disconnect());
             GameConsole.Console.Instance.RegisterCommand(new Commands.Log());
             GameConsole.Console.Instance.RegisterCommand(new Commands.Say());
+
+            StartCoroutine(VersionChecker.CheckVersion());
         }
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            /*
+            foreach (var locator in Addressables.ResourceLocators)
+            {
+                if (locator is ResourceLocationMap)
+                {
+                    foreach (string key in locator.Keys)
+                    {
+                        if (key.ToLower().Contains("assets/music/")) logger.LogInfo(key);
+                    }
+                }
+            }
+            */
+            /*
+            foreach (MusicChanger changer in Resources.FindObjectsOfTypeAll<MusicChanger>())
+            {
+                if (changer.gameObject.scene.name == SceneManager.GetActiveScene().name)
+                {
+                    logger.LogInfo(changer.gameObject.name);
+                    if (changer.transform.parent != null) logger.LogInfo(changer.transform.parent.name);
+                }
+            }
+            */
             if (SceneHelper.CurrentScene == "Intro" || SceneHelper.CurrentScene == null) return;
             obj.GetComponent<Core>().StopCoroutine("DisplayMessage");
             UIManager.displayingMessage = false;
             UIManager.levels.Clear();
             UIManager.secrets.Clear();
             UIManager.skullIcons.Clear();
+            LevelManager.skulls.Clear();
             LevelManager.shopPanels.Clear();
             playerActive = false;
             poweredUp = false;
@@ -172,6 +191,10 @@ namespace ArchipelagoULTRAKILL
             if (SceneHelper.CurrentScene == "Main Menu")
             {
                 UIManager.FindMenuObjects();
+
+                if (DataExists() && Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["green"];
+                else if (DataExists() && !Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
+
                 if (UIManager.log == null) UIManager.CreateLogObject();
 
                 if (DataExists() && !firstTimeLoad)
@@ -191,6 +214,7 @@ namespace ArchipelagoULTRAKILL
             {
                 UIManager.CreateMessageUI();
                 LevelManager.FindShopObjects();
+                if (data.musicRandomizer) AudioManager.ChangeMusic();
             }
             if (!inIntro) OptionsManager.Instance.optionsMenu.gameObject.AddComponent<OptionsMenuState>();
 
@@ -234,7 +258,7 @@ namespace ArchipelagoULTRAKILL
             if (File.Exists(filePath)) File.Delete(filePath);
         }
 
-        public static void AddPowerup()
+        public void AddPowerup()
         {
             Enums.Powerup powerup = LocationManager.powerupQueue[0];
             LocationManager.powerupQueue.RemoveAt(0);
@@ -366,12 +390,21 @@ namespace ArchipelagoULTRAKILL
                     if (!NewMovement.Instance.gc.onGround) Traverse.Create(NewMovement.Instance).Field<bool>("falling").Value = true;
                 }
 
-                if (data.randomizeFire2 && !data.unlockedFire2.Contains("rev0") && GunControl.Instance.currentSlot == 1 && GunControl.Instance.currentVariation == 0 && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
+                if (data.randomizeFire2 && !data.unlockedFire2.Contains("rev0") && GunControl.Instance.currentSlot == 1 && GunControl.Instance.currentWeapon.GetComponent<Revolver>().gunVariation == 0 && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
                 {
                     if (GameProgressSaver.GetGeneralProgress().rev0 == 1)
                     {
                         Traverse.Create(GunControl.Instance.currentWeapon.GetComponent<Revolver>()).Field<bool>("pierceReady").Value = false;
                         GunControl.Instance.currentWeapon.GetComponent<Revolver>().pierceCharge = 0;
+
+                        if (Traverse.Create(PowerUpMeter.Instance).Field<bool>("hasPowerUp").Value == true)
+                        {
+                            foreach (DualWield dw in GunControl.Instance.gameObject.GetComponentsInChildren<DualWield>())
+                            {
+                                Traverse.Create(dw.gameObject.transform.GetChild(0).GetComponent<Revolver>()).Field<bool>("pierceReady").Value = false;
+                                dw.gameObject.transform.GetChild(0).GetComponent<Revolver>().pierceCharge = 0;
+                            }
+                        }
                     }
                     WeaponCharges.Instance.rev0charge = 0;
                 }
@@ -386,7 +419,7 @@ namespace ArchipelagoULTRAKILL
                     WeaponCharges.Instance.rev2charge = 0;
                 }
 
-                if (data.randomizeFire2 && !data.unlockedFire2.Contains("sho0") && GunControl.Instance.currentSlot == 2 && GunControl.Instance.currentVariation == 0 && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
+                if (data.randomizeFire2 && !data.unlockedFire2.Contains("sho0") && GunControl.Instance.currentSlot == 2 && GunControl.Instance.currentWeapon.GetComponent<Shotgun>().variation == 0 && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
                 {
                     if (InputManager.Instance.InputSource.Fire2.IsPressed)
                     {
@@ -401,7 +434,7 @@ namespace ArchipelagoULTRAKILL
                     WeaponCharges.Instance.naiMagnetCharge = 0;
                 }
 
-                if (data.randomizeFire2 && !data.unlockedFire2.Contains("nai1") && GunControl.Instance.currentSlot == 3 && GunControl.Instance.currentVariation == 0 && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
+                if (data.randomizeFire2 && !data.unlockedFire2.Contains("nai1") && GunControl.Instance.currentSlot == 3 && GunControl.Instance.currentWeapon.GetComponent<Nailgun>().variation == 0 && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
                 {
                     Traverse.Create(GunControl.Instance.currentWeapon.GetComponent<Nailgun>()).Field<float>("heatSinks").Value = 0;
                     WeaponCharges.Instance.naiHeatsinks = 0;

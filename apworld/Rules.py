@@ -629,7 +629,8 @@ def rules(ultrakillworld):
     set_rule(world.get_location("0-3: Secret #1", player),
         lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
     set_rule(world.get_location("0-3: Secret #2", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm))
+        lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm) and \
+            state._ultrakill_break_walls(player, fire2, arm))
         
     set_rule(world.get_location("0-3: Secret #3", player),
         lambda state: state._ultrakill_break_walls(player, fire2, arm))

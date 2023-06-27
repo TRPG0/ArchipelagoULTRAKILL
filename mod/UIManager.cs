@@ -1,12 +1,11 @@
 ﻿using ArchipelagoULTRAKILL.Structures;
+using ArchipelagoULTRAKILL.Components;
 using HarmonyLib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 namespace ArchipelagoULTRAKILL
@@ -29,7 +28,6 @@ namespace ArchipelagoULTRAKILL
         public static GameObject menuText;
         public static GameObject menuIcon;
         public static GameObject goalCount;
-        public static Sprite lockedImage;
 
         public static readonly List<string> skullLevels = new List<string>()
         {
@@ -40,7 +38,6 @@ namespace ArchipelagoULTRAKILL
             "Level 1-3",
             "Level 1-4",
             "Level 2-3",
-            "Level 2-4",
             "Level 2-4",
             "Level 4-2",
             "Level 4-3",
@@ -334,25 +331,16 @@ namespace ArchipelagoULTRAKILL
             if (!Multiworld.Authenticated) goalCount.SetActive(false);
         }
 
-        public static void GetLockedImage()
-        {
-            Image[] imageComponents = levels["P-3"].GetComponentsInChildren<Image>();
-            foreach (Image component in imageComponents)
-            {
-                if (component.gameObject.name == "Image") lockedImage = component.sprite;
-            }
-        }
-
         public static void UpdateLevels()
         {
-            GetLockedImage();
+            Sprite locked = Addressables.LoadAssetAsync<Sprite>("Assets/Textures/UI/Level Thumbnails/Locked.png").WaitForCompletion();
             foreach (string level in Core.allLevels)
             {
                 if ((!Core.data.unlockedLevels.Contains(level) && level != Core.data.goal) || (level == Core.data.goal && Core.data.completedLevels.Count < Core.data.goalRequirement))
                 {
                     foreach (Image component in levels[level].GetComponentsInChildren<Image>())
                     {
-                        if (component.gameObject.name == "Image") component.sprite = lockedImage;
+                        if (component.gameObject.name == "Image") component.sprite = locked;
                     }
                     levels[level].GetComponent<Button>().enabled = false;
                 }
