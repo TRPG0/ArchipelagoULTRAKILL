@@ -1,3 +1,9 @@
+## 1.1.4
+
+- Fixed: Various weird things about the blue skull in 1-2.
+- Fixed: Shotguns could sometimes become impossible to fire after parrying with them.
+- Fixed: Plando can now be used to place a specific weapon at the beginning of the game.
+
 ## 1.1.3
 
 - New: The mod will now check if a new version is available, and output the result to the console.

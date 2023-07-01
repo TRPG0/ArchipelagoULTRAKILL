@@ -11,7 +11,7 @@ namespace ArchipelagoULTRAKILL.Patches
             if (Core.DataExists() && Core.data.randomizeFire2 && !Core.data.unlockedFire2.Contains("sho1") && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
             {
                 //Debug.Log("Attempted to pump shotgun. Locked");
-                __instance.ReadyGun();
+                Traverse.Create(__instance).Field<bool>("gunReady").Value = true;
                 return false;
             }
             else return true;

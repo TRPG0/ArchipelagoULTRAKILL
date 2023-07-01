@@ -7,7 +7,7 @@ namespace ArchipelagoULTRAKILL.Components
 {
     public class ReverseDoorCloser : MonoBehaviour
     {
-        private void OnEnable()
+        private void Start()
         {
 
             foreach (ItemPlaceZone ipz in gameObject.GetComponentsInChildren<ItemPlaceZone>())
@@ -16,15 +16,18 @@ namespace ArchipelagoULTRAKILL.Components
                 {
                     for (int i = 0; i < ipz.reverseDoors.Count(); i++)
                     {
-                        //ipz.reverseDoors[i].Close(true);
                         StartCoroutine(Close(ipz.reverseDoors[i]));
                     }
                 }
 
-                if (SceneHelper.CurrentScene == "Level 1-2" && Traverse.Create(ipz).Field<bool>("acceptedItemPlaced").Value == false)
+                if (SceneHelper.CurrentScene == "Level 1-2" && !Core.data.unlockedSkulls.Contains("7_b"))
                 {
                     ipz.activateOnFailure = ipz.activateOnSuccess;
                     ipz.activateOnSuccess = null;
+                    foreach (GameObject go in ipz.activateOnFailure)
+                    {
+                        go.SetActive(true);
+                    }
                 }
             }
         }
