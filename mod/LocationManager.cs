@@ -101,6 +101,7 @@ namespace ArchipelagoULTRAKILL
                         }
                         else
                         {
+                            if (!Core.data.hasArm && item.item_name == "Knuckleblaster") PrefsManager.Instance.SetInt("weapon.arm0", 0);
                             GameProgressSaver.AddGear(GetWeaponIdFromName(item.item_name));
                             PrefsManager.Instance.SetInt("weapon." + GetWeaponIdFromName(item.item_name), 1);
                             if (Core.playerActive && Core.inLevel)

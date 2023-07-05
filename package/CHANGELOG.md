@@ -1,7 +1,11 @@
+## 1.1.5
+
+- Fixed: The displays on the side of the Core Eject and Pump Charge shotguns wouldn't work.
+- Fixed: Shotguns would get jammed after parrying an attack.
+
 ## 1.1.4
 
 - Fixed: Various weird things about the blue skull in 1-2.
-- Fixed: Shotguns could sometimes become impossible to fire after parrying with them.
 - Fixed: Plando can now be used to place a specific weapon at the beginning of the game.
 
 ## 1.1.3

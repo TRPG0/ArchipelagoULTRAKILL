@@ -19,7 +19,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string ModGUID = "trpg.archipelagoultrakill";
         public const string ModName = "Archipelago";
-        public const string ModVersion = "1.1.4";
+        public const string ModVersion = "1.1.5";
         public const string ModDescription = "Connect to an Archipelago server to play ULTRAKILL randomizer.";
 
         public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("Archipelago");
@@ -219,7 +219,6 @@ namespace ArchipelagoULTRAKILL
             if (!inIntro) OptionsManager.Instance.optionsMenu.gameObject.AddComponent<OptionsMenuState>();
 
             if (DataExists() && UIManager.log != null) UIManager.AdjustLogBounds();
-            if (DataExists() && SceneHelper.CurrentScene == "Level 0-1" && HasNoArms()) LevelManager.DeactivatePlanks();
             if (DataExists() && SceneHelper.CurrentScene == "Level 1-2" && GameProgressSaver.GetGeneralProgress().nai0 == 0) LevelManager.DeactivateNailgun();
         }
 
@@ -351,6 +350,38 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
+        public static string GetHeldWeapon()
+        {
+            if (GunControl.Instance.currentWeapon.GetComponent<Revolver>())
+            {
+                switch (GunControl.Instance.currentWeapon.GetComponent<Revolver>().gunVariation)
+                {
+                    case 0:
+                    default:
+                        return "rev0";
+                    case 1:
+                        return "rev2";
+                    case 2:
+                        return "rev1";
+                }
+            }
+            else if (GunControl.Instance.currentWeapon.GetComponent<Shotgun>()) return $"sho{GunControl.Instance.currentWeapon.GetComponent<Shotgun>().variation}";
+            else if (GunControl.Instance.currentWeapon.GetComponent <Nailgun>())
+            {
+                switch (GunControl.Instance.currentWeapon.GetComponent<Nailgun>().variation)
+                {
+                    case 0:
+                    default:
+                        return "nai1";
+                    case 1:
+                        return "nai0";
+                }
+            }
+            else if (GunControl.Instance.currentWeapon.GetComponent<Railcannon>()) return $"rai{GunControl.Instance.currentWeapon.GetComponent<Railcannon>().variation}";
+            else if (GunControl.Instance.currentWeapon.GetComponent<RocketLauncher>()) return $"rock{GunControl.Instance.currentWeapon.GetComponent<RocketLauncher>().variation}";
+            else return "?";
+        }
+
         void Update()
         {
             if (playerActive && DataExists())
@@ -390,7 +421,12 @@ namespace ArchipelagoULTRAKILL
                     if (!NewMovement.Instance.gc.onGround) Traverse.Create(NewMovement.Instance).Field<bool>("falling").Value = true;
                 }
 
-                if (data.randomizeFire2 && !data.unlockedFire2.Contains("rev0") && GunControl.Instance.currentSlot == 1 && GunControl.Instance.currentWeapon.GetComponent<Revolver>().gunVariation == 0 && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
+                if (!data.hasArm && FistControl.Instance.currentPunch.type == FistType.Standard)
+                {
+                    FistControl.Instance.currentPunch.ready = false;
+                }
+
+                if (data.randomizeFire2 && !data.unlockedFire2.Contains("rev0") && GetHeldWeapon() == "rev0" && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
                 {
                     if (GameProgressSaver.GetGeneralProgress().rev0 == 1)
                     {
@@ -419,14 +455,9 @@ namespace ArchipelagoULTRAKILL
                     WeaponCharges.Instance.rev2charge = 0;
                 }
 
-                if (data.randomizeFire2 && !data.unlockedFire2.Contains("sho0") && GunControl.Instance.currentSlot == 2 && GunControl.Instance.currentWeapon.GetComponent<Shotgun>().variation == 0 && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
+                if (data.randomizeFire2 && ((!data.unlockedFire2.Contains("sho0") && GetHeldWeapon() == "sho0") || (!data.unlockedFire2.Contains("sho1") && GetHeldWeapon() == "sho1")) && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
                 {
-                    if (InputManager.Instance.InputSource.Fire2.IsPressed)
-                    {
-                        Traverse shotgun = Traverse.Create(GunControl.Instance.currentWeapon.GetComponent<Shotgun>());
-                        shotgun.Field<bool>("charging").Value = false;
-                        shotgun.Field<float>("grenadeForce").Value = 0;
-                    }
+                    Traverse.Create(InputManager.Instance.InputSource.Fire2).Property("IsPressed").SetValue(false);
                 }
 
                 if (data.randomizeFire2 && !data.unlockedFire2.Contains("nai0") && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
@@ -434,7 +465,7 @@ namespace ArchipelagoULTRAKILL
                     WeaponCharges.Instance.naiMagnetCharge = 0;
                 }
 
-                if (data.randomizeFire2 && !data.unlockedFire2.Contains("nai1") && GunControl.Instance.currentSlot == 3 && GunControl.Instance.currentWeapon.GetComponent<Nailgun>().variation == 0 && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
+                if (data.randomizeFire2 && !data.unlockedFire2.Contains("nai1") && GetHeldWeapon() == "nai1" && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
                 {
                     Traverse.Create(GunControl.Instance.currentWeapon.GetComponent<Nailgun>()).Field<float>("heatSinks").Value = 0;
                     WeaponCharges.Instance.naiHeatsinks = 0;

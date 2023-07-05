@@ -327,7 +327,6 @@
     <Compile Include="Patches\ShopButton.cs" />
     <Compile Include="Patches\ShopCategory.cs" />
     <Compile Include="Patches\ShopZone.cs" />
-    <Compile Include="Patches\Shotgun.cs" />
     <Compile Include="Patches\StatsManager.cs" />
     <Compile Include="Patches\VariationInfo.cs" />
     <Compile Include="Patches\WeaponPickUp.cs" />

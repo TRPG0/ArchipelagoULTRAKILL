@@ -113,6 +113,7 @@ namespace ArchipelagoULTRAKILL
                     if (Core.data.musicRandomizer) Core.data.music = JsonConvert.DeserializeObject<Dictionary<string, string>>(success.SlotData["music"].ToString());
 
                     PrefsManager.Instance.SetInt("difficulty", 3);
+                    PrefsManager.Instance.SetInt("weapon.arm0", 1);
                     GameProgressSaver.SetIntro(true);
                     GameProgressSaver.SetTutorial(true);
                     GameProgressSaver.SaveProgress(26);
@@ -121,8 +122,8 @@ namespace ArchipelagoULTRAKILL
                     Core.SaveData();
                 }
 
-                if (!Core.data.hasArm) PrefsManager.Instance.SetInt("weapon.arm0", 0);
-                else PrefsManager.Instance.SetInt("weapon.arm0", 1);
+                //if (!Core.data.hasArm) PrefsManager.Instance.SetInt("weapon.arm0", 0);
+                //else PrefsManager.Instance.SetInt("weapon.arm0", 1);
 
                 LocationManager.locations.Clear();
                 LocationManager.ukitems.Clear();

@@ -249,32 +249,6 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
-        public static void DeactivatePlanks()
-        {
-            GameObject room;
-            if (GameObject.Find("1 -  Starting Room"))
-            {
-                room = GameObject.Find("1 -  Starting Room");
-                for (int i = 0; i < room.transform.childCount; i++)
-                {
-                    GameObject child = room.transform.GetChild(i).gameObject;
-
-                    if (child.name.Contains("Plank")) child.SetActive(false);
-                }
-            }
-            else if (GameObject.Find("1Alt -  Short Starting Room"))
-            {
-                room = GameObject.Find("1Alt -  Short Starting Room");
-                for (int i = 0; i < room.transform.childCount; i++)
-                {
-                    GameObject child = room.transform.GetChild(i).gameObject;
-
-                    if (child.name.Contains("Plank")) child.SetActive(false);
-                }
-            }
-
-        }
-
         public static void DeactivateNailgun()
         {
             foreach (GearCheckEnabler gce in Resources.FindObjectsOfTypeAll<GearCheckEnabler>())
