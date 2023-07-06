@@ -1,6 +1,6 @@
 from typing import Dict, Set, List, Any
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 from .Items import base_id, item_table, group_table
 from .Locations import location_table, event_table, challenge_locations
 from .Regions import region_table
