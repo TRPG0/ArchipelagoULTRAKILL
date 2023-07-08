@@ -1,3 +1,8 @@
+## 1.1.6
+
+- Leaderboard times can no longer be submitted while playing randomizer.
+- Every 5 waves cleared in The Cyber Grind will now unlock a random hint.
+
 ## 1.1.5
 
 - Fixed: The displays on the side of the Core Eject and Pump Charge shotguns wouldn't work.

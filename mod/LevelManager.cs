@@ -126,7 +126,7 @@ namespace ArchipelagoULTRAKILL
                         vi.buyButton.gameObject.transform.GetChild(0).GetComponent<Text>().color = new Color(0.5882f, 0.5882f, 0.5882f);
                         vi.equipButton.gameObject.SetActive(false);
                     }
-                    else if (int.Parse(field.GetValue(generalProgress).ToString()) == 0)
+                    else if (int.Parse(field.GetValue(generalProgress).ToString()) == 0 && weapon.Contains("0"))
                     {
                         vi.costText.text = "<color=red>UNAVAILABLE</color>";
                         vi.buyButton.gameObject.transform.GetChild(0).GetComponent<Text>().text = "UNAVAILABLE";

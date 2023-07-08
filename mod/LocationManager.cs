@@ -1,6 +1,7 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Packets;
 using ArchipelagoULTRAKILL.Structures;
-using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -40,6 +41,8 @@ namespace ArchipelagoULTRAKILL
         public static bool overhealWaiting = false;
         public static bool hardDmgWaiting = false;
         public static bool soapWaiting = false;
+
+        private static System.Random Random = new System.Random();
 
         public static List<KeyValuePair<string, UKItem>> tempItems = new List<KeyValuePair<string, UKItem>>();
 
@@ -287,6 +290,53 @@ namespace ArchipelagoULTRAKILL
             if (powerupQueue.Count > 0 && Core.playerActive && Core.inLevel && !Core.poweredUp) Core.obj.GetComponent<Core>().Invoke("AddPowerup", 1f);
         }
 
+        public static void GetRandomHint()
+        {
+            if (!Multiworld.Authenticated) return;
+
+            var missing = Multiworld.Session.Locations.AllMissingLocations;
+            var alreadyHinted = Multiworld.Session.DataStorage.GetHints()
+                .Where(h => h.FindingPlayer == Multiworld.Session.ConnectionInfo.Slot)
+                .Select(h => h.LocationId);
+            var available = missing.Except(alreadyHinted).ToArray();
+
+            if (available.Any())
+            {
+                var locationId = available[Random.Next(0, available.Length)];
+
+                Multiworld.Session.Locations.ScoutLocationsAsync(true, locationId);
+                LocationInfoPacket info = Multiworld.Session.Locations.ScoutLocationsAsync(false, locationId).Result;
+
+                string itemColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(Multiworld.Session.Items.GetItemName(info.Locations[0].Item)));
+                Color color = GetUKMessageColor(Multiworld.Session.Items.GetItemName(info.Locations[0].Item));
+                if (itemColor == "FFFFFF")
+                {
+                    itemColor = ColorUtility.ToHtmlStringRGB(GetAPMessageColor(info.Locations[0].Flags));
+                    color = GetAPMessageColor(info.Locations[0].Flags);
+                }
+                string playerColor = ColorUtility.ToHtmlStringRGB(colors["ap_player_other"]);
+                string locationColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(Multiworld.Session.Locations.GetLocationNameFromId(info.Locations[0].Location).Substring(0, 3)));
+
+                string hint = "HINT: <color=#" + itemColor + "FF>";
+                hint += Multiworld.Session.Items.GetItemName(info.Locations[0].Item) + "</color> ";
+                if (Multiworld.Session.Players.GetPlayerName(info.Locations[0].Player) != Core.data.slot_name) 
+                    hint += "(<color=#" + playerColor + "FF>" + Multiworld.Session.Players.GetPlayerAlias(info.Locations[0].Player) + "</color>) ";
+                hint += "at <color=#" + locationColor + "FF>" + Multiworld.Session.Locations.GetLocationNameFromId(info.Locations[0].Location) + "</color>";
+
+                messages.Add(new Message
+                {
+                    image = GetUKMessageImage(Multiworld.Session.Items.GetItemName(info.Locations[0].Item)),
+                    color = color,
+                    message = hint
+                });
+                if (!UIManager.displayingMessage && Core.playerActive) Core.uim.StartCoroutine("DisplayMessage");
+            }
+            else
+            {
+                Core.logger.LogWarning("No locations available to hint.");
+            }
+        }
+
         public static void AddAPItemMessage(APItem item)
         {
             string itemColor = ColorUtility.ToHtmlStringRGB(GetAPMessageColor(item.type));
@@ -479,6 +529,10 @@ namespace ArchipelagoULTRAKILL
                 case "5-2: WAVES OF THE STARLESS SEA":
                 case "5-3: SHIP OF FOOLS":
                 case "5-4: LEVIATHAN":
+                case "5-1":
+                case "5-2":
+                case "5-3":
+                case "5-4":
                 case "LAYER 5: WRATH":
                 case "Blue Skull (0-2)":
                 case "Blue Skull (0-S)":
@@ -501,11 +555,17 @@ namespace ArchipelagoULTRAKILL
                 case "1-2: THE BURNING WORLD":
                 case "1-3: HALLS OF SACRED REMAINS":
                 case "1-4: CLAIR DE LUNE":
+                case "1-1":
+                case "1-2":
+                case "1-3":
+                case "1-4":
                 case "LAYER 1: LIMBO":
                     return colors["green"];
                 case "Knuckleblaster":
                 case "6-1: CRY FOR THE WEEPER":
                 case "6-2: AESTHETICS OF HATE":
+                case "6-1":
+                case "6-2":
                 case "LAYER 6: HERESY":
                 case "P-1: SOUL SURVIVOR":
                 case "P-2: WAIT OF THE WORLD":
@@ -525,15 +585,26 @@ namespace ArchipelagoULTRAKILL
                 case "0-4: A ONE-MACHINE ARMY":
                 case "0-5: CERBERUS":
                 case "OVERTURE: THE MOUTH OF HELL":
+                case "0-1":
+                case "0-2":
+                case "0-3":
+                case "0-4":
+                case "0-5":
                     return colors["orange"];
                 case "2-1: BRIDGEBURNER":
                 case "2-2: DEATH AT 20,000 VOLTS":
                 case "2-3: SHEER HEART ATTACK":
                 case "2-4: COURT OF THE CORPSE KING":
                 case "LAYER 2: LUST":
+                case "2-1":
+                case "2-2":
+                case "2-3":
+                case "2-4":
                     return colors["purple"];
                 case "3-1: BELLY OF THE BEAST":
                 case "3-2: IN THE FLESH":
+                case "3-1":
+                case "3-2":
                 case "LAYER 3: GLUTTONY":
                     return colors["bone"];
                 case "4-1: SLAVES TO POWER":
@@ -541,11 +612,16 @@ namespace ArchipelagoULTRAKILL
                 case "4-3: A SHOT IN THE DARK":
                 case "4-4: CLAIR DE SOLEIL":
                 case "LAYER 4: GREED":
+                case "4-1":
+                case "4-2":
+                case "4-3":
+                case "4-4":
                 case "Dual Wield":
                     return colors["yellow"];
                 case "Overheal":
                     return ColorBlindSettings.Instance.overHealColor;
                 case "+10,000P":
+                case "Sho":
                     return colors["gold"];
                 case "Hard Damage":
                 case "Stamina Limiter":
