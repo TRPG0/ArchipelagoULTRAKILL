@@ -1,466 +1,481 @@
 from worlds.generic.Rules import set_rule, add_rule
 from worlds.AutoWorld import LogicMixin
+from BaseClasses import CollectionState
 
 
-class UltrakillLogic(LogicMixin):
-    def _ultrakill_good_weapon(self, player, fire2, arm):
-        if fire2 and not arm:
-            return self.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player) or \
-                (self.has("Shotgun - Core Eject", player) and \
-                    self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                        (self.has("Shotgun - Pump Charge", player) and \
-                            self.has_any({"Secondary Fire - Pump Charge", "Feedbacker"}, player))
-        else:
-            return self.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter", \
-                "Shotgun - Core Eject", "Shotgun - Pump Charge"}, player)
+def dashes(state: CollectionState, player: int, has: int, needs: int) -> bool:
+    dashes: int = needs - has
+    return True if dashes <= 0 else state.has("Stamina Bar", player, dashes)
 
-    def _ultrakill_break_glass(self, player, fire2, arm):
-        if fire2 and not arm:
-            return self.has_any({"Railcannon - Electric", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", \
-                "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player) or \
-                    (self.has("Revolver - Piercer", player) and \
-                        self.has_any({"Revolver - Alternate", "Secondary Fire - Piercer"}, player)) or \
-                            (self.has("Revolver - Marksman", player) and \
-                                self.has_any({"Revolver - Alternate", "Secondary Fire - Marksman"}, player)) or \
-                                    (self.has("Revolver - Sharpshooter", player) and \
-                                        self.has_any({"Revolver - Alternate", "Secondary Fire - Sharpshooter"}, player)) or \
-                                            (self.has("Shotgun - Core Eject", player) and \
-                                                self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                                                    (self.has("Shotgun - Pump Charge", player) and \
-                                                        self.has_any({"Secondary Fire - Pump Charge", "Feedbacker"}, player))
-        elif fire2 and arm:
-            return self.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Electric", \
-                "Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", \
-                    "Knuckleblaster"}, player) or \
-                        (self.has("Revolver - Piercer", player) and \
-                            self.has_any({"Revolver - Alternate", "Secondary Fire - Piercer"}, player)) or \
-                                (self.has("Revolver - Marksman", player) and \
-                                    self.has_any({"Revolver - Alternate", "Secondary Fire - Marksman"}, player)) or \
-                                        (self.has("Revolver - Sharpshooter", player) and \
-                                            self.has_any({"Revolver - Alternate", "Secondary Fire - Sharpshooter"}, player))
-        else:
-            return self.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter", \
-                "Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Electric", "Railcannon - Malicious", \
-                    "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player)
 
-    def _ultrakill_break_walls(self, player, fire2, arm):
-        if not fire2:
-            return self.has_any({"Revolver - Sharpshooter", "Shotgun - Core Eject", "Shotgun - Pump Charge", "Nailgun - Overheat", "Railcannon - Electric", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player) or \
-                (self.has_any({"Revolver - Piercer", "Revolver - Marksman"}, player) and \
-                    self.has("Revolver - Alternate", player))
-        elif fire2 and not arm:
-            return self.has_any({"Railcannon - Electric", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player) or \
-                self.has_all({"Nailgun - Overheat", "Secondary Fire - Overheat"}, player) or \
-                    (self.has("Shotgun - Core Eject", player) and \
-                        self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                            (self.has("Shotgun - Pump Charge", player) and \
-                                self.has_any({"Secondary Fire - Pump Charge", "Feedbacker"}, player)) or \
-                                    (self.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player) and \
-                                        self.has("Revolver - Alternate", player))
-        elif fire2 and arm:
-            return self.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Electric", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player) or \
-                self.has_all({"Nailgun - Overheat", "Secondary Fire - Overheat"}, player) or \
-                    (self.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player) and \
-                        self.has("Revolver - Alternate", player))
+def walljumps(state: CollectionState, player: int, has: int, needs: int) -> bool:
+    walljumps: int = needs - has
+    return True if walljumps <= 0 else state.has("Wall Jump", player, walljumps)
 
-    def _ultrakill_generic_jump(self, player, walljumps, slam, fire2, arm):
-        if slam:
-            return True
-        elif not fire2 or arm:
-            return self.has("Wall Jump", player, walljumps) or \
-                self.has_any({"Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", "Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Malicious"}, player)
-        elif fire2 and not arm:
-            return self.has("Wall Jump", player, walljumps) or \
-                self.has_any({"Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon"}, player) or \
-                    self.has_all({"Shotgun - Pump Charge", "Secondary Fire - Pump Charge"}, player) or \
-                        self.has_all({"Shotgun - Core Eject", "Secondary Fire - Core Eject"}, player) or \
-                            (self.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge"}, player) and \
-                                self.has("Feedbacker", player)) or \
-                                    self.has("Railcannon - Malicious", player) 
 
-    def _ultrakill_rev1_fly(self, player, fire2):
-        if fire2:
-            return self.has_all({"Revolver - Sharpshooter", "Secondary Fire - Sharpshooter"}, player)
-        else:
-            return self.has("Revolver - Sharpshooter", player)
+def can_slide(state: CollectionState, player: int, option: bool) -> bool:
+    return True if option else state.has("Slide", player)
 
-    def _ultrakill_0_1c(self, player, fire2, arm):
-        if fire2 and not arm:
-            return self.has_any({"Railcannon - Electric", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", \
-                "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player) or \
-                    (self.has("Revolver - Piercer", player) and \
-                        self.has_any({"Revolver - Alternate", "Secondary Fire - Piercer"}, player)) or \
-                            self.has_all({"Revolver - Marksman", "Revolver - Alternate"}, player) or \
-                                (self.has("Shotgun - Core Eject", player) and \
-                                    self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                                        self.has_all({"Shotgun - Pump Charge", "Feedbacker"}, player)
-        elif fire2 and arm:
-            return self.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Electric", \
-                "Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon" \
-                    "Knuckleblaster"}, player) or \
-                        (self.has("Revolver - Piercer", player) and \
-                            self.has_any({"Revolver - Alternate", "Secondary Fire - Piercer"}, player)) or \
-                                self.has_all({"Revolver - Marksman", "Revolver - Alternate"}, player)
-        else:
-            return self.has_any({"Revolver - Piercer", "Shotgun - Core Eject", "Shotgun - Pump Charge", \
-                "Railcannon - Electric", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", \
-                    "Rocket Launcher - S.R.S. Cannon", "Knuckleblaster"}, player) or \
-                        self.has_all({"Revolver - Marksman", "Revolver - Alternate"}, player)
-    
-    def _ultrakill_0_2_secret(self, player, walljumps, slam, fire2, arm):
-        if (not slam and not fire2) or (not slam and fire2 and arm):
-            return self.has("Wall Jump", player, walljumps) or \
-                (self.has("Wall Jump", player, walljumps-1) and \
-                    self.has("Slam", player)) or \
-                        self.has_any({"Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", \
-                            "Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Malicious"}, player)
-        elif (slam and not fire2) or (slam and fire2 and arm):
-            return self.has("Wall Jump", player, walljumps-1) or \
-                self.has_any({"Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", "Shotgun - Core Eject", \
-                    "Shotgun - Pump Charge", "Railcannon - Malicious"}, player)
-        elif not slam and fire2 and not arm:
-            return self.has("Wall Jump", player, walljumps) or \
-                (self.has("Wall Jump", player, walljumps-1) and \
-                    self.has("Slam", player)) or \
-                        (self.has("Shotgun - Core Eject", player) and \
-                            self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                                (self.has("Shotgun - Pump Charge", player) and \
-                                    self.has_any({"Secondary Fire - Pump Charge", "Feedbacker"}, player)) or \
-                                        self.has_any({"Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", \
-                                            "Railcannon - Malicious"}, player)
-        elif slam and fire2 and not arm:
-            return self.has("Wall Jump", player, walljumps) or \
-                (self.has("Shotgun - Core Eject", player) and \
-                    self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                        (self.has("Shotgun - Pump Charge", player) and \
-                            self.has_any({"Secondary Fire - Pump Charge", "Feedbacker"}, player)) or \
-                                self.has_any({"Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", \
-                                    "Railcannon - Malicious"}, player)
-    
-    def _ultrakill_0_3c(self, player, walljumps, slam, fire2, arm):
-        if not slam and not fire2:
-            return (self.has("Slam", player) and \
-                self.has("Wall Jump", player, walljumps-2)) or \
-                    (self.has("Shotgun - Core Eject", player) and \
-                        self.has("Wall Jump", player, walljumps)) or \
-                            self.has_any({"Shotgun - Pump Charge", "Railcannon - Malicious", \
-                                "Rocket Launcher - Freezeframe"}, player)
-        elif slam and not fire2:
-            return self.has("Wall Jump", player, walljumps-2) or \
-                (self.has("Shotgun - Core Eject", player) and \
-                    self.has("Wall Jump", player, walljumps)) or \
-                        self.has_any({"Shotgun - Pump Charge", "Railcannon - Malicious", \
-                            "Rocket Launcher - Freezeframe"}, player)
-        elif not slam and fire2:
-            if not arm:
-                return (self.has("Slam", player) and \
-                    self.has("Wall Jump", player, walljumps-2)) or \
-                        (self.has("Shotgun - Core Eject", player) and \
-                            self.has("Wall Jump", player, walljumps) and \
-                                self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                                    (self.has("Shotgun - Pump Charge", player) and \
-                                        self.has("Wall Jump", player, walljumps) and \
-                                            self.has("Feedbacker", player)) or \
-                                                self.has_all({"Shotgun - Pump Charge", \
-                                                    "Secondary Fire - Pump Charge", "Feedbacker"}, player) or \
-                                                        self.has_all({"Rocket Launcher - Freezeframe", \
-                                                            "Secondary Fire - Freezeframe"}, player) or \
-                                                                self.has("Railcannon - Malicious", player)
-            else:
-                return (self.has("Slam", player) and \
-                    self.has("Wall Jump", player, walljumps-2)) or \
-                        (self.has("Shotgun - Core Eject", player) and \
-                            self.has("Wall Jump", player, walljumps)) or \
-                                (self.has("Shotgun - Pump Charge", player) and \
-                                    self.has("Wall Jump", player, walljumps)) or \
-                                        self.has_all({"Shotgun - Pump Charge", "Secondary Fire - Pump Charge"}, player) or \
-                                            self.has_all({"Rocket Launcher - Freezeframe", \
-                                                "Secondary Fire - Freezeframe"}, player) or \
-                                                    self.has("Railcannon - Malicious", player)
-        elif slam and fire2:
-            if not arm:
-                return self.has("Wall Jump", player, walljumps-2) or \
-                    (self.has("Shotgun - Core Eject", player) and \
-                        self.has("Wall Jump", player, walljumps) and \
-                            self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                                (self.has("Shotgun - Pump Charge", player) and \
-                                    ((self.has("Wall Jump", player, walljumps) and \
-                                        self.has("Feedbacker", player)) or \
-                                            self.has("Secondary Fire - Pump Charge", player))) or \
-                                                self.has_all({"Rocket Launcher - Freezeframe", \
-                                                    "Secondary Fire - Freezeframe"}, player) or \
-                                                        self.has("Railcannon - Malicious", player)
-            else:
-                return self.has("Wall Jump", player, walljumps-2) or \
-                    (self.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge"}, player) and \
-                        self.has("Wall Jump", player, walljumps)) or \
-                            self.has_all({"Shotgun - Pump Charge", "Secondary Fire - Pump Charge"}, player) or \
-                                self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player) or \
-                                    self.has("Railcannon - Malicious", player)
 
-    def _ultrakill_0_5(self, player, walljumps, dashes, slide, fire2):
-        if not slide:
-            if not fire2:
-                return (self.has("Slide", player) and \
-                    (self.has("Wall Jump", player, walljumps) or \
-                        self.has("Stamina Bar", player, dashes))) or \
-                            self.has_any({"Rocket Launcher - Freezeframe", "Railcannon - Malicious", "Shotgun - Pump Charge"}, player)
-            else:
-                return (self.has("Slide", player) and \
-                    (self.has("Wall Jump", player, walljumps) or \
-                        self.has("Stamina Bar", player, dashes))) or \
-                            self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player) or \
-                                self.has_all({"Shotgun - Pump Charge", "Secondary Fire - Pump Charge"}, player) or \
-                                    self.has("Railcannon - Malicious", player)
-        else:
-            if not fire2:
-                return self.has("Wall Jump", player, walljumps) or \
-                    self.has("Stamina Bar", player, dashes) or \
-                        self.has_any({"Rocket Launcher - Freezeframe", "Railcannon - Malicious", "Shotgun - Pump Charge"}, player)
-            else:
-                return self.has("Wall Jump", player, walljumps) or \
-                    self.has("Stamina Bar", player, dashes) or \
-                        self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player) or \
-                            self.has_all({"Shotgun - Pump Charge", "Secondary Fire - Pump Charge"}, player) or \
-                                self.has("Railcannon - Malicious", player)
-    
-    def _ultrakill_1_1_jump(self, player, slam, fire2, arm):
-        if slam:
-            return True
-        elif not slam and not fire2:
-            return self.has_any({"Slam", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", \
-                "Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Malicious"}, player)
-        elif not slam and fire2:
-            return self.has("Slam", player) or \
-                self.has_any({"Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon"}, player) or \
-                    self.has_all({"Shotgun - Pump Charge", "Secondary Fire - Pump Charge"}, player) or \
-                        self.has_all({"Shotgun - Core Eject", "Secondary Fire - Core Eject"}, player) or \
-                            (self.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge"}, player) and \
-                                self.has("Feedbacker", player)) or \
-                                    self.has("Railcannon - Malicious", player)
-        
-    def _ultrakill_2_1_s1(self, player, dashes, fire2, arm):
-        if fire2 and not arm:
-            return self.has("Stamina Bar", player, dashes) or \
-                (self.has("Shotgun - Core Eject", player) and \
-                    self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                        (self.has("Shotgun - Pump Charge", player) and \
-                            self.has_any({"Secondary Fire - Pump Charge", "Feedbacker"}, player)) or \
-                                self.has_any({"Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon"}, player)
-        else:
-            return self.has("Stamina Bar", player, dashes) or \
-                self.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon"}, player)
+def can_slam(state: CollectionState, player: int, option: bool) -> bool:
+    return True if option else state.has("Slam", player)
 
-    def _ultrakill_2_1_s3(self, player, walljumps, dashes, fire2):
-        if fire2:
-            return ((self.has("Stamina Bar", player, dashes) or \
-                (self.has("Wall Jump", player, walljumps) and \
-                    self.has("Stamina Bar", player, dashes-1))) and \
-                        (self.has_all({"Shotgun - Pump Charge", "Secondary Fire - Pump Charge"}, player) or \
-                            self.has("Railcannon - Malicious", player))) or \
-                                self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player)
-        else:
-            return ((self.has("Stamina Bar", player, dashes) or \
-                (self.has("Wall Jump", player, walljumps) and \
-                    self.has("Stamina Bar", player, dashes-1))) and \
-                        self.has_any({"Shotgun - Pump Charge", "Railcannon - Malicious"}, player)) or \
-                            self.has("Rocket Launcher - Freezeframe", player)
 
-    def _ultrakill_2_1_s5(self, player, walljumps, dashes, slam, fire2, arm):
-        if slam:
-            return True
-        elif not arm and fire2:
-            return self.has_any({"Slam", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon"}, player) or \
-                (self.has("Wall Jump", player, walljumps) and \
-                    self.has("Stamina Bar", player, dashes)) or \
-                        (self.has("Shotgun - Core Eject", player) and \
-                            self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                                (self.has("Shotgun - Pump Charge", player) and \
-                                    self.has_any({"Secondary Fire - Pump Charge", "Feedbacker"}, player))
-        else:
-            return self.has_any({"Slam", "Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon"}, player) or \
-                (self.has("Wall Jump", player, walljumps) and \
-                    self.has("Stamina Bar", player, dashes))
+def has_arm(state: CollectionState, player: int, option: bool) -> bool:
+    return True if option else state.has("Feedbacker", player)
 
-    def _ultrakill_2_1c(self, player, walljumps, dashes, slam, fire2):
-        if fire2:
-            if not slam:
-                return (self.has("Stamina Bar", player, dashes) and \
-                    self.has("Wall Jump", player, walljumps) and \
-                        self.has("Slam", player)) or \
-                            self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player)
-            else:
-                return (self.has("Stamina Bar", player, dashes) and \
-                    self.has("Wall Jump", player, walljumps)) or \
-                        self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player)
-        else:
-            if not slam:
-                return (self.has("Stamina Bar", player, dashes) and \
-                    self.has("Wall Jump", player, walljumps) and \
-                        self.has("Slam", player)) or \
-                            self.has("Rocket Launcher - Freezeframe", player)
-            else:
-                return (self.has("Stamina Bar", player, dashes) and \
-                    self.has("Wall Jump", player, walljumps)) or \
-                        self.has("Rocket Launcher - Freezeframe", player)
-    
-    def _ultrakill_2_3_s3(self, player, walljumps, dashes, slam, fire2):
-        if slam:
-            return True
-        elif not slam:
-            if fire2:
-                return self.has_any({"Slam", "Shotgun - Pump Charge", "Railcannon - Malicious", "Rocket Launcher - Freezeframe"}, player) or \
-                    (self.has("Wall Jump", player, walljumps) or \
-                        (self.has("Wall Jump", player, walljumps-1) and \
-                            self.has("Stamina Bar", player, dashes)))
-            else:
-                return self.has_any({"Slam", "Railcannon - Malicious"}, player) or \
-                    (self.has("Wall Jump", player, walljumps) or \
-                        (self.has("Wall Jump", player, walljumps-1) and \
-                            self.has("Stamina Bar", player, dashes))) or \
-                                self.has_all({"Shotgun - Pump Charge", "Secondary Fire - Pump Charge"}, player) or \
-                                    self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player)
 
-    def _ultrakill_3_2_jump(self, player, walljumps, dashes, slam, fire2, arm):
-        if slam:
-            return True
-        elif not slam and fire2:
-            if not arm:
-                return self.has_any({"Slam", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", \
-                    "Rocket Launcher - S.R.S. Cannon"}, player) or \
-                        self.has("Wall Jump", player, walljumps) or \
-                            self.has("Stamina Bar", player, dashes) or \
-                                (self.has("Shotgun - Core Eject", player) and \
-                                    self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                                        (self.has("Shotgun - Pump Charge", player) and \
-                                            self.has_any({"Secondary Fire - Pump Charge", "Feedbacker"}, player))
-            else:
-                return self.has_any({"Slam", "Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Malicious", \
-                    "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon"}, player) or \
-                        self.has("Wall Jump", player, walljumps) or \
-                            self.has("Stamina Bar", player, dashes)
-        elif not slam and not fire2:
-            return self.has_any({"Slam", "Shotgun - Core Eject", "Shotgun - Pump Charge", "Railcannon - Malicious", \
-                "Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon"}, player) or \
-                    self.has("Wall Jump", player, walljumps) or \
-                        self.has("Stamina Bar", player, dashes)
+def rev0(state: CollectionState, player: int) -> bool:
+    """Revolver - Piercer"""
+    return state.has("Revolver - Piercer", player)
 
-    def _ultrakill_4_1c(self, player, walljumps, dashes, slam, fire2):
-        if not slam:
-            if fire2:
-                return self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player) or \
-                    (self.has("Wall Jump", player, walljumps) and \
-                        self.has("Stamina Bar", player, dashes) and \
-                            self.has("Slam", player))
-            else:
-                return self.has("Rocket Launcher - Freezeframe", player) or \
-                    (self.has("Wall Jump", player, walljumps) and \
-                        self.has("Stamina Bar", player, dashes) and \
-                            self.has("Slam", player))
-        else:
-            if fire2:
-                return self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player) or \
-                    (self.has("Wall Jump", player, walljumps) and \
-                        self.has("Stamina Bar", player, dashes))
-            else:
-                return self.has("Rocket Launcher - Freezeframe", player) or \
-                    (self.has("Wall Jump", player, walljumps) and \
-                        self.has("Stamina Bar", player, dashes))
-    
-    def _ultrakill_4_3(self, player, fire2, arm):
-        if arm:
-            return True
-        elif not arm and not fire2:
-            return self.has_any({"Feedbacker", "Knuckleblaster", "Shotgun - Core Eject", \
-                "Railcannon - Malicious"}, player) or \
-                    (self.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge"}, player) and \
-                        self.has("Feedbacker", player))
-        elif not arm and fire2:
-            return self.has_any({"Feedbacker", "Knuckleblaster", "Railcannon - Malicious"}, player) or \
-                (self.has("Shotgun - Core Eject", player) and \
-                    self.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                        self.has_all({"Shotgun - Pump Charge", "Feedbacker"}, player)
 
-    def _ultrakill_4_4(self, player, walljumps, dashes, skulls, slam, fire2):
-        if skulls:
-            if not fire2:
-                if not slam:
-                    return self.has_all({"Whiplash", "Blue Skull (4-4)"}, player) or \
-                        ((self.has("Stamina Bar", player, dashes) and \
-                            self.has("Wall Jump", player, walljumps-1)) or \
-                                self.has("Wall Jump", player, walljumps) or \
-                                    self.has_any({"Slam", "Rocket Launcher - Freezeframe"}, player))
-                else:
-                    return self.has_all({"Whiplash", "Blue Skull (4-4)"}, player) or \
-                        ((self.has("Stamina Bar", player, dashes) and \
-                            self.has("Wall Jump", player, walljumps-1)) or \
-                                self.has("Wall Jump", player, walljumps) or \
-                                    self.has("Rocket Launcher - Freezeframe", player))
-            else:
-                if not slam:
-                    return self.has_all({"Whiplash", "Blue Skull (4-4)"}, player) or \
-                        ((self.has("Stamina Bar", player, dashes) and \
-                            self.has("Wall Jump", player, walljumps-1)) or \
-                                self.has("Wall Jump", player, walljumps) or \
-                                    self.has("Slam", player) or \
-                                        self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player))
-                else:
-                    return self.has_all({"Whiplash", "Blue Skull (4-4)"}, player) or \
-                        ((self.has("Stamina Bar", player, dashes) and \
-                            self.has("Wall Jump", player, walljumps-1)) or \
-                                self.has("Wall Jump", player, walljumps) or \
-                                    self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player))
-        else:
-            if not fire2:
-                if not slam:
-                    return self.has("Whiplash", player) or \
-                        ((self.has("Stamina Bar", player, dashes) and \
-                            self.has("Wall Jump", player, walljumps-1)) or \
-                                self.has("Wall Jump", player, walljumps) or \
-                                    self.has_any({"Slam", "Rocket Launcher - Freezeframe"}, player))
-                else:
-                    return self.has("Whiplash", player) or \
-                        ((self.has("Stamina Bar", player, dashes) and \
-                            self.has("Wall Jump", player, walljumps-1)) or \
-                                self.has("Wall Jump", player, walljumps) or \
-                                    self.has("Rocket Launcher - Freezeframe", player))
-            else:
-                if not slam:
-                    return self.has("Whiplash", player) or \
-                        ((self.has("Stamina Bar", player, dashes) and \
-                            self.has("Wall Jump", player, walljumps-1)) or \
-                                self.has("Wall Jump", player, walljumps) or \
-                                    self.has("Slam", player) or \
-                                        self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player))
-                else:
-                    return self.has("Whiplash", player) or \
-                        ((self.has("Stamina Bar", player, dashes) and \
-                            self.has("Wall Jump", player, walljumps-1)) or \
-                                self.has("Wall Jump", player, walljumps) or \
-                                    self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player))
+def rev0_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
+    """Revolver - Piercer"""
+    return state.has_all({"Revolver - Piercer", "Secondary Fire - Piercer"}, player) if fire2 else rev0(state, player)
 
-    def _ultrakill_5_1(self, player, walljumps, dashes, slam, fire2):
-        if not slam and not fire2:
-            return (self.has("Slam", player) and \
-                self.has("Wall Jump", player, walljumps) and \
-                    self.has("Stamina Bar", player, dashes)) or \
-                        self.has_any({"Rocket Launcher - Freezeframe", "Whiplash"}, player)
-        elif not slam and fire2:
-            return (self.has("Slam", player) and \
-                self.has("Wall Jump", player, walljumps) and \
-                    self.has("Stamina Bar", player, dashes)) or \
-                        self.has("Whiplash", player) or \
-                            self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player)
-        elif slam and not fire2:
-            return (self.has("Wall Jump", player, walljumps) and \
-                self.has("Stamina Bar", player, dashes)) or \
-                    self.has_any({"Rocket Launcher - Freezeframe", "Whiplash"}, player)
-        elif slam and fire2:
-            return (self.has("Wall Jump", player, walljumps) and \
-                self.has("Stamina Bar", player, dashes)) or \
-                    self.has("Whiplash", player) or \
-                        self.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player)
 
+def rev1(state: CollectionState, player: int) -> bool:
+    """Revolver - Sharpshooter"""
+    return state.has("Revolver - Sharpshooter", player)
+
+
+def rev1_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
+    """Revolver - Sharpshooter"""
+    return state.has_all({"Revolver - Sharpshooter", "Secondary Fire - Sharpshooter"}, player) if fire2 else rev1(state, player)
+
+
+def rev2(state: CollectionState, player: int) -> bool:
+    """Revolver - Marksman"""
+    return state.has("Revolver - Marksman", player)
+
+
+def rev2_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
+    """Revolver - Marksman"""
+    return state.has_all({"Revolver - Marksman", "Secondary Fire - Marksman"}, player) if fire2 else rev2(state, player)
+
+
+def revalt(state: CollectionState, player: int):
+    return state.has("Revolver - Alternate", player)
+
+
+def sho0(state: CollectionState, player: int) -> bool:
+    """Shotgun - Core Eject"""
+    return state.has("Shotgun - Core Eject", player)
+
+
+def sho0_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
+    """Shotgun - Core Eject"""
+    return state.has_all({"Shotgun - Core Eject", "Secondary Fire - Core Eject"}, player) if fire2 else sho0(state, player)
+
+
+def sho1(state: CollectionState, player: int) -> bool:
+    """Shotgun - Pump Charge"""
+    return state.has("Shotgun - Pump Charge", player)
+
+
+def sho1_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
+    """Shotgun - Pump Charge"""
+    return state.has_all({"Shotgun - Pump Charge", "Secondary Fire - Pump Charge"}, player) if fire2 else sho1(state, player)
+
+
+def nai0(state: CollectionState, player: int) -> bool:
+    """Nailgun - Attractor"""
+    return state.has("Nailgun - Attractor", player)
+
+
+def nai0_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
+    """Nailgun - Attractor"""
+    return state.has_all({"Nailgun - Attractor", "Secondary Fire - Attractor"}, player) if fire2 else nai0(state, player)
+
+
+def nai1(state: CollectionState, player: int) -> bool:
+    """Nailgun - Overheat"""
+    return state.has("Nailgun - Overheat", player)
+
+
+def nai1_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
+    """Nailgun - Overheat"""
+    return state.has_all({"Nailgun - Overheat", "Secondary Fire - Overheat"}, player) if fire2 else nai1(state, player)
+
+
+def naialt(state: CollectionState, player: int):
+    return state.has("Nailgun - Alternate", player)
+
+
+def rai0(state: CollectionState, player: int) -> bool:
+    """Railgun - Electric"""
+    return state.has("Railgun - Electric", player)
+
+
+def rai1(state: CollectionState, player: int) -> bool:
+    """Railgun - Screwdriver"""
+    return state.has("Railgun - Screwdriver", player)
+
+
+def rai2(state: CollectionState, player: int) -> bool:
+    """Railgun - Malicious"""
+    return state.has("Railgun - Malicious", player)
+
+
+def rock0(state: CollectionState, player: int) -> bool:
+    """Rocket Launcher - Freezeframe"""
+    return state.has("Rocket Launcher - Freezeframe", player)
+
+
+def rock0_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
+    """Rocket Launcher - Freezeframe"""
+    return state.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player) if fire2 else rock0(state, player)
+
+
+def rock1(state: CollectionState, player: int) -> bool:
+    """Rocket Launcher - S.R.S. Cannon"""
+    return state.has("Rocket Launcher - S.R.S. Cannon", player)
+
+
+def rock1_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
+    """Rocket Launcher - S.R.S. Cannon"""
+    return state.has_all({"Rocket Launcher - S.R.S. Cannon", "Secondary Fire - S.R.S. Cannon"}, player) if fire2 else rock1(state, player)
+
+
+def arm0(state: CollectionState, player: int) -> bool:
+    """Feedbacker"""
+    return state.has("Feedbacker", player)
+
+
+def arm1(state: CollectionState, player: int) -> bool:
+    """Knuckleblaster"""
+    return state.has("Knuckleblaster", player)
+
+
+def arm2(state: CollectionState, player: int) -> bool:
+    """Whiplash"""
+    return state.has("Whiplash", player)
+
+
+def grab_item(state: CollectionState, player: int, option: bool) -> bool:
+    return has_arm(state, player, option) or arm1(state, player)
+
+
+def can_proj_boost(state: CollectionState, player: int, arm: bool) -> bool:
+    if arm:
+        return (
+            sho0(state, player)
+            or sho1(state, player)
+        )
+    else:
+        return (
+            (
+                sho0(state, player)
+                or sho1(state, player)
+            )
+            and arm0(state, player)
+        )
+
+
+def slam_storage(state: CollectionState, player: int, slam: bool, has: int) -> bool:
+    return (
+        can_slam(state, player, slam)
+        and walljumps(state, player, has, 1)
+    )
+
+
+def good_weapon(state: CollectionState, player: int, fire2: bool, arm: bool) -> bool:
+    return (
+        rev0(state, player)
+        or rev1(state, player)
+        or rev2(state, player)
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+    )
+
+
+def can_break_glass(state: CollectionState, player: int, fire2: bool, arm: bool) -> bool:
+    return (
+        rai0(state, player)
+        or rai2(state, player)
+        or rock0(state, player)
+        or rock1(state, player)
+        or arm1(state, player)
+        or rev0_fire2(state, player, fire2)
+        or rev1_fire2(state, player, fire2)
+        or rev2_fire2(state, player, fire2)
+        or (
+            state.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player)
+            and revalt(state, player)
+        )
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+    )
+
+
+def can_break_walls(state: CollectionState, player: int, fire2: bool, arm: bool) -> bool:
+    return (
+        rai0(state, player)
+        or rai2(state, player)
+        or rock0(state, player)
+        or rock1(state, player)
+        or arm1(state, player)
+        or nai1_fire2(state, player, fire2)
+        or (
+            state.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player)
+            and revalt(state, player)
+        )
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+    )
+
+
+def jump_general(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool, has: int, needs: int) -> bool:
+    return (
+        can_slam(state, player, slam)
+        or walljumps(state, player, has, needs)
+        or rock0(state, player)
+        or rock1(state, player)
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+        or rai2(state, player)
+    )
+
+
+def challenge_0_1(state: CollectionState, player: int, fire2: bool, arm: bool) -> bool:
+    return (
+        rai0(state, player)
+        or rai2(state, player)
+        or rock0(state, player)
+        or rock1(state, player)
+        or rev0_fire2(state, player, fire2)
+        or rev1_fire2(state, player, fire2)
+        or rev2_fire2(state, player, fire2)
+        or (
+            state.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player)
+            and revalt(state, player)
+        )
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+    )
+
+
+def secret_0_2(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool, has: int) -> bool:
+    return (
+        walljumps(state, player, has, 3)
+        or (
+            walljumps(state, player, has, 2)
+            and can_slam(state, player, slam)
+        )
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+        or rai2(state, player)
+        or rock0(state, player)
+        or rock1(state, player)
+    )
+
+
+def challenge_0_3(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool, has: int) -> bool:
+    return (
+        slam_storage(state, player, slam, has)
+        or (
+            (
+                sho0_fire2(state, player, fire2)
+                or can_proj_boost(state, player, arm)
+            )
+            and walljumps(state, player, has, 3)
+        )
+        or (
+            sho1_fire2(state, player, fire2)
+            and can_proj_boost(state, player, arm)
+        )
+        or rock0_fire2(state, player, fire2)
+        or rai2(state, player)
+    )
+
+
+def level_0_5(state: CollectionState, player: int, slide: bool, fire2: bool, has_walljumps: int, has_dashes: int) -> bool:
+    return (
+        (
+            can_slide(state, player, slide)
+            and (
+                walljumps(state, player, has_walljumps, 2)
+                or dashes(state, player, has_dashes, 2)
+            )
+        )
+        or rock0_fire2(state, player, fire2)
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or rai2(state, player)
+    )
+
+
+def jump_1_1(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool) -> bool:
+    return (
+        can_slam(state, player, slam)
+        or rock0(state, player)
+        or rock1(state, player)
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+        or rai2(state, player)
+    )
+
+
+def secret1_2_1(state: CollectionState, player: int, fire2: bool, arm: bool, has: int) -> bool:
+    return (
+        dashes(state, player, has, 1)
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+        or rai2(state, player)
+        or rock0(state, player)
+        or rock1(state, player)
+    )
+
+
+def secret3_2_1(state: CollectionState, player: int, fire2: bool, has_walljumps: int, has_dashes: int) -> bool:
+    return (
+        (
+            (
+                dashes(state, player, has_dashes, 2)
+                or (
+                    walljumps(state, player, has_walljumps, 1)
+                    and dashes(state, player, has_dashes, 1)
+                )
+            )
+            and (
+                sho1_fire2(state, player, fire2)
+                or rai2(state, player)
+            )
+        )
+        or rock0_fire2(state, player, fire2)
+    )
+
+
+def secret5_2_1(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool, has_walljumps: int, has_dashes: int) -> bool:
+    return (
+        can_slam(state, player, slam)
+        or rai2(state, player)
+        or rock0(state, player)
+        or rock1(state, player)
+        or (
+            walljumps(state, player, has_walljumps, 1)
+            and dashes(state, player, has_dashes, 1)
+        )
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+    )
+
+
+def challenge_2_1(state: CollectionState, player: int, slam: bool, fire2: bool, has_walljumps: int, has_dashes: int) -> bool:
+    return (
+        (
+            dashes(state, player, has_dashes, 1)
+            and walljumps(state, player, has_walljumps, 1)
+            and can_slam(state, player, slam)
+        )
+        or rock0_fire2(state, player, fire2)
+    )
+
+
+def secret3_2_3(state: CollectionState, player: int, slam: bool, fire2: bool, has_walljumps: int, has_dashes: int) -> bool:
+    return (
+        can_slam(state, player, slam)
+        or rai2(state, player)
+        or (
+            walljumps(state, player, has_walljumps, 2)
+            or (
+                walljumps(state, player, has_walljumps, 1)
+                and dashes(state, player, has_dashes, 1)
+            )
+        )
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or rock0_fire2(state, player, fire2)
+    )
+
+
+def jump_3_2(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool, has_walljumps: int, has_dashes: int) -> bool:
+    return (
+        can_slam(state, player, slam)
+        or rai2(state, player)
+        or rock0(state, player)
+        or rock1(state, player)
+        or walljumps(state, player, has_walljumps, 1)
+        or dashes(state, player, has_dashes, 1)
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+    )
+
+
+def challenge_4_1(state: CollectionState, player: int, slam: bool, fire2: bool, has_walljumps: int, has_dashes: int) -> bool:
+    return (
+        rock0_fire2(state, player, fire2)
+        or (
+            walljumps(state, player, has_walljumps, 2)
+            and dashes(state, player, has_dashes, 2)
+            and can_slam(state, player, slam)
+        )
+    )
+
+
+def level_4_3(state: CollectionState, player: int, fire2: bool, arm: bool) -> bool:
+    return (
+        has_arm(state, player, arm)
+        or arm1(state, player)
+        or rai2(state, player)
+        or sho0_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+    )
+
+
+def level_4_4(state: CollectionState, player: int, slam: bool, fire2: bool, skulls: bool, has_walljumps: int, has_dashes: int) -> bool:
+    if skulls:
+        return (
+            (
+                arm2(state, player)
+                and state.has("Blue Skull (4-4)", player)
+            )
+            or (
+                (
+                    dashes(state, player, has_dashes, 1)
+                    and walljumps(state, player, has_walljumps, 1)
+                )
+                or walljumps(state, player, has_walljumps, 2)
+            )
+            or can_slam(state, player, slam)
+            or rock0_fire2(state, player, fire2)
+        )
+    else:
+        return (
+            arm2(state, player)
+            or (
+                (
+                    dashes(state, player, has_dashes, 1)
+                    and walljumps(state, player, has_walljumps, 1)
+                )
+                or walljumps(state, player, has_walljumps, 2)
+            )
+            or can_slam(state, player, slam)
+            or rock0_fire2(state, player, fire2)
+    )
+
+
+def level_5_1(state: CollectionState, player: int, slam: bool, fire2: bool, has_walljumps: int, has_dashes: int) -> bool:
+    return (
+        (
+            can_slam(state, player, slam)
+            and walljumps(state, player, has_walljumps, 3)
+            and dashes(state, player, has_dashes, 2)
+        )
+        or rock0_fire2(state, player, fire2)
+        or arm2(state, player)
+    )
 
 
 def rules(ultrakillworld):
@@ -474,13 +489,10 @@ def rules(ultrakillworld):
     skulls = world.randomize_skulls[player]
     challenge = world.challenge_rewards[player]
     prank = world.p_rank_rewards[player]
+    secretcompletion = world.include_secret_mission_completion[player]
 
-    dash1: int = 1 - world.starting_stamina[player].value
-    dash2: int = 2 - world.starting_stamina[player].value
-    dash3: int = 3 - world.starting_stamina[player].value
-    walljump1: int = 1 - world.starting_walljumps[player].value
-    walljump2: int = 2 - world.starting_walljumps[player].value
-    walljump3: int = 3 - world.starting_walljumps[player].value
+    dash: int = world.starting_stamina[player].value
+    walljump: int = world.starting_walljumps[player].value
 
     # goal
     set_rule(world.get_entrance("To " + ultrakillworld.goal_name, player), \
@@ -574,229 +586,258 @@ def rules(ultrakillworld):
 
     # 0-1
     set_rule(world.get_location("0-1: Secret #1", player),
-        lambda state: state._ultrakill_break_glass(player, fire2, arm))
-        
+        lambda state: can_break_glass(state, player, fire2, arm))
+
     set_rule(world.get_location("0-1: Secret #3", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
     set_rule(world.get_location("0-1: Secret #4", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
 
     if challenge:
         set_rule(world.get_location("0-1: Get 5 kills with a single glass panel", player),
-            lambda state: state._ultrakill_0_1c(player, fire2, arm))
+            lambda state: challenge_0_1(state, player, fire2, arm))
 
     if prank:
         set_rule(world.get_location("0-1: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm) or \
+            lambda state: good_weapon(state, player, fire2, arm) or \
                 state.has("Knuckleblaster", player))
 
 
     # 0-2
-    if fire2:
-        set_rule(world.get_location("0-2: Secret #3", player),
-            lambda state: state.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player) or \
-                (state.has("Wall Jump", player, walljump1) and \
-                    state.has("Stamina Bar", player, dash2)))
-        
-    if not slide:
-        set_rule(world.get_location("0-2: Secret #4", player),
-            lambda state: state.has("Slide", player))
-        if challenge:
-            set_rule(world.get_location("0-2: Beat the secret encounter", player),
-                lambda state: state.has("Slide", player))
+    set_rule(world.get_location("0-2: Secret #3", player),
+        lambda state: (
+            rock0_fire2(state, player, fire2)
+            or (
+                walljumps(state, player, walljump, 1)
+                and dashes(state, player, dash, 2)
+            )
+        ))
 
+
+    set_rule(world.get_location("0-2: Secret #4", player),
+        lambda state: can_slide(state, player, slide))
     if challenge:
-        add_rule(world.get_location("0-2: Beat the secret encounter", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
-            
+        set_rule(world.get_location("0-2: Beat the secret encounter", player),
+            lambda state: (
+                can_slide(state, player, slide)
+                and good_weapon(state, player, fire2, arm)
+            ))
+
     if prank:
         add_rule(world.get_location("0-2: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
-            
-    set_rule(world.get_location("Cleared 0-S", player),
-        lambda state: state._ultrakill_0_2_secret(player, walljump2, slam, fire2, arm))
-        
-    if skulls:
+            lambda state: good_weapon(state, player, fire2, arm))
+
+    if secretcompletion:
+        set_rule(world.get_location("Cleared 0-S", player),
+            lambda state: (
+                secret_0_2(state, player, slam, fire2, arm, walljump)
+                and grab_item(state, player, arm)
+            ))
+
+    if skulls and secretcompletion:
         add_rule(world.get_location("Cleared 0-S", player),
             lambda state: state.has_all({"Blue Skull (0-2)", "Blue Skull (0-S)", "Red Skull (0-S)"}, player))
-         
-    if not arm:
-        add_rule(world.get_location("Cleared 0-S", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-
 
     # 0-3
     set_rule(world.get_location("0-3: Secret #1", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
     set_rule(world.get_location("0-3: Secret #2", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm) and \
-            state._ultrakill_break_walls(player, fire2, arm))
-        
+        lambda state: (
+            jump_general(state, player, slam, fire2, arm, walljump, 2)
+            and can_break_walls(state, player, fire2, arm)
+        ))
+
     set_rule(world.get_location("0-3: Secret #3", player),
-        lambda state: state._ultrakill_break_walls(player, fire2, arm))
+        lambda state: can_break_walls(state, player, fire2, arm))
     set_rule(world.get_location("Cleared 0-3", player),
-        lambda state: state._ultrakill_break_walls(player, fire2, arm) or \
-            state._ultrakill_0_3c(player, walljump3, slam, fire2, arm))
-    
+        lambda state: (
+            can_break_walls(state, player, fire2, arm)
+            or challenge_0_3(state, player, slam, fire2, arm, walljump)
+        ))
 
     set_rule(world.get_location("0-3: Weapon", player),
-        lambda state: state._ultrakill_good_weapon(player, fire2, arm))
+        lambda state: good_weapon(state, player, fire2, arm))
 
     if challenge:
         set_rule(world.get_location("0-3: Kill only 1 enemy", player),
-            lambda state: state._ultrakill_0_3c(player, walljump3, slam, fire2, arm))
+            lambda state: challenge_0_3(state, player, slam, fire2, arm, walljump))
 
     if prank:
         add_rule(world.get_location("0-3: Perfect Rank", player),
-            lambda state: state._ultrakill_break_walls(player, fire2, arm) and \
-                state._ultrakill_good_weapon(player, fire2, arm))
+            lambda state: (
+                can_break_walls(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm)
+            ))
 
     # 0-4
     set_rule(world.get_location("0-4: Secret #1", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
 
     set_rule(world.get_location("0-4: Secret #2", player),
-        lambda state: state._ultrakill_break_glass(player, fire2, arm))
-        
-    if not slide:
-        set_rule(world.get_location("0-4: Secret #3", player),
-            lambda state: state.has("Slide", player))
-        if challenge:
-            set_rule(world.get_location("0-4: Slide uninterrupted for 17 seconds", player),
-                lambda state: state.has("Slide", player))
-            
+        lambda state: can_break_glass(state, player, fire2, arm))
+
+    set_rule(world.get_location("0-4: Secret #3", player),
+        lambda state: can_slide(state, player, slide))
+    if challenge:
+        set_rule(world.get_location("0-4: Slide uninterrupted for 17 seconds", player),
+            lambda state: can_slide(state, player, slide))
+
     if prank:
         set_rule(world.get_location("0-4: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm))
 
 
     # 0-5
     set_rule(world.get_location("Cleared 0-5", player),
-        lambda state: state._ultrakill_0_5(player, walljump2, dash2, slide, fire2))
-    
+        lambda state: level_0_5(state, player, slide, fire2, walljump, dash))
+
     if challenge:
         set_rule(world.get_location("0-5: Don't inflict fatal damage to any enemy", player),
-            lambda state: state._ultrakill_0_5(player, walljump2, dash2, slide, fire2))
-    
+            lambda state: level_0_5(state, player, slide, fire2, walljump, dash))
+
     if prank:
         set_rule(world.get_location("0-5: Perfect Rank", player),
-            lambda state: state._ultrakill_0_5(player, walljump2, dash2, slide, fire2) and \
-                state._ultrakill_good_weapon(player, fire2, arm))
-            
-    
+            lambda state: (
+                level_0_5(state, player, slide, fire2, walljump, dash)
+                and good_weapon(state, player, fire2, arm)
+            ))
+
+
     # 1-1
     set_rule(world.get_location("1-1: Secret #5", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
+
+    set_rule(world.get_location("1-1: Weapon", player),
+        lambda state: grab_item(state, player, arm))
+    set_rule(world.get_location("1-1: Secret #3", player),
+        lambda state: grab_item(state, player, arm))
+    set_rule(world.get_location("1-1: Secret #4", player),
+        lambda state: grab_item(state, player, arm))
+    add_rule(world.get_location("1-1: Secret #5", player),
+        lambda state: grab_item(state, player, arm))
+    if prank:
+        set_rule(world.get_location("1-1: Perfect Rank", player),
+            lambda state: grab_item(state, player, arm))
 
     if skulls:
-        if fire2:
-            if not arm:
-                set_rule(world.get_location("Cleared 1-1", player),
-                    lambda state: (state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)"}, player) and \
-                        state.has_any({"Feedbacker", "Knuckleblaster"}, player)) or \
-                            state.has_all({"Revolver - Marksman", "Secondary Fire - Marksman"}, player))
-            else:
-                set_rule(world.get_location("Cleared 1-1", player),
-                    lambda state: state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)"}, player) or \
-                        state.has_all({"Revolver - Marksman", "Secondary Fire - Marksman"}, player))
-        else:
-            if not arm:
-                set_rule(world.get_location("Cleared 1-1", player),
-                    lambda state: (state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)"}, player) and \
-                        state.has_any({"Feedbacker", "Knuckleblaster"}, player)) or \
-                            state.has("Revolver - Marksman", player))
-            else:    
-                set_rule(world.get_location("Cleared 1-1", player),
-                    lambda state: state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)"}, player) or \
-                        state.has("Revolver - Marksman", player))
-        set_rule(world.get_location("1-1: Weapon", player),
+        set_rule(world.get_location("Cleared 1-1", player),
+            lambda state: (
+                (
+                    state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)"}, player)
+                    and grab_item(state, player, arm)
+                )
+                or rev2_fire2(state, player, fire2)
+            ))
+
+        add_rule(world.get_location("1-1: Weapon", player),
             lambda state: state.has("Red Skull (1-1)", player))
-        set_rule(world.get_location("1-1: Secret #3", player),
+        add_rule(world.get_location("1-1: Secret #3", player),
             lambda state: state.has("Red Skull (1-1)", player))
-        set_rule(world.get_location("1-1: Secret #4", player),
+        add_rule(world.get_location("1-1: Secret #4", player),
             lambda state: state.has("Red Skull (1-1)", player))
         add_rule(world.get_location("1-1: Secret #5", player),
             lambda state: state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)"}, player))
         if prank:
             set_rule(world.get_location("1-1: Perfect Rank", player),
                 lambda state: state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)"}, player))
-    if not arm:
-        if prank:
-            set_rule(world.get_location("1-1: Perfect Rank", player),
-                lambda state: state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)"}, player))
-            
-    if challenge:
-        if fire2:
-            set_rule(world.get_location("1-1: Complete the level in under 10 seconds", player),
-                lambda state: state.has_all({"Revolver - Marksman", "Secondary Fire - Marksman"}, player))
-        else:
-            set_rule(world.get_location("1-1: Complete the level in under 10 seconds", player),
-                lambda state: state.has("Revolver - Marksman", player))
-        
-    if fire2:
-        set_rule(world.get_location("Cleared 1-S", player),
-            lambda state: state.has_all({"Revolver - Marksman", "Secondary Fire - Marksman"}, player))
     else:
+        set_rule(world.get_location("Cleared 1-1", player),
+            lambda state: (
+                grab_item(state, player, arm)
+                or rev2_fire2(state, player, fire2)
+            ))
+
+
+    if challenge:
+        set_rule(world.get_location("1-1: Complete the level in under 10 seconds", player),
+            lambda state: rev2_fire2(state, player, fire2))
+
+    if secretcompletion:
         set_rule(world.get_location("Cleared 1-S", player),
-            lambda state: state.has("Revolver - Marksman", player))
+            lambda state: rev2_fire2(state, player, fire2))
 
     if prank:
         add_rule(world.get_location("1-1: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
-        
-    
+            lambda state: (
+                good_weapon(state, player, fire2, arm)
+                and grab_item(state, player, arm)
+            ))
+
+
     # 1-2
     if challenge:
         set_rule(world.get_location("1-2: Do not pick up any skulls", player),
-            lambda state: state.has("Railcannon - Electric", player))
+            lambda state: rai0(state, player))
+
+    set_rule(world.get_location("1-2: Secret #3", player),
+        lambda state: grab_item(state, player, arm))
 
     if skulls:
-        set_rule(world.get_location("1-2: Secret #3", player),
+        add_rule(world.get_location("1-2: Secret #3", player),
             lambda state: state.has("Blue Skull (1-2)", player))
         set_rule(world.get_location("1-2: Secret #4", player),
-            lambda state: state.has_all({"Blue Skull (1-2)", "Red Skull (1-2)"}, player) or \
-                state.has("Railcannon - Electric", player))
+            lambda state: (
+                state.has_all({"Blue Skull (1-2)", "Red Skull (1-2)"}, player)
+                and grab_item(state, player, arm)
+                or rai0(state, player)
+            ))
         set_rule(world.get_location("1-2: Secret #5", player),
-            lambda state: state.has_all({"Blue Skull (1-2)", "Red Skull (1-2)"}, player) or \
-                state.has("Railcannon - Electric", player))
+            lambda state: (
+                state.has_all({"Blue Skull (1-2)", "Red Skull (1-2)"}, player)
+                and grab_item(state, player, arm)
+                or rai0(state, player)
+            ))
         set_rule(world.get_location("Cleared 1-2", player),
-            lambda state: state.has_all({"Blue Skull (1-2)", "Red Skull (1-2)"}, player) or \
-                state.has("Railcannon - Electric", player))
+            lambda state: (
+                state.has_all({"Blue Skull (1-2)", "Red Skull (1-2)"}, player)
+                and grab_item(state, player, arm)
+                or rai0(state, player)
+            ))
         if prank:
             set_rule(world.get_location("1-2: Perfect Rank", player),
-                lambda state: state.has_all({"Blue Skull (1-2)", "Red Skull (1-2)"}, player) or \
-                    state.has("Railcannon - Electric", player))
-        
-    if not arm:
-        add_rule(world.get_location("1-2: Secret #3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("1-2: Secret #4", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player) or \
-                state.has("Railcannon - Electric", player))
-        add_rule(world.get_location("1-2: Secret #5", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player) or \
-                state.has("Railcannon - Electric", player))
-        add_rule(world.get_location("Cleared 1-2", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player) or \
-                state.has("Railcannon - Electric", player))
+                lambda state: (
+                    state.has_all({"Blue Skull (1-2)", "Red Skull (1-2)"}, player)
+                    and grab_item(state, player, arm)
+                ))
+    else:
+        set_rule(world.get_location("1-2: Secret #4", player),
+            lambda state: (
+                grab_item(state, player, arm)
+                or rai0(state, player)
+            ))
+        set_rule(world.get_location("1-2: Secret #5", player),
+            lambda state: (
+                grab_item(state, player, arm)
+                or rai0(state, player)
+            ))
+        set_rule(world.get_location("Cleared 1-2", player),
+            lambda state: (
+                grab_item(state, player, arm)
+                or rai0(state, player)
+            ))
         if prank:
-            add_rule(world.get_location("1-2: Perfect Rank", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
+            set_rule(world.get_location("1-2: Perfect Rank", player),
+                lambda state: (
+                    grab_item(state, player, arm)
+                    or rai0(state, player)
+                ))
 
     if prank:
         add_rule(world.get_location("1-2: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
+            lambda state: (
+                good_weapon(state, player, fire2, arm)
+                and grab_item(state, player, arm)
+            ))
 
 
     # 1-3        
     set_rule(world.get_location("1-3: Secret #1", player),
-        lambda state: state._ultrakill_break_glass(player, fire2, arm))
-        
-    if not slide:
-        set_rule(world.get_location("1-3: Secret #4", player),
-            lambda state: state.has("Slide", player))
-        set_rule(world.get_location("1-3: Secret #5", player),
-            lambda state: state.has("Slide", player))
+        lambda state: can_break_glass(state, player, fire2, arm))
+
+    set_rule(world.get_location("1-3: Secret #4", player),
+        lambda state: can_slide(state, player, slide))
+    set_rule(world.get_location("1-3: Secret #5", player),
+        lambda state: can_slide(state, player, slide))
 
     if skulls:
         set_rule(world.get_location("Cleared 1-3", player),
@@ -808,124 +849,142 @@ def rules(ultrakillworld):
             set_rule(world.get_location("1-3: Beat the secret encounter", player),
                 lambda state: state.has_all({"Red Skull (1-3)", "Blue Skull (1-3)"}, player))
 
-    if not arm:
-        add_rule(world.get_location("Cleared 1-3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if prank:
-            add_rule(world.get_location("1-3: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if challenge:
-            add_rule(world.get_location("1-3: Beat the secret encounter", player),
-                lambda state: state.has_all({"Feedbacker", "Knuckleblaster"}, player))
-
-    if challenge:
-        add_rule(world.get_location("1-3: Beat the secret encounter", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
-
+    add_rule(world.get_location("Cleared 1-3", player),
+        lambda state: grab_item(state, player, arm))
     if prank:
         add_rule(world.get_location("1-3: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))    
+            lambda state: (
+                grab_item(state, player, arm)
+                and good_weapon(state, player, fire2, arm)
+            ))
+    if challenge:
+        add_rule(world.get_location("1-3: Beat the secret encounter", player),
+            lambda state: (
+                grab_item(state, player, arm)
+                and good_weapon(state, player, fire2, arm)
+            ))
+
 
     # 1-4
     set_rule(world.get_location("1-4: Secret Weapon", player),
         lambda state: state.can_reach(world.get_region("1-1: HEART OF THE SUNRISE", player)) and \
             state.can_reach(world.get_region("1-2: THE BURNING WORLD", player)) and \
                 state.can_reach(world.get_region("1-3: HALLS OF SACRED REMAINS", player)))
-    
+
     add_rule(world.get_location("1-4: Secret Weapon", player),
-        lambda state: state._ultrakill_1_1_jump(player, slam, fire2, arm) and \
-            state._ultrakill_break_glass(player, fire2, arm) and \
-                state._ultrakill_break_walls(player, fire2, arm))
+        lambda state: (
+            jump_1_1(state, player, slam, fire2, arm)
+            and can_break_glass(state, player, fire2, arm)
+            and can_break_walls(state, player, fire2, arm)
+        ))
 
     if skulls:
         add_rule(world.get_location("1-4: Secret Weapon", player),
-            lambda state: state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)", "Blue Skull (1-3)", \
-                "Red Skull (1-3)"}, player) and \
-                    (state.has_all({"Blue Skull (1-2)", "Red Skull (1-2)"}, player) or \
-                        state.has("Railcannon - Electric", player)))
-    
-    if not arm:
-        add_rule(world.get_location("1-4: Secret Weapon", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
+            lambda state: (
+                state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)", "Blue Skull (1-3)", "Red Skull (1-3)"}, player)
+                and (
+                    state.has_all({"Blue Skull (1-2)", "Red Skull (1-2)"}, player) or \
+                    rai0(state, player)
+                )
+            ))
+
+    add_rule(world.get_location("1-4: Secret Weapon", player),
+        lambda state: grab_item(state, player, arm))
 
     if challenge and world.goal[player] != 0:
         add_rule(world.get_location("1-4: Do not pick up any skulls", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm))
 
-        
     if prank and world.goal[player] != 0:
         add_rule(world.get_location("1-4: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm))
 
 
     # 2-1
     set_rule(world.get_location("2-1: Secret #1", player),
-        lambda state: state._ultrakill_2_1_s1(player, dash1, fire2, arm) and \
-            state._ultrakill_break_walls(player, fire2, arm))
+        lambda state: (
+            secret1_2_1(state, player, fire2, arm, dash)
+            and can_break_walls(state, player, fire2, arm)
+        ))
 
     set_rule(world.get_location("2-1: Secret #3", player),
-        lambda state: state._ultrakill_2_1_s3(player, walljump1, dash2, fire2))
+        lambda state: secret3_2_1(state, player, fire2, walljump, dash))
 
     set_rule(world.get_location("2-1: Secret #5", player),
-        lambda state: state._ultrakill_2_1_s5(player, walljump1, dash1, slam, fire2, arm))
+        lambda state: secret5_2_1(state, player, slam, fire2, arm, walljump, dash))
     set_rule(world.get_location("Cleared 2-1", player),
-        lambda state: state._ultrakill_2_1_s5(player, walljump1, dash1, slam, fire2, arm))
+        lambda state: secret5_2_1(state, player, slam, fire2, arm, walljump, dash))
 
     if challenge:
         set_rule(world.get_location("2-1: Don't open any normal doors", player),
-            lambda state: state._ultrakill_2_1c(player, walljump1, dash1, slam, fire2) and \
-                state._ultrakill_break_walls(player, fire2, arm))
+            lambda state: (
+                challenge_2_1(state, player, slam, fire2, walljump, dash)
+                and can_break_walls(state, player, fire2, arm)
+            ))
 
     if prank:
         set_rule(world.get_location("2-1: Perfect Rank", player),
-            lambda state: state._ultrakill_2_1_s5(player, walljump1, dash1, slam, fire2, arm) and \
-                state._ultrakill_good_weapon(player, fire2, arm))            
+            lambda state: (
+                secret5_2_1(state, player, slam, fire2, arm, walljump, dash)
+                and good_weapon(state, player, fire2, arm)
+            ))            
 
     # 2-2
-    if not slide:
-        set_rule(world.get_location("2-2: Secret #4", player),
-            lambda state: state.has("Slide", player))
-    
+    set_rule(world.get_location("2-2: Secret #4", player),
+        lambda state: can_slide(state, player, slide))
+
     set_rule(world.get_location("2-2: Secret #2", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
     set_rule(world.get_location("2-2: Secret #3", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm))
-        
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 2))
+
     set_rule(world.get_location("2-2: Secret #5", player),
-        lambda state: state._ultrakill_break_walls(player, fire2, arm))
+        lambda state: can_break_walls(state, player, fire2, arm))
 
     if challenge:
-        if not slide:
-            set_rule(world.get_location("2-2: Beat the level in under 60 seconds", player),
-                lambda state: state.has("Stamina Bar", player, dash2))
-            
+        set_rule(world.get_location("2-2: Beat the level in under 60 seconds", player),
+            lambda state: (
+                can_slide(state, player, slide)
+                or dashes(state, player, dash, 2)
+            ))
+
     if prank:
         add_rule(world.get_location("2-2: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
-        
+            lambda state: good_weapon(state, player, fire2, arm))
 
 
     # 2-3
-    if not slide:
-        set_rule(world.get_location("2-3: Secret #2", player),
-            lambda state: state.has("Slide", player))
-        set_rule(world.get_location("2-3: Secret #5", player),
-            lambda state: state.has("Slide", player))
+    set_rule(world.get_location("2-3: Secret #2", player),
+        lambda state: can_slide(state, player, slide))
+    set_rule(world.get_location("2-3: Secret #5", player),
+        lambda state: can_slide(state, player, slide))
 
     if skulls:
         add_rule(world.get_location("2-3: Secret #3", player),
             lambda state: state.has("Blue Skull (2-3)", player))
         set_rule(world.get_location("2-3: Secret #4", player),
             lambda state: state.has("Blue Skull (2-3)", player))
-        #set_rule(world.get_location("Cleared 2-3", player),
-            #lambda state: state.has_all({"Blue Skull (2-3)", "Red Skull (2-3)"}, player))
+        add_rule(world.get_location("Cleared 2-3", player),
+            lambda state: (
+                (
+                    secret3_2_3(state, player, slam, fire2, walljump, dash)
+                    and (
+                        state.has("Blue Skull (2-3)", player)
+                        or can_slide(state, player, slide)
+                    )
+                )
+                or state.has_all({"Blue Skull (2-3)", "Red Skull (2-3)"}, player)
+            ))
+        if secretcompletion:
+            add_rule(world.get_location("Cleared 2-S", player),
+                lambda state: state.has("Blue Skull (2-3)", player))
         if challenge:
             set_rule(world.get_location("2-3: Don't touch any water", player),
                 lambda state: state.has_all({"Blue Skull (2-3)", "Red Skull (2-3)"}, player))
         if prank:
             set_rule(world.get_location("2-3: Perfect Rank", player),
                 lambda state: state.has_all({"Blue Skull (2-3)", "Red Skull (2-3)"}, player))
-    
+
     if not arm:
         add_rule(world.get_location("2-3: Secret #3", player),
             lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
@@ -933,52 +992,38 @@ def rules(ultrakillworld):
             lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         add_rule(world.get_location("Cleared 2-3", player),
             lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("Cleared 2-S", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
+        if secretcompletion:
+            add_rule(world.get_location("Cleared 2-S", player),
+                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if challenge:
             add_rule(world.get_location("2-3: Don't touch any water", player),
                 lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
         if prank:
             add_rule(world.get_location("2-3: Perfect Rank", player),
                 lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        
-    if not slide:
-        add_rule(world.get_location("Cleared 2-S", player),
-            lambda state: state.has("Slide", player))
-    if skulls:
-        add_rule(world.get_location("Cleared 2-S", player),
-            lambda state: state.has("Blue Skull (2-3)", player))
 
     add_rule(world.get_location("2-3: Secret #3", player),
-        lambda state: state._ultrakill_2_3_s3(player, walljump2, dash1, slam, fire2))
-    add_rule(world.get_location("Cleared 2-S", player),
-        lambda state: state._ultrakill_2_3_s3(player, walljump2, dash1, slam, fire2))
+        lambda state: secret3_2_3(state, player, slam, fire2, walljump, dash))
+    
+    if secretcompletion:
+        add_rule(world.get_location("Cleared 2-S", player),
+            lambda state: (
+                can_slide(state, player, slide)
+                and secret3_2_3(state, player, slam, fire2, walljump, dash)
+            ))
+
     if challenge:
         add_rule(world.get_location("2-3: Don't touch any water", player),
-            lambda state: state._ultrakill_2_3_s3(player, walljump2, dash1, slam, fire2))
-            
-    if challenge and not slide:
-        add_rule(world.get_location("2-3: Don't touch any water", player),
-            lambda state: state.has("Slide", player))
-
-    # either normal exit or secret exit
-    if skulls:
-        if not slide:
-            add_rule(world.get_location("Cleared 2-3", player),
-                lambda state: (state._ultrakill_2_3_s3(player, walljump2, dash1, slam, fire2) and \
-                    state.has_all({"Blue Skull (2-3)", "Slide"}, player)) or \
-                        state.has_all({"Blue Skull (2-3)", "Red Skull (2-3)"}, player))
-        else:
-            add_rule(world.get_location("Cleared 2-3", player),
-                lambda state: (state._ultrakill_2_3_s3(player, walljump2, dash1, slam, fire2) and \
-                    state.has("Blue Skull (2-3)", player)) or \
-                        state.has_all({"Blue Skull (2-3)", "Red Skull (2-3)"}, player))
+            lambda state: (
+                secret3_2_3(state, player, slam, fire2, walljump, dash)
+                and can_slide(state, player, slide)
+            ))
 
     if prank:
         add_rule(world.get_location("2-3: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
-        
-    
+            lambda state: good_weapon(state, player, fire2, arm))
+
+
     # 2-4
     if skulls:
         set_rule(world.get_location("Cleared 2-4", player),
@@ -989,197 +1034,208 @@ def rules(ultrakillworld):
         if prank and world.goal[player] != 1:
             add_rule(world.get_location("2-4: Perfect Rank", player),
                 lambda state: state.has_all({"Blue Skull (2-4)", "Red Skull (2-4)"}, player))
-        
-    if not arm:
-        add_rule(world.get_location("Cleared 2-4", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if challenge and world.goal[player] != 1:
-            add_rule(world.get_location("2-4: Parry a punch", player),
-                lambda state: state.has("Feedbacker", player))
-        if prank and world.goal[player] != 1:
-            add_rule(world.get_location("2-4: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-            
+
+    add_rule(world.get_location("Cleared 2-4", player),
+        lambda state: grab_item(state, player, arm))
+    if challenge and world.goal[player] != 1:
+        add_rule(world.get_location("2-4: Parry a punch", player),
+            lambda state: has_arm(state, player, arm))
     if prank and world.goal[player] != 1:
         add_rule(world.get_location("2-4: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
+            lambda state: grab_item(state, player, arm))
+
+    if prank and world.goal[player] != 1:
+        add_rule(world.get_location("2-4: Perfect Rank", player),
+            lambda state: good_weapon(state, player, fire2, arm))
 
 
     # 3-1
-    if not slide:
-        set_rule(world.get_location("3-1: Secret #4", player),
-            lambda state: state.has("Slide", player))
-        
+    set_rule(world.get_location("3-1: Secret #4", player),
+        lambda state: can_slide(state, player, slide))
+
     if prank:
-            add_rule(world.get_location("3-1: Perfect Rank", player),
-                lambda state: state._ultrakill_good_weapon(player, fire2, arm))
+        add_rule(world.get_location("3-1: Perfect Rank", player),
+            lambda state: good_weapon(state, player, fire2, arm))
 
 
     # 3-2
-    if not slide:
-        add_rule(world.get_location("Cleared 3-2", player),
-            lambda state: state.has("Slide", player))
-        if challenge and world.goal[player] != 2:
-            add_rule(world.get_location("3-2: Drop Gabriel in a pit", player),
-                lambda state: state.has("Slide", player))
-        if prank and world.goal[player] != 2:
-            add_rule(world.get_location("3-2: Perfect Rank", player),
-                lambda state: state.has("Slide", player))
-
     add_rule(world.get_location("Cleared 3-2", player),
-        lambda state: state._ultrakill_3_2_jump(player, walljump1, dash1, slam, fire2, arm))
+        lambda state: can_slide(state, player, slide))
     if challenge and world.goal[player] != 2:
         add_rule(world.get_location("3-2: Drop Gabriel in a pit", player),
-            lambda state: state._ultrakill_3_2_jump(player, walljump1, dash1, slam, fire2, arm) and \
-                state._ultrakill_good_weapon(player, fire2, arm))
+            lambda state: can_slide(state, player, slide))
     if prank and world.goal[player] != 2:
         add_rule(world.get_location("3-2: Perfect Rank", player),
-            lambda state: state._ultrakill_3_2_jump(player, walljump1, dash1, slam, fire2, arm) and \
-                state._ultrakill_good_weapon(player, fire2, arm))
+            lambda state: can_slide(state, player, slide))
+
+    add_rule(world.get_location("Cleared 3-2", player),
+        lambda state: jump_3_2(state, player, slam, fire2, arm, walljump, dash))
+
+    if challenge and world.goal[player] != 2:
+        add_rule(world.get_location("3-2: Drop Gabriel in a pit", player),
+            lambda state: (
+                jump_3_2(state, player, slam, fire2, arm, walljump, dash)
+                and good_weapon(state, player, fire2, arm)
+            ))
+
+    if prank and world.goal[player] != 2:
+        add_rule(world.get_location("3-2: Perfect Rank", player),
+            lambda state: (
+                jump_3_2(state, player, slam, fire2, arm, walljump, dash)
+                and good_weapon(state, player, fire2, arm)
+            ))
+
 
     # 4-1
-    if fire2:
-        set_rule(world.get_location("4-1: Secret #1", player),
-            lambda state: state.has("Stamina Bar", player, dash1) or \
-                state.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player))
-    else:
-        set_rule(world.get_location("4-1: Secret #1", player),
-            lambda state: state.has("Stamina Bar", player, dash1) or \
-                state.has("Rocket Launcher - Freezeframe", player))
+    set_rule(world.get_location("4-1: Secret #1", player),
+        lambda state: (
+            dashes(state, player, dash, 1)
+            or rock0_fire2(state, player, fire2)
+        ))
 
-    if not slam and not fire2:
-        set_rule(world.get_location("4-1: Secret #4", player),
-            lambda state: (state.has("Wall Jump", player, walljump2) and \
-                state.has("Slam", player)) or \
-                    state.has_any({"Rocket Launcher - Freezeframe", "Shotgun - Pump Charge", "Railcannon - Malicious"}, player))
-    elif not slam and fire2:
-        set_rule(world.get_location("4-1: Secret #4", player),
-            lambda state: (state.has("Wall Jump", player, walljump2) and \
-                state.has("Slam", player)) or \
-                    state.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player) or \
-                        state.has_all({"Shotgun - Pump Charge", "Secondary Fire - Pump Charge"}, player) or \
-                            state.has("Railcannon - Malicious", player))
-    else:
-        set_rule(world.get_location("4-1: Secret #4", player),
-            lambda state: state.has("Wall Jump", player, walljump2) or \
-                state.has_any({"Rocket Launcher - Freezeframe", "Shotgun - Pump Charge", "Railcannon - Malicious"}, player))
+    set_rule(world.get_location("4-1: Secret #4", player),
+        lambda state: (
+            (
+                walljumps(state, player, walljump, 2) and \
+                state.has("Slam", player)
+            )
+            or rock0_fire2(state, player, fire2)
+            or sho1_fire2(state, player, fire2)
+            or rai2(state, player)
+        ))
 
     set_rule(world.get_location("4-1: Secret #2", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
     set_rule(world.get_location("4-1: Secret #3", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
     set_rule(world.get_location("4-1: Secret #5", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
-        
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
+
     if challenge:
         set_rule(world.get_location("4-1: Don't activate any enemies", player),
-            lambda state: state._ultrakill_4_1c(player, walljump2, dash2, slam, fire2))
-                
+            lambda state: challenge_4_1(state, player, slam, fire2, walljump, dash))
+
     if prank:
         add_rule(world.get_location("4-1: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm))
 
 
-    # 4-2            
+    # 4-2
     set_rule(world.get_location("4-2: Secret #4", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm) or \
-            state._ultrakill_rev1_fly(player, fire2))
-    set_rule(world.get_location("Cleared 4-S", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm) or \
-            state._ultrakill_rev1_fly(player, fire2)) 
+        lambda state: (
+            jump_general(state, player, slam, fire2, arm, walljump, 2)
+            or rev1_fire2(state, player, fire2)
+        ))
+
+    if secretcompletion:
+        set_rule(world.get_location("Cleared 4-S", player),
+            lambda state: (
+                (
+                    jump_general(state, player, slam, fire2, arm, walljump, 2)
+                    or rev1_fire2(state, player, fire2)
+                )
+                and grab_item(state, player, arm)
+            ))
 
     if skulls:
-        #set_rule(world.get_location("Cleared 4-2", player),
-            #lambda state: state.has_all({"Blue Skull (4-2)", "Red Skull (4-2)"}, player))
+        set_rule(world.get_location("Cleared 4-2", player),
+            lambda state: (
+                jump_general(state, player, slam, fire2, arm, walljump, 2)
+                or rev1_fire2(state, player, fire2)
+                or (
+                    state.has_all({"Blue Skull (4-2)", "Red Skull (4-2)"}, player)
+                    and grab_item(state, player, arm)
+                )
+            ))
         if challenge:
             set_rule(world.get_location("4-2: Kill the Insurrectionist in under 10 seconds", player),
                 lambda state: state.has_all({"Blue Skull (4-2)", "Red Skull (4-2)"}, player))
         if prank:
             set_rule(world.get_location("4-2: Perfect Rank", player),
                 lambda state: state.has_all({"Blue Skull (4-2)", "Red Skull (4-2)"}, player))
-        
-    if not arm:
-        add_rule(world.get_location("Cleared 4-2", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("Cleared 4-S", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if challenge:
-            add_rule(world.get_location("4-2: Kill the Insurrectionist in under 10 seconds", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if prank:
-            add_rule(world.get_location("4-2: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-            
+    else:
+        set_rule(world.get_location("Cleared 4-2", player),
+            lambda state: (
+                jump_general(state, player, slam, fire2, arm, walljump, 2)
+                or rev1_fire2(state, player, fire2)
+                or grab_item(state, player, arm)
+            ))
+
+    if challenge:
+        add_rule(world.get_location("4-2: Kill the Insurrectionist in under 10 seconds", player),
+            lambda state: grab_item(state, player, arm))
+
     if prank:
         add_rule(world.get_location("4-2: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
-            
-    # either normal exit or secret exit
-    if skulls:
-        set_rule(world.get_location("Cleared 4-2", player),
-            lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm) or \
-                state._ultrakill_rev1_fly(player, fire2) or \
-                    state.has_all({"Blue Skull (4-2)", "Red Skull (4-2)"}, player))
+            lambda state: (
+                grab_item(state, player, arm)
+                and good_weapon(state, player, fire2, arm)
+            ))
+
 
     # 4-3
-    if not arm and not fire2:
-        if challenge:
-            add_rule(world.get_location("4-3: Don't pick up the torch", player),
-            lambda state: (state.has("Shotgun - Core Eject", player) or \
-                state.has_all({"Shotgun - Pump Charge", "Feedbacker"}, player)) and \
-                    state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-    elif not arm and fire2:
-        if challenge:
-            add_rule(world.get_location("4-3: Don't pick up the torch", player),
-            lambda state: ((state.has("Shotgun - Core Eject", player) and \
-                state.has_any({"Secondary Fire - Core Eject", "Feedbacker"}, player)) or \
-                    state.has_all({"Shotgun - Pump Charge", "Feedbacker"}, player)) and \
-                        state.has_any({"Feedbacker", "Knuckleblaster"}, player))
+    if challenge:
+        add_rule(world.get_location("4-3: Don't pick up the torch", player),
+        lambda state: (
+            (
+                sho0_fire2(state, player, fire2)
+                or can_proj_boost(state, player, arm)
+            )
+            and grab_item(state, player, arm)
+        ))
 
     add_rule(world.get_location("4-3: Secret #1", player),
-        lambda state: state._ultrakill_4_3(player, fire2, arm))
+        lambda state: level_4_3(state, player, fire2, arm))
     add_rule(world.get_location("4-3: Secret #2", player),
-        lambda state: state._ultrakill_4_3(player, fire2, arm))
+        lambda state: level_4_3(state, player, fire2, arm))
     add_rule(world.get_location("4-3: Secret #3", player),
-        lambda state: state._ultrakill_4_3(player, fire2, arm))
+        lambda state: level_4_3(state, player, fire2, arm))
     add_rule(world.get_location("4-3: Secret #4", player),
-        lambda state: state._ultrakill_4_3(player, fire2, arm) and \
-            state._ultrakill_break_walls(player, fire2, arm))
+        lambda state: (
+            level_4_3(state, player, fire2, arm)
+            and can_break_walls(state, player, fire2, arm)
+        ))
     add_rule(world.get_location("4-3: Secret #5", player),
-        lambda state: state._ultrakill_4_3(player, fire2, arm))
+        lambda state: level_4_3(state, player, fire2, arm))
     add_rule(world.get_location("Cleared 4-3", player),
-        lambda state: state._ultrakill_4_3(player, fire2, arm))
+        lambda state: level_4_3(state, player, fire2, arm))
     if prank:
         add_rule(world.get_location("4-3: Perfect Rank", player),
-            lambda state: state._ultrakill_4_3(player, fire2, arm) and \
-                state._ultrakill_good_weapon(player, fire2, arm))
+            lambda state: (
+                level_4_3(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm)
+            ))
 
-    if not slide:
-        add_rule(world.get_location("4-3: Secret #2", player),
-            lambda state: state.has("Slide", player))
-        add_rule(world.get_location("4-3: Secret #5", player),
-            lambda state: state.has("Slide", player))
-        
+    add_rule(world.get_location("4-3: Secret #2", player),
+        lambda state: can_slide(state, player, arm))
+    add_rule(world.get_location("4-3: Secret #5", player),
+        lambda state: can_slide(state, player, arm))
+
     if skulls and challenge:
         add_rule(world.get_location("4-3: Don't pick up the torch", player),
             lambda state: state.has("Blue Skull (4-3)", player))
-        
+
 
     # 4-4
     set_rule(world.get_location("Cleared 4-4", player),
-        lambda state: state.has("Whiplash", player))
+        lambda state: arm2(state, player))
     if prank and world.goal[player] != 3:
         set_rule(world.get_location("4-4: Perfect Rank", player),
-            lambda state: state.has("Whiplash", player))
-            
+            lambda state: arm2(state, player))
+
     if challenge and world.goal[player] != 3:
         set_rule(world.get_location("4-4: Reach the boss room in 18 seconds", player),
-            lambda state: state.has("Whiplash", player) and \
-                state.has("Stamina Bar", player, dash3))
-        
+            lambda state: (
+                arm2(state, player)
+                and dashes(state, player, dash, 3)
+            ))
+
     set_rule(world.get_location("4-4: Secret Weapon", player),
-        lambda state: state.has_all({"Whiplash", "Railcannon - Electric"}, player))
-        
+        lambda state: (
+            arm2(state, player)
+            and rai0(state, player)
+        ))
+
     if skulls:
         add_rule(world.get_location("4-4: Secret Weapon", player),
             lambda state: state.has("Blue Skull(4-4)", player))
@@ -1188,145 +1244,163 @@ def rules(ultrakillworld):
                 lambda state: state.has("Blue Skull (4-4)", player))
 
     add_rule(world.get_location("Cleared 4-4", player),
-        lambda state: state._ultrakill_4_4(player, walljump2, dash1, skulls, slam, fire2))
+        lambda state: level_4_4(state, player, slam, fire2, skulls, walljump, dash))
     add_rule(world.get_location("4-4: V2's Other Arm", player),
-        lambda state: state._ultrakill_4_4(player, walljump2, dash1, skulls, slam, fire2))
+        lambda state: level_4_4(state, player, slam, fire2, skulls, walljump, dash))
     if prank and world.goal[player] != 3:
         add_rule(world.get_location("4-4: Perfect Rank", player),
-            lambda state: state._ultrakill_4_4(player, walljump2, dash1, skulls, slam, fire2) and \
-                state._ultrakill_good_weapon(player, fire2, arm))
-                            
+            lambda state: level_4_4(state, player, slam, fire2, skulls, walljump, dash)
+            and good_weapon(state, player, fire2, arm))
+
     if challenge and world.goal[player] != 3:
         add_rule(world.get_location("4-4: Reach the boss room in 18 seconds", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm))
+
 
     # 5-1
     if challenge:
-        if fire2:
-            add_rule(world.get_location("5-1: Don't touch any water", player),
-                lambda state: state.has("Whiplash", player) or \
-                    state.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player))
-        else:
-            add_rule(world.get_location("5-1: Don't touch any water", player),
-                lambda state: state.has("Whiplash", player) or \
-                    state.has("Rocket Launcher - Freezeframe", player))
+        add_rule(world.get_location("5-1: Don't touch any water", player),
+            lambda state: (
+                arm2(state, player)
+                or rock0_fire2(state, player, fire2)
+            ))
 
-    if not slide:
-        add_rule(world.get_location("5-1: Secret #1", player),
-            lambda state: state.has("Slide", player))
-        add_rule(world.get_location("5-1: Secret #2", player),
-            lambda state: state.has("Slide", player))
-        add_rule(world.get_location("5-1: Secret #3", player),
-            lambda state: state.has("Slide", player))
-        add_rule(world.get_location("5-1: Secret #4", player),
-            lambda state: state.has("Slide", player))
-        add_rule(world.get_location("5-1: Secret #5", player),
-            lambda state: state.has("Slide", player))
-        add_rule(world.get_location("Cleared 5-1", player),
-            lambda state: state.has("Slide", player))
+    add_rule(world.get_location("5-1: Secret #1", player),
+        lambda state: (
+            can_slide(state, player, slide)
+            and level_5_1(state, player, slam, fire2, walljump, dash)
+        ))
+    add_rule(world.get_location("5-1: Secret #2", player),
+        lambda state: (
+            can_slide(state, player, slide)
+            and level_5_1(state, player, slam, fire2, walljump, dash)
+        ))
+    add_rule(world.get_location("5-1: Secret #3", player),
+        lambda state: (
+            can_slide(state, player, slide)
+            and level_5_1(state, player, slam, fire2, walljump, dash)
+        ))
+    add_rule(world.get_location("5-1: Secret #4", player),
+        lambda state: (
+            can_slide(state, player, slide)
+            and level_5_1(state, player, slam, fire2, walljump, dash)
+        ))
+    add_rule(world.get_location("5-1: Secret #5", player),
+        lambda state: (
+            can_slide(state, player, slide)
+            and level_5_1(state, player, slam, fire2, walljump, dash)
+            and grab_item(state, player, arm)
+        ))
+    add_rule(world.get_location("Cleared 5-1", player),
+        lambda state: (
+            can_slide(state, player, slide)
+            and level_5_1(state, player, slam, fire2, walljump, dash)
+            and grab_item(state, player, arm)
+        ))
+    if secretcompletion:
         add_rule(world.get_location("Cleared 5-S", player),
-            lambda state: state.has("Slide", player))
-        if challenge:
-            add_rule(world.get_location("5-1: Don't touch any water", player),
-                lambda state: state.has("Slide", player))
-        if prank:
-            add_rule(world.get_location("5-1: Perfect Rank", player),
-                lambda state: state.has("Slide", player))
-        
+            lambda state: (
+                can_slide(state, player, slide)
+                and level_5_1(state, player, slam, fire2, walljump, dash)
+                and grab_item(state, player, arm)
+            ))
+    if challenge:
+        add_rule(world.get_location("5-1: Don't touch any water", player),
+            lambda state: (
+                can_slide(state, player, slide)
+                and level_5_1(state, player, slam, fire2, walljump, dash)
+                and grab_item(state, player, arm)
+            ))
+    if prank:
+        add_rule(world.get_location("5-1: Perfect Rank", player),
+            lambda state: (
+                can_slide(state, player, slide)
+                and level_5_1(state, player, slam, fire2, walljump, dash)
+                and grab_item(state, player, arm)
+                and good_weapon(state, player, fire2, arm)
+            ))
+
     if skulls:
         add_rule(world.get_location("5-1: Secret #5", player),
             lambda state: state.has("Blue Skull (5-1)", player, 3))
         add_rule(world.get_location("Cleared 5-1", player),
             lambda state: state.has("Blue Skull (5-1)", player, 3))
-        add_rule(world.get_location("Cleared 5-S", player),
-            lambda state: state.has("Blue Skull (5-1)", player, 3))
+        if secretcompletion:
+            add_rule(world.get_location("Cleared 5-S", player),
+                lambda state: state.has("Blue Skull (5-1)", player, 3))
         if challenge:
             add_rule(world.get_location("5-1: Don't touch any water", player),
                 lambda state: state.has("Blue Skull (5-1)", player, 3))
         if prank:
             add_rule(world.get_location("5-1: Perfect Rank", player),
                 lambda state: state.has("Blue Skull (5-1)", player, 3))
-
-    add_rule(world.get_location("5-1: Secret #1", player),
-        lambda state: state._ultrakill_5_1(player, walljump3, dash2, slam, fire2))
-    add_rule(world.get_location("5-1: Secret #2", player),
-        lambda state: state._ultrakill_5_1(player, walljump3, dash2, slam, fire2))
-    add_rule(world.get_location("5-1: Secret #3", player),
-        lambda state: state._ultrakill_5_1(player, walljump3, dash2, slam, fire2))
-    add_rule(world.get_location("5-1: Secret #4", player),
-        lambda state: state._ultrakill_5_1(player, walljump3, dash2, slam, fire2))
-    add_rule(world.get_location("5-1: Secret #5", player),
-        lambda state: state._ultrakill_5_1(player, walljump3, dash2, slam, fire2))
-    add_rule(world.get_location("Cleared 5-1", player),
-        lambda state: state._ultrakill_5_1(player, walljump3, dash2, slam, fire2))
-    add_rule(world.get_location("Cleared 5-S", player),
-        lambda state: state._ultrakill_5_1(player, walljump3, dash2, slam, fire2))
-
-    if not arm:
-        add_rule(world.get_location("5-1: Secret #5", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("Cleared 5-1", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("Cleared 5-S", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if challenge:
-            add_rule(world.get_location("5-1: Don't touch any water", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if prank:
-            add_rule(world.get_location("5-1: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        
-    if prank:
-        add_rule(world.get_location("5-1: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
 
     # 5-2
-    if not slide:
-        if fire2:
-            add_rule(world.get_location("5-2: Secret #1", player),
-                lambda state: state.has("Slide", player) or \
-                    state.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player))
-        else:
-            add_rule(world.get_location("5-2: Secret #1", player),
-                lambda state: state.has("Slide", player) or \
-                    state.has("Rocket Launcher - Freezeframe", player))
+    add_rule(world.get_location("5-2: Secret #1", player),
+        lambda state: (
+            can_slide(state, player, slide)
+            or rock0_fire2(state, player, fire2)
+        ))
 
-    if not slam:
-        add_rule(world.get_location("5-2: Secret #2", player),
-            lambda state: state.has("Slam", player) or \
-                state.has("Stamina Bar", player, dash1))
-        add_rule(world.get_location("5-2: Secret #3", player),
-            lambda state: state.has("Slam", player) or \
-                state.has("Stamina Bar", player, dash1))
-        add_rule(world.get_location("5-2: Secret #4", player),
-            lambda state: state.has("Slam", player) or \
-                state.has("Stamina Bar", player, dash1))
-        add_rule(world.get_location("5-2: Secret #5", player),
-            lambda state: state.has("Slam", player) or \
-                state.has("Stamina Bar", player, dash1))
-        add_rule(world.get_location("Cleared 5-2", player),
-            lambda state: state.has("Slam", player) or \
-                state.has("Stamina Bar", player, dash1))
-        if challenge:
-            add_rule(world.get_location("5-2: Don't fight the ferryman", player),
-                lambda state: state.has("Slam", player) or \
-                    state.has("Stamina Bar", player, dash1))
-                    
+    add_rule(world.get_location("5-2: Secret #2", player),
+        lambda state: (
+            can_slam(state, player, slam)
+            or dashes(state, player, dash, 1)
+        ))
     add_rule(world.get_location("5-2: Secret #3", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm))
+        lambda state: (
+            (
+                can_slam(state, player, slam)
+                or dashes(state, player, dash, 1)
+            )
+            and jump_general(state, player, slam, fire2, arm, walljump, 2)
+        ))
     add_rule(world.get_location("5-2: Secret #4", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm))
-        
+        lambda state: (
+            (
+                can_slam(state, player, slam)
+                or dashes(state, player, dash, 1)
+            )
+            and jump_general(state, player, slam, fire2, arm, walljump, 2)
+        ))
+    add_rule(world.get_location("5-2: Secret #5", player),
+        lambda state: (
+            (
+                can_slam(state, player, slam)
+                or dashes(state, player, dash, 1)
+            )
+            and grab_item(state, player, arm)
+        ))
+    add_rule(world.get_location("Cleared 5-2", player),
+        lambda state: (
+            (
+                can_slam(state, player, slam)
+                or dashes(state, player, dash, 1)
+            )
+            and grab_item(state, player, arm)
+        ))
     if challenge:
-        if fire2:
-            add_rule(world.get_location("5-2: Don't fight the ferryman", player),
-                lambda state: state.has_all({"Revolver - Marksman", "Secondary Fire - Marksman"}, player))
-        else:
-            add_rule(world.get_location("5-2: Don't fight the ferryman", player),
-                lambda state: state.has("Revolver - Marksman", player))
-        
-        
+        add_rule(world.get_location("5-2: Don't fight the ferryman", player),
+            lambda state: (
+                (
+                    can_slam(state, player, slam)
+                    or dashes(state, player, dash, 1)
+                )
+                and rev2_fire2(state, player, fire2)
+                and grab_item(state, player, arm)
+            ))
+    if prank:
+        add_rule(world.get_location("5-2: Perfect Rank", player),
+            lambda state: (
+                (
+                    can_slam(state, player, slam)
+                    or dashes(state, player, dash, 1)
+                )
+                and grab_item(state, player, arm)
+                and good_weapon(state, player, fire2, arm)
+            ))
+
     if skulls:
         add_rule(world.get_location("5-2: Secret #5", player),
             lambda state: state.has_all({"Blue Skull (5-2)", "Red Skull (5-2)"}, player))
@@ -1338,22 +1412,6 @@ def rules(ultrakillworld):
         if prank:
             add_rule(world.get_location("5-2: Perfect Rank", player),
                 lambda state: state.has_all({"Blue Skull (5-2)", "Red Skull (5-2)"}, player))
-            
-    if not arm:
-        add_rule(world.get_location("5-2: Secret #5", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("Cleared 5-2", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if challenge:
-            add_rule(world.get_location("5-2: Don't fight the ferryman", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if prank:
-            add_rule(world.get_location("5-2: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-            
-    if prank:
-        add_rule(world.get_location("5-2: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
 
     # 5-3
@@ -1376,71 +1434,79 @@ def rules(ultrakillworld):
         if prank:
             set_rule(world.get_location("5-3: Perfect Rank", player),
                 lambda state: state.has_any({"Blue Skull (5-3)", "Red Skull (5-3)"}, player))
-        
-    if not arm:
-        add_rule(world.get_location("5-3: Secret #1", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("5-3: Secret #3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("5-3: Weapon", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("5-3: Secret #4", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("5-3: Secret #5", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("Cleared 5-3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if challenge:
-            add_rule(world.get_location("5-3: Don't touch any water", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if prank:
-            add_rule(world.get_location("5-3: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-            
-    if challenge:
-        if not slam:
-            add_rule(world.get_location("5-3: Don't touch any water", player),
-                lambda state: state.has("Slide", player))
 
+    add_rule(world.get_location("5-3: Secret #1", player),
+        lambda state: grab_item(state, player, arm))
+    add_rule(world.get_location("5-3: Secret #3", player),
+        lambda state: grab_item(state, player, arm))
+    add_rule(world.get_location("5-3: Weapon", player),
+        lambda state: grab_item(state, player, arm))
+    add_rule(world.get_location("5-3: Secret #4", player),
+        lambda state: grab_item(state, player, arm))
+    add_rule(world.get_location("5-3: Secret #5", player),
+        lambda state: grab_item(state, player, arm))
+    add_rule(world.get_location("Cleared 5-3", player),
+        lambda state: grab_item(state, player, arm))
+    if challenge:
         add_rule(world.get_location("5-3: Don't touch any water", player),
-            lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm))
-            
+            lambda state: (
+                grab_item(state, player, arm)
+                and can_slide(state, player, slide)
+                and jump_general(state, player, slam, fire2, arm, walljump, 2)
+            ))
     if prank:
         add_rule(world.get_location("5-3: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
+            lambda state: (
+                grab_item(state, player, arm)
+                and good_weapon(state, player, fire2, arm)
+            ))
 
 
     # 5-4
     if challenge and world.goal[player] != 4:
-        if fire2:
-            set_rule(world.get_location("5-4: Reach the surface in under 10 seconds", player),
-                lambda state: state.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player))
-            if prank:
-                set_rule(world.get_location("5-4: Perfect Rank", player),
-                    lambda state: state.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player))
-        else:
-            set_rule(world.get_location("5-4: Reach the surface in under 10 seconds", player),
-                lambda state: state.has("Rocket Launcher - Freezeframe", player))
-            if prank:
-                set_rule(world.get_location("5-4: Perfect Rank", player),
-                    lambda state: state.has("Rocket Launcher - Freezeframe", player))
-            
+        set_rule(world.get_location("5-4: Reach the surface in under 10 seconds", player),
+                lambda state: rock0_fire2(state, player, fire2))
     if prank and world.goal[player] != 4:
-        add_rule(world.get_location("5-4: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
+        set_rule(world.get_location("5-4: Perfect Rank", player),
+            lambda state: (
+                rock0_fire2(state, player, fire2)
+                and good_weapon(state, player, fire2, arm)
+            ))
 
 
     # 6-1
+    add_rule(world.get_location("6-1: Secret #2", player),
+        lambda state: grab_item(state, player, arm))
+    add_rule(world.get_location("6-1: Secret #3", player),
+        lambda state: grab_item(state, player, arm))
     set_rule(world.get_location("6-1: Secret #4", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
+        lambda state: (
+            jump_general(state, player, slam, fire2, arm, walljump, 1)
+            and grab_item(state, player, arm)
+        ))
     set_rule(world.get_location("6-1: Secret #5", player),
-        lambda state: state._ultrakill_generic_jump(player, walljump2, slam, fire2, arm))
+        lambda state: (
+            jump_general(state, player, slam, fire2, arm, walljump, 2)
+            and grab_item(state, player, arm)
+        ))
+    add_rule(world.get_location("Cleared 6-1", player),
+        lambda state: (
+            jump_general(state, player, slam, fire2, arm, walljump, 1)
+            and grab_item(state, player, arm)
+        ))
     if challenge:
         set_rule(world.get_location("6-1: Beat the secret encounter", player),
-            lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
+            lambda state: (
+                jump_general(state, player, slam, fire2, arm, walljump, 1)
+                and grab_item(state, player, arm)
+            ))
     if prank:
         set_rule(world.get_location("6-1: Perfect Rank", player),
-            lambda state: state._ultrakill_generic_jump(player, walljump1, slam, fire2, arm))
+            lambda state: (
+                jump_general(state, player, slam, fire2, arm, walljump, 1)
+                and grab_item(state, player, arm)
+                and good_weapon(state, player, fire2, arm)
+            ))
 
     if skulls:
         add_rule(world.get_location("6-1: Secret #2", player),
@@ -1460,89 +1526,95 @@ def rules(ultrakillworld):
             add_rule(world.get_location("6-1: Perfect Rank", player),
                 lambda state: state.has("Red Skull (6-1)", player))
 
-    if not arm:
-        add_rule(world.get_location("6-1: Secret #2", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("6-1: Secret #3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("6-1: Secret #4", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("6-1: Secret #5", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("Cleared 6-1", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if challenge:
-            add_rule(world.get_location("6-1: Beat the secret encounter", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if prank:
-            add_rule(world.get_location("6-1: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-            
-    if prank:
-        add_rule(world.get_location("6-1: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
-        
-    
-    # 6-2
-    if not slam:
-        if fire2:
-            set_rule(world.get_location("Cleared 6-2", player),
-                lambda state: state.has_any({"Slam", "Railcannon - Malicious"}, player) or \
-                    state.has("Wall Jump", player, walljump2) or \
-                        state.has_all({"Rocket Launcher - Freezeframe", "Secondary Fire - Freezeframe"}, player) or \
-                            state.has_all({"Shotgun - Pump Charge", "Secondary Fire - Pump Charge"}, player))
-        else:
-            set_rule(world.get_location("Cleared 6-2", player),
-                lambda state: state.has_any({"Slam", "Railcannon - Malicious", "Rocket Launcher - Freezeframe", \
-                    "Shotgun - Pump Charge"}, player) or \
-                        state.has("Wall Jump", player, walljump2))
-        if world.goal[player] != 5:
-            if challenge:
-                set_rule(world.get_location("6-2: Hit Gabriel into the ceiling", player),
-                    lambda state: state.has("Slam", player) or \
-                        state.has("Wall Jump", player, walljump2))
-            if prank:
-                set_rule(world.get_location("6-2: Perfect Rank", player),
-                    lambda state: state.has("Slam", player) or \
-                        state.has("Wall Jump", player, walljump2))
-            
-    if challenge and world.goal[player] != 5:
-        add_rule(world.get_location("6-2: Hit Gabriel into the ceiling", player),
-            lambda state: (state.has("Rocket Launcher - Freezeframe", player) or \
-                state.has("Rocket Launcher - S.R.S. Cannon", player)) and \
-                    state._ultrakill_good_weapon(player, fire2, arm))
-        
-    if prank and world.goal[player] != 5:
-        add_rule(world.get_location("6-2: Perfect Rank", player),
-            lambda state: state._ultrakill_good_weapon(player, fire2, arm))
 
-    add_rule(world.get_location("Cleared 6-2", player),
-        lambda state: state.has("Stamina Bar", player, dash1))
-    if prank and world.goal[player] != 5:
-        add_rule(world.get_location("6-2: Perfect Rank", player),
-            lambda state: state.has("Stamina Bar", player, dash1))
-    if challenge and world.goal[player] != 5:
-        add_rule(world.get_location("6-2: Hit Gabriel into the ceiling", player),
-            lambda state: state.has("Stamina Bar", player, dash1))
+    # 6-2                
+    set_rule(world.get_location("Cleared 6-2", player),
+        lambda state: (
+            (
+                can_slam(state, player, slam)
+                or walljumps(state, player, walljump, 2)
+                or sho1_fire2(state, player, fire2)
+                or rai2(state, player)
+                or rock0_fire2(state, player, fire2)
+            )
+            and dashes(state, player, dash, 1)
+        ))
+    if world.goal[player] != 5:
+        if challenge:
+            set_rule(world.get_location("6-2: Hit Gabriel into the ceiling", player),
+                lambda state: (
+                    (
+                        can_slam(state, player, slam)
+                        or walljumps(state, player, walljump, 2)
+                        or sho1_fire2(state, player, fire2)
+                        or rai2(state, player)
+                        or rock0_fire2(state, player, fire2)
+                    )
+                    and (
+                        rock0(state, player)
+                        or rock1(state, player)
+                    )
+                    and good_weapon(state, player, fire2, arm)
+                    and dashes(state, player, dash, 1)
+                ))
+        if prank:
+            set_rule(world.get_location("6-2: Perfect Rank", player),
+                lambda state: (
+                    (
+                        can_slam(state, player, slam)
+                        or walljumps(state, player, walljump, 2)
+                        or sho1_fire2(state, player, fire2)
+                        or rai2(state, player)
+                        or rock0_fire2(state, player, fire2)
+                    )
+                    and good_weapon(state, player, fire2, arm)
+                    and dashes(state, player, dash, 1)
+                ))
+
 
     # shop
     set_rule(world.get_location("Shop: Buy Revolver Variant 1", player),
-        lambda state: state.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player))
+        lambda state: (
+            rev0(state, player)
+            or rev1(state, player)
+            or rev2(state, player)
+        ))
 
     set_rule(world.get_location("Shop: Buy Revolver Variant 2", player),
-        lambda state: state.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player))
-    
+        lambda state: (
+            rev0(state, player)
+            or rev1(state, player)
+            or rev2(state, player)
+        ))
+
     set_rule(world.get_location("Shop: Buy Shotgun Variant", player),
-        lambda state: state.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge"}, player))
-    
+        lambda state: (
+            sho0(state, player)
+            or sho1(state, player)
+        ))
+
     set_rule(world.get_location("Shop: Buy Nailgun Variant", player),
-        lambda state: state.has_any({"Nailgun - Attractor", "Nailgun - Overheat"}, player))
-    
+        lambda state: (
+            nai0(state, player)
+            or nai1(state, player)
+        ))
+
     set_rule(world.get_location("Shop: Buy Railcannon Variant 1", player),
-        lambda state: state.has_any({"Railcannon - Electric", "Railcannon - Screwdriver", "Railcannon - Malicious"}, player))
-    
+        lambda state: (
+            rai0(state, player)
+            or rai1(state, player)
+            or rai2(state, player)
+        ))
+
     set_rule(world.get_location("Shop: Buy Railcannon Variant 2", player),
-        lambda state: state.has_any({"Railcannon - Electric", "Railcannon - Screwdriver", "Railcannon - Malicious"}, player))
-    
+        lambda state: (
+            rai0(state, player)
+            or rai1(state, player)
+            or rai2(state, player)
+        ))
+
     set_rule(world.get_location("Shop: Buy Rocket Launcher Variant", player),
-        lambda state: state.has_any({"Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon"}, player))
+        lambda state: (
+            rock0(state, player)
+            or rock1(state, player)
+        ))

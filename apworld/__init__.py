@@ -3,7 +3,7 @@ from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassifi
 from worlds.AutoWorld import World, WebWorld
 from .Items import base_id, item_table, group_table
 from .Locations import location_table, event_table, challenge_locations
-from .Regions import region_table
+from .Regions import region_table, secret_levels
 from .Rules import rules
 from .Options import ultrakill_options, Goal, UnlockType, StartingWeapon
 from .Music import multilayer_music, singlelayer_music
@@ -56,6 +56,13 @@ class UltrakillWorld(World):
     
 
     def generate_early(self):
+        world = self.multiworld
+        player = self.player
+        
+        if not world.include_secret_mission_completion[self.player] and world.goal_requirement[self.player].value > 24:
+            print(f"[ULTRAKILL - '{world.get_player_name(player)}'] Secret mission completion is disabled. Goal requirement lowered to 24.")
+            world.goal_requirement[self.player].value = 24
+
         if self.multiworld.starting_weapon[self.player] != StartingWeapon.option_revolver:
             weapons: Set[str] = group_table["start_weapons"]
 
@@ -206,12 +213,12 @@ class UltrakillWorld(World):
 
         if first_loc.item != None:
             if not first_loc.item.name in group_table["start_weapons"]:
-                raise Exception(f'[ULTRAKILL - {world.get_player_name(player)}] '
-                                f'"{first_loc.item.name}" is not a valid starting weapon.')
+                raise Exception(f"[ULTRAKILL - {world.get_player_name(player)}] "
+                                f"'{first_loc.item.name}' is not a valid starting weapon.")
             
             if first_loc.item.name != self.start_weapon:
-                print(f'[ULTRAKILL - "{world.get_player_name(player)}"] An item already exists at "0-1: Weapon". '
-                    'Selected starting weapon is being returned to the item pool.')
+                print(f"[ULTRAKILL - '{world.get_player_name(player)}'] An item already exists at \"0-1: Weapon\". "
+                    "Selected starting weapon is being returned to the item pool.")
                 
                 world.itempool.append(self.create_item(self.start_weapon))
         else:
@@ -229,7 +236,10 @@ class UltrakillWorld(World):
             r = Region(name, player, world)
             entrance = Entrance(player, "To " + number, menu)
             entrance.connect(r)
-            menu.exits.append(entrance)
+            if "S" in number:
+                world.get_region(region_table[secret_levels[number]], player).exits.append(entrance)
+            else:
+                menu.exits.append(entrance)
             exit = Entrance(player, "To Menu", r)
             exit.connect(menu)
             r.exits.append(exit)
@@ -271,7 +281,12 @@ class UltrakillWorld(World):
         for loc in event_table:
             if "P-" in loc["name"] and not self.goal_name in loc["name"]:
                 continue
+
+            if "-S" in loc["name"] and not world.include_secret_mission_completion[self.player]:
+                continue
+
             region: Region = world.get_region(region_table[loc["region"]], player)
+
             location: UltrakillLocation = UltrakillLocation(player, loc["name"], None, region)
             if not self.goal_name in loc["name"]:
                 location.place_locked_item(self.create_event("Level Completed"))

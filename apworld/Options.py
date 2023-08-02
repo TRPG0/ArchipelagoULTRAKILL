@@ -23,6 +23,11 @@ class GoalRequirement(Range):
     default = 15
 
 
+class SecretMissionClear(DefaultOnToggle):
+    """Choose if completing secret missions will count towards unlocking the goal or not."""
+    display_name = "Include Secret Mission Completion"
+
+
 class UnlockType(Choice):
     """Choose if levels will be unlocked one at a time, or whole layers at once."""
     display_name = "Level Unlock Type"
@@ -119,6 +124,7 @@ class UltrakillDeathLink(DeathLink):
 ultrakill_options = {
     "goal": Goal,
     "goal_requirement": GoalRequirement,
+    "include_secret_mission_completion": SecretMissionClear,
     "unlock_type": UnlockType,
     "trap_percent": TrapPercent,
     "challenge_rewards": Challenges,
