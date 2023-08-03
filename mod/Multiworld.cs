@@ -64,6 +64,11 @@ namespace ArchipelagoULTRAKILL
             {
                 Authenticated = true;
 
+                ConfigManager.isConnected.value = true;
+                ConfigManager.playerName.interactable = false;
+                ConfigManager.serverAddress.interactable = false;
+                ConfigManager.serverPassword.interactable = false;
+
                 switch (int.Parse(success.SlotData["goal"].ToString()))
                 {
                     case 0:
@@ -193,6 +198,10 @@ namespace ArchipelagoULTRAKILL
 
         public static void Disconnect()
         {
+            ConfigManager.isConnected.value = false;
+            ConfigManager.playerName.interactable = true;
+            ConfigManager.serverAddress.interactable = true;
+            ConfigManager.serverPassword.interactable = true;
             if (Session != null && Session.Socket != null) Session.Socket.DisconnectAsync();
             if (SceneHelper.CurrentScene == "Main Menu") UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
             //GameConsole.Console.Instance.PrintLine("Disconnected from Archipelago server.");
@@ -233,8 +242,8 @@ namespace ArchipelagoULTRAKILL
                             switch (messagePart.Type)
                             {
                                 case JsonMessagePartType.PlayerId:
-                                    if (Session.Players.GetPlayerName(int.Parse(messagePart.Text)) == Core.data.slot_name) color = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_player_self"]) + "FF>";
-                                    else color = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_player_other"]) + "FF>";
+                                    if (Session.Players.GetPlayerName(int.Parse(messagePart.Text)) == Core.data.slot_name) color = "<color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APPlayerSelf.value) + "FF>";
+                                    else color = "<color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APPlayerOther.value) + "FF>";
                                     if (int.TryParse(messagePart.Text, out int playerSlot))
                                     {
                                         string playerName = Session.Players.GetPlayerAlias(playerSlot) ?? $"Slot: {playerSlot}";
@@ -251,16 +260,16 @@ namespace ArchipelagoULTRAKILL
                                     switch (messagePart.Flags)
                                     {
                                         case ItemFlags.Advancement:
-                                            color = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_item_advancement"]) + "FF>";
+                                            color = "<color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APItemAdvancement.value) + "FF>";
                                             break;
                                         case ItemFlags.NeverExclude:
-                                            color = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_item_neverexclude"]) + "FF>";
+                                            color = "<color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APItemNeverExclude.value) + "FF>";
                                             break;
                                         case ItemFlags.Trap:
-                                            color = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_item_trap"]) + "FF>";
+                                            color = "<color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APItemTrap.value) + "FF>";
                                             break;
                                         default:
-                                            color = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_item_filler"]) + "FF>";
+                                            color = "<color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APItemFiller.value) + "FF>";
                                             break;
                                     }
                                     if (int.TryParse(messagePart.Text, out int itemId))
@@ -276,7 +285,7 @@ namespace ArchipelagoULTRAKILL
                                     }
                                     break;
                                 case JsonMessagePartType.LocationId:
-                                    color = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_location"]) + "FF>";
+                                    color = "<color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APLocation.value) + "FF>";
                                     if (int.TryParse(messagePart.Text, out int locationId))
                                     {
                                         string locationName = Session.Locations.GetLocationNameFromId(locationId) ?? $"Location: {locationId}";

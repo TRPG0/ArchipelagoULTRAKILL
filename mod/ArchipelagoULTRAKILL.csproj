@@ -76,8 +76,12 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Archipelago.MultiClient.Net.5.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PluginConfigurator">
+      <HintPath>D:\steam games\steamapps\common\ULTRAKILL\BepInEx\plugins\PluginConfigurator\PluginConfigurator.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -304,12 +308,12 @@
   <ItemGroup>
     <Compile Include="AudioManager.cs" />
     <Compile Include="Components\ChapterSelectState.cs" />
-    <Compile Include="Commands\Log.cs" />
     <Compile Include="Commands\Say.cs" />
     <Compile Include="Commands\Disconnect.cs" />
     <Compile Include="Commands\Connect.cs" />
     <Compile Include="Components\GlassDisabler.cs" />
     <Compile Include="Components\ReverseDoorCloser.cs" />
+    <Compile Include="ConfigManager.cs" />
     <Compile Include="LevelManager.cs" />
     <Compile Include="Multiworld.cs" />
     <Compile Include="LocationManager.cs" />

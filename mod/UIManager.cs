@@ -68,7 +68,7 @@ namespace ArchipelagoULTRAKILL
             Core.obj.GetComponent<Canvas>().sortingOrder = 256;
 
             log.AddComponent<Text>().font = font;
-            log.GetComponent<Text>().fontSize = UMM.UKMod.RetrieveIntPersistentModData("message_log_font_size", "Archipelago");
+            log.GetComponent<Text>().fontSize = ConfigManager.logFontSize.value;
             log.GetComponent<Text>().alignment = TextAnchor.LowerCenter;
             log.GetComponent<Text>().alignByGeometry = true;
             log.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);

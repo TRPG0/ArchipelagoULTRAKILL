@@ -517,7 +517,7 @@ namespace ArchipelagoULTRAKILL
                     return ColorBlindSettings.Instance.variationColors[2]; // red
                 case "Revolver - Alternate":
                 case "Nailgun - Alternate":
-                    return colors["gold"];
+                    return ConfigManager.altColor.value;
                 case "Stamina Bar":
                 case "Wall Jump":
                 case "Slide":
@@ -525,6 +525,7 @@ namespace ArchipelagoULTRAKILL
                 case "Infinite Stamina":
                     return ColorBlindSettings.Instance.staminaColor;
                 case "Feedbacker":
+                    return ConfigManager.arm0Color.value;
                 case "5-1: IN THE WAKE OF POSEIDON":
                 case "5-2: WAVES OF THE STARLESS SEA":
                 case "5-3: SHIP OF FOOLS":
@@ -534,6 +535,7 @@ namespace ArchipelagoULTRAKILL
                 case "5-3":
                 case "5-4":
                 case "LAYER 5: WRATH":
+                    return ConfigManager.layer5Color.value;
                 case "Blue Skull (0-2)":
                 case "Blue Skull (0-S)":
                 case "Blue Skull (1-1)":
@@ -549,8 +551,9 @@ namespace ArchipelagoULTRAKILL
                 case "Blue Skull (5-2)":
                 case "Blue Skull (5-3)":
                 case "Blue Skull (5-4)":
-                    return colors["lightblue"];
+                    return ConfigManager.blueSkullColor.value;
                 case "Whiplash":
+                    return ConfigManager.arm2Color.value;
                 case "1-1: HEART OF THE SUNRISE":
                 case "1-2: THE BURNING WORLD":
                 case "1-3: HALLS OF SACRED REMAINS":
@@ -560,15 +563,18 @@ namespace ArchipelagoULTRAKILL
                 case "1-3":
                 case "1-4":
                 case "LAYER 1: LIMBO":
-                    return colors["green"];
+                    return ConfigManager.layer1Color.value;
                 case "Knuckleblaster":
+                    return ConfigManager.arm1Color.value;
                 case "6-1: CRY FOR THE WEEPER":
                 case "6-2: AESTHETICS OF HATE":
                 case "6-1":
                 case "6-2":
                 case "LAYER 6: HERESY":
+                    return ConfigManager.layer6Color.value;
                 case "P-1: SOUL SURVIVOR":
                 case "P-2: WAIT OF THE WORLD":
+                    return ConfigManager.primeColor.value;
                 case "Red Skull (0-S)":
                 case "Red Skull (1-1)":
                 case "Red Skull (1-2)":
@@ -579,7 +585,7 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (5-2)":
                 case "Red Skull (5-3)":
                 case "Red Skull (6-1)":
-                    return colors["red"];
+                    return ConfigManager.redSkullColor.value;
                 case "0-2: THE MEATGRINDER":
                 case "0-3: DOUBLE DOWN":
                 case "0-4: A ONE-MACHINE ARMY":
@@ -590,7 +596,7 @@ namespace ArchipelagoULTRAKILL
                 case "0-3":
                 case "0-4":
                 case "0-5":
-                    return colors["orange"];
+                    return ConfigManager.layer0Color.value;
                 case "2-1: BRIDGEBURNER":
                 case "2-2: DEATH AT 20,000 VOLTS":
                 case "2-3: SHEER HEART ATTACK":
@@ -600,13 +606,13 @@ namespace ArchipelagoULTRAKILL
                 case "2-2":
                 case "2-3":
                 case "2-4":
-                    return colors["purple"];
+                    return ConfigManager.layer2Color.value;
                 case "3-1: BELLY OF THE BEAST":
                 case "3-2: IN THE FLESH":
                 case "3-1":
                 case "3-2":
                 case "LAYER 3: GLUTTONY":
-                    return colors["bone"];
+                    return ConfigManager.layer3Color.value;
                 case "4-1: SLAVES TO POWER":
                 case "4-2: GOD DAMN THE SUN":
                 case "4-3: A SHOT IN THE DARK":
@@ -616,18 +622,19 @@ namespace ArchipelagoULTRAKILL
                 case "4-2":
                 case "4-3":
                 case "4-4":
+                    return ConfigManager.layer4Color.value;
                 case "Dual Wield":
-                    return colors["yellow"];
+                    return ConfigManager.dualwieldColor.value;
                 case "Overheal":
                     return ColorBlindSettings.Instance.overHealColor;
                 case "+10,000P":
                 case "Sho":
-                    return colors["gold"];
+                    return ConfigManager.pointsColor.value;
                 case "Hard Damage":
                 case "Stamina Limiter":
                 case "Wall Jump Limiter":
                 case "Empty Ammunition":
-                    return colors["gray"];
+                    return ConfigManager.trapColor.value;
                 default:
                     return colors["white"];
             }
@@ -638,13 +645,13 @@ namespace ArchipelagoULTRAKILL
             switch (flag)
             {
                 case ItemFlags.Advancement:
-                    return colors["ap_item_advancement"];
+                    return ConfigManager.APItemAdvancement.value;
                 case ItemFlags.NeverExclude:
-                    return colors["ap_item_neverexclude"];
+                    return ConfigManager.APItemNeverExclude.value;
                 case ItemFlags.Trap:
-                    return colors["ap_item_trap"];
+                    return ConfigManager.APItemTrap.value;
                 default:
-                    return colors["ap_item_filler"];
+                    return ConfigManager.APItemFiller.value;
             }
         }
 

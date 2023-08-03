@@ -11,6 +11,7 @@ using ArchipelagoULTRAKILL.Structures;
 using ArchipelagoULTRAKILL.Components;
 using ArchipelagoULTRAKILL.Powerups;
 using BepInEx.Logging;
+using System.Reflection;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -21,6 +22,9 @@ namespace ArchipelagoULTRAKILL
         public const string ModName = "Archipelago";
         public const string ModVersion = "1.1.6";
         public const string ModDescription = "Connect to an Archipelago server to play ULTRAKILL randomizer.";
+
+        public static string workingPath;
+        public static string workingDir;
 
         public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("Archipelago");
 
@@ -116,10 +120,11 @@ namespace ArchipelagoULTRAKILL
             Harmony harmony = new Harmony("archipelago");
             harmony.PatchAll();
 
-            if (!PersistentModDataExists("message_log_lines", "Archipelago")) SetPersistentModData("message_log_lines", UIManager.lines.ToString(), "Archipelago");
-            else UIManager.lines = RetrieveIntPersistentModData("message_log_lines", "Archipelago");
+            workingPath = Assembly.GetExecutingAssembly().Location;
+            workingDir = Path.GetDirectoryName(workingPath);
+            logger.LogInfo($"Working Path: {workingPath}, Working Dir: {workingDir}");
 
-            if (!PersistentModDataExists("message_log_font_size", "Archipelago")) SetPersistentModData("message_log_font_size", "16", "Archipelago");
+            ConfigManager.Initialize();
 
             obj = FindObjectOfType<Core>().gameObject;
             obj.name = "Archipelago";
@@ -145,7 +150,6 @@ namespace ArchipelagoULTRAKILL
 
             GameConsole.Console.Instance.RegisterCommand(new Commands.Connect());
             GameConsole.Console.Instance.RegisterCommand(new Commands.Disconnect());
-            GameConsole.Console.Instance.RegisterCommand(new Commands.Log());
             GameConsole.Console.Instance.RegisterCommand(new Commands.Say());
 
             StartCoroutine(VersionChecker.CheckVersion());
@@ -200,6 +204,7 @@ namespace ArchipelagoULTRAKILL
                 if (DataExists() && !firstTimeLoad)
                 {
                     LoadData();
+                    ConfigManager.LoadConnectionInfo();
                     firstTimeLoad = true;
                 }
 
