@@ -415,20 +415,20 @@ namespace ArchipelagoULTRAKILL
 
                 if (skull.name.Contains("9") && !skull.name.Contains("19"))
                 {
-                    if (Core.data.unlockedSkulls1_4 >= int.Parse(skull.name.Substring(skull.name.Length - 1, 1))) skull.GetComponent<Image>().color = LocationManager.colors["lightblue"];
+                    if (Core.data.unlockedSkulls1_4 >= int.Parse(skull.name.Substring(skull.name.Length - 1, 1))) skull.GetComponent<Image>().color = ConfigManager.blueSkullColor.value;
                     else skull.GetComponent<Image>().color = LocationManager.colors["gray"];
                 }
                 else if (skull.name.Contains("20"))
                 {
-                    if (Core.data.unlockedSkulls5_1 >= int.Parse(skull.name.Substring(skull.name.Length - 1, 1))) skull.GetComponent<Image>().color = LocationManager.colors["lightblue"];
+                    if (Core.data.unlockedSkulls5_1 >= int.Parse(skull.name.Substring(skull.name.Length - 1, 1))) skull.GetComponent<Image>().color = ConfigManager.blueSkullColor.value;
                     else skull.GetComponent<Image>().color = LocationManager.colors["gray"];
                 }
                 else
                 {
                     if (Core.data.unlockedSkulls.Contains(skull.name))
                     {
-                        if (skull.name.Contains("_b")) skull.GetComponent<Image>().color = LocationManager.colors["lightblue"];
-                        else if (skull.name.Contains("_r")) skull.GetComponent<Image>().color = LocationManager.colors["red"];
+                        if (skull.name.Contains("_b")) skull.GetComponent<Image>().color = ConfigManager.blueSkullColor.value;
+                        else if (skull.name.Contains("_r")) skull.GetComponent<Image>().color = ConfigManager.redSkullColor.value;
                     }
                     else
                     {
@@ -475,7 +475,7 @@ namespace ArchipelagoULTRAKILL
             popupCanvas.transform.GetChild(0).gameObject.SetActive(true);
             popupCanvas.SetActive(false);
             popupImage.GetComponent<Image>().sprite = bundle.LoadAsset<Sprite>("assets/layer4.png");
-            popupImage.GetComponent<Image>().color = LocationManager.colors["yellow"];
+            popupImage.GetComponent<Image>().color = ConfigManager.layer4Color.value;
             popupText = new GameObject();
             popupText.name = "APText";
             popupText.transform.SetParent(popupCanvas.transform.GetChild(0));

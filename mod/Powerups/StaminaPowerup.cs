@@ -17,7 +17,7 @@ namespace ArchipelagoULTRAKILL.Powerups
                 meter.latestMaxJuice = juiceAmount;
                 meter.juice = juiceAmount;
             }
-            meter.powerUpColor = LocationManager.colors["lightblue"];
+            meter.powerUpColor = ColorBlindSettings.Instance.staminaColor;
             juiceGiven = true;
             Core.staminaPowerup = true;
         }

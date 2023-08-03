@@ -17,7 +17,7 @@ namespace ArchipelagoULTRAKILL.Powerups
                 meter.latestMaxJuice = juiceAmount;
                 meter.juice = juiceAmount;
             }
-            meter.powerUpColor = new Color(0, 0, 0);
+            meter.powerUpColor = ConfigManager.trapColor.value;
             juiceGiven = true;
             Core.walljumpTrap = true;
         }

@@ -72,18 +72,18 @@ namespace ArchipelagoULTRAKILL
                             {
                                 UKItem item = LocationManager.ukitems["shop_" + vi.weaponName];
                                 description = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.GetUKMessageColor(item.item_name)) + "FF>" + item.item_name + "</color>\n";
-                                if (item.player_name != Core.data.slot_name) description += "for <color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_player_other"]) + "FF>" + item.player_name + "</color>\n";
+                                if (item.player_name != Core.data.slot_name) description += "for <color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APPlayerOther.value) + "FF>" + item.player_name + "</color>\n";
                                 else description += "\n";
                             }
                             else
                             {
                                 APItem item = LocationManager.apitems["shop_" + vi.weaponName];
                                 description = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.GetAPMessageColor(item.type)) + "FF>" + item.item_name + "</color>\n";
-                                description += "for <color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_player_other"]) + "FF>" + item.player_name + "</color>\n\n";
-                                if (item.type == ItemFlags.Advancement) description += "You don't know what this is, but it seems <color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_item_advancement"]) + "FF>important.</color>";
-                                else if (item.type == ItemFlags.NeverExclude) description += "You don't know what this is, but it seems like it could be <color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_item_neverexclude"]) + "FF>useful.</color>";
-                                else if (item.type == ItemFlags.Trap) description += "You don't know what this is, but it seems like they're probably <color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_item_neverexclude"]) + "FF>better off without it.</color>";
-                                else description += "You don't know what this is, but it seems like you could probably <color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["ap_item_filler"]) + "FF>skip this</color> if you wanted to.";
+                                description += "for <color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APPlayerOther.value) + "FF>" + item.player_name + "</color>\n\n";
+                                if (item.type == ItemFlags.Advancement) description += "You don't know what this is, but it seems <color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APItemAdvancement.value) + "FF>important.</color>";
+                                else if (item.type == ItemFlags.NeverExclude) description += "You don't know what this is, but it seems like it could be <color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APItemNeverExclude.value) + "FF>useful.</color>";
+                                else if (item.type == ItemFlags.Trap) description += "You don't know what this is, but it seems like they're probably <color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APItemTrap.value) + "FF>better off without it.</color>";
+                                else description += "You don't know what this is, but it seems like you could probably <color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APItemFiller.value) + "FF>skip this</color> if you wanted to.";
                             }
                         }
                         else description = "???";

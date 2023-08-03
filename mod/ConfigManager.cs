@@ -79,17 +79,24 @@ namespace ArchipelagoULTRAKILL
             connectButton = new ButtonField(playerPanel, "CONNECT", "connectButton");
             connectButton.onClick += () =>
             {
-                Core.data.slot_name = playerName.value;
-                Core.data.host_name = serverAddress.value;
-                Core.data.password = serverPassword.value;
-                if (Core.data.password == "") Core.data.password = null;
-                Multiworld.Connect();
+                if (!Multiworld.Authenticated)
+                {
+                    Core.data.slot_name = playerName.value;
+                    Core.data.host_name = serverAddress.value;
+                    Core.data.password = serverPassword.value;
+                    if (Core.data.password == "") Core.data.password = null;
+                    Multiworld.Connect();
+                }
             };
 
             disconnectButton = new ButtonField(playerPanel, "DISCONNECT", "disconnectButton");
             disconnectButton.onClick += () =>
             {
-                Multiworld.Disconnect();
+                if (Multiworld.Authenticated) Multiworld.Disconnect();
+                if (SceneHelper.CurrentScene == "Main Menu")
+                {
+                    UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
+                }
             };
 
             // log settings

@@ -16,20 +16,6 @@ namespace ArchipelagoULTRAKILL
             ["gray"] = new Color (0.7f, 0.7f, 0.7f),
             ["red"] = new Color(1, 0.2353f, 0.2353f),
             ["green"] = new Color(0.2667f, 1, 0.2706f),
-            ["lightblue"] = new Color(0.251f, 0.9059f, 1),
-            ["yellow"] = new Color(1, 1, 0.25f, 1),
-            ["orange"] = new Color(1, 0.5f, 0.25f),
-            ["gold"] = new Color(1, 0.65f, 0),
-            ["purple"] = new Color(0.765f, 0.25f, 1),
-            ["bone"] = new Color(1, 0.9479f, 0.8566f),
-            ["ap_item_advancement"] = new Color(0.69f, 0.6f, 0.94f),
-            ["ap_item_neverexclude"] = new Color(0.43f, 0.55f, 0.91f),
-            ["ap_item_trap"] = new Color(0.98f, 0.5f, 0.45f),
-            ["ap_item_filler"] = new Color(0, 0.93f, 0.93f),
-            ["ap_player_self"] = new Color(0.93f, 0, 0.93f),
-            ["ap_player_other"] = new Color(0.98f, 0.98f, 0.82f),
-            ["ap_location"] = new Color(0, 1, 0.5f),
-            ["ap_entrance"] = new Color(0.39f, 0.58f, 0.93f)
         };
 
         public static Dictionary<string, UKLocation> locations = new Dictionary<string, UKLocation>();
@@ -67,7 +53,7 @@ namespace ArchipelagoULTRAKILL
         public static void GetUKItem(UKItem item, string sendingPlayer = null)
         {
             string itemColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(item.item_name));
-            string playerColor = ColorUtility.ToHtmlStringRGB(colors["ap_player_other"]);
+            string playerColor = ColorUtility.ToHtmlStringRGB(ConfigManager.APPlayerOther.value);
             string text = "";
 
             if (item.player_name == Core.data.slot_name)
@@ -314,7 +300,7 @@ namespace ArchipelagoULTRAKILL
                     itemColor = ColorUtility.ToHtmlStringRGB(GetAPMessageColor(info.Locations[0].Flags));
                     color = GetAPMessageColor(info.Locations[0].Flags);
                 }
-                string playerColor = ColorUtility.ToHtmlStringRGB(colors["ap_player_other"]);
+                string playerColor = ColorUtility.ToHtmlStringRGB(ConfigManager.APPlayerOther.value);
                 string locationColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(Multiworld.Session.Locations.GetLocationNameFromId(info.Locations[0].Location).Substring(0, 3)));
 
                 string hint = "HINT: <color=#" + itemColor + "FF>";
@@ -340,7 +326,7 @@ namespace ArchipelagoULTRAKILL
         public static void AddAPItemMessage(APItem item)
         {
             string itemColor = ColorUtility.ToHtmlStringRGB(GetAPMessageColor(item.type));
-            string playerColor = ColorUtility.ToHtmlStringRGB(colors["ap_player_other"]);
+            string playerColor = ColorUtility.ToHtmlStringRGB(ConfigManager.APPlayerOther.value);
             string text = "FOUND: <color=#" + itemColor + "FF>" + item.item_name + "</color> (<color=#" + playerColor + "FF>" + item.player_name + "</color>)";
 
             messages.Add(new Message
