@@ -19,6 +19,7 @@ namespace ArchipelagoULTRAKILL
         public static StringField serverPassword;
         public static ButtonField connectButton;
         public static ButtonField disconnectButton;
+        public static ConfigHeader connectionInfo;
 
         public static ConfigPanel logPanel;
         public static BoolField showLog;
@@ -92,12 +93,18 @@ namespace ArchipelagoULTRAKILL
             disconnectButton = new ButtonField(playerPanel, "DISCONNECT", "disconnectButton");
             disconnectButton.onClick += () =>
             {
-                if (Multiworld.Authenticated) Multiworld.Disconnect();
-                if (SceneHelper.CurrentScene == "Main Menu")
+                if (Multiworld.Authenticated)
                 {
-                    UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
+                    Multiworld.Disconnect();
+                    connectionInfo.text = "Disconnected from server.";
+                    if (SceneHelper.CurrentScene == "Main Menu")
+                    {
+                        UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
+                    }
                 }
             };
+
+            connectionInfo = new ConfigHeader(playerPanel, "", 16, TextAnchor.UpperCenter);  
 
             // log settings
             showLog = new BoolField(logPanel, "SHOW LOG", "showLog", true, true);

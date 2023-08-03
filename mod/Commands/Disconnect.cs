@@ -26,7 +26,7 @@ namespace ArchipelagoULTRAKILL.Commands
                 else
                 {
                     Multiworld.Disconnect();
-
+                    ConfigManager.connectionInfo.text = "Disconnected from server.";
                     if (SceneHelper.CurrentScene == "Main Menu")
                     {
                         UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
