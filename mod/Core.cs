@@ -357,6 +357,8 @@ namespace ArchipelagoULTRAKILL
 
         public static string GetHeldWeapon()
         {
+            if (GunControl.Instance.currentWeapon == null) return "?";
+
             if (GunControl.Instance.currentWeapon.GetComponent<Revolver>())
             {
                 switch (GunControl.Instance.currentWeapon.GetComponent<Revolver>().gunVariation)

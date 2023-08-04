@@ -1,10 +1,16 @@
-﻿using PluginConfig.API;
+﻿using Archipelago.MultiClient.Net.Models;
+using Archipelago.MultiClient.Net.Enums;
+using HarmonyLib;
+using PluginConfig.API;
 using PluginConfig.API.Decorators;
 using PluginConfig.API.Fields;
 using PluginConfig.API.Functionals;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using Color = UnityEngine.Color;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -54,6 +60,11 @@ namespace ArchipelagoULTRAKILL
         public static ColorField dualwieldColor;
         public static ColorField trapColor;
 
+        public static ConfigPanel hintsPanel;
+        public static BoolField hintAdvancementOnly;
+        public static ButtonField hintRefresh;
+        public static ConfigDivision hintList;
+
         public static void Initialize()
         {
             if (config != null) return;
@@ -68,6 +79,7 @@ namespace ArchipelagoULTRAKILL
             playerPanel = new ConfigPanel(config.rootPanel, "PLAYER SETTINGS", "playerPanel");
             logPanel = new ConfigPanel(config.rootPanel, "LOG SETTINGS", "logPanel");
             colorPanel = new ConfigPanel(config.rootPanel, "COLOR SETTINGS", "colorPanel");
+            hintsPanel = new ConfigPanel(config.rootPanel, "HINTS", "hintsPanel");
 
             // player settings
             isConnected = new BoolField(playerPanel, "CONNECTED TO SERVER?", "isConnected", false, false);
@@ -80,7 +92,19 @@ namespace ArchipelagoULTRAKILL
             connectButton = new ButtonField(playerPanel, "CONNECT", "connectButton");
             connectButton.onClick += () =>
             {
-                if (!Multiworld.Authenticated)
+                if (Multiworld.Authenticated)
+                {
+                    connectionInfo.text = "Already connected to server.";
+                }
+                else if (SceneHelper.CurrentScene != "Main Menu")
+                {
+                    connectionInfo.text = "Can only connect to an Archipelago server on the main menu.";
+                }
+                else if ((GameProgressSaver.GetTutorial() || GameProgressSaver.GetIntro()) && !Core.DataExists())
+                {
+                    connectionInfo.text = "No Archipelago data found. Start a new save file before connecting.";
+                }
+                else if (!Multiworld.Authenticated)
                 {
                     Core.data.slot_name = playerName.value;
                     Core.data.host_name = serverAddress.value;
@@ -161,6 +185,36 @@ namespace ArchipelagoULTRAKILL
             pointsColor = new ColorField(colorPanel, "POINTS", "pointsColor", new Color(1, 0.65f, 0), true);
             dualwieldColor = new ColorField(colorPanel, "DUAL WIELD", "dualwieldColor", new Color(1, 1, 0.25f), true);
             trapColor = new ColorField(colorPanel, "TRAP", "trapColor", new Color(0.7f, 0.7f, 0.7f), true);
+
+            // hint settings
+            hintAdvancementOnly = new BoolField(hintsPanel, "PROGRESSION ITEM HINTS ONLY", "hintAdvancementOnly", true, true);
+            hintRefresh = new ButtonField(hintsPanel, "REFRESH LIST", "hintRefresh");
+            hintList = new ConfigDivision(hintsPanel, "hintList");
+            hintRefresh.onClick += () => 
+            {
+                if (Multiworld.Authenticated)
+                {
+                    GameObject.Destroy(Traverse.Create(hintList).Field("panelObject").GetValue<GameObject>());
+                    Traverse.Create(hintsPanel).Field("fieldObjects").GetValue<List<List<Transform>>>().RemoveAt(2);
+                    Traverse.Create(hintsPanel).Field("fields").GetValue<List<ConfigField>>().RemoveAt(2);
+
+                    hintList = null;
+                    hintList = new ConfigDivision(hintsPanel, "hintList");
+
+                    Hint[] hints = Multiworld.Session.DataStorage.GetHints();
+                    foreach (Hint h in hints)
+                    {
+                        if (hintAdvancementOnly.value && h.ItemFlags != ItemFlags.Advancement) continue;
+
+                        if (Array.IndexOf(hints, h) != 0) new ConfigHeader(hintList, "-----");
+                        new StringField(hintList, "ITEM", $"hint{Array.IndexOf(hints, h)}_item", Multiworld.Session.Items.GetItemName(h.ItemId), true, false) { interactable = false };
+                        new StringField(hintList, "RECEIVING PLAYER", $"hint{Array.IndexOf(hints, h)}_receiving_player", Multiworld.Session.Players.GetPlayerAlias(h.ReceivingPlayer), true, false) { interactable = false };
+                        new StringField(hintList, "LOCATION", $"hint{Array.IndexOf(hints, h)}_location", Multiworld.Session.Locations.GetLocationNameFromId(h.LocationId), true, false) { interactable = false };
+                        new StringField(hintList, "SENDING PLAYER", $"hint{Array.IndexOf(hints, h)}_sending_player", Multiworld.Session.Players.GetPlayerAlias(h.FindingPlayer), true, false) { interactable = false };
+                        new BoolField(hintList, "FOUND", $"hint{Array.IndexOf(hints, h)}_found", h.Found, false) { interactable = false };
+                    }
+                }
+            };
         }
 
         public static void LoadConnectionInfo()

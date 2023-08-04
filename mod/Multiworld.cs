@@ -229,12 +229,14 @@ namespace ArchipelagoULTRAKILL
 
         public static void PacketReceived(ArchipelagoPacketBase packet)
         {
-            if (messages.Count >= UIManager.lines) messages.RemoveAt(0);
             switch (packet.PacketType)
             {
                 case ArchipelagoPacketType.PrintJSON:
                     {
+                        if (messages.Count >= UIManager.lines) messages.RemoveAt(0);
+
                         var p = packet as PrintJsonPacket;
+
                         string richText = "";
                         string plainText = "";
                         string color = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.colors["white"]) + "FF>";
