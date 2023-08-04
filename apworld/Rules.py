@@ -501,86 +501,174 @@ def rules(ultrakillworld):
 
     # level entrances
     set_rule(world.get_entrance("To shop", player),
-        lambda state: state.has_group("levels", player) or \
-        state.has_group("layers", player))
+        lambda state: (
+            state.has_group("levels", player)
+            or state.has_group("layers", player)
+        ))
     set_rule(world.get_entrance("To 0-2", player),
-        lambda state: state.has("0-2: THE MEATGRINDER", player) or \
-        state.has("OVERTURE: THE MOUTH OF HELL", player))
+        lambda state: (
+            state.has("0-2: THE MEATGRINDER", player)
+            or state.has("OVERTURE: THE MOUTH OF HELL", player)
+        ))
     set_rule(world.get_entrance("To 0-3", player),
-        lambda state: state.has("0-3: DOUBLE DOWN", player) or \
-            state.has("OVERTURE: THE MOUTH OF HELL", player))
+        lambda state: (
+            state.has("0-3: DOUBLE DOWN", player)
+            or state.has("OVERTURE: THE MOUTH OF HELL", player)
+        ))
     set_rule(world.get_entrance("To 0-4", player),
-        lambda state: state.has("0-4: A ONE-MACHINE ARMY", player) or \
-            state.has("OVERTURE: THE MOUTH OF HELL", player))
+        lambda state: (
+            state.has("0-4: A ONE-MACHINE ARMY", player)
+            or state.has("OVERTURE: THE MOUTH OF HELL", player)
+        ))
     set_rule(world.get_entrance("To 0-5", player),
-        lambda state: state.has("0-5: CERBERUS", player) or \
-            state.has("OVERTURE: THE MOUTH OF HELL", player))
+        lambda state: (
+            state.has("0-5: CERBERUS", player)
+            or state.has("OVERTURE: THE MOUTH OF HELL", player)
+        ))
     set_rule(world.get_entrance("To 1-1", player),
-        lambda state: state.has("1-1: HEART OF THE SUNRISE", player) or \
-            state.has("LAYER 1: LIMBO", player))
+        lambda state: (
+            state.has("1-1: HEART OF THE SUNRISE", player)
+            or state.has("LAYER 1: LIMBO", player)
+        ))
     set_rule(world.get_entrance("To 1-2", player),
-        lambda state: state.has("1-2: THE BURNING WORLD", player) or \
-            state.has("LAYER 1: LIMBO", player))
+        lambda state: (
+            state.has("1-2: THE BURNING WORLD", player)
+            or state.has("LAYER 1: LIMBO", player)
+        ))
     set_rule(world.get_entrance("To 1-3", player),
-        lambda state: state.has("1-3: HALLS OF SACRED REMAINS", player) or \
-            state.has("LAYER 1: LIMBO", player))
+        lambda state: (
+            state.has("1-3: HALLS OF SACRED REMAINS", player)
+            or state.has("LAYER 1: LIMBO", player)
+        ))
     if world.goal[player].value != 0:
         set_rule(world.get_entrance("To 1-4", player),
-            lambda state: state.has("1-4: CLAIR DE LUNE", player) or \
-                state.has("LAYER 1: LIMBO", player))
+            lambda state: (
+                state.has("1-4: CLAIR DE LUNE", player)
+                or state.has("LAYER 1: LIMBO", player)
+            ))
     set_rule(world.get_entrance("To 2-1", player),
-        lambda state: state.has("2-1: BRIDGEBURNER", player) or \
-            state.has("LAYER 2: LUST", player))
+        lambda state: (
+            state.has("2-1: BRIDGEBURNER", player)
+            or state.has("LAYER 2: LUST", player)
+        ))
     set_rule(world.get_entrance("To 2-2", player),
-        lambda state: state.has("2-2: DEATH AT 20,000 VOLTS", player) or \
-            state.has("LAYER 2: LUST", player))
+        lambda state: (
+            state.has("2-2: DEATH AT 20,000 VOLTS", player)
+            or state.has("LAYER 2: LUST", player)
+        ))
     set_rule(world.get_entrance("To 2-3", player),
-        lambda state: state.has("2-3: SHEER HEART ATTACK", player) or \
-            state.has("LAYER 2: LUST", player))
+        lambda state: (
+            state.has("2-3: SHEER HEART ATTACK", player)
+            or state.has("LAYER 2: LUST", player)
+        ))
     if world.goal[player].value != 1:
         set_rule(world.get_entrance("To 2-4", player),
-            lambda state: state.has("2-4: COURT OF THE CORPSE KING", player) or \
-                state.has("LAYER 2: LUST", player))
+            lambda state: (
+                state.has("2-4: COURT OF THE CORPSE KING", player)
+                or state.has("LAYER 2: LUST", player)
+            ))
     set_rule(world.get_entrance("To 3-1", player),
-        lambda state: state.has("3-1: BELLY OF THE BEAST", player) or \
-            state.has("LAYER 3: GLUTTONY", player))
+        lambda state: (
+            state.has("3-1: BELLY OF THE BEAST", player)
+            or state.has("LAYER 3: GLUTTONY", player)
+        ))
     if world.goal[player].value != 2:
         set_rule(world.get_entrance("To 3-2", player),
-            lambda state: state.has("3-2: IN THE FLESH", player) or \
-                state.has("LAYER 3: GLUTTONY", player))
+            lambda state: (
+                state.has("3-2: IN THE FLESH", player)
+                or state.has("LAYER 3: GLUTTONY", player)
+            ))
     set_rule(world.get_entrance("To 4-1", player),
-        lambda state: state.has("4-1: SLAVES TO POWER", player) or \
-            state.has("LAYER 4: GREED", player))
+        lambda state: (
+            state.has("4-1: SLAVES TO POWER", player)
+            or state.has("LAYER 4: GREED", player)
+        ))
     set_rule(world.get_entrance("To 4-2", player),
-        lambda state: state.has("4-2: GOD DAMN THE SUN", player) or \
-            state.has("LAYER 4: GREED", player))
+        lambda state: (
+            state.has("4-2: GOD DAMN THE SUN", player)
+            or state.has("LAYER 4: GREED", player)
+        ))
     set_rule(world.get_entrance("To 4-3", player),
-        lambda state: state.has("4-3: A SHOT IN THE DARK", player) or \
-            state.has("LAYER 4: GREED", player))
+        lambda state: (
+            state.has("4-3: A SHOT IN THE DARK", player)
+            or state.has("LAYER 4: GREED", player)
+        ))
     if world.goal[player].value != 3:
         set_rule(world.get_entrance("To 4-4", player),
-            lambda state: state.has("4-4: CLAIR DE SOLEIL", player) or \
-                state.has("LAYER 4: GREED", player))
+            lambda state: (
+                state.has("4-4: CLAIR DE SOLEIL", player)
+                or state.has("LAYER 4: GREED", player)
+            ))
     set_rule(world.get_entrance("To 5-1", player),
-        lambda state: state.has("5-1: IN THE WAKE OF POSEIDON", player) or \
-            state.has("LAYER 5: WRATH", player))
+        lambda state: (
+            state.has("5-1: IN THE WAKE OF POSEIDON", player)
+            or state.has("LAYER 5: WRATH", player)
+        ))
     set_rule(world.get_entrance("To 5-2", player),
-        lambda state: state.has("5-2: WAVES OF THE STARLESS SEA", player) or \
-            state.has("LAYER 5: WRATH", player))
+        lambda state: (
+            state.has("5-2: WAVES OF THE STARLESS SEA", player)
+            or state.has("LAYER 5: WRATH", player)
+        ))
     set_rule(world.get_entrance("To 5-3", player),
-        lambda state: state.has("5-3: SHIP OF FOOLS", player) or \
-            state.has("LAYER 5: WRATH", player))
+        lambda state: (
+            state.has("5-3: SHIP OF FOOLS", player)
+            or state.has("LAYER 5: WRATH", player)
+        ))
     if world.goal[player].value != 4:
         set_rule(world.get_entrance("To 5-4", player),
-            lambda state: state.has("5-4: LEVIATHAN", player) or \
-                state.has("LAYER 5: WRATH", player))
+            lambda state: (
+                state.has("5-4: LEVIATHAN", player)
+                or state.has("LAYER 5: WRATH", player)
+            ))
     set_rule(world.get_entrance("To 6-1", player),
-        lambda state: state.has("6-1: CRY FOR THE WEEPER", player) or \
-            state.has("LAYER 6: HERESY", player))
+        lambda state: (
+            state.has("6-1: CRY FOR THE WEEPER", player)
+            or state.has("LAYER 6: HERESY", player)
+        ))
     if world.goal[player].value != 5:
         set_rule(world.get_entrance("To 6-2", player),
-            lambda state: state.has("6-2: AESTHETICS OF HATE", player) or \
-                state.has("LAYER 6: HERESY", player))
+            lambda state: (
+                state.has("6-2: AESTHETICS OF HATE", player)
+                or state.has("LAYER 6: HERESY", player)
+            ))
+
+    # secret mission entrances
+    set_rule(world.get_entrance("To 0-S", player),
+        lambda state: (
+            secret_0_2(state, player, slam, fire2, arm, walljump)
+            and grab_item(state, player, arm)
+        ))
+    if skulls:
+        add_rule(world.get_entrance("To 0-S", player),
+            lambda state: state.has("Blue Skull (0-2)", player))
+    set_rule(world.get_entrance("To 1-S", player),
+        lambda state: rev2_fire2(state, player, fire2))
+    set_rule(world.get_entrance("To 2-S", player),
+        lambda state: (
+            secret3_2_3(state, player, slam, fire2, walljump, dash)
+            and can_slide(state, player, slide)
+        ))
+    if skulls:
+        add_rule(world.get_entrance("To 2-S", player),
+            lambda state: state.has("Blue Skull (2-3)", player))
+    set_rule(world.get_entrance("To 4-S", player),
+        lambda state: (
+            (
+                jump_general(state, player, slam, fire2, arm, walljump, 2)
+                or rev1_fire2(state, player, fire2)
+            )
+            and grab_item(state, player, arm)
+        ))
+    set_rule(world.get_entrance("To 5-S", player),
+        lambda state: (
+            can_slide(state, player, slide)
+            and level_5_1(state, player, slam, fire2, walljump, dash)
+            and grab_item(state, player, arm)
+        ))
+    if skulls:
+        add_rule(world.get_entrance("To 2-S", player),
+            lambda state: state.has("Blue Skull (5-1)", player, 3))
+
 
 
     # 0-1
@@ -626,16 +714,12 @@ def rules(ultrakillworld):
         add_rule(world.get_location("0-2: Perfect Rank", player),
             lambda state: good_weapon(state, player, fire2, arm))
 
-    if secretcompletion:
-        set_rule(world.get_location("Cleared 0-S", player),
-            lambda state: (
-                secret_0_2(state, player, slam, fire2, arm, walljump)
-                and grab_item(state, player, arm)
-            ))
 
+    # 0-S
     if skulls and secretcompletion:
         add_rule(world.get_location("Cleared 0-S", player),
             lambda state: state.has_all({"Blue Skull (0-2)", "Blue Skull (0-S)", "Red Skull (0-S)"}, player))
+
 
     # 0-3
     set_rule(world.get_location("0-3: Secret #1", player),
@@ -749,10 +833,6 @@ def rules(ultrakillworld):
 
     if challenge:
         set_rule(world.get_location("1-1: Complete the level in under 10 seconds", player),
-            lambda state: rev2_fire2(state, player, fire2))
-
-    if secretcompletion:
-        set_rule(world.get_location("Cleared 1-S", player),
             lambda state: rev2_fire2(state, player, fire2))
 
     if prank:
@@ -955,28 +1035,32 @@ def rules(ultrakillworld):
     # 2-3
     set_rule(world.get_location("2-3: Secret #2", player),
         lambda state: can_slide(state, player, slide))
+    set_rule(world.get_location("2-3: Secret #3", player),
+        lambda state: (
+            grab_item(state, player, arm)
+            and secret3_2_3(state, player, slam, fire2, walljump, dash)
+        ))
+    set_rule(world.get_location("2-3: Secret #4", player),
+        lambda state: grab_item(state, player, arm))
     set_rule(world.get_location("2-3: Secret #5", player),
         lambda state: can_slide(state, player, slide))
+    set_rule(world.get_location("Cleared 2-3", player),
+        lambda state: grab_item(state, player, arm))
 
     if skulls:
         add_rule(world.get_location("2-3: Secret #3", player),
             lambda state: state.has("Blue Skull (2-3)", player))
-        set_rule(world.get_location("2-3: Secret #4", player),
+        add_rule(world.get_location("2-3: Secret #4", player),
             lambda state: state.has("Blue Skull (2-3)", player))
         add_rule(world.get_location("Cleared 2-3", player),
             lambda state: (
                 (
                     secret3_2_3(state, player, slam, fire2, walljump, dash)
-                    and (
-                        state.has("Blue Skull (2-3)", player)
-                        or can_slide(state, player, slide)
-                    )
+                    and state.has("Blue Skull (2-3)", player)
+                    and can_slide(state, player, slide)
                 )
                 or state.has_all({"Blue Skull (2-3)", "Red Skull (2-3)"}, player)
             ))
-        if secretcompletion:
-            add_rule(world.get_location("Cleared 2-S", player),
-                lambda state: state.has("Blue Skull (2-3)", player))
         if challenge:
             set_rule(world.get_location("2-3: Don't touch any water", player),
                 lambda state: state.has_all({"Blue Skull (2-3)", "Red Skull (2-3)"}, player))
@@ -984,43 +1068,20 @@ def rules(ultrakillworld):
             set_rule(world.get_location("2-3: Perfect Rank", player),
                 lambda state: state.has_all({"Blue Skull (2-3)", "Red Skull (2-3)"}, player))
 
-    if not arm:
-        add_rule(world.get_location("2-3: Secret #3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("2-3: Secret #4", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        add_rule(world.get_location("Cleared 2-3", player),
-            lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if secretcompletion:
-            add_rule(world.get_location("Cleared 2-S", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if challenge:
-            add_rule(world.get_location("2-3: Don't touch any water", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-        if prank:
-            add_rule(world.get_location("2-3: Perfect Rank", player),
-                lambda state: state.has_any({"Feedbacker", "Knuckleblaster"}, player))
-
-    add_rule(world.get_location("2-3: Secret #3", player),
-        lambda state: secret3_2_3(state, player, slam, fire2, walljump, dash))
-    
-    if secretcompletion:
-        add_rule(world.get_location("Cleared 2-S", player),
-            lambda state: (
-                can_slide(state, player, slide)
-                and secret3_2_3(state, player, slam, fire2, walljump, dash)
-            ))
-
     if challenge:
         add_rule(world.get_location("2-3: Don't touch any water", player),
             lambda state: (
                 secret3_2_3(state, player, slam, fire2, walljump, dash)
                 and can_slide(state, player, slide)
+                and grab_item(state, player, arm)
             ))
 
     if prank:
         add_rule(world.get_location("2-3: Perfect Rank", player),
-            lambda state: good_weapon(state, player, fire2, arm))
+            lambda state: (
+                good_weapon(state, player, fire2, arm)
+                and grab_item(state, player, arm)
+            ))
 
 
     # 2-4
@@ -1125,16 +1186,6 @@ def rules(ultrakillworld):
             jump_general(state, player, slam, fire2, arm, walljump, 2)
             or rev1_fire2(state, player, fire2)
         ))
-
-    if secretcompletion:
-        set_rule(world.get_location("Cleared 4-S", player),
-            lambda state: (
-                (
-                    jump_general(state, player, slam, fire2, arm, walljump, 2)
-                    or rev1_fire2(state, player, fire2)
-                )
-                and grab_item(state, player, arm)
-            ))
 
     if skulls:
         set_rule(world.get_location("Cleared 4-2", player),
@@ -1296,13 +1347,6 @@ def rules(ultrakillworld):
             and level_5_1(state, player, slam, fire2, walljump, dash)
             and grab_item(state, player, arm)
         ))
-    if secretcompletion:
-        add_rule(world.get_location("Cleared 5-S", player),
-            lambda state: (
-                can_slide(state, player, slide)
-                and level_5_1(state, player, slam, fire2, walljump, dash)
-                and grab_item(state, player, arm)
-            ))
     if challenge:
         add_rule(world.get_location("5-1: Don't touch any water", player),
             lambda state: (
@@ -1324,9 +1368,6 @@ def rules(ultrakillworld):
             lambda state: state.has("Blue Skull (5-1)", player, 3))
         add_rule(world.get_location("Cleared 5-1", player),
             lambda state: state.has("Blue Skull (5-1)", player, 3))
-        if secretcompletion:
-            add_rule(world.get_location("Cleared 5-S", player),
-                lambda state: state.has("Blue Skull (5-1)", player, 3))
         if challenge:
             add_rule(world.get_location("5-1: Don't touch any water", player),
                 lambda state: state.has("Blue Skull (5-1)", player, 3))
