@@ -4,7 +4,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // check P rank location if necessary
     [HarmonyPatch(typeof(FinalRank), "SetRank")]
-    class SetRank_Patch
+    class FinalRank_SetRank_Patch
     {
         public static void Prefix()
         {

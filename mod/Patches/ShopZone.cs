@@ -4,7 +4,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // update shop objects when entering zone
     [HarmonyPatch(typeof(ShopZone), "TurnOn")]
-    class TurnOn_Patch
+    class ShopZone_TurnOn_Patch
     {
         public static void Prefix()
         {

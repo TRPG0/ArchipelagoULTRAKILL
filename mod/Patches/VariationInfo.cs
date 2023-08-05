@@ -5,7 +5,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // update item descriptions in shop
     [HarmonyPatch(typeof(VariationInfo), "Start")]
-    class Start_Patch
+    class VariationInfo_Start_Patch
     {
         public static void Postfix(VariationInfo __instance)
         {
@@ -15,7 +15,7 @@ namespace ArchipelagoULTRAKILL.Patches
 
     // update item prices in shop
     [HarmonyPatch(typeof(VariationInfo), "UpdateMoney")]
-    class UpdateMoney_Patch
+    class VariationInfo_UpdateMoney_Patch
     {
         public static bool Prefix(VariationInfo __instance)
         {

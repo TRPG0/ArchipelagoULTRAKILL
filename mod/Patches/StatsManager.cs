@@ -4,7 +4,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // send check when touching a secret
     [HarmonyPatch(typeof(StatsManager), "SecretFound")]
-    class SecretFound_Patch
+    class StatsManager_SecretFound_Patch
     {
         public static bool Prefix(int i)
         {

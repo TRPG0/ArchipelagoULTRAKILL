@@ -4,7 +4,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // disconnect when loading a different save file
     [HarmonyPatch(typeof(GameProgressSaver), "SetSlot")]
-    class SetSlot_Patch
+    class GameProgressSaver_SetSlot_Patch
     {
         public static void Postfix()
         {
@@ -20,7 +20,7 @@ namespace ArchipelagoULTRAKILL.Patches
 
     // save multiworld data when game is saving
     [HarmonyPatch(typeof(GameProgressSaver), "WriteFile")]
-    class WriteFile_Patch
+    class GameProgressSaver_WriteFile_Patch
     {
         public static void Prefix()
         {
@@ -30,7 +30,7 @@ namespace ArchipelagoULTRAKILL.Patches
 
     // delete data when wiping save file
     [HarmonyPatch(typeof(GameProgressSaver), "WipeSlot")]
-    class WipeSlot_Patch
+    class GameProgressSaver_WipeSlot_Patch
     {
         public static void Postfix(int slot)
         {
@@ -43,7 +43,7 @@ namespace ArchipelagoULTRAKILL.Patches
 
     // multiply points
     [HarmonyPatch(typeof(GameProgressSaver), "AddMoney")]
-    class AddMoney_Patch
+    class GameProgressSaver_AddMoney_Patch
     {
         public static void Prefix(ref int money)
         {

@@ -6,7 +6,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // prevent shop from giving the player weapons
     [HarmonyPatch(typeof(ShopButton), "OnPointerClick")]
-    class OnPointerClick_Patch
+    class ShopButton_OnPointerClick_Patch
     {
         public static bool Prefix(ShopButton __instance)
         {

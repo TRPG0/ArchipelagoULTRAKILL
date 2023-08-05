@@ -4,7 +4,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // set playerActive when landing at the beginning of a level
     [HarmonyPatch(typeof(PlayerActivatorRelay), "Activate")]
-    class Activate_Patch
+    class PlayerActivatorRelay_Activate_Patch
     {
         public static void Postfix()
         {

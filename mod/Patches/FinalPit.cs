@@ -4,7 +4,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // load main menu instead of next level
     [HarmonyPatch(typeof(FinalPit), "OnTriggerEnter")]
-    class OnTriggerEnter_Patch
+    class FinalPit_OnTriggerEnter_Patch
     {
         public static void Prefix(FinalPit __instance)
         {
@@ -17,7 +17,7 @@ namespace ArchipelagoULTRAKILL.Patches
 
     // add to list of completed levels, check challenge location if necessary
     [HarmonyPatch(typeof(FinalPit), "SendInfo")]
-    class SendInfo_Patch
+    class FinalPit_SendInfo_Patch
     {
         public static void Prefix()
         {

@@ -3,7 +3,7 @@
 namespace ArchipelagoULTRAKILL.Patches
 {
     [HarmonyPatch(typeof(EndlessGrid), "NextWave")]
-    class NextWave_Patch
+    class EndlessGrid_NextWave_Patch
     {
         public static void Prefix(EndlessGrid __instance)
         {

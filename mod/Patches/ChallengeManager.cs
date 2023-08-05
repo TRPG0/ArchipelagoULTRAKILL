@@ -4,7 +4,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // check challenge location if necessary
     [HarmonyPatch(typeof(ChallengeManager), "ChallengeDone")]
-    class ChallengeDone_Patch
+    class ChallengeManager_ChallengeDone_Patch
     {
         public static void Prefix(ChallengeManager __instance)
         {

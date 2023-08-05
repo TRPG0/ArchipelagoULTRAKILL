@@ -4,7 +4,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // prevent sliding
     [HarmonyPatch(typeof(NewMovement), "StartSlide")]
-    class StartSlide_Patch
+    class NewMovement_StartSlide_Patch
     {
         public static bool Prefix(NewMovement __instance)
         {

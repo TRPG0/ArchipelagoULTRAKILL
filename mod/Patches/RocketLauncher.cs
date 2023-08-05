@@ -4,7 +4,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // prevent freezing rockets
     [HarmonyPatch(typeof(RocketLauncher), "FreezeRockets")]
-    class FreezeRockets_Patch
+    class RocketLauncher_FreezeRockets_Patch
     {
         public static bool Prefix()
         {

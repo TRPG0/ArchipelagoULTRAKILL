@@ -6,7 +6,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // send check when picking up an alternate weapon
     [HarmonyPatch(typeof(AltPickUp), "GotActivated")]
-    class GotActivated_Patch2
+    class AltPickUp_GotActivated_Patch
     {
         public static bool Prefix(AltPickUp __instance)
         {

@@ -4,7 +4,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // add to list of completed levels
     [HarmonyPatch(typeof(SecretMissionPit), "OnTriggerEnter")]
-    class OnTriggerEnter_Patch2
+    class SecretMissionPit_OnTriggerEnter_Patch
     {
         public static void Prefix(SecretMissionPit __instance)
         {

@@ -3,7 +3,7 @@
 namespace ArchipelagoULTRAKILL.Patches
 {
     [HarmonyPatch(typeof(LeaderboardController), "SubmitLevelScore")]
-    class SubmitLevelScore_Patch
+    class LeaderboardController_SubmitLevelScore_Patch
     {
         public static bool Prefix()
         {

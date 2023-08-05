@@ -4,7 +4,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // show shop categories if any weapon of type is unlocked
     [HarmonyPatch(typeof(ShopCategory), "CheckGear")]
-    class CheckGear_Patch
+    class ShopCategory_CheckGear_Patch
     {
         public static bool Prefix(ShopCategory __instance)
         {

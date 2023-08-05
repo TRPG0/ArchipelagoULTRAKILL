@@ -4,7 +4,7 @@ namespace ArchipelagoULTRAKILL.Patches
 {
     // add more powerups after a dual wield powerup, if any
     [HarmonyPatch(typeof(DualWield), "EndPowerUp")]
-    class EndPowerUp_Patch
+    class DualWield_EndPowerUp_Patch
     {
         public static void Postfix()
         {
