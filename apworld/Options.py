@@ -48,9 +48,15 @@ class Challenges(Toggle):
     """Adds rewards for completing each level's challenge, except for the goal."""
     display_name = "Challenge Rewards"
 
+
 class PRanks(Toggle):
     """Adds rewards for completing each level with a Perfect Rank, except for the goal."""
     display_name = "P Rank Rewards"
+
+
+class FishRewards(Toggle):
+    """Adds rewards for catching each fish in 5-S."""
+    display_name = "Fish Rewards"
 
 
 class StartingWeapon(Choice):
@@ -129,6 +135,7 @@ ultrakill_options = {
     "trap_percent": TrapPercent,
     "challenge_rewards": Challenges,
     "p_rank_rewards": PRanks,
+    "fish_rewards": FishRewards,
     "starting_weapon": StartingWeapon,
     "randomize_secondary_fire": RandomizeFire2,
     "start_with_arm": StartWithArm,

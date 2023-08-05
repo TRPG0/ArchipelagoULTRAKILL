@@ -19,6 +19,7 @@ namespace ArchipelagoULTRAKILL
         public int goalRequirement = 20;
         public bool challengeRewards = false;
         public bool pRankRewards = false;
+        public bool fishRewards = false;
         public bool hasArm = true;
         public int dashes = 3;
         public int walljumps = 3;

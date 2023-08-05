@@ -8,7 +8,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static bool Prefix(WeaponPickUp __instance)
         {
-            if (Core.DataExists())
+            if (Core.DataExists() && SceneHelper.CurrentScene != "Level 5-S")
             {
                 Traverse wpu = Traverse.Create(__instance);
                 wpu.Field<bool>("activated").Value = true;

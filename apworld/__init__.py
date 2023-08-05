@@ -271,6 +271,8 @@ class UltrakillWorld(World):
                 continue
             elif "Perfect Rank" in loc["name"] and not world.p_rank_rewards[player]:
                 continue
+            elif "fish" in loc["game_id"] and not world.fish_rewards[player]:
+                continue
             else:
                 id = base_id + location_table.index(loc)
                 region: Region = world.get_region(region_table[loc["region"]], player)
@@ -327,6 +329,7 @@ class UltrakillWorld(World):
             "goal_requirement": self.multiworld.goal_requirement[self.player].value,
             "challenge_rewards": bool(self.multiworld.challenge_rewards[self.player]),
             "p_rank_rewards": bool(self.multiworld.p_rank_rewards[self.player]),
+            "fish_rewards": bool(self.multiworld.fish_rewards[self.player]),
             "randomize_secondary_fire": bool(self.multiworld.randomize_secondary_fire[self.player]),
             "start_with_arm": bool(self.multiworld.start_with_arm[self.player]),
             "starting_stamina": self.multiworld.starting_stamina[self.player].value,

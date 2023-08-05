@@ -324,8 +324,11 @@
     <Compile Include="Patches\EndlessGrid.cs" />
     <Compile Include="Patches\FinalPit.cs" />
     <Compile Include="Patches\FinalRank.cs" />
+    <Compile Include="Patches\FishingHUD.cs" />
     <Compile Include="Patches\GameProgressSaver.cs" />
     <Compile Include="Patches\LeaderboardController.cs" />
+    <Compile Include="Patches\LevelStats.cs" />
+    <Compile Include="Patches\LevelStatsEnabler.cs" />
     <Compile Include="Patches\NewMovement.cs" />
     <Compile Include="Patches\PlayerActivatorRelay.cs" />
     <Compile Include="Patches\RocketLauncher.cs" />

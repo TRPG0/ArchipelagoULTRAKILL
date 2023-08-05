@@ -101,6 +101,7 @@ namespace ArchipelagoULTRAKILL
                 Core.data.goalRequirement = int.Parse(success.SlotData["goal_requirement"].ToString());
                 Core.data.challengeRewards = bool.Parse(success.SlotData["challenge_rewards"].ToString());
                 Core.data.pRankRewards = bool.Parse(success.SlotData["p_rank_rewards"].ToString());
+                Core.data.fishRewards = bool.Parse(success.SlotData["fish_rewards"].ToString());
                 Core.data.randomizeFire2 = bool.Parse(success.SlotData["randomize_secondary_fire"].ToString());
                 Core.data.randomizeSkulls = bool.Parse(success.SlotData["randomize_skulls"].ToString());
 

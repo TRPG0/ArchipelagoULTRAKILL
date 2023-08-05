@@ -428,7 +428,7 @@ namespace ArchipelagoULTRAKILL
                     if (!NewMovement.Instance.gc.onGround) Traverse.Create(NewMovement.Instance).Field<bool>("falling").Value = true;
                 }
 
-                if (!data.hasArm && FistControl.Instance.currentPunch.type == FistType.Standard)
+                if (!data.hasArm && FistControl.Instance.currentPunch.type == FistType.Standard && SceneHelper.CurrentScene != "Level 5-S")
                 {
                     FistControl.Instance.currentPunch.ready = false;
                 }

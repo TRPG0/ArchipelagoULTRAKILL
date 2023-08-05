@@ -405,6 +405,44 @@ location_table: List[LocationDict] = [
         'region': "5-1",
         'game_id': "20_p"},
 
+    # 5-S: I ONLY SAY MORNING
+    {'name': "Funny Stupid Fish (Friend)",
+        'region': "5-S",
+        'game_id': "fish0"},
+    {'name': "PITR Fish",
+        'region': "5-S",
+        'game_id': "fish1"},
+    {'name': "Trout",
+        'region': "5-S",
+        'game_id': "fish2"},
+    {'name': "Metal Fish",
+        'region': "5-S",
+        'game_id': "fish3"},
+    {'name': "Chomper",
+        'region': "5-S",
+        'game_id': "fish4"},
+    {'name': "Bomb Fish",
+        'region': "5-S",
+        'game_id': "fish5"},
+    {'name': "Eyeball",
+        'region': "5-S",
+        'game_id': "fish6"},
+    {'name': "Frog (?)",
+        'region': "5-S",
+        'game_id': "fish7"},
+    {'name': "Dope Fish",
+        'region': "5-S",
+        'game_id': "fish8"},
+    {'name': "Stickfish",
+        'region': "5-S",
+        'game_id': "fish9"},
+    {'name': "Cooked Fish",
+        'region': "5-S",
+        'game_id': "fish10"},
+    {'name': "Shark",
+        'region': "5-S",
+        'game_id': "fish11"},
+
     # 5-2: WAVES OF THE STARLESS SEA
     {'name': "5-2: Secret #1",
         'region': "5-2",
@@ -517,6 +555,7 @@ location_table: List[LocationDict] = [
         'game_id': "shop_rock1"},
 ]
 
+
 event_table: List[LocationDict] = [
     {'name': "Cleared 0-1",
         'region': "0-1"},
@@ -583,6 +622,7 @@ event_table: List[LocationDict] = [
     {'name': "Cleared P-2",
         'region': "P-2"},
 ]
+
 
 challenge_locations: Set[str] = [
     "0-1: Get 5 kills with a single glass panel",
