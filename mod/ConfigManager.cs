@@ -27,6 +27,16 @@ namespace ArchipelagoULTRAKILL
         public static ButtonField disconnectButton;
         public static ConfigHeader connectionInfo;
 
+        public static StringField goal;
+        public static StringField goalProgress;
+        public static StringField locationsChecked;
+        public static BoolField challengeRewards;
+        public static BoolField pRankRewards;
+        public static BoolField fishRewards;
+        public static BoolField randomizeFire2;
+        public static BoolField randomizeSkulls;
+        public static BoolField musicRandomizer;
+
         public static ConfigPanel logPanel;
         public static BoolField showLog;
         public static IntField logLines;
@@ -129,7 +139,17 @@ namespace ArchipelagoULTRAKILL
                 }
             };
 
-            connectionInfo = new ConfigHeader(playerPanel, "", 16, TextAnchor.UpperCenter);  
+            connectionInfo = new ConfigHeader(playerPanel, "", 16, TextAnchor.UpperCenter);
+            new ConfigHeader(playerPanel, "-----");
+            goal = new StringField(playerPanel, "GOAL", "goal", "?", false, false) { interactable = false };
+            goalProgress = new StringField(playerPanel, "LEVELS COMPLETED", "goalProgress", "?", false, false) { interactable = false };
+            locationsChecked = new StringField(playerPanel, "LOCATIONS CHECKED", "locationsChecked", "?", false, false) { interactable = false };
+            challengeRewards = new BoolField(playerPanel, "CHALLENGE REWARDS", "challengeRewards", false, false) { interactable = false };
+            pRankRewards = new BoolField(playerPanel, "P RANK REWARDS", "pRankRewards", false, false) { interactable = false };
+            fishRewards = new BoolField(playerPanel, "FISH REWARDS", "fishRewards", false, false) { interactable = false };
+            randomizeFire2 = new BoolField(playerPanel, "RANDOMIZE SECONDARY FIRE", "randomizeFire2", false, false) { interactable = false };
+            randomizeSkulls = new BoolField(playerPanel, "RANDOMIZE SKULLS", "randomizeSkulls", false, false) { interactable = false };
+            musicRandomizer = new BoolField(playerPanel, "MUSIC RANDOMIZER", "musicRandomizer", false, false) { interactable = false };
 
             // log settings
             showLog = new BoolField(logPanel, "SHOW LOG", "showLog", true, true);
@@ -224,6 +244,35 @@ namespace ArchipelagoULTRAKILL
             if (Core.data.slot_name != null) playerName.value = Core.data.slot_name;
             if (Core.data.host_name != null) serverAddress.value = Core.data.host_name;
             if (Core.data.password != null) serverPassword.value = Core.data.password;
+        }
+
+        public static void LoadStats()
+        {
+            goal.value = Core.data.goal;
+            goalProgress.value = $"{Core.data.completedLevels.Count} / {Core.data.goalRequirement}";
+
+            string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
+            locationsChecked.value = $"{Core.data.@checked.Count} / {totalLocations}";
+
+            challengeRewards.value = Core.data.challengeRewards;
+            pRankRewards.value = Core.data.pRankRewards;
+            fishRewards.value = Core.data.fishRewards;
+            randomizeFire2.value = Core.data.randomizeFire2;
+            randomizeSkulls.value = Core.data.randomizeSkulls;
+            musicRandomizer.value = Core.data.musicRandomizer;
+        }
+
+        public static void ResetStatsDefaults()
+        {
+            goal.value = "?";
+            goalProgress.value = "?";
+            locationsChecked.value = "?";
+            challengeRewards.value = false;
+            pRankRewards.value = false;
+            fishRewards.value = false;
+            randomizeFire2.value = false;
+            randomizeSkulls.value = false;
+            musicRandomizer.value = false;
         }
     }
 }

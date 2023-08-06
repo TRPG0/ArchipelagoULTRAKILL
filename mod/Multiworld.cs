@@ -180,6 +180,7 @@ namespace ArchipelagoULTRAKILL
                     }
                 }
 
+                ConfigManager.LoadStats();
                 Core.logger.LogInfo("Successfully connected to server as player \"" + Core.data.slot_name + "\".");
                 ConfigManager.connectionInfo.text = "Successfully connected to server as player \"" + Core.data.slot_name + "\".";
                 UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["green"];

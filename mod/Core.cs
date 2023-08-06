@@ -208,8 +208,10 @@ namespace ArchipelagoULTRAKILL
                 {
                     LoadData();
                     ConfigManager.LoadConnectionInfo();
+                    ConfigManager.LoadStats();
                     firstTimeLoad = true;
                 }
+                else if (!DataExists()) ConfigManager.ResetStatsDefaults();
 
                 if (DataExists() && data.randomizeSkulls) UIManager.CreateSkullIcons();
 
