@@ -8,6 +8,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix()
         {
+            Core.poweredUp = false;
             if (LocationManager.powerupQueue.Count > 0) Core.obj.GetComponent<Core>().Invoke("AddPowerup", 1f);
         }
     }

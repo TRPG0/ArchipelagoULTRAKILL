@@ -58,6 +58,7 @@ namespace ArchipelagoULTRAKILL
         public static ColorField redSkullColor;
         public static ColorField pointsColor;
         public static ColorField dualwieldColor;
+        public static ColorField doublejumpColor;
         public static ColorField trapColor;
 
         public static ConfigPanel hintsPanel;
@@ -184,6 +185,7 @@ namespace ArchipelagoULTRAKILL
             redSkullColor = new ColorField(colorPanel, "RED SKULL", "redSkullColor", new Color(1, 0.2353f, 0.2353f), true);
             pointsColor = new ColorField(colorPanel, "POINTS", "pointsColor", new Color(1, 0.65f, 0), true);
             dualwieldColor = new ColorField(colorPanel, "DUAL WIELD", "dualwieldColor", new Color(1, 1, 0.25f), true);
+            doublejumpColor = new ColorField(colorPanel, "AIR JUMP", "doublejumpColor", new Color(1, 1, 0.6f), true);
             trapColor = new ColorField(colorPanel, "TRAP", "trapColor", new Color(0.7f, 0.7f, 0.7f), true);
 
             // hint settings

@@ -34,6 +34,7 @@ namespace ArchipelagoULTRAKILL.Powerups
         public void EndPowerUp()
         {
             Core.walljumpTrap = false; 
+            Core.poweredUp = false;
             if (LocationManager.powerupQueue.Count > 0) Core.obj.GetComponent<Core>().Invoke("AddPowerup", 1f);
             Destroy(gameObject);
         }

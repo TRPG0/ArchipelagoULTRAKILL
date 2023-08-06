@@ -12,6 +12,8 @@ using ArchipelagoULTRAKILL.Components;
 using ArchipelagoULTRAKILL.Powerups;
 using BepInEx.Logging;
 using System.Reflection;
+// using UnityEngine.AddressableAssets;
+// using UnityEngine.AddressableAssets.ResourceLocators;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -107,13 +109,13 @@ namespace ArchipelagoULTRAKILL
             [667] = "P-2"
         };
 
-
         public static bool playerActive = false;
         public static bool poweredUp = false;
 
         public static bool dashTrap = false;
         public static bool walljumpTrap = false;
         public static bool staminaPowerup = false;
+        public static bool doublejumpPowerup = false;
 
         public override void OnModLoaded()
         {
@@ -122,7 +124,7 @@ namespace ArchipelagoULTRAKILL
 
             workingPath = Assembly.GetExecutingAssembly().Location;
             workingDir = Path.GetDirectoryName(workingPath);
-            logger.LogInfo($"Working Path: {workingPath}, Working Dir: {workingDir}");
+            //logger.LogInfo($"Working Path: {workingPath}, Working Dir: {workingDir}");
 
             ConfigManager.Initialize();
 
@@ -164,7 +166,7 @@ namespace ArchipelagoULTRAKILL
                 {
                     foreach (string key in locator.Keys)
                     {
-                        if (key.ToLower().Contains("assets/music/")) logger.LogInfo(key);
+                        if (key.ToLower().Contains("4-3")) logger.LogInfo(key);
                     }
                 }
             }
@@ -190,6 +192,7 @@ namespace ArchipelagoULTRAKILL
             playerActive = false;
             poweredUp = false;
             staminaPowerup = false;
+            doublejumpPowerup = false;
             dashTrap = false;
             walljumpTrap = false;
             if (SceneHelper.CurrentScene == "Main Menu")
@@ -280,6 +283,10 @@ namespace ArchipelagoULTRAKILL
                     gameObject.transform.SetParent(obj.transform);
                     gameObject.AddComponent<StaminaPowerup>();
                     break;
+                case Enums.Powerup.DoubleJump:
+                    gameObject.transform.SetParent(obj.transform);
+                    gameObject.AddComponent<DoubleJumpPowerup>();
+                    break;
                 case Enums.Powerup.StaminaLimiter:
                     gameObject.transform.SetParent(obj.transform);
                     gameObject.AddComponent<DashTrap>();
@@ -297,6 +304,7 @@ namespace ArchipelagoULTRAKILL
                     WeaponCharges.Instance.raicharge = 0;
                     WeaponCharges.Instance.rocketFreezeTime = 0;
                     WeaponCharges.Instance.rocketCannonballCharge = 0;
+                    poweredUp = false;
                     if (LocationManager.powerupQueue.Count > 0) AddPowerup();
                     break;
                 default: break;
@@ -346,7 +354,7 @@ namespace ArchipelagoULTRAKILL
             GameObject obj = Instantiate(AssetHelper.LoadPrefab("Assets/Prefabs/Items/Soap.prefab"), NewMovement.Instance.transform);
             obj.transform.parent = null;
 
-            if (FistControl.Instance.currentPunch != null)
+            if (FistControl.Instance.currentPunch != null || !(!data.hasArm && FistControl.Instance.currentPunch.type == FistType.Standard))
             {
                 if (!FistControl.Instance.currentPunch.holding)
                 {

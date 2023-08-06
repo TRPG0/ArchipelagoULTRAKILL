@@ -2,7 +2,7 @@
 
 namespace ArchipelagoULTRAKILL.Powerups
 {
-    public class StaminaPowerup : MonoBehaviour
+    public class DoubleJumpPowerup : MonoBehaviour
     {
         private PowerUpMeter meter;
         public float juiceAmount;
@@ -17,9 +17,9 @@ namespace ArchipelagoULTRAKILL.Powerups
                 meter.latestMaxJuice = juiceAmount;
                 meter.juice = juiceAmount;
             }
-            meter.powerUpColor = ColorBlindSettings.Instance.staminaColor;
+            meter.powerUpColor = ConfigManager.doublejumpColor.value;
             juiceGiven = true;
-            Core.staminaPowerup = true;
+            Core.doublejumpPowerup = true;
         }
 
         private void Update()
@@ -33,7 +33,7 @@ namespace ArchipelagoULTRAKILL.Powerups
 
         public void EndPowerUp()
         {
-            Core.staminaPowerup = false;
+            Core.doublejumpPowerup = false;
             Core.poweredUp = false;
             if (LocationManager.powerupQueue.Count > 0) Core.obj.GetComponent<Core>().Invoke("AddPowerup", 1f);
             Destroy(gameObject);

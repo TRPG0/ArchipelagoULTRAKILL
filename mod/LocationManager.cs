@@ -221,6 +221,7 @@ namespace ArchipelagoULTRAKILL
                         }
                         else if (item.item_name == "Dual Wield") powerupQueue.Add(Enums.Powerup.DualWield);
                         else if (item.item_name == "Infinite Stamina") powerupQueue.Add(Enums.Powerup.InfiniteStamina);
+                        else if (item.item_name == "Air Jump") powerupQueue.Add(Enums.Powerup.DoubleJump);
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";
                         break;
@@ -372,7 +373,6 @@ namespace ArchipelagoULTRAKILL
                     return "revalt";
                 case "Nailgun - Alternate":
                     return "naialt";
-                // TO DO: make arm icons
                 case "Feedbacker":
                 case "Knuckleblaster":
                 case "Whiplash":
@@ -466,6 +466,8 @@ namespace ArchipelagoULTRAKILL
                     return "infinitestamina";
                 case "Wall Jump Limiter":
                     return "walljumptrap";
+                case "Air Jump":
+                    return "doublejump";
                 case "Soap":
                     return "soap";
                 default:
@@ -611,6 +613,8 @@ namespace ArchipelagoULTRAKILL
                     return ConfigManager.layer4Color.value;
                 case "Dual Wield":
                     return ConfigManager.dualwieldColor.value;
+                case "Air Jump":
+                    return ConfigManager.doublejumpColor.value;
                 case "Overheal":
                     return ColorBlindSettings.Instance.overHealColor;
                 case "+10,000P":
@@ -736,6 +740,7 @@ namespace ArchipelagoULTRAKILL
                 case "Overheal":
                 case "Dual Wield":
                 case "Infinite Stamina":
+                case "Air Jump":
                     return Enums.UKItemType.Powerup;
                 case "Hard Damage":
                 case "Stamina Limiter":

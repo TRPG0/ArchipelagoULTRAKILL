@@ -338,7 +338,9 @@
     <Compile Include="Patches\ShopZone.cs" />
     <Compile Include="Patches\StatsManager.cs" />
     <Compile Include="Patches\VariationInfo.cs" />
+    <Compile Include="Patches\WallCheck.cs" />
     <Compile Include="Patches\WeaponPickUp.cs" />
+    <Compile Include="Powerups\DoubleJumpPowerup.cs" />
     <Compile Include="Powerups\StaminaPowerup.cs" />
     <Compile Include="Powerups\WalljumpTrap.cs" />
     <Compile Include="Powerups\DashTrap.cs" />
