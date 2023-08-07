@@ -31,7 +31,8 @@ namespace ArchipelagoULTRAKILL.Structures
             StaminaLimiter,
             WalljumpLimiter,
             EmptyAmmo,
-            DoubleJump
+            DoubleJump,
+            Radiance
         }
     }
 }

@@ -297,6 +297,10 @@ namespace ArchipelagoULTRAKILL
                     gameObject.transform.SetParent(obj.transform);
                     gameObject.AddComponent<WalljumpTrap>();
                     break;
+                case Enums.Powerup.Radiance:
+                    gameObject.transform.SetParent(obj.transform);
+                    gameObject.AddComponent<RadianceTrap>();
+                    break;
                 case Enums.Powerup.EmptyAmmo:
                     WeaponCharges.Instance.rev0charge = 0;
                     WeaponCharges.Instance.rev1charge = 0;

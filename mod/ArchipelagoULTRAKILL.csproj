@@ -331,6 +331,7 @@
     <Compile Include="Patches\LevelStatsEnabler.cs" />
     <Compile Include="Patches\NewMovement.cs" />
     <Compile Include="Patches\PlayerActivatorRelay.cs" />
+    <Compile Include="Patches\PowerUpMeter.cs" />
     <Compile Include="Patches\RocketLauncher.cs" />
     <Compile Include="Patches\SecretMissionPit.cs" />
     <Compile Include="Patches\ShopButton.cs" />
@@ -341,6 +342,7 @@
     <Compile Include="Patches\WallCheck.cs" />
     <Compile Include="Patches\WeaponPickUp.cs" />
     <Compile Include="Powerups\DoubleJumpPowerup.cs" />
+    <Compile Include="Powerups\RadianceTrap.cs" />
     <Compile Include="Powerups\StaminaPowerup.cs" />
     <Compile Include="Powerups\WalljumpTrap.cs" />
     <Compile Include="Powerups\DashTrap.cs" />

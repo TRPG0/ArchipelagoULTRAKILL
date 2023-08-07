@@ -235,6 +235,7 @@ namespace ArchipelagoULTRAKILL
                         else if (item.item_name == "Stamina Limiter") powerupQueue.Add(Enums.Powerup.StaminaLimiter);
                         else if (item.item_name == "Wall Jump Limiter") powerupQueue.Add(Enums.Powerup.WalljumpLimiter);
                         else if (item.item_name == "Empty Ammunition") powerupQueue.Add(Enums.Powerup.EmptyAmmo);
+                        else if (item.item_name == "Radiant Aura") powerupQueue.Add(Enums.Powerup.Radiance);
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";
                         break;
@@ -468,6 +469,8 @@ namespace ArchipelagoULTRAKILL
                     return "walljumptrap";
                 case "Air Jump":
                     return "doublejump";
+                case "Radiant Aura":
+                    return "radiance";
                 case "Soap":
                     return "soap";
                 default:
@@ -624,6 +627,7 @@ namespace ArchipelagoULTRAKILL
                 case "Stamina Limiter":
                 case "Wall Jump Limiter":
                 case "Empty Ammunition":
+                case "Radiant Aura":
                     return ConfigManager.trapColor.value;
                 default:
                     return colors["white"];
@@ -746,6 +750,7 @@ namespace ArchipelagoULTRAKILL
                 case "Stamina Limiter":
                 case "Wall Jump Limiter":
                 case "Empty Ammunition":
+                case "Radiant Aura":
                     return Enums.UKItemType.Trap;
                 case "Soap":
                     return Enums.UKItemType.Soap;

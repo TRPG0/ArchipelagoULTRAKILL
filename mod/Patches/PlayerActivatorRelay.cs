@@ -26,11 +26,13 @@ namespace ArchipelagoULTRAKILL.Patches
                 }
             }
             if (LocationManager.messages.Count > 0 && !UIManager.displayingMessage) Core.uim.StartCoroutine("DisplayMessage");
+            /*
             if (LocationManager.powerupQueue.Count > 0 && !Core.poweredUp)
             {
                 Core.obj.GetComponent<Core>().Invoke("AddPowerup", 1f);
                 Core.poweredUp = true;
             }
+            */
             if (LocationManager.overhealWaiting)
             {
                 NewMovement.Instance.SuperCharge();
