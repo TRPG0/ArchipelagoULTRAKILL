@@ -39,7 +39,7 @@ namespace ArchipelagoULTRAKILL
             ["12"] = "Assets/Music/2-3.wav",
             ["14A"] = "Assets/Music/3-1 Guts.wav",
             ["14B"] = "Assets/Music/3-1 Glory.wav",
-            ["16"] = "Assets/Music/4-1.wav",
+            ["16"] = "Assets/Music/4-1 Greed.wav",
             ["17"] = "Assets/Music/4-2.wav",
             ["18A"] = "Assets/Music/4-3 Phase 1.wav",
             ["18B"] = "Assets/Music/4-3 Phase 2.wav",
@@ -69,7 +69,7 @@ namespace ArchipelagoULTRAKILL
             ["17"] = "Assets/Music/4-2 Clean.wav",
             ["18A"] = "Assets/Music/4-3 Phase 1 Clean.wav",
             ["18B"] = "Assets/Music/4-3 Phase 2 Clean.wav",
-            ["18C"] = "Assets/Music/4-3 Phase 3 Clean.wav",
+            ["18C"] = "Assets/Music/4-3 Phase 3.wav",
             ["20"] = "Assets/Music/5-1 Clean.wav",
             ["22A"] = "Assets/Music/5-3 Clean.wav",
             ["22B"] = "Assets/Music/5-3 Aftermath Clean.wav",
@@ -88,7 +88,7 @@ namespace ArchipelagoULTRAKILL
             ["15A"] = "Assets/Music/Bosses/Gabriel 3-2 Intro.wav",
             ["15B"] = "Assets/Music/Bosses/Gabriel 3-2.wav",
             ["18D"] = "Assets/Music/Misc/themeofcancer.wav",
-            ["19"] = "Assets/Music/Misc/V2 4-4.wav",
+            ["19"] = "Assets/Music/Bosses/V2 4-4.wav",
             ["24B"] = "Assets/Music/6-1 Halls of Sacreligious Remains.wav",
             ["25A"] = "Assets/Music/Bosses/Gabriel 6-2 Intro B.wav",
             ["25B"] = "Assets/Music/Bosses/Gabriel 6-2.wav",
@@ -127,6 +127,7 @@ namespace ArchipelagoULTRAKILL
             {
                 MusicManager.Instance.cleanTheme.clip = LoadNewTrack(MusicManager.Instance.cleanTheme.clip, StatsManager.Instance.levelNumber.ToString(), true);
                 MusicManager.Instance.battleTheme.clip = LoadNewTrack(MusicManager.Instance.battleTheme.clip, StatsManager.Instance.levelNumber.ToString(), false);
+                MusicManager.Instance.bossTheme.clip = LoadNewTrack(MusicManager.Instance.battleTheme.clip, StatsManager.Instance.levelNumber.ToString(), false);
             }
             else
             {
@@ -135,9 +136,17 @@ namespace ArchipelagoULTRAKILL
                     case "Level 0-5":
                         foreach (AudioSource audio in Resources.FindObjectsOfTypeAll<AudioSource>())
                         {
-                            if (audio.gameObject.scene.name == SceneManager.GetActiveScene().name && audio.clip.name == "Cerberus A")
+                            //if (audio.gameObject.scene.name == SceneManager.GetActiveScene().name) Core.logger.LogInfo(audio.gameObject.name);
+                            try
                             {
-                                audio.clip = LoadNewTrack(audio.clip, "5", true, true);
+                                if (audio.gameObject.scene.name == SceneManager.GetActiveScene().name && audio.transform.parent.name == "4 Contents(Clone)" && audio.transform.name == "Music")
+                                {
+                                    audio.clip = LoadNewTrack(audio.clip, "5", true, true);
+                                }
+                            }
+                            catch (NullReferenceException)
+                            {
+                                continue;
                             }
                         }
                         break;
@@ -172,11 +181,11 @@ namespace ArchipelagoULTRAKILL
                         {
                             if (audio.gameObject.scene.name == SceneManager.GetActiveScene().name)
                             {
-                                if (audio.clip.name == "Clair_de_lune_(Claude_Debussy)_Suite_bergamasque (CREATIVE COMMONS)")
+                                if (audio.gameObject.name == "Music - Clair de Lune")
                                 {
                                     audio.clip = LoadNewTrack(audio.clip, "9A", true, true);
                                 }
-                                else if (audio.clip.name == "V2 1-4")
+                                else if (audio.gameObject.name == "Music - Versus")
                                 {
                                     audio.clip = LoadNewTrack(audio.clip, "9B", true, true);
                                 }
@@ -196,7 +205,7 @@ namespace ArchipelagoULTRAKILL
                     case "Level 2-4":
                         foreach (AudioSource audio in Resources.FindObjectsOfTypeAll<AudioSource>())
                         {
-                            if (audio.gameObject.scene.name == SceneManager.GetActiveScene().name && audio.clip.name == "Minos Corpse B")
+                            if (audio.gameObject.scene.name == SceneManager.GetActiveScene().name && audio.gameObject.name == "BossMusic")
                             {
                                 audio.clip = LoadNewTrack(audio.clip, "13", true, true);
                             }
@@ -220,11 +229,11 @@ namespace ArchipelagoULTRAKILL
                         {
                             if (audio.gameObject.scene.name == SceneManager.GetActiveScene().name)
                             {
-                                if (audio.clip.name == "Gabriel 3-2 Intro")
+                                if (audio.gameObject.name == "Music 2")
                                 {
                                     audio.clip = LoadNewTrack(audio.clip, "15A", true, true);
                                 }
-                                else if (audio.clip.name == "Gabriel 3-2")
+                                else if (audio.gameObject.name == "Music 3")
                                 {
                                     audio.clip = LoadNewTrack(audio.clip, "15B", true, true);
                                 }
@@ -268,7 +277,7 @@ namespace ArchipelagoULTRAKILL
                     case "Level 4-4":
                         foreach (AudioSource audio in Resources.FindObjectsOfTypeAll<AudioSource>())
                         {
-                            if (audio.gameObject.scene.name == SceneManager.GetActiveScene().name && audio.clip.name == "V2 4-4")
+                            if (audio.gameObject.scene.name == SceneManager.GetActiveScene().name && audio.gameObject.name == "Versus 2")
                             {
                                 audio.clip = LoadNewTrack(audio.clip, "19", true, true);
                             }
@@ -355,11 +364,11 @@ namespace ArchipelagoULTRAKILL
                         {
                             if (audio.gameObject.scene.name == SceneManager.GetActiveScene().name)
                             {
-                                if (audio.clip.name == "Flesh Prison")
+                                if (audio.gameObject.name == "Chaos")
                                 {
                                     audio.clip = LoadNewTrack(audio.clip, "666A", true, true);
                                 }
-                                else if (audio.clip.name == "Minos Prime")
+                                else if (audio.gameObject.name == "Music 3")
                                 {
                                     audio.clip = LoadNewTrack(audio.clip, "666B", true, true);
                                 }
@@ -373,17 +382,18 @@ namespace ArchipelagoULTRAKILL
                             {
                                 changer.clean = LoadNewTrack(changer.clean, "667A", true);
                                 changer.battle = LoadNewTrack(changer.battle, "667A", false);
+                                changer.boss = LoadNewTrack(changer.battle, "667A", false);
                             }
                         }
                         foreach (AudioSource audio in Resources.FindObjectsOfTypeAll<AudioSource>())
                         {
                             if (audio.gameObject.scene.name == SceneManager.GetActiveScene().name)
                             {
-                                if (audio.clip.name == "Flesh Panopticon")
+                                if (audio.gameObject.name == "FleshPrison")
                                 {
                                     audio.clip = LoadNewTrack(audio.clip, "667B", true, true);
                                 }
-                                else if (audio.clip.name == "Sisyphus Prime")
+                                else if (audio.gameObject.name == "Sisyphus")
                                 {
                                     audio.clip = LoadNewTrack(audio.clip, "667C", true, true);
                                 }

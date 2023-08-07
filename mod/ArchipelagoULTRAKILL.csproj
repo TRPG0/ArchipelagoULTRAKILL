@@ -322,6 +322,7 @@
     <Compile Include="Patches\ChallengeManager.cs" />
     <Compile Include="Patches\DualWield.cs" />
     <Compile Include="Patches\EndlessGrid.cs" />
+    <Compile Include="Patches\FinalDoorOpener.cs" />
     <Compile Include="Patches\FinalPit.cs" />
     <Compile Include="Patches\FinalRank.cs" />
     <Compile Include="Patches\FishingHUD.cs" />

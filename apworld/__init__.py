@@ -339,8 +339,7 @@ class UltrakillWorld(World):
             "randomize_skulls": bool(self.multiworld.randomize_skulls[self.player]),
             "point_multiplier": self.multiworld.point_multiplier[self.player].value,
             "death_link": bool(self.multiworld.death_link[self.player]),
-            #"music_randomizer": bool(self.multiworld.music_randomizer[self.player]),
-            "music_randomizer": False,
+            "music_randomizer": bool(self.multiworld.music_randomizer[self.player]),
             "music": self.music
         }
         return slot_data

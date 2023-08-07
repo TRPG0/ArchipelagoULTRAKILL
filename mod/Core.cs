@@ -195,6 +195,7 @@ namespace ArchipelagoULTRAKILL
             doublejumpPowerup = false;
             dashTrap = false;
             walljumpTrap = false;
+            ConfigManager.connectionInfo.text = "";
             if (SceneHelper.CurrentScene == "Main Menu")
             {
                 UIManager.FindMenuObjects();
@@ -224,7 +225,10 @@ namespace ArchipelagoULTRAKILL
             {
                 UIManager.CreateMessageUI();
                 LevelManager.FindShopObjects();
-                if (data.musicRandomizer) AudioManager.ChangeMusic();
+                if (data.musicRandomizer)
+                {
+                    if (SceneHelper.CurrentScene != "Level 0-5") AudioManager.ChangeMusic();
+                }
             }
             if (!inIntro) OptionsManager.Instance.optionsMenu.gameObject.AddComponent<OptionsMenuState>();
 
