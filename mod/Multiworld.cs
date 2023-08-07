@@ -122,6 +122,11 @@ namespace ArchipelagoULTRAKILL
                     PrefsManager.Instance.SetInt("weapon.arm0", 1);
                     GameProgressSaver.SetIntro(true);
                     GameProgressSaver.SetTutorial(true);
+                    GameProgressSaver.UnlockWeaponCustomization(GameProgressSaver.WeaponCustomizationType.Revolver);
+                    GameProgressSaver.UnlockWeaponCustomization(GameProgressSaver.WeaponCustomizationType.Shotgun);
+                    GameProgressSaver.UnlockWeaponCustomization(GameProgressSaver.WeaponCustomizationType.Nailgun);
+                    GameProgressSaver.UnlockWeaponCustomization(GameProgressSaver.WeaponCustomizationType.Railcannon);
+                    GameProgressSaver.UnlockWeaponCustomization(GameProgressSaver.WeaponCustomizationType.RocketLauncher);
                     GameProgressSaver.SaveProgress(26);
                     GameProgressSaver.SetPrime(1, 1);
                     GameProgressSaver.SetPrime(2, 1);
