@@ -128,7 +128,7 @@ class UltrakillWorld(World):
             #print(self.music)
 
     
-    def write_spoiler(self, spoiler_handle):
+    def write_spoiler_header(self, spoiler_handle):
         if self.multiworld.music_randomizer[self.player]:
             spoiler_handle.write("\nMusic:\n")
             for i, j in self.music.items():

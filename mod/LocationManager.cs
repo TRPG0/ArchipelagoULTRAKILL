@@ -143,10 +143,13 @@ namespace ArchipelagoULTRAKILL
                             if (item.item_name.Contains("Blue")) LevelManager.skulls["SkullBlue"].SetActive(true);
                             else if (item.item_name.Contains("Red")) LevelManager.skulls["SkullRed"].SetActive(true);
                         }
-                        else if (Core.playerActive && item.item_name.Contains(Core.idToLevel[StatsManager.Instance.levelNumber]))
+                        else if (StatsManager.Instance.levelNumber != 0)
                         {
-                            if (item.item_name.Contains("Blue")) LevelManager.skulls["SkullBlue"].SetActive(true);
-                            else if (item.item_name.Contains("Red")) LevelManager.skulls["SkullRed"].SetActive(true);
+                            if (Core.playerActive && item.item_name.Contains(Core.idToLevel[StatsManager.Instance.levelNumber]))
+                            {
+                                if (item.item_name.Contains("Blue")) LevelManager.skulls["SkullBlue"].SetActive(true);
+                                else if (item.item_name.Contains("Red")) LevelManager.skulls["SkullRed"].SetActive(true);
+                            }
                         }
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";

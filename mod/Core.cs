@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string ModGUID = "trpg.archipelagoultrakill";
         public const string ModName = "Archipelago";
-        public const string ModVersion = "1.1.6";
+        public const string ModVersion = "2.0.0";
         public const string ModDescription = "Connect to an Archipelago server to play ULTRAKILL randomizer.";
 
         public static string workingPath;
