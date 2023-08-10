@@ -68,6 +68,7 @@ namespace ArchipelagoULTRAKILL
                 ConfigManager.playerName.interactable = false;
                 ConfigManager.serverAddress.interactable = false;
                 ConfigManager.serverPassword.interactable = false;
+                ConfigManager.chat.interactable = true;
 
                 switch (int.Parse(success.SlotData["goal"].ToString()))
                 {
@@ -211,6 +212,7 @@ namespace ArchipelagoULTRAKILL
             ConfigManager.playerName.interactable = true;
             ConfigManager.serverAddress.interactable = true;
             ConfigManager.serverPassword.interactable = true;
+            ConfigManager.chat.interactable = false;
             if (Session != null && Session.Socket != null) Session.Socket.DisconnectAsync();
             if (SceneHelper.CurrentScene == "Main Menu") UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
             //GameConsole.Console.Instance.PrintLine("Disconnected from Archipelago server.");

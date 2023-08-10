@@ -11,6 +11,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
+using Archipelago.MultiClient.Net.Packets;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -23,6 +24,7 @@ namespace ArchipelagoULTRAKILL
         public static StringField playerName;
         public static StringField serverAddress;
         public static StringField serverPassword;
+        public static StringField chat;
         public static ButtonField connectButton;
         public static ButtonField disconnectButton;
         public static ConfigHeader connectionInfo;
@@ -140,6 +142,16 @@ namespace ArchipelagoULTRAKILL
             };
 
             connectionInfo = new ConfigHeader(playerPanel, "", 16, TextAnchor.UpperCenter);
+
+            chat = new StringField(playerPanel, "CHAT", "chat", "", true, false) { interactable = false };
+            chat.onValueChange += (StringField.StringValueChangeEvent e) =>
+            {
+                if (Multiworld.Authenticated)
+                {
+                    if (e.value != "") Multiworld.Session.Socket.SendPacket(new SayPacket() { Text = e.value });
+                }
+            };
+
             new ConfigHeader(playerPanel, "-----");
             goal = new StringField(playerPanel, "GOAL", "goal", "?", false, false) { interactable = false };
             goalProgress = new StringField(playerPanel, "LEVELS COMPLETED", "goalProgress", "?", false, false) { interactable = false };

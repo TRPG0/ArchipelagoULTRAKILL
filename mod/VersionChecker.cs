@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
+using PluginConfig.API.Decorators;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine.Networking;
 
 namespace ArchipelagoULTRAKILL
@@ -35,6 +31,7 @@ namespace ArchipelagoULTRAKILL
                     {
                         Core.logger.LogWarning("A new version of Archipelago is available: " + latest + " | Current version: " + Core.ModVersion);
                         GameConsole.Console.Instance.PrintLine("[Archipelago] A new version of Archipelago is available: " + latest + " | Current version: " + Core.ModVersion, GameConsole.ConsoleLogType.Warning);
+                        new ConfigHeader(ConfigManager.config.rootPanel, "A new version of Archipelago is available!") { textColor = UnityEngine.Color.yellow };
                     }
                     else
                     {
