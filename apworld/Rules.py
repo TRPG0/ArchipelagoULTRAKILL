@@ -152,8 +152,12 @@ def arm2(state: CollectionState, player: int) -> bool:
     return state.has("Whiplash", player)
 
 
-def grab_item(state: CollectionState, player: int, option: bool) -> bool:
+def can_punch(state: CollectionState, player: int, option: bool) -> bool:
     return has_arm(state, player, option) or arm1(state, player)
+
+
+def grab_item(state: CollectionState, player: int, option: bool) -> bool:
+    return has_arm(state, player, option) or arm1(state, player) or arm2(state, player)
 
 
 def can_proj_boost(state: CollectionState, player: int, arm: bool) -> bool:
@@ -179,14 +183,20 @@ def slam_storage(state: CollectionState, player: int, slam: bool, has: int) -> b
     )
 
 
-def good_weapon(state: CollectionState, player: int, fire2: bool, arm: bool) -> bool:
+def good_weapon(state: CollectionState, player: int, fire2: bool, arm: bool, slide: bool, dash: int) -> bool:
     return (
-        rev0(state, player)
-        or rev1(state, player)
-        or rev2(state, player)
-        or sho0_fire2(state, player, fire2)
-        or sho1_fire2(state, player, fire2)
-        or can_proj_boost(state, player, arm)
+        (
+            rev0(state, player)
+            or rev1(state, player)
+            or rev2(state, player)
+            or sho0_fire2(state, player, fire2)
+            or sho1_fire2(state, player, fire2)
+            or can_proj_boost(state, player, arm)
+        )
+        and (
+            can_slide(state, player, slide)
+            or dashes(state, player, dash, 1)
+        )
     )
 
 
@@ -666,7 +676,7 @@ def rules(ultrakillworld):
             and grab_item(state, player, arm)
         ))
     if skulls:
-        add_rule(world.get_entrance("To 2-S", player),
+        add_rule(world.get_entrance("To 5-S", player),
             lambda state: state.has("Blue Skull (5-1)", player, 3))
 
 
@@ -686,7 +696,7 @@ def rules(ultrakillworld):
 
     if prank:
         set_rule(world.get_location("0-1: Perfect Rank", player),
-            lambda state: good_weapon(state, player, fire2, arm) or \
+            lambda state: good_weapon(state, player, fire2, arm, slide, dash) or \
                 state.has("Knuckleblaster", player))
 
 
@@ -694,6 +704,7 @@ def rules(ultrakillworld):
     set_rule(world.get_location("0-2: Secret #3", player),
         lambda state: (
             rock0_fire2(state, player, fire2)
+            or sho0_fire2(state, player, fire2)
             or (
                 walljumps(state, player, walljump, 1)
                 and dashes(state, player, dash, 2)
@@ -707,12 +718,12 @@ def rules(ultrakillworld):
         set_rule(world.get_location("0-2: Beat the secret encounter", player),
             lambda state: (
                 can_slide(state, player, slide)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
     if prank:
         add_rule(world.get_location("0-2: Perfect Rank", player),
-            lambda state: good_weapon(state, player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm, slide, dash))
 
 
     # 0-S
@@ -739,7 +750,7 @@ def rules(ultrakillworld):
         ))
 
     set_rule(world.get_location("0-3: Weapon", player),
-        lambda state: good_weapon(state, player, fire2, arm))
+        lambda state: good_weapon(state, player, fire2, arm, slide, dash))
 
     if challenge:
         set_rule(world.get_location("0-3: Kill only 1 enemy", player),
@@ -749,7 +760,7 @@ def rules(ultrakillworld):
         add_rule(world.get_location("0-3: Perfect Rank", player),
             lambda state: (
                 can_break_walls(state, player, fire2, arm)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
     # 0-4
@@ -767,7 +778,7 @@ def rules(ultrakillworld):
 
     if prank:
         set_rule(world.get_location("0-4: Perfect Rank", player),
-            lambda state: good_weapon(state, player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm, slide, dash))
 
 
     # 0-5
@@ -782,7 +793,7 @@ def rules(ultrakillworld):
         set_rule(world.get_location("0-5: Perfect Rank", player),
             lambda state: (
                 level_0_5(state, player, slide, fire2, walljump, dash)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
 
@@ -838,7 +849,7 @@ def rules(ultrakillworld):
     if prank:
         add_rule(world.get_location("1-1: Perfect Rank", player),
             lambda state: (
-                good_weapon(state, player, fire2, arm)
+                good_weapon(state, player, fire2, arm, slide, dash)
                 and grab_item(state, player, arm)
             ))
 
@@ -904,7 +915,7 @@ def rules(ultrakillworld):
     if prank:
         add_rule(world.get_location("1-2: Perfect Rank", player),
             lambda state: (
-                good_weapon(state, player, fire2, arm)
+                good_weapon(state, player, fire2, arm, slide, dash)
                 and grab_item(state, player, arm)
             ))
 
@@ -934,13 +945,13 @@ def rules(ultrakillworld):
         add_rule(world.get_location("1-3: Perfect Rank", player),
             lambda state: (
                 grab_item(state, player, arm)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
     if challenge:
         add_rule(world.get_location("1-3: Beat the secret encounter", player),
             lambda state: (
                 grab_item(state, player, arm)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
 
@@ -972,11 +983,11 @@ def rules(ultrakillworld):
 
     if challenge and world.goal[player] != 0:
         add_rule(world.get_location("1-4: Do not pick up any skulls", player),
-            lambda state: good_weapon(state, player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm, slide, dash))
 
     if prank and world.goal[player] != 0:
         add_rule(world.get_location("1-4: Perfect Rank", player),
-            lambda state: good_weapon(state, player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm, slide, dash))
 
 
     # 2-1
@@ -1005,7 +1016,7 @@ def rules(ultrakillworld):
         set_rule(world.get_location("2-1: Perfect Rank", player),
             lambda state: (
                 secret5_2_1(state, player, slam, fire2, arm, walljump, dash)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))            
 
     # 2-2
@@ -1029,7 +1040,7 @@ def rules(ultrakillworld):
 
     if prank:
         add_rule(world.get_location("2-2: Perfect Rank", player),
-            lambda state: good_weapon(state, player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm, slide, dash))
 
 
     # 2-3
@@ -1079,7 +1090,7 @@ def rules(ultrakillworld):
     if prank:
         add_rule(world.get_location("2-3: Perfect Rank", player),
             lambda state: (
-                good_weapon(state, player, fire2, arm)
+                good_weapon(state, player, fire2, arm, slide, dash)
                 and grab_item(state, player, arm)
             ))
 
@@ -1106,7 +1117,7 @@ def rules(ultrakillworld):
 
     if prank and world.goal[player] != 1:
         add_rule(world.get_location("2-4: Perfect Rank", player),
-            lambda state: good_weapon(state, player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm, slide, dash))
 
 
     # 3-1
@@ -1115,7 +1126,7 @@ def rules(ultrakillworld):
 
     if prank:
         add_rule(world.get_location("3-1: Perfect Rank", player),
-            lambda state: good_weapon(state, player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm, slide, dash))
 
 
     # 3-2
@@ -1135,14 +1146,14 @@ def rules(ultrakillworld):
         add_rule(world.get_location("3-2: Drop Gabriel in a pit", player),
             lambda state: (
                 jump_3_2(state, player, slam, fire2, arm, walljump, dash)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
     if prank and world.goal[player] != 2:
         add_rule(world.get_location("3-2: Perfect Rank", player),
             lambda state: (
                 jump_3_2(state, player, slam, fire2, arm, walljump, dash)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
 
@@ -1177,7 +1188,7 @@ def rules(ultrakillworld):
 
     if prank:
         add_rule(world.get_location("4-1: Perfect Rank", player),
-            lambda state: good_weapon(state, player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm, slide, dash))
 
 
     # 4-2
@@ -1219,7 +1230,7 @@ def rules(ultrakillworld):
         add_rule(world.get_location("4-2: Perfect Rank", player),
             lambda state: (
                 grab_item(state, player, arm)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
 
@@ -1253,7 +1264,7 @@ def rules(ultrakillworld):
         add_rule(world.get_location("4-3: Perfect Rank", player),
             lambda state: (
                 level_4_3(state, player, fire2, arm)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
     add_rule(world.get_location("4-3: Secret #2", player),
@@ -1300,11 +1311,11 @@ def rules(ultrakillworld):
     if prank and world.goal[player] != 3:
         add_rule(world.get_location("4-4: Perfect Rank", player),
             lambda state: level_4_4(state, player, slam, fire2, skulls, walljump, dash)
-            and good_weapon(state, player, fire2, arm))
+            and good_weapon(state, player, fire2, arm, slide, dash))
 
     if challenge and world.goal[player] != 3:
         add_rule(world.get_location("4-4: Reach the boss room in 18 seconds", player),
-            lambda state: good_weapon(state, player, fire2, arm))
+            lambda state: good_weapon(state, player, fire2, arm, slide, dash))
 
 
     # 5-1
@@ -1360,7 +1371,7 @@ def rules(ultrakillworld):
                 can_slide(state, player, slide)
                 and level_5_1(state, player, slam, fire2, walljump, dash)
                 and grab_item(state, player, arm)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
     if skulls:
@@ -1411,6 +1422,7 @@ def rules(ultrakillworld):
                 or dashes(state, player, dash, 1)
             )
             and grab_item(state, player, arm)
+            and can_punch(state, player, arm)
         ))
     add_rule(world.get_location("Cleared 5-2", player),
         lambda state: (
@@ -1419,6 +1431,7 @@ def rules(ultrakillworld):
                 or dashes(state, player, dash, 1)
             )
             and grab_item(state, player, arm)
+            and can_punch(state, player, arm)
         ))
     if challenge:
         add_rule(world.get_location("5-2: Don't fight the ferryman", player),
@@ -1429,6 +1442,7 @@ def rules(ultrakillworld):
                 )
                 and rev2_fire2(state, player, fire2)
                 and grab_item(state, player, arm)
+                and can_punch(state, player, arm)
             ))
     if prank:
         add_rule(world.get_location("5-2: Perfect Rank", player),
@@ -1438,7 +1452,8 @@ def rules(ultrakillworld):
                     or dashes(state, player, dash, 1)
                 )
                 and grab_item(state, player, arm)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
+                and can_punch(state, player, arm)
             ))
 
     if skulls:
@@ -1477,28 +1492,45 @@ def rules(ultrakillworld):
 
     add_rule(world.get_location("5-3: Secret #1", player),
         lambda state: grab_item(state, player, arm))
+    add_rule(world.get_location("5-3: Secret #2", player),
+        lambda state: good_weapon(state, player, fire2, arm, slide, dash))
     add_rule(world.get_location("5-3: Secret #3", player),
         lambda state: grab_item(state, player, arm))
     add_rule(world.get_location("5-3: Weapon", player),
-        lambda state: grab_item(state, player, arm))
+        lambda state: (
+            grab_item(state, player, arm)
+            and can_punch(state, player, arm)
+        ))
     add_rule(world.get_location("5-3: Secret #4", player),
-        lambda state: grab_item(state, player, arm))
+        lambda state: (
+            grab_item(state, player, arm)
+            and can_punch(state, player, arm)
+        ))
     add_rule(world.get_location("5-3: Secret #5", player),
-        lambda state: grab_item(state, player, arm))
+        lambda state: (
+            grab_item(state, player, arm)
+            and can_punch(state, player, arm)
+        ))
     add_rule(world.get_location("Cleared 5-3", player),
-        lambda state: grab_item(state, player, arm))
+        lambda state: (
+            grab_item(state, player, arm)
+            and can_punch(state, player, arm)
+        ))
     if challenge:
         add_rule(world.get_location("5-3: Don't touch any water", player),
             lambda state: (
                 grab_item(state, player, arm)
+                and can_punch(state, player, arm)
                 and can_slide(state, player, slide)
+                and dashes(state, player, dash, 3)
                 and jump_general(state, player, slam, fire2, arm, walljump, 2)
             ))
     if prank:
         add_rule(world.get_location("5-3: Perfect Rank", player),
             lambda state: (
                 grab_item(state, player, arm)
-                and good_weapon(state, player, fire2, arm)
+                and can_punch(state, player, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
 
@@ -1510,7 +1542,7 @@ def rules(ultrakillworld):
         set_rule(world.get_location("5-4: Perfect Rank", player),
             lambda state: (
                 rock0_fire2(state, player, fire2)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
 
@@ -1545,7 +1577,7 @@ def rules(ultrakillworld):
             lambda state: (
                 jump_general(state, player, slam, fire2, arm, walljump, 1)
                 and grab_item(state, player, arm)
-                and good_weapon(state, player, fire2, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
     if skulls:
@@ -1594,7 +1626,7 @@ def rules(ultrakillworld):
                         rock0(state, player)
                         or rock1(state, player)
                     )
-                    and good_weapon(state, player, fire2, arm)
+                    and good_weapon(state, player, fire2, arm, slide, dash)
                     and dashes(state, player, dash, 1)
                 ))
         if prank:
@@ -1607,7 +1639,7 @@ def rules(ultrakillworld):
                         or rai2(state, player)
                         or rock0_fire2(state, player, fire2)
                     )
-                    and good_weapon(state, player, fire2, arm)
+                    and good_weapon(state, player, fire2, arm, slide, dash)
                     and dashes(state, player, dash, 1)
                 ))
 
