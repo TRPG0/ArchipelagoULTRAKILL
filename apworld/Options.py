@@ -117,10 +117,34 @@ class PointMultiplier(Range):
     default = 1
 
 
+class UIColorRando(Choice):
+    """Randomizes UI colors, either once at the beginning of a run, or every time a level is loaded.
+    This option can be changed later."""
+    display_name = "UI Color Randomizer"
+    option_disabled = 0
+    option_once = 1
+    option_every_load = 2
+
+
+class GunColorRando(Choice):
+    """Randomizes gun colors, either once at the beginning of a run, or every time a level is loaded.
+    This option can be changed later."""
+    display_name = "Gun Color Randomizer"
+    option_disabled = 0
+    option_once = 1
+    option_every_load = 2
+
+
 class MusicRando(Toggle):
     """Randomizes the music that plays in each level.
     Some music is never randomized."""
     display_name = "Music Randomizer"
+
+
+class CybergrindHints(DefaultOnToggle):
+    """Unlocks hints for every 5 waves cleared in The Cyber Grind.
+    This option can NOT be changed later."""
+    display_name = "Cyber Grind Hints"
 
 
 class UltrakillDeathLink(DeathLink):
@@ -145,6 +169,9 @@ ultrakill_options = {
     "start_with_slam": StartWithSlam,
     "randomize_skulls": RandomizeSkulls,
     "point_multiplier": PointMultiplier,
+    "ui_color_randomizer": UIColorRando,
+    "gun_color_randomizer": GunColorRando,
     "music_randomizer": MusicRando,
+    "cybergrind_hints": CybergrindHints,
     "death_link": UltrakillDeathLink
 }

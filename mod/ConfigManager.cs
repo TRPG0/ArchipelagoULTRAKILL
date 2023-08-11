@@ -39,6 +39,7 @@ namespace ArchipelagoULTRAKILL
         public static BoolField randomizeFire2;
         public static BoolField randomizeSkulls;
         public static BoolField musicRandomizer;
+        public static BoolField cybergrindHints;
 
         public static ConfigPanel logPanel;
         public static BoolField showLog;
@@ -167,6 +168,7 @@ namespace ArchipelagoULTRAKILL
             randomizeFire2 = new BoolField(playerPanel, "RANDOMIZE SECONDARY FIRE", "randomizeFire2", false, false) { interactable = false };
             randomizeSkulls = new BoolField(playerPanel, "RANDOMIZE SKULLS", "randomizeSkulls", false, false) { interactable = false };
             musicRandomizer = new BoolField(playerPanel, "MUSIC RANDOMIZER", "musicRandomizer", false, false) { interactable = false };
+            cybergrindHints = new BoolField(playerPanel, "UNLOCK HINTS IN CYBERGRIND", "cybergrindHints", false, false) { interactable = false };
 
             // log settings
             showLog = new BoolField(logPanel, "SHOW LOG", "showLog", true, true);
@@ -287,6 +289,7 @@ namespace ArchipelagoULTRAKILL
             randomizeFire2.value = Core.data.randomizeFire2;
             randomizeSkulls.value = Core.data.randomizeSkulls;
             musicRandomizer.value = Core.data.musicRandomizer;
+            cybergrindHints.value = Core.data.cybergrindHints;
         }
 
         public static void ResetStatsDefaults()
@@ -300,6 +303,7 @@ namespace ArchipelagoULTRAKILL
             randomizeFire2.value = false;
             randomizeSkulls.value = false;
             musicRandomizer.value = false;
+            cybergrindHints.value = false;
         }
     }
 }

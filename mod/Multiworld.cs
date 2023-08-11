@@ -118,6 +118,10 @@ namespace ArchipelagoULTRAKILL
                     Core.data.multiplier = int.Parse(success.SlotData["point_multiplier"].ToString());
                     Core.data.musicRandomizer = bool.Parse(success.SlotData["music_randomizer"].ToString());
                     if (Core.data.musicRandomizer) Core.data.music = JsonConvert.DeserializeObject<Dictionary<string, string>>(success.SlotData["music"].ToString());
+                    Core.data.cybergrindHints = bool.Parse(success.SlotData["cybergrind_hints"].ToString());
+
+                    ConfigManager.uiColorRandomizer.value = (Enums.ColorOptions)Enum.Parse(typeof(Enums.ColorOptions), success.SlotData["ui_color_randomizer"].ToString());
+                    ConfigManager.gunColorRandomizer.value = (Enums.ColorOptions)Enum.Parse(typeof(Enums.ColorOptions), success.SlotData["gun_color_randomizer"].ToString());
 
                     PrefsManager.Instance.SetInt("difficulty", 3);
                     PrefsManager.Instance.SetInt("weapon.arm0", 1);
@@ -132,6 +136,9 @@ namespace ArchipelagoULTRAKILL
                     GameProgressSaver.SetPrime(1, 1);
                     GameProgressSaver.SetPrime(2, 1);
                     Core.SaveData();
+
+                    if (ConfigManager.uiColorRandomizer.value != Enums.ColorOptions.Off) ColorRandomizer.RandomizeUIColors();
+                    if (ConfigManager.gunColorRandomizer.value != Enums.ColorOptions.Off) ColorRandomizer.RandomizeGunColors();
                 }
 
                 //if (!Core.data.hasArm) PrefsManager.Instance.SetInt("weapon.arm0", 0);

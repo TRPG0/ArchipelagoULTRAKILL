@@ -301,9 +301,18 @@ class UltrakillWorld(World):
 
 
     def fill_slot_data(self) -> Dict[str, Any]:
+        world = self.multiworld
+        player = self.player
+
         locations = []
 
-        for loc in self.multiworld.get_filled_locations(self.player):
+        color_int_to_enum: Dict[int, str] = {
+            0: "Off",
+            1: "Once",
+            2: "EveryLoad"
+        }
+
+        for loc in world.get_filled_locations(player):
             if "Cleared" in loc.name:
                 continue
             else:
@@ -311,7 +320,7 @@ class UltrakillWorld(World):
                     "id": self.location_name_to_game_id[loc.name],
                     "ap_id": loc.address,
                     "item_name": loc.item.name,
-                    "player_name": self.multiworld.player_name[loc.item.player]
+                    "player_name": world.player_name[loc.item.player]
                 }
 
                 if loc.item.game == "ULTRAKILL":
@@ -325,22 +334,25 @@ class UltrakillWorld(World):
 
         slot_data: Dict[str, Any] = {
             "locations": locations,
-            "goal": self.multiworld.goal[self.player].value,
-            "goal_requirement": self.multiworld.goal_requirement[self.player].value,
-            "challenge_rewards": bool(self.multiworld.challenge_rewards[self.player]),
-            "p_rank_rewards": bool(self.multiworld.p_rank_rewards[self.player]),
-            "fish_rewards": bool(self.multiworld.fish_rewards[self.player]),
-            "randomize_secondary_fire": bool(self.multiworld.randomize_secondary_fire[self.player]),
-            "start_with_arm": bool(self.multiworld.start_with_arm[self.player]),
-            "starting_stamina": self.multiworld.starting_stamina[self.player].value,
-            "starting_walljumps": self.multiworld.starting_walljumps[self.player].value,
-            "start_with_slide": bool(self.multiworld.start_with_slide[self.player]),
-            "start_with_slam": bool(self.multiworld.start_with_slam[self.player]),
-            "randomize_skulls": bool(self.multiworld.randomize_skulls[self.player]),
-            "point_multiplier": self.multiworld.point_multiplier[self.player].value,
-            "death_link": bool(self.multiworld.death_link[self.player]),
-            "music_randomizer": bool(self.multiworld.music_randomizer[self.player]),
-            "music": self.music
+            "goal": world.goal[player].value,
+            "goal_requirement": world.goal_requirement[player].value,
+            "challenge_rewards": bool(world.challenge_rewards[player]),
+            "p_rank_rewards": bool(world.p_rank_rewards[player]),
+            "fish_rewards": bool(world.fish_rewards[player]),
+            "randomize_secondary_fire": bool(world.randomize_secondary_fire[player]),
+            "start_with_arm": bool(world.start_with_arm[player]),
+            "starting_stamina": world.starting_stamina[player].value,
+            "starting_walljumps": world.starting_walljumps[player].value,
+            "start_with_slide": bool(world.start_with_slide[player]),
+            "start_with_slam": bool(world.start_with_slam[player]),
+            "randomize_skulls": bool(world.randomize_skulls[player]),
+            "point_multiplier": world.point_multiplier[player].value,
+            "ui_color_randomizer": color_int_to_enum[world.ui_color_randomizer[player].value],
+            "gun_color_randomizer": color_int_to_enum[world.gun_color_randomizer[player].value],
+            "music_randomizer": bool(world.music_randomizer[player]),
+            "music": self.music,
+            "cybergrind_hints": bool(world.cybergrind_hints[player]),
+            "death_link": bool(world.death_link[player]),
         }
         return slot_data
 

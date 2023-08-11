@@ -7,7 +7,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Prefix(EndlessGrid __instance)
         {
-            if (Core.DataExists() && Multiworld.Authenticated)
+            if (Core.DataExists() && Multiworld.Authenticated && Core.data.cybergrindHints)
             {
                 if (__instance.currentWave != 0 && __instance.currentWave % 5 == 0) LocationManager.GetRandomHint();
             }
