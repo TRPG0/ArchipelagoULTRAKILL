@@ -2,7 +2,7 @@ from typing import Dict, Set, List, Any
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from .Items import base_id, item_table, group_table
-from .Locations import location_table, event_table, challenge_locations
+from .Locations import location_table, event_table, ext_bosses
 from .Regions import region_table, secret_levels
 from .Rules import rules
 from .Options import ultrakill_options, Goal, UnlockType, StartingWeapon
@@ -265,11 +265,15 @@ class UltrakillWorld(World):
             self.goal_name = "P-2"
 
         for loc in location_table:
-            if self.goal_name in loc["name"] and not ("Weapon" in loc["name"] or "V2" in loc["name"]):
+            if self.goal_name in loc["name"] and not "_w" in loc["game_id"]:
                 continue
-            elif loc["name"] in challenge_locations and not world.challenge_rewards[player]:
+            elif "_b" in loc["game_id"] and world.boss_rewards[player].value == 0:
                 continue
-            elif "Perfect Rank" in loc["name"] and not world.p_rank_rewards[player]:
+            elif loc["name"] in ext_bosses and world.boss_rewards[player].value < 2:
+                continue
+            elif "_c" in loc["game_id"] and not world.challenge_rewards[player]:
+                continue
+            elif "_p" in loc["game_id"] and not world.p_rank_rewards[player]:
                 continue
             elif "fish" in loc["game_id"] and not world.fish_rewards[player]:
                 continue

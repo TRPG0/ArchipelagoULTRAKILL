@@ -44,6 +44,16 @@ class TrapPercent(Range):
     default = 25
 
 
+class BossRewards(Choice):
+    """Adds rewards for defeating the bosses in the final level of each layer. 
+    \"Extended\" also adds rewards for some optional bosses."""
+    display_name = "Boss Rewards"
+    option_disabled = 0
+    option_standard = 1
+    option_extended = 2
+    default = 0
+
+
 class Challenges(Toggle):
     """Adds rewards for completing each level's challenge, except for the goal."""
     display_name = "Challenge Rewards"
@@ -124,6 +134,7 @@ class UIColorRando(Choice):
     option_disabled = 0
     option_once = 1
     option_every_load = 2
+    default = 0
 
 
 class GunColorRando(Choice):
@@ -133,16 +144,17 @@ class GunColorRando(Choice):
     option_disabled = 0
     option_once = 1
     option_every_load = 2
+    default = 0
 
 
 class MusicRando(Toggle):
-    """Randomizes the music that plays in each level.
+    """Randomizes the music that plays during the game.
     Some music is never randomized."""
     display_name = "Music Randomizer"
 
 
 class CybergrindHints(DefaultOnToggle):
-    """Unlocks hints for every 5 waves cleared in The Cyber Grind.
+    """Every 5 waves cleared in The Cyber Grind will unlock a hint.
     This option can NOT be changed later."""
     display_name = "Cyber Grind Hints"
 
@@ -157,6 +169,7 @@ ultrakill_options = {
     "include_secret_mission_completion": SecretMissionClear,
     "unlock_type": UnlockType,
     "trap_percent": TrapPercent,
+    "boss_rewards": BossRewards,
     "challenge_rewards": Challenges,
     "p_rank_rewards": PRanks,
     "fish_rewards": FishRewards,

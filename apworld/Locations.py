@@ -95,6 +95,9 @@ location_table: List[LocationDict] = [
         'game_id': "4_p"},
 
     # 0-5: CERBERUS
+    {'name': "0-5: Defeat the Cerberi",
+        'region': "0-5",
+        'game_id': "5_b"},
     {'name': "0-5: Don't inflict fatal damage to any enemy",
         'region': "0-5",
         'game_id': "5_c"},
@@ -144,6 +147,9 @@ location_table: List[LocationDict] = [
     {'name': "1-2: Secret #5",
         'region': "1-2",
         'game_id': "7_s5"},
+    {'name': "1-2: Defeat the Very Cancerous Rodent",
+        'region': "1-2",
+        'game_id': "7_b"},
     {'name': "1-2: Do not pick up any skulls",
         'region': "1-2",
         'game_id': "7_c"},
@@ -181,6 +187,9 @@ location_table: List[LocationDict] = [
     {'name': "1-4: Secret Weapon",
         'region': "1-4",
         'game_id': "9_w2"},
+    {'name': "1-4: Defeat V2",
+        'region': "1-4",
+        'game_id': "9_b"},
     {'name': "1-4: Do not pick up any skulls",
         'region': "1-4",
         'game_id': "9_c"},
@@ -261,6 +270,9 @@ location_table: List[LocationDict] = [
         'game_id': "12_p"},
 
     # 2-4: COURT OF THE CORPSE KING
+    {'name': "2-4: Defeat the Corpse of King Minos",
+        'region': "2-4",
+        'game_id': "13_b"},
     {'name': "2-4: Parry a punch",
         'region': "2-4",
         'game_id': "13_c"},
@@ -292,6 +304,9 @@ location_table: List[LocationDict] = [
         'game_id': "14_p"},
 
     # 3-2: IN THE FLESH
+    {'name': "3-2: Defeat Gabriel",
+        'region': "3-2",
+        'game_id': "15_b"},
     {'name': "3-2: Drop Gabriel in a pit",
         'region': "3-2",
         'game_id': "15_c"},
@@ -361,6 +376,9 @@ location_table: List[LocationDict] = [
     {'name': "4-3: Secret #5",
         'region': "4-3",
         'game_id': "18_s5"},
+    {'name': "4-3: Defeat the Mysterious Druid Knight (& Owl)",
+        'region': "4-3",
+        'game_id': "18_b"},
     {'name': "4-3: Don't pick up the torch",
         'region': "4-3",
         'game_id': "18_c"},
@@ -375,6 +393,9 @@ location_table: List[LocationDict] = [
     {'name': "4-4: Secret Weapon",
         'region': "4-4",
         'game_id': "19_w2"},
+    {'name': "4-4: Defeat V2",
+        'region': "4-4",
+        'game_id': "19_b"},
     {'name': "4-4: Reach the boss room in 18 seconds",
         'region': "4-4",
         'game_id': "19_c"},
@@ -493,6 +514,9 @@ location_table: List[LocationDict] = [
         'game_id': "22_p"},
 
     # 5-4: LEVIATHAN
+    {'name': "5-4: Defeat the Leviathan",
+        'region': "5-4",
+        'game_id': "23_b"},
     {'name': "5-4: Reach the surface in under 10 seconds",
         'region': "5-4",
         'game_id': "23_c"},
@@ -524,6 +548,9 @@ location_table: List[LocationDict] = [
         'game_id': "24_p"},
 
     # 6-2: AESTHETICS OF HATE
+    {'name': "6-2: Defeat Gabriel",
+        'region': "6-2",
+        'game_id': "25_b"},
     {'name': "6-2: Hit Gabriel into the ceiling",
         'region': "6-2",
         'game_id': "25_c"},
@@ -624,30 +651,7 @@ event_table: List[LocationDict] = [
 ]
 
 
-challenge_locations: Set[str] = [
-    "0-1: Get 5 kills with a single glass panel",
-    "0-2: Beat the secret encounter",
-    "0-3: Kill only 1 enemy",
-    "0-4: Slide uninterrupted for 17 seconds",
-    "0-5: Don't inflict fatal damage to any enemy",
-    "1-1: Complete the level in under 10 seconds",
-    "1-2: Do not pick up any skulls",
-    "1-3: Beat the secret encounter",
-    "1-4: Do not pick up any skulls",
-    "2-1: Don't open any normal doors",
-    "2-2: Beat the level in under 60 seconds",
-    "2-3: Don't touch any water",
-    "2-4: Parry a punch",
-    "3-1: Kill a Mindflayer with acid",
-    "3-2: Drop Gabriel in a pit",
-    "4-1: Don't activate any enemies",
-    "4-2: Kill the Insurrectionist in under 10 seconds",
-    "4-3: Don't pick up the torch",
-    "4-4: Reach the boss room in 18 seconds",
-    "5-1: Don't touch any water",
-    "5-2: Don't fight the ferryman",
-    "5-3: Don't touch any water",
-    "5-4: Reach the surface in under 10 seconds",
-    "6-1: Beat the secret encounter",
-    "6-2: Hit Gabriel into the ceiling"
+ext_bosses: Set[str] = [
+    "1-2: Defeat the Very Cancerous Rodent",
+    "4-3: Defeat the Mysterious Druid Knight (& Owl)"
 ]
