@@ -34,5 +34,12 @@ namespace ArchipelagoULTRAKILL.Structures
             DoubleJump,
             Radiance
         }
+
+        public enum ColorOptions
+        {
+            Off,
+            Once,
+            EveryLoad
+        }
     }
 }

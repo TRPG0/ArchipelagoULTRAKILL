@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string ModGUID = "trpg.archipelagoultrakill";
         public const string ModName = "Archipelago";
-        public const string ModVersion = "2.0.0";
+        public const string ModVersion = "1.2.0";
         public const string ModDescription = "Connect to an Archipelago server to play ULTRAKILL randomizer.";
 
         public static string workingPath;
@@ -183,19 +183,26 @@ namespace ArchipelagoULTRAKILL
             */
             if (SceneHelper.CurrentScene == "Intro" || SceneHelper.CurrentScene == null) return;
             obj.GetComponent<Core>().StopCoroutine("DisplayMessage");
+
             UIManager.displayingMessage = false;
             UIManager.levels.Clear();
             UIManager.secrets.Clear();
             UIManager.skullIcons.Clear();
+
             LevelManager.skulls.Clear();
             LevelManager.shopPanels.Clear();
+
             playerActive = false;
             poweredUp = false;
             staminaPowerup = false;
             doublejumpPowerup = false;
             dashTrap = false;
             walljumpTrap = false;
+
             ConfigManager.connectionInfo.text = "";
+            if (ConfigManager.uiColorRandomizer.value == Enums.ColorOptions.EveryLoad) ColorRandomizer.RandomizeUIColors();
+            if (ConfigManager.gunColorRandomizer.value == Enums.ColorOptions.EveryLoad) ColorRandomizer.RandomizeGunColors();
+
             if (SceneHelper.CurrentScene == "Main Menu")
             {
                 UIManager.FindMenuObjects();

@@ -307,6 +307,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioManager.cs" />
+    <Compile Include="ColorRandomizer.cs" />
     <Compile Include="Components\ChapterSelectState.cs" />
     <Compile Include="Commands\Say.cs" />
     <Compile Include="Commands\Disconnect.cs" />

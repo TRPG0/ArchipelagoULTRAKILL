@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
 using Archipelago.MultiClient.Net.Packets;
+using ArchipelagoULTRAKILL.Structures;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -46,6 +47,10 @@ namespace ArchipelagoULTRAKILL
         public static ButtonField logClear;
 
         public static ConfigPanel colorPanel;
+
+        public static EnumField<Enums.ColorOptions> uiColorRandomizer;
+        public static EnumField<Enums.ColorOptions> gunColorRandomizer;
+
         public static ColorField APPlayerSelf;
         public static ColorField APPlayerOther;
         public static ColorField APItemAdvancement;
@@ -191,6 +196,16 @@ namespace ArchipelagoULTRAKILL
             };
 
             // color settings
+            uiColorRandomizer = new EnumField<Enums.ColorOptions>(colorPanel, "UI COLOR RANDOMIZER", "uiColorRandomizer", Enums.ColorOptions.Off, true);
+            uiColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.Off, "DISABLED");
+            uiColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.Once, "ONCE");
+            uiColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.EveryLoad, "EVERY NEW LEVEL LOADED");
+
+            gunColorRandomizer = new EnumField<Enums.ColorOptions>(colorPanel, "GUN COLOR RANDOMIZER", "gunColorRandomizer", Enums.ColorOptions.Off, true);
+            gunColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.Off, "DISABLED");
+            gunColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.Once, "ONCE");
+            gunColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.EveryLoad, "EVERY NEW LEVEL LOADED");
+
             new ConfigHeader(colorPanel, "ARCHIPELAGO COLORS");
             APPlayerSelf = new ColorField(colorPanel, "PLAYER (YOU)", "APPlayerSelf", new Color(0.93f, 0, 0.93f), true);
             APPlayerOther = new ColorField(colorPanel, "PLAYER (OTHERS)", "APPlayerOther", new Color(0.98f, 0.98f, 0.82f), true);
