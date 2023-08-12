@@ -340,6 +340,7 @@ class UltrakillWorld(World):
             "locations": locations,
             "goal": world.goal[player].value,
             "goal_requirement": world.goal_requirement[player].value,
+            "boss_rewards": world.boss_rewards[player] > 0,
             "challenge_rewards": bool(world.challenge_rewards[player]),
             "p_rank_rewards": bool(world.p_rank_rewards[player]),
             "fish_rewards": bool(world.fish_rewards[player]),

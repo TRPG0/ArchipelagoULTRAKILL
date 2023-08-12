@@ -129,6 +129,7 @@ class PointMultiplier(Range):
 
 class UIColorRando(Choice):
     """Randomizes UI colors, either once at the beginning of a run, or every time a level is loaded.
+    Does not affect item popup colors.
     This option can be changed later."""
     display_name = "UI Color Randomizer"
     option_disabled = 0

@@ -46,6 +46,7 @@ namespace ArchipelagoULTRAKILL
                     else if (!locations[loc].ukitem && !locations[loc].@checked) AddAPItemMessage(apitems[loc]);
                     locations[loc].@checked = true;
                 }
+                else Core.logger.LogWarning("Location \"" + loc + "\" does not exist.");
             }
             else Core.logger.LogWarning("Tried to check location \"" + loc + "\", but cheats are enabled!");
         }

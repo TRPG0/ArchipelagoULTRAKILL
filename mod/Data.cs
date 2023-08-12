@@ -17,6 +17,7 @@ namespace ArchipelagoULTRAKILL
 
         public string goal = "6-2";
         public int goalRequirement = 20;
+        public bool bossRewards = false;
         public bool challengeRewards = false;
         public bool pRankRewards = false;
         public bool fishRewards = false;

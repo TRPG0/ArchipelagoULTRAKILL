@@ -320,6 +320,8 @@
     <Compile Include="LocationManager.cs" />
     <Compile Include="Components\OptionsMenuState.cs" />
     <Compile Include="Patches\AltPickUp.cs" />
+    <Compile Include="Patches\BestiaryData.cs" />
+    <Compile Include="Patches\BigDoorOpener.cs" />
     <Compile Include="Patches\ChallengeManager.cs" />
     <Compile Include="Patches\DualWield.cs" />
     <Compile Include="Patches\EndlessGrid.cs" />
