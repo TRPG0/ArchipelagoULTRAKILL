@@ -707,6 +707,7 @@ def rules(ultrakillworld):
         lambda state: (
             rock0_fire2(state, player, fire2)
             or sho0_fire2(state, player, fire2)
+            or can_proj_boost(state, player, arm)
             or (
                 walljumps(state, player, walljump, 1)
                 and dashes(state, player, dash, 2)
@@ -739,7 +740,10 @@ def rules(ultrakillworld):
         lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
     set_rule(world.get_location("0-3: Secret #2", player),
         lambda state: (
-            jump_general(state, player, slam, fire2, arm, walljump, 2)
+            (
+                jump_general(state, player, slam, fire2, arm, walljump, 2)
+                or dashes(state, player, dash, 1)
+            )
             and can_break_walls(state, player, fire2, arm)
         ))
 
@@ -895,7 +899,7 @@ def rules(ultrakillworld):
                     (
                         state.has_all({"Blue Skull (1-2)", "Red Skull (1-2)"}, player)
                         and grab_item(state, player, arm)
-                        or rai0(state, player, arm)
+                        or rai0(state, player)
                     )
                     and can_break_walls(state, player, fire2, arm)
                 ))
@@ -926,7 +930,7 @@ def rules(ultrakillworld):
                 lambda state: (
                     (
                         grab_item(state, player, arm)
-                        or rai0(state, player, arm)
+                        or rai0(state, player)
                     )
                     and can_break_walls(state, player, fire2, arm)
                 ))
@@ -1637,11 +1641,13 @@ def rules(ultrakillworld):
         lambda state: (
             jump_general(state, player, slam, fire2, arm, walljump, 2)
             and grab_item(state, player, arm)
+            and can_punch(state, player, arm)
         ))
     add_rule(world.get_location("Cleared 6-1", player),
         lambda state: (
             jump_general(state, player, slam, fire2, arm, walljump, 1)
             and grab_item(state, player, arm)
+            and can_punch(state, player, arm)
         ))
     if challenge:
         set_rule(world.get_location("6-1: Beat the secret encounter", player),
@@ -1654,6 +1660,7 @@ def rules(ultrakillworld):
             lambda state: (
                 jump_general(state, player, slam, fire2, arm, walljump, 1)
                 and grab_item(state, player, arm)
+                and can_punch(state, player, arm)
                 and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
