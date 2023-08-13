@@ -51,6 +51,8 @@ namespace ArchipelagoULTRAKILL
 
         public static EnumField<Enums.ColorOptions> uiColorRandomizer;
         public static EnumField<Enums.ColorOptions> gunColorRandomizer;
+        public static ButtonField enableCustomButton;
+        public static ButtonField disableCustomButton;
 
         public static ColorField APPlayerSelf;
         public static ColorField APPlayerOther;
@@ -207,6 +209,30 @@ namespace ArchipelagoULTRAKILL
             gunColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.Off, "DISABLED");
             gunColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.Once, "ONCE");
             gunColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.EveryLoad, "EVERY NEW LEVEL LOADED");
+
+            enableCustomButton = new ButtonField(colorPanel, "ENABLE ALL CUSTOM WEAPON COLORS", "enableCustomButton");
+            enableCustomButton.onClick += () =>
+            {
+                PrefsManager.Instance.SetBool("gunColorType.1", true);
+                PrefsManager.Instance.SetBool("gunColorType.1.a", true);
+                PrefsManager.Instance.SetBool("gunColorType.2", true);
+                PrefsManager.Instance.SetBool("gunColorType.3", true);
+                PrefsManager.Instance.SetBool("gunColorType.3.a", true);
+                PrefsManager.Instance.SetBool("gunColorType.4", true);
+                PrefsManager.Instance.SetBool("gunColorType.5", true);
+            };
+
+            disableCustomButton = new ButtonField(colorPanel, "DISABLE ALL CUSTOM WEAPON COLORS", "disableCustomButton");
+            disableCustomButton.onClick += () =>
+            {
+                PrefsManager.Instance.SetBool("gunColorType.1", false);
+                PrefsManager.Instance.SetBool("gunColorType.1.a", false);
+                PrefsManager.Instance.SetBool("gunColorType.2", false);
+                PrefsManager.Instance.SetBool("gunColorType.3", false);
+                PrefsManager.Instance.SetBool("gunColorType.3.a", false);
+                PrefsManager.Instance.SetBool("gunColorType.4", false);
+                PrefsManager.Instance.SetBool("gunColorType.5", false);
+            };
 
             new ConfigHeader(colorPanel, "ARCHIPELAGO COLORS");
             APPlayerSelf = new ColorField(colorPanel, "PLAYER (YOU)", "APPlayerSelf", new Color(0.93f, 0, 0.93f), true);
