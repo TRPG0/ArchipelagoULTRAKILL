@@ -33,6 +33,7 @@ namespace ArchipelagoULTRAKILL
         public static StringField goal;
         public static StringField goalProgress;
         public static StringField locationsChecked;
+        public static StringField bossRewards;
         public static BoolField challengeRewards;
         public static BoolField pRankRewards;
         public static BoolField fishRewards;
@@ -164,6 +165,7 @@ namespace ArchipelagoULTRAKILL
             goal = new StringField(playerPanel, "GOAL", "goal", "?", false, false) { interactable = false };
             goalProgress = new StringField(playerPanel, "LEVELS COMPLETED", "goalProgress", "?", false, false) { interactable = false };
             locationsChecked = new StringField(playerPanel, "LOCATIONS CHECKED", "locationsChecked", "?", false, false) { interactable = false };
+            bossRewards = new StringField(playerPanel, "BOSS REWARDS", "bossRewards", "?", false) { interactable = false };
             challengeRewards = new BoolField(playerPanel, "CHALLENGE REWARDS", "challengeRewards", false, false) { interactable = false };
             pRankRewards = new BoolField(playerPanel, "P RANK REWARDS", "pRankRewards", false, false) { interactable = false };
             fishRewards = new BoolField(playerPanel, "FISH REWARDS", "fishRewards", false, false) { interactable = false };
@@ -309,6 +311,21 @@ namespace ArchipelagoULTRAKILL
             string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
             locationsChecked.value = $"{Core.data.@checked.Count} / {totalLocations}";
 
+            switch (Core.data.bossRewards)
+            {
+                case 0:
+                    bossRewards.value = "DISABLED";
+                    break;
+                case 1:
+                    bossRewards.value = "STANDARD";
+                    break;
+                case 2:
+                    bossRewards.value = "EXTENDED";
+                    break;
+                default:
+                    break;
+            }
+            
             challengeRewards.value = Core.data.challengeRewards;
             pRankRewards.value = Core.data.pRankRewards;
             fishRewards.value = Core.data.fishRewards;
@@ -323,6 +340,7 @@ namespace ArchipelagoULTRAKILL
             goal.value = "?";
             goalProgress.value = "?";
             locationsChecked.value = "?";
+            bossRewards.value = "?";
             challengeRewards.value = false;
             pRankRewards.value = false;
             fishRewards.value = false;

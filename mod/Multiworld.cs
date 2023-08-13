@@ -100,7 +100,7 @@ namespace ArchipelagoULTRAKILL
                 }
 
                 Core.data.goalRequirement = int.Parse(success.SlotData["goal_requirement"].ToString());
-                Core.data.bossRewards = bool.Parse(success.SlotData["boss_rewards"].ToString());
+                Core.data.bossRewards = int.Parse(success.SlotData["boss_rewards"].ToString());
                 Core.data.challengeRewards = bool.Parse(success.SlotData["challenge_rewards"].ToString());
                 Core.data.pRankRewards = bool.Parse(success.SlotData["p_rank_rewards"].ToString());
                 Core.data.fishRewards = bool.Parse(success.SlotData["fish_rewards"].ToString());
