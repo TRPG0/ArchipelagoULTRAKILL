@@ -1,3 +1,23 @@
+## 1.2.0
+
+- There are now many options that can be changed in-game thanks to the [PluginConfigurator](https://thunderstore.io/c/ultrakill/p/EternalsTeam/PluginConfigurator/) mod.
+    - Connecting to a server can now be done through the options menu. (You can still use the command if you want to, though)
+    - Settings for the current run can be viewed in the options menu.
+    - The log that appears at the bottom of the screen can be adjusted in the options menu.
+    - Every UI color used by Archipelago can now be customized.
+    - While connected to a server, a list of all acquired hints can be viewed in the options menu.
+- You can now choose to remove secret mission completions from logic, if you would prefer not to do them.
+- Unlocking hints while playing The Cyber Grind can now be disabled, if you want.
+- The stats screen can now be opened anytime, even while playing levels that haven't been completed yet.
+- Custom weapon colors are now always unlocked.
+- A new powerup has been added: Air Jump, which allows the player to use their wall jumps as additional midair jumps.
+- A new trap has been added: Radiant Aura, which gives all enemies Radiance for 10 seconds.
+- You can now enable Boss Rewards, which adds location checks for the boss at the end of each layer.
+    - When set to "Extended", location checks will also be added for the Very Cancerous Rodent in 1-2 and the Mysterious Druid Knight (& Owl) in 4-3.
+- You can now enable Fish Rewards, which adds location checks for catching each fish in 5-S.
+- The music that plays during gameplay can now be randomized. Note that some music is never randomized.
+- UI and weapon colors can be randomized, either once at the beginning of each run, or every time a new level is loaded.
+
 ## 1.1.6
 
 - Leaderboard times can no longer be submitted while playing randomizer.

@@ -1,6 +1,8 @@
 # ULTRAKILL Multiworld Setup Guide
 
-1. Download the Archipelago mod by using a Thunderstore Mod Manager, or manually by extracting the contents of the zip file into the `UMM Mods` folder.
+1. Download and install the Archipelago mod with r2modman, or manually by extracting the contents of the zip file into the `UMM Mods` folder. If you decide to install manually, you will also need to install [PluginConfigurator](https://thunderstore.io/c/ultrakill/p/EternalsTeam/PluginConfigurator/).
+
+*Note that only one player in the multiworld will need to complete steps 2-5.*
 
 2. Download and install [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Then, download `ultrakill.apworld` from the mod's [releases page](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases) and add it to your `worlds` folder. (Default path: `C:\ProgramData\Archipelago\lib\worlds`)
 
@@ -12,14 +14,10 @@
 
 6. Enable Archipelago in game, then restart ULTRAKILL.
 
-7. To connect to the server, first select a new save file, then press `F8` and use the command `connect [address:port] [player] [password]`. The port and password are both optional - if no port is given, then the default port of `38281` will be used.
+7. To connect to the server, first select a new save file. Then open the options menu, click the PLUGIN CONFIG button, click Configure next to Archipelago, and open the PLAYER SETTINGS menu. Enter your name, the server's address in the form of `address:port`, and a password if necessary, then click the Connect button.
 
-There are some additional commands that can be used:
+There are some additional commands that can be used by pressing `F8` to open the console:
 
+- `connect [address:port] [player] [password]` - Connect to an Archipelago server.
 - `disconnect`: Disconnect from an Archipelago server.
 - `say [message]`: Send messages or commands to the server.
-- `log`: Adjust the messages that appear at the bottom of the screen while connected to a server.
-    - `log size [int]`: Change the font size.
-    - `log lines [int]`: Change the number of lines that will be displayed.
-    - `log clear`: Clears all messages.
-    - `log toggle`: Shows/hides the messages.
