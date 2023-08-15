@@ -1,3 +1,8 @@
+## 1.2.1
+
+- Randomizer runs that were generated prior to 1.2.0 can now be played on the current version.
+- Slightly tweaked the way that the level select is modified. (Should be much less annoying to navigate with a controller)
+
 ## 1.2.0
 
 - There are now many options that can be changed in-game thanks to the [PluginConfigurator](https://thunderstore.io/c/ultrakill/p/EternalsTeam/PluginConfigurator/) mod.
