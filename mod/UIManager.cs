@@ -342,7 +342,7 @@ namespace ArchipelagoULTRAKILL
                     {
                         if (component.gameObject.name == "Image") component.sprite = locked;
                     }
-                    levels[level].GetComponent<Button>().enabled = false;
+                    levels[level].GetComponent<Button>().interactable = false;
                 }
             }
         }

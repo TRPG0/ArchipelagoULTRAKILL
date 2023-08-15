@@ -100,10 +100,16 @@ namespace ArchipelagoULTRAKILL
                 }
 
                 Core.data.goalRequirement = int.Parse(success.SlotData["goal_requirement"].ToString());
-                Core.data.bossRewards = int.Parse(success.SlotData["boss_rewards"].ToString());
+
+                try { Core.data.bossRewards = int.Parse(success.SlotData["boss_rewards"].ToString()); }
+                catch (KeyNotFoundException) { Core.data.bossRewards = 0; }
+
                 Core.data.challengeRewards = bool.Parse(success.SlotData["challenge_rewards"].ToString());
                 Core.data.pRankRewards = bool.Parse(success.SlotData["p_rank_rewards"].ToString());
-                Core.data.fishRewards = bool.Parse(success.SlotData["fish_rewards"].ToString());
+
+                try { Core.data.fishRewards = bool.Parse(success.SlotData["fish_rewards"].ToString()); }
+                catch (KeyNotFoundException) { Core.data.fishRewards = false; }
+
                 Core.data.randomizeFire2 = bool.Parse(success.SlotData["randomize_secondary_fire"].ToString());
                 Core.data.randomizeSkulls = bool.Parse(success.SlotData["randomize_skulls"].ToString());
 
@@ -117,12 +123,19 @@ namespace ArchipelagoULTRAKILL
                     Core.data.canSlide = bool.Parse(success.SlotData["start_with_slide"].ToString());
                     Core.data.canSlam = bool.Parse(success.SlotData["start_with_slam"].ToString());
                     Core.data.multiplier = int.Parse(success.SlotData["point_multiplier"].ToString());
-                    Core.data.musicRandomizer = bool.Parse(success.SlotData["music_randomizer"].ToString());
-                    if (Core.data.musicRandomizer) Core.data.music = JsonConvert.DeserializeObject<Dictionary<string, string>>(success.SlotData["music"].ToString());
-                    Core.data.cybergrindHints = bool.Parse(success.SlotData["cybergrind_hints"].ToString());
 
-                    ConfigManager.uiColorRandomizer.value = (Enums.ColorOptions)Enum.Parse(typeof(Enums.ColorOptions), success.SlotData["ui_color_randomizer"].ToString());
-                    ConfigManager.gunColorRandomizer.value = (Enums.ColorOptions)Enum.Parse(typeof(Enums.ColorOptions), success.SlotData["gun_color_randomizer"].ToString());
+                    try { Core.data.musicRandomizer = bool.Parse(success.SlotData["music_randomizer"].ToString()); }
+                    catch (KeyNotFoundException) { Core.data.musicRandomizer = false; }
+
+                    if (Core.data.musicRandomizer) Core.data.music = JsonConvert.DeserializeObject<Dictionary<string, string>>(success.SlotData["music"].ToString());
+
+                    try { Core.data.cybergrindHints = bool.Parse(success.SlotData["cybergrind_hints"].ToString()); }
+                    catch (KeyNotFoundException) { Core.data.cybergrindHints = true; }
+
+                    try { ConfigManager.uiColorRandomizer.value = (Enums.ColorOptions)Enum.Parse(typeof(Enums.ColorOptions), success.SlotData["ui_color_randomizer"].ToString()); }
+                    catch (KeyNotFoundException) { ConfigManager.uiColorRandomizer.value = Enums.ColorOptions.Off; }
+                    try { ConfigManager.gunColorRandomizer.value = (Enums.ColorOptions)Enum.Parse(typeof(Enums.ColorOptions), success.SlotData["gun_color_randomizer"].ToString()); }
+                    catch (KeyNotFoundException) { ConfigManager.gunColorRandomizer.value = Enums.ColorOptions.Off; }
 
                     PrefsManager.Instance.SetInt("difficulty", 3);
                     PrefsManager.Instance.SetInt("weapon.arm0", 1);
