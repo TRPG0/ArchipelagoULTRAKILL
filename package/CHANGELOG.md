@@ -1,3 +1,8 @@
+## 1.2.2
+
+- Fixed sometimes being unable to use the Feedbacker when starting a new run.
+- The "ARMS" panel of the shop is now visible after receiving the Feedbacker.
+
 ## 1.2.1
 
 - Randomizer runs that were generated prior to 1.2.0 can now be played on the current version.

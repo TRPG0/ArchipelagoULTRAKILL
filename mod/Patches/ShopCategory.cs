@@ -8,7 +8,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static bool Prefix(ShopCategory __instance)
         {
-            if (Core.DataExists() && !__instance.weaponName.Contains("arm"))
+            if (Core.DataExists())
             {
                 bool hasWeapon = false;
                 switch (__instance.weaponName.Substring(0, __instance.weaponName.Length - 1))
@@ -34,6 +34,9 @@ namespace ArchipelagoULTRAKILL.Patches
                     case "rock":
                         if (GameProgressSaver.CheckGear("rock0") == 1) hasWeapon = true;
                         if (GameProgressSaver.CheckGear("rock1") == 1) hasWeapon = true;
+                        break;
+                    case "arm":
+                        if (Core.data.hasArm) hasWeapon = true;
                         break;
                     default: break;
                 }

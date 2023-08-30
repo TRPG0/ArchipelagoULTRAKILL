@@ -155,8 +155,7 @@ namespace ArchipelagoULTRAKILL
                     if (ConfigManager.gunColorRandomizer.value != Enums.ColorOptions.Off) ColorRandomizer.RandomizeGunColors();
                 }
 
-                //if (!Core.data.hasArm) PrefsManager.Instance.SetInt("weapon.arm0", 0);
-                //else PrefsManager.Instance.SetInt("weapon.arm0", 1);
+                PrefsManager.Instance.SetInt("weapon.arm0", 1);
 
                 LocationManager.locations.Clear();
                 LocationManager.ukitems.Clear();
