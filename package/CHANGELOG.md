@@ -1,3 +1,8 @@
+## 1.2.3
+
+- Death Link is now supported.
+- Fixed more arm related bugs.
+
 ## 1.2.2
 
 - Fixed sometimes being unable to use the Feedbacker when starting a new run.
