@@ -5,9 +5,6 @@ using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using ArchipelagoULTRAKILL.Structures;
 using Newtonsoft.Json.Linq;
@@ -153,7 +150,11 @@ namespace ArchipelagoULTRAKILL
 
                     if (ConfigManager.uiColorRandomizer.value != Enums.ColorOptions.Off) ColorRandomizer.RandomizeUIColors();
                     if (ConfigManager.gunColorRandomizer.value != Enums.ColorOptions.Off) ColorRandomizer.RandomizeGunColors();
+
+                    Core.data.deathLink = bool.Parse(success.SlotData["death_link"].ToString());
                 }
+
+                if (Core.data.deathLink) EnableDeathLink();
 
                 PrefsManager.Instance.SetInt("weapon.arm0", 1);
 
@@ -368,14 +369,36 @@ namespace ArchipelagoULTRAKILL
             helper.DequeueItem();
         }
 
-        public static void ToggleDeathLink()
+        public static void EnableDeathLink()
         {
-
+            if (DeathLinkService == null)
+            {
+                DeathLinkService = Session.CreateDeathLinkService();
+                DeathLinkService.OnDeathLinkReceived += DeathLinkReceived;
+            }
+            DeathLinkService.EnableDeathLink();
         }
 
-        public static void DeathLinkRecieved()
+        public static void DisableDeathLink()
         {
+            if (DeathLinkService == null) return;
+            else DeathLinkService.DisableDeathLink();
+        }
 
+        public static void DeathLinkReceived(DeathLink deathLink)
+        {
+            if (Core.playerActive)
+            {
+                DeathLinkKilling = true;
+                string cause = "{0} has died.";
+                if (deathLink.Cause != "") cause = deathLink.Cause;
+                else cause = string.Format(cause, deathLink.Source);
+
+                messages.Add($"[DeathLink] {cause}");
+                if (Core.uim.deathLinkMessage != null) Core.uim.deathLinkMessage.SetDeathMessage(cause);
+                NewMovement.Instance.GetHurt(200, false, 0);
+            }
+            else Core.logger.LogWarning("Received DeathLink, but player cannot be killed right now.");
         }
 
         public static void SendCompletion()

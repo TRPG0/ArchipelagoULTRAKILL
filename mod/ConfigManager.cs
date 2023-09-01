@@ -25,10 +25,12 @@ namespace ArchipelagoULTRAKILL
         public static StringField playerName;
         public static StringField serverAddress;
         public static StringField serverPassword;
-        public static StringField chat;
         public static ButtonField connectButton;
         public static ButtonField disconnectButton;
         public static ConfigHeader connectionInfo;
+        public static ButtonField deathLinkOnButton;
+        public static ButtonField deathLinkOffButton;
+        public static StringField chat;
 
         public static StringField goal;
         public static StringField goalProgress;
@@ -41,6 +43,7 @@ namespace ArchipelagoULTRAKILL
         public static BoolField randomizeSkulls;
         public static BoolField musicRandomizer;
         public static BoolField cybergrindHints;
+        public static BoolField deathLink;
 
         public static ConfigPanel logPanel;
         public static BoolField showLog;
@@ -152,6 +155,25 @@ namespace ArchipelagoULTRAKILL
 
             connectionInfo = new ConfigHeader(playerPanel, "", 16, TextAnchor.UpperCenter);
 
+            deathLinkOnButton = new ButtonField(playerPanel, "ENABLE DEATH LINK", "deathLinkOnButton");
+            deathLinkOnButton.onClick += () =>
+            {
+                if (Multiworld.Authenticated)
+                {
+                    Core.data.deathLink = true;
+                    Multiworld.EnableDeathLink();
+                }
+            };
+            deathLinkOffButton = new ButtonField(playerPanel, "DISABLE DEATH LINK", "deathLinkOffButton");
+            deathLinkOffButton.onClick += () =>
+            {
+                if (Multiworld.Authenticated)
+                {
+                    Core.data.deathLink = false;
+                    Multiworld.DisableDeathLink();
+                }
+            };
+
             chat = new StringField(playerPanel, "CHAT", "chat", "", true, false) { interactable = false };
             chat.onValueChange += (StringField.StringValueChangeEvent e) =>
             {
@@ -173,6 +195,7 @@ namespace ArchipelagoULTRAKILL
             randomizeSkulls = new BoolField(playerPanel, "RANDOMIZE SKULLS", "randomizeSkulls", false, false) { interactable = false };
             musicRandomizer = new BoolField(playerPanel, "MUSIC RANDOMIZER", "musicRandomizer", false, false) { interactable = false };
             cybergrindHints = new BoolField(playerPanel, "UNLOCK HINTS IN CYBERGRIND", "cybergrindHints", false, false) { interactable = false };
+            deathLink = new BoolField(playerPanel, "DEATH LINK", "deathLink", false, false) { interactable = false };
 
             // log settings
             showLog = new BoolField(logPanel, "SHOW LOG", "showLog", true, true);
@@ -333,6 +356,7 @@ namespace ArchipelagoULTRAKILL
             randomizeSkulls.value = Core.data.randomizeSkulls;
             musicRandomizer.value = Core.data.musicRandomizer;
             cybergrindHints.value = Core.data.cybergrindHints;
+            deathLink.value = Core.data.deathLink;
         }
 
         public static void ResetStatsDefaults()
@@ -348,6 +372,7 @@ namespace ArchipelagoULTRAKILL
             randomizeSkulls.value = false;
             musicRandomizer.value = false;
             cybergrindHints.value = false;
+            deathLink.value = false;
         }
     }
 }

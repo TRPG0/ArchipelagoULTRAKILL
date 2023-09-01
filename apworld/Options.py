@@ -161,7 +161,8 @@ class CybergrindHints(DefaultOnToggle):
 
 
 class UltrakillDeathLink(DeathLink):
-    """When you die, everyone dies. The reverse is also true."""
+    """When you die, everyone dies. The reverse is also true.
+    This option can be changed later."""
 
 
 ultrakill_options = {

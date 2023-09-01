@@ -57,6 +57,8 @@ namespace ArchipelagoULTRAKILL
         public static GameObject popupImage;
         public static bool displayingMessage = false;
 
+        public DeathLinkMessage deathLinkMessage = null;
+
         public static void CreateLogObject()
         {
             log = new GameObject();
@@ -511,6 +513,26 @@ namespace ArchipelagoULTRAKILL
             popupCanvas.SetActive(false);
             if (LocationManager.messages.Count > 0 && Core.inLevel) StartCoroutine(DisplayMessage());
             else displayingMessage = false;
+        }
+
+        public void CreateDeathLinkMessage()
+        {
+            GameObject go = new GameObject()
+            {
+                name = "APDeathMessage",
+                layer = 5,
+            };
+            GameObject go2 = new GameObject()
+            {
+                name = "Text",
+                layer = 5
+            };
+            go.transform.parent = NewMovement.Instance.blackScreen.gameObject.transform;
+            go.AddComponent<Canvas>();
+            go2.transform.parent = go.transform;
+            go2.AddComponent<Text>();
+            deathLinkMessage = go2.AddComponent<DeathLinkMessage>();
+            deathLinkMessage.Initialize();
         }
     }
 }

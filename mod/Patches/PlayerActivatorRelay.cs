@@ -24,6 +24,7 @@ namespace ArchipelagoULTRAKILL.Patches
                 {
                     LevelManager.FindSkulls();
                 }
+                if (Core.data.deathLink && Core.uim.deathLinkMessage == null) Core.uim.CreateDeathLinkMessage();
             }
             if (LocationManager.messages.Count > 0 && !UIManager.displayingMessage) Core.uim.StartCoroutine("DisplayMessage");
             /*

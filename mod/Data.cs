@@ -40,5 +40,7 @@ namespace ArchipelagoULTRAKILL
         public Dictionary<string, string> music = new Dictionary<string, string>();
 
         public bool cybergrindHints = true;
+
+        public bool deathLink = false;
     }
 }

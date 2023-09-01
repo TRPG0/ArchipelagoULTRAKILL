@@ -17,4 +17,14 @@ namespace ArchipelagoULTRAKILL.Patches
             else return true;
         }
     }
+
+    [HarmonyPatch(typeof(NewMovement), "Respawn")]
+    class NewMovement_Respawn_Patch
+    {
+        public static void Postfix()
+        {
+            Multiworld.DeathLinkKilling = false;
+            if (Core.uim.deathLinkMessage != null) Core.uim.deathLinkMessage.text.text = "";
+        }
+    }
 }

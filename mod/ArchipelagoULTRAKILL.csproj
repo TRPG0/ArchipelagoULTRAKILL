@@ -312,6 +312,7 @@
     <Compile Include="Commands\Say.cs" />
     <Compile Include="Commands\Disconnect.cs" />
     <Compile Include="Commands\Connect.cs" />
+    <Compile Include="Components\DeathLinkMessage.cs" />
     <Compile Include="Components\GlassDisabler.cs" />
     <Compile Include="Components\ReverseDoorCloser.cs" />
     <Compile Include="ConfigManager.cs" />
