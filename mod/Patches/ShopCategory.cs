@@ -37,6 +37,8 @@ namespace ArchipelagoULTRAKILL.Patches
                         break;
                     case "arm":
                         if (Core.data.hasArm) hasWeapon = true;
+                        if (GameProgressSaver.CheckGear("arm1") == 1) hasWeapon = true;
+                        if (GameProgressSaver.CheckGear("arm2") == 1) hasWeapon = true;
                         break;
                     default: break;
                 }
