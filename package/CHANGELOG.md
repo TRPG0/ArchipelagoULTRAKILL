@@ -1,3 +1,9 @@
+## 1.2.4
+
+- Added "hint mode", which disables all randomization, and allows connecting to other games' slots to unlock hints while playing The Cyber Grind.
+- The chat box in the options menu will now properly clear itself after sending a message.
+- Fixed a crash that would occur after Death Link was enabled, then disconnecting, then reconnecting.
+
 ## 1.2.3
 
 - Death Link is now supported.
