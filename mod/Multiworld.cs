@@ -15,11 +15,12 @@ namespace ArchipelagoULTRAKILL
 {
     public static class Multiworld
     {
-        public static int[] AP_VERSION = new int[] { 0, 4, 1 };
+        public static int[] AP_VERSION = new int[] { 0, 4, 3 };
         public static DeathLinkService DeathLinkService = null;
         public static bool DeathLinkKilling = false;
 
         public static bool Authenticated;
+        public static bool HintMode = false;
         public static ArchipelagoSession Session;
         public static List<string> messages = new List<string>();
 
@@ -30,17 +31,7 @@ namespace ArchipelagoULTRAKILL
                 return true;
             }
 
-            string url = Core.data.host_name;
-            int port = 38281;
-
-            if (url.Contains(":"))
-            {
-                var splits = url.Split(new char[] { ':' });
-                url = splits[0];
-                if (!int.TryParse(splits[1], out port)) port = 38281;
-            }
-
-            Session = ArchipelagoSessionFactory.CreateSession(url, port);
+            Session = ArchipelagoSessionFactory.CreateSession(Core.data.host_name);
             Session.Socket.SocketClosed += SocketClosed;
             Session.Socket.ErrorReceived += ErrorReceived;
             Session.Socket.PacketReceived += PacketReceived;
@@ -65,6 +56,7 @@ namespace ArchipelagoULTRAKILL
                 ConfigManager.playerName.interactable = false;
                 ConfigManager.serverAddress.interactable = false;
                 ConfigManager.serverPassword.interactable = false;
+                ConfigManager.hintMode.interactable = false;
                 ConfigManager.chat.interactable = true;
 
                 switch (int.Parse(success.SlotData["goal"].ToString()))
@@ -214,12 +206,66 @@ namespace ArchipelagoULTRAKILL
                 string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
                 UIManager.menuText.GetComponent<Text>().text = "Archipelago\n" + Core.ModVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
             }
-            else if (loginResult is LoginFailure loginFailure)
+            else if (loginResult is LoginFailure failure)
             {
                 Authenticated = false;
                 //GameConsole.Console.Instance.PrintLine(String.Join("\n", loginFailure.Errors));
-                Core.logger.LogError(String.Join("\n", loginFailure.Errors));
-                ConfigManager.connectionInfo.text = String.Join("\n", loginFailure.Errors);
+                Core.logger.LogError(String.Join("\n", failure.Errors));
+                ConfigManager.connectionInfo.text = String.Join("\n", failure.Errors);
+                Session.Socket.DisconnectAsync();
+                Session = null;
+                UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
+            }
+            return loginResult.Successful;
+        }
+
+        public static bool ConnectBK()
+        {
+            if (Authenticated)
+            {
+                return true;
+            }
+
+            Session = ArchipelagoSessionFactory.CreateSession(Core.data.host_name);
+            Session.Socket.SocketClosed += SocketClosed;
+            Session.Socket.ErrorReceived += ErrorReceived;
+            Session.Socket.PacketReceived += PacketReceived;
+
+            LoginResult loginResult = Session.TryConnectAndLogin(
+                "",
+                Core.data.slot_name,
+                ItemsHandlingFlags.NoItems,
+                new Version(AP_VERSION[0], AP_VERSION[1], AP_VERSION[2]),
+                new string[] { "TextOnly" },
+                null,
+                Core.data.password == "" ? null : Core.data.password,
+                false
+                );
+
+            if (loginResult is LoginSuccessful success)
+            {
+                Authenticated = true;
+                HintMode = true;
+
+                ConfigManager.isConnected.value = true;
+                ConfigManager.playerName.interactable = false;
+                ConfigManager.serverAddress.interactable = false;
+                ConfigManager.serverPassword.interactable = false;
+                ConfigManager.hintMode.interactable = false;
+                ConfigManager.chat.interactable = true;
+
+                Core.logger.LogInfo("Successfully connected to server in hint mode as player \"" + Core.data.slot_name + "\".");
+                ConfigManager.connectionInfo.text = "Successfully connected to server in hint mode as player \"" + Core.data.slot_name + "\".";
+                UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["green"];
+                UIManager.menuText.GetComponent<Text>().text = "Archipelago\n" + Core.ModVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\nHint Mode";
+            }
+            else if (loginResult is LoginFailure failure)
+            {
+                Authenticated = false;
+                HintMode = false;
+                //GameConsole.Console.Instance.PrintLine(String.Join("\n", loginFailure.Errors));
+                Core.logger.LogError(String.Join("\n", failure.Errors));
+                ConfigManager.connectionInfo.text = String.Join("\n", failure.Errors);
                 Session.Socket.DisconnectAsync();
                 Session = null;
                 UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
@@ -233,6 +279,7 @@ namespace ArchipelagoULTRAKILL
             ConfigManager.playerName.interactable = true;
             ConfigManager.serverAddress.interactable = true;
             ConfigManager.serverPassword.interactable = true;
+            ConfigManager.hintMode.interactable = true;
             ConfigManager.chat.interactable = false;
             if (Session != null && Session.Socket != null) Session.Socket.DisconnectAsync();
             if (SceneHelper.CurrentScene == "Main Menu") UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
@@ -241,7 +288,9 @@ namespace ArchipelagoULTRAKILL
             UIManager.log.GetComponent<Text>().text = "";
             messages.Clear();
             Session = null;
+            DeathLinkService = null;
             Authenticated = false;
+            HintMode = false;
         }
 
         public static void SocketClosed(string reason)

@@ -25,6 +25,7 @@ namespace ArchipelagoULTRAKILL
         public static StringField playerName;
         public static StringField serverAddress;
         public static StringField serverPassword;
+        public static BoolField hintMode;
         public static ButtonField connectButton;
         public static ButtonField disconnectButton;
         public static ConfigHeader connectionInfo;
@@ -113,6 +114,8 @@ namespace ArchipelagoULTRAKILL
             playerName = new StringField(playerPanel, "NAME", "playerName", "V1", false, true);
             serverAddress = new StringField(playerPanel, "ADDRESS", "serverAddress", "archipelago.gg", false, true);
             serverPassword = new StringField(playerPanel, "PASSWORD", "serverPassword", "", true, true);
+            hintMode = new BoolField(playerPanel, "HINT MODE", "hintMode", false, false);
+            new ConfigHeader(playerPanel, "Hint mode disables all randomization, and allows connecting to other games' slots to unlock hints while playing The Cyber Grind.", 12, TextAnchor.UpperLeft);
 
             connectButton = new ButtonField(playerPanel, "CONNECT", "connectButton");
             connectButton.onClick += () =>
@@ -125,9 +128,13 @@ namespace ArchipelagoULTRAKILL
                 {
                     connectionInfo.text = "Can only connect to an Archipelago server on the main menu.";
                 }
-                else if ((GameProgressSaver.GetTutorial() || GameProgressSaver.GetIntro()) && !Core.DataExists())
+                else if ((GameProgressSaver.GetTutorial() || GameProgressSaver.GetIntro()) && !Core.DataExists() && !hintMode.value)
                 {
                     connectionInfo.text = "No Archipelago data found. Start a new save file before connecting.";
+                }
+                else if (Core.DataExists() && hintMode.value)
+                {
+                    connectionInfo.text = "Can't use hint mode on a save file that already has randomizer data.";
                 }
                 else if (!Multiworld.Authenticated)
                 {
@@ -135,7 +142,8 @@ namespace ArchipelagoULTRAKILL
                     Core.data.host_name = serverAddress.value;
                     Core.data.password = serverPassword.value;
                     if (Core.data.password == "") Core.data.password = null;
-                    Multiworld.Connect();
+                    if (hintMode.value) Multiworld.ConnectBK();
+                    else Multiworld.Connect();
                 }
             };
 
@@ -175,11 +183,12 @@ namespace ArchipelagoULTRAKILL
             };
 
             chat = new StringField(playerPanel, "CHAT", "chat", "", true, false) { interactable = false };
-            chat.onValueChange += (StringField.StringValueChangeEvent e) =>
+            chat.postValueChangeEvent += (string value) =>
             {
                 if (Multiworld.Authenticated)
                 {
-                    if (e.value != "") Multiworld.Session.Socket.SendPacket(new SayPacket() { Text = e.value });
+                    if (value != "") Multiworld.Session.Socket.SendPacket(new SayPacket() { Text = value });
+                    chat.value = "";
                 }
             };
 

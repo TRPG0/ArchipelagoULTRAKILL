@@ -303,6 +303,7 @@ namespace ArchipelagoULTRAKILL
             menuText.GetComponent<Text>().fontSize = 24;
             string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
             if (Core.DataExists()) menuText.GetComponent<Text>().text = "Archipelago\n" + Core.ModVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
+            else if (Multiworld.HintMode) menuText.GetComponent<Text>().text = "Archipelago\n" + Core.ModVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\nHint Mode";
             else menuText.GetComponent<Text>().text = "Archipelago\n" + Core.ModVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\nNo data.";
             font = menuText.GetComponent<Text>().font;
             menuIcon = new GameObject();

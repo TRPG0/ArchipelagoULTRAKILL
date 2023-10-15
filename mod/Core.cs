@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string ModGUID = "trpg.archipelagoultrakill";
         public const string ModName = "Archipelago";
-        public const string ModVersion = "1.2.3";
+        public const string ModVersion = "1.2.4";
         public const string ModDescription = "Connect to an Archipelago server to play ULTRAKILL randomizer.";
 
         public static string workingPath;
@@ -238,6 +238,7 @@ namespace ArchipelagoULTRAKILL
                     if (SceneHelper.CurrentScene != "Level 0-5") AudioManager.ChangeMusic();
                 }
             }
+            else if (SceneHelper.CurrentScene == "Endless" && Multiworld.HintMode) UIManager.CreateMessageUI();
             if (!inIntro) OptionsManager.Instance.optionsMenu.gameObject.AddComponent<OptionsMenuState>();
 
             if (DataExists() && UIManager.log != null) UIManager.AdjustLogBounds();
