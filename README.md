@@ -22,7 +22,7 @@ Note that the logic for the randomizer assumes that the player is willing to tak
 
 # Setup
 
-First, download and install the Archipelago mod with r2modman, or manually by extracting the contents of the zip file into the `UMM Mods` folder. If you decide to install manually, you will also need to install [PluginConfigurator](https://github.com/eternalUnion/UKPluginConfigurator).
+First, download and install the Archipelago mod with r2modman, or manually by extracting the contents of the zip file into the `plugins` folder. If you decide to install manually, you will also need to install [PluginConfigurator](https://github.com/eternalUnion/UKPluginConfigurator).
 
 *Note that only one player in the multiworld will need to complete steps 1-5.*
 
@@ -52,4 +52,4 @@ Not yet. I would like to make a standalone version of the randomizer eventually,
 
 # Something's not working!
 
-If you have trouble setting up ULTRAKILL randomizer or have found any bugs that need fixing, feel free to ask about it on the [GitHub discussions](https://github.com/TRPG0/ArchipelagoULTRAKILL/discussions) page, or you can DM me on Discord at `TRPG#8501` / `@trpg`.
+If you have trouble setting up ULTRAKILL randomizer or have found any bugs that need fixing, feel free to ask about it on the [GitHub discussions](https://github.com/TRPG0/ArchipelagoULTRAKILL/discussions) page, join the [AP After Dark](https://discord.gg/Sbhy4ykUKn) Discord server, or you can DM me on Discord at `TRPG#8501` / `@trpg`.
