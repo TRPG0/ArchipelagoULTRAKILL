@@ -1145,7 +1145,7 @@ def rules(ultrakillworld):
     add_rule(world.get_location("Cleared 2-4", player),
         lambda state: grab_item(state, player, arm))
     if boss > 0 and goal != 1:
-        set_rule(world.get_location("2-4: Defeat the Corpse of King Minos", player),
+        add_rule(world.get_location("2-4: Defeat the Corpse of King Minos", player),
             lambda state: (
                 grab_item(state, player, arm)
                 and good_weapon(state, player, fire2, arm, slide, dash)
@@ -1323,7 +1323,7 @@ def rules(ultrakillworld):
             lambda state: (
                 level_4_3(state, player, fire2, arm)
                 and can_break_walls(state, player, fire2, arm)
-                and grab_item(state, player, arm)
+                and can_punch(state, player, arm)
             ))
     
     if prank:

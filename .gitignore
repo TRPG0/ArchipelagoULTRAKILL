@@ -1,4 +1,4 @@
 .vs/
 bin/
 obj/
-package/UMM Mods
+package/*.dll

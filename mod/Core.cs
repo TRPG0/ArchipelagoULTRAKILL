@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using System.Text;
-using UMM;
+using BepInEx;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -17,13 +17,12 @@ using System.Reflection;
 
 namespace ArchipelagoULTRAKILL
 {
-    [UKPlugin(ModGUID, ModName, ModVersion, ModDescription, false, true)]
-    public class Core : UKMod
+    [BepInPlugin(ModGUID, ModName, ModVersion)]
+    public class Core : BaseUnityPlugin
     {
         public const string ModGUID = "trpg.archipelagoultrakill";
         public const string ModName = "Archipelago";
-        public const string ModVersion = "1.2.4";
-        public const string ModDescription = "Connect to an Archipelago server to play ULTRAKILL randomizer.";
+        public const string ModVersion = "1.2.5";
 
         public static string workingPath;
         public static string workingDir;
@@ -65,6 +64,10 @@ namespace ArchipelagoULTRAKILL
             "5-4",
             "6-1",
             "6-2",
+            "7-1",
+            "7-2",
+            "7-3",
+            "7-4",
             "P-1",
             "P-2"
         };
@@ -117,7 +120,7 @@ namespace ArchipelagoULTRAKILL
         public static bool staminaPowerup = false;
         public static bool doublejumpPowerup = false;
 
-        public override void OnModLoaded()
+        public void Awake()
         {
             Harmony harmony = new Harmony("archipelago");
             harmony.PatchAll();
@@ -128,8 +131,7 @@ namespace ArchipelagoULTRAKILL
 
             ConfigManager.Initialize();
 
-            obj = FindObjectOfType<Core>().gameObject;
-            obj.name = "Archipelago";
+            obj = this.gameObject;
             obj.transform.localPosition = new Vector3(960, 540, 0);
 
             uim = obj.AddComponent<UIManager>();
@@ -181,7 +183,7 @@ namespace ArchipelagoULTRAKILL
                 }
             }
             */
-            if (SceneHelper.CurrentScene == "Intro" || SceneHelper.CurrentScene == null) return;
+            if (SceneHelper.CurrentScene == "Intro" || SceneHelper.CurrentScene == "Bootstrap" || SceneHelper.CurrentScene == null) return;
             obj.GetComponent<Core>().StopCoroutine("DisplayMessage");
 
             UIManager.displayingMessage = false;

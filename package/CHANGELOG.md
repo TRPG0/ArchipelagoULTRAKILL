@@ -1,3 +1,9 @@
+## 1.2.5
+
+- Quick update so that randomizer can be played on the current version.
+	- This update **does not** contain any new content from Layer 7, that will be coming soon.
+- Archipelago no longer depends on UMM.
+
 ## 1.2.4
 
 - Added "hint mode", which disables all randomization, and allows connecting to other games' slots to unlock hints while playing The Cyber Grind.

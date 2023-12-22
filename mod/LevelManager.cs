@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -51,7 +52,7 @@ namespace ArchipelagoULTRAKILL
                 {
                     VariationInfo info = panel.GetComponent<VariationInfo>();
                     info.costText.text = "<color=red>UNAVAILABLE</color>";
-                    info.buyButton.gameObject.transform.GetChild(0).GetComponent<Text>().text = "UNAVAILABLE";
+                    info.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "UNAVAILABLE";
                     info.equipButton.gameObject.SetActive(false);
                 }
                 else if (weapon == "arm0" && Core.data.hasArm) continue;
@@ -59,6 +60,7 @@ namespace ArchipelagoULTRAKILL
                 else
                 {
                     FieldInfo field = typeof(GameProgressMoneyAndGear).GetField(weapon, BindingFlags.Instance | BindingFlags.Public);
+
                     VariationInfo vi = panel.GetComponent<VariationInfo>();
 
                     Core.logger.LogInfo(weapon + ": " + field.GetValue(generalProgress));
@@ -88,7 +90,7 @@ namespace ArchipelagoULTRAKILL
                         }
                         else description = "???";
 
-                        vi.varPage.transform.GetChild(3).GetComponent<Text>().text = description;
+                        vi.varPage.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = description;
                     }
 
                     if (int.Parse(field.GetValue(generalProgress).ToString()) == 1 && !weapon.Contains("0") && !Core.data.purchasedItems.Contains(weapon))
@@ -105,12 +107,12 @@ namespace ArchipelagoULTRAKILL
                         vi.orderButtons.SetActive(true);
                         Traverse.Create(vi).Field<int>("equipStatus").Value = PrefsManager.Instance.GetInt("weapon." + weapon, 1);
                         Traverse.Create(vi).Field<int>("money").Value = GameProgressSaver.GetMoney();
-                        vi.moneyText.text = MoneyText.DivideMoney(GameProgressSaver.GetMoney()) + "<color=orange>P</color>";
+                        vi.costText.text = MoneyText.DivideMoney(GameProgressSaver.GetMoney()) + "<color=orange>P</color>";
 
-                        vi.buyButton.gameObject.transform.GetChild(0).GetComponent<Text>().text = cost;
+                        vi.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = cost;
                         if (canAfford)
                         {
-                            vi.buyButton.gameObject.transform.GetChild(0).GetComponent<Text>().color = new Color(1, 1, 1);
+                            vi.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(1, 1, 1);
                             vi.buyButton.gameObject.GetComponent<Image>().color = new Color(1, 1, 1);
                         }
                         else
@@ -122,16 +124,15 @@ namespace ArchipelagoULTRAKILL
                     {
                         vi.costText.text = "ALREADY OWNED";
                         vi.buyButton.deactivated = true;
-                        vi.buyButton.gameObject.transform.GetChild(0).GetComponent<Text>().text = "ALREADY OWNED";
-                        vi.buyButton.gameObject.transform.GetChild(0).GetComponent<Text>().color = new Color(0.5882f, 0.5882f, 0.5882f);
+                        vi.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "ALREADY OWNED";
+                        vi.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(0.5882f, 0.5882f, 0.5882f);
                         vi.equipButton.gameObject.SetActive(false);
                     }
                     else if (int.Parse(field.GetValue(generalProgress).ToString()) == 0 && weapon.Contains("0"))
                     {
                         vi.costText.text = "<color=red>UNAVAILABLE</color>";
-                        vi.buyButton.gameObject.transform.GetChild(0).GetComponent<Text>().text = "UNAVAILABLE";
+                        vi.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "UNAVAILABLE";
                         vi.equipButton.gameObject.SetActive(false);
-
                     }
                 }
             }

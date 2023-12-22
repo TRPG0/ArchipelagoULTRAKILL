@@ -62,7 +62,7 @@ namespace ArchipelagoULTRAKILL
         public static void CreateLogObject()
         {
             log = new GameObject();
-            log.name = "Message Log";
+            log.name = "Archipelago Log";
             log.transform.parent = Core.obj.transform;
             log.transform.localPosition = new Vector3(0, 0, 0);
 
@@ -143,6 +143,9 @@ namespace ArchipelagoULTRAKILL
                         break;
                     case "Layer 6 Heresy":
                         layers["layer6"] = component.gameObject;
+                        break;
+                    case "Layer 7 Violence":
+                        layers["layer7"] = component.gameObject;
                         break;
                     case "Prime Sanctums":
                         layers["layerP"] = component.gameObject;
@@ -245,6 +248,18 @@ namespace ArchipelagoULTRAKILL
                         break;
                     case "5-4 Panel":
                         levels["5-4"] = component.gameObject;
+                        break;
+                    case "7-1 Panel":
+                        levels["7-1"] = component.gameObject;
+                        break;
+                    case "7-2 Panel":
+                        levels["7-2"] = component.gameObject;
+                        break;
+                    case "7-3 Panel":
+                        levels["7-3"] = component.gameObject;
+                        break;
+                    case "7-4 Panel":
+                        levels["7-4"] = component.gameObject;
                         break;
                     case "P-1 Panel":
                         levels["P-1"] = component.gameObject;
