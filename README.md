@@ -26,7 +26,7 @@ First, download and install the Archipelago mod with r2modman, or manually by ex
 
 *Note that only one player in the multiworld will need to complete steps 1-5.*
 
-1. Download and install [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). You can skip installing the games you don't plan on playing, but make sure that `Generator` is checked. Optionally, you can also check `Text, to !command and chat` under `Clients` if you would like to have a separate window for chat while playing.
+1. Download and install [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 
 2. Download `ultrakill.apworld` from the mod's [releases page](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases) and add it to your `worlds` folder. (Default path: `C:\ProgramData\Archipelago\lib\worlds`)
 
@@ -48,7 +48,7 @@ There are some additional commands that can be used by pressing `F8` to open the
 
 # Can I play ULTRAKILL randomizer without Archipelago?
 
-Not yet. I would like to make a standalone version of the randomizer eventually, but since the Archipelago version already works well enough, I'm releasing it now.
+Maybe later. I would like to make a standalone version of the randomizer eventually, but since the Archipelago version already works well enough, I'm releasing it now.
 
 # Something's not working!
 

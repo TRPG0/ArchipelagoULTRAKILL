@@ -4,18 +4,18 @@ from enum import Enum
 
 
 class UKType(Enum):
-    Weapon = 1
-    WeaponAlt = 2
-    Arm = 3
-    Ability = 4
-    Skull = 5
-    Level = 6
-    Layer = 7
-    Points = 8
-    Powerup = 9
-    Trap = 10
-    Soap = 11
-    Fire2 = 12
+    Weapon = 0
+    WeaponAlt = 1
+    Arm = 2
+    Ability = 3
+    Skull = 4
+    Level = 5
+    Layer = 6
+    Points = 7
+    Powerup = 8
+    Trap = 9
+    Soap = 10
+    Fire2 = 11
 
 
 class ItemDict(TypedDict):
@@ -202,6 +202,15 @@ item_table: List[ItemDict] = [
     {'name': "Red Skull (6-1)",
         'classification': ItemClassification.progression,
         'type': UKType.Skull},
+    {'name': "Red Skull (7-1)",
+        'classification': ItemClassification.progression,
+        'type': UKType.Skull},
+    {'name': "Blue Skull (7-1)",
+        'classification': ItemClassification.progression,
+        'type': UKType.Skull},
+    {'name': "Red Skull (7-2)",
+        'classification': ItemClassification.progression,
+        'type': UKType.Skull},
 
     # Levels
     {'name': "0-2: THE MEATGRINDER",
@@ -276,6 +285,18 @@ item_table: List[ItemDict] = [
     {'name': "6-2: AESTHETICS OF HATE",
         'classification': ItemClassification.progression,
         'type': UKType.Level},
+    {'name': "7-1: GARDEN OF FORKING PATHS",
+        'classification': ItemClassification.progression,
+        'type': UKType.Level},
+    {'name': "7-2: LIGHT UP THE NIGHT",
+        'classification': ItemClassification.progression,
+        'type': UKType.Level},
+    {'name': "7-3: NO SOUND, NO MEMORY",
+        'classification': ItemClassification.progression,
+        'type': UKType.Level},
+    {'name': "7-4: ...LIKE ANTENNAS TO HEAVEN",
+        'classification': ItemClassification.progression,
+        'type': UKType.Level},
     {'name': "P-1: SOUL SURVIVOR",
         'classification': ItemClassification.filler,
         'type': UKType.Level},
@@ -303,6 +324,9 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.progression,
         'type': UKType.Layer},
     {'name': "LAYER 6: HERESY",
+        'classification': ItemClassification.progression,
+        'type': UKType.Layer},
+    {'name': "LAYER 7: VIOLENCE",
         'classification': ItemClassification.progression,
         'type': UKType.Layer},
 
@@ -416,14 +440,19 @@ group_table: Dict[str, Set[str]] = {
                "5-3: SHIP OF FOOLS",
                "5-4: LEVIATHAN",
                "6-1: CRY FOR THE WEEPER",
-               "6-2: AESTHETICS OF HATE"],
+               "6-2: AESTHETICS OF HATE",
+               "7-1: GARDEN OF FORKING PATHS",
+               "7-2: LIGHT UP THE NIGHT",
+               "7-3: NO SOUND, NO MEMORY",
+               "7-4: ...LIKE ANTENNAS TO HEAVEN"],
     "layers": ["OVERTURE: THE MOUTH OF HELL",
                "LAYER 1: LIMBO",
                "LAYER 2: LUST",
                "LAYER 3: GLUTTONY",
                "LAYER 4: GREED",
                "LAYER 5: WRATH",
-               "LAYER 6: HERESY"],
+               "LAYER 6: HERESY",
+               "LAYER 7: VIOLENCE"],
     "start_weapons": ["Revolver - Piercer",
                       "Revolver - Marksman",
                       "Revolver - Sharpshooter",
@@ -462,6 +491,10 @@ group_table: Dict[str, Set[str]] = {
     "5-4": ["5-4: LEVIATHAN"],
     "6-1": ["6-1: CRY FOR THE WEEPER"],
     "6-2": ["6-2: AESTHETICS OF HATE"],
+    "7-1": ["7-1: GARDEN OF FORKING PATHS"],
+    "7-2": ["7-2: LIGHT UP THE NIGHT"],
+    "7-3": ["7-3: NO SOUND, NO MEMORY"],
+    "7-4": ["7-4: ...LIKE ANTENNAS TO HEAVEN"],
     "P-1": ["P-1: SOUL SURVIVOR"],
     "P-2": ["P-2: WAIT OF THE WORLD"],
     "overture": ["OVERTURE: THE MOUTH OF HELL"],
@@ -479,4 +512,6 @@ group_table: Dict[str, Set[str]] = {
     "wrath": ["LAYER 5: WRATH"],
     "layer 6": ["LAYER 6: HERESY"],
     "heresy": ["LAYER 6: HERESY"],
+    "layer 7": ["LAYER 7: VIOLENCE"],
+    "violence": ["LAYER 7: VIOLENCE"],
 }

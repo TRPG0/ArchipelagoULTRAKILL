@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ArchipelagoULTRAKILL.Structures;
+using HarmonyLib;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
@@ -7,7 +8,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Prefix()
         {
-            if (Core.DataExists() && Core.data.musicRandomizer && SceneHelper.CurrentScene == "Level 0-5") AudioManager.ChangeMusic();
+            if (Core.DataExists() && Core.data.musicRandomizer && Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.Music == MusicType.Special2) AudioManager.ChangeMusic();
         }
     }
 }

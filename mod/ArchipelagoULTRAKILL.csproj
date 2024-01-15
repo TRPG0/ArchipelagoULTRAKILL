@@ -312,12 +312,14 @@
   <ItemGroup>
     <Compile Include="AudioManager.cs" />
     <Compile Include="ColorRandomizer.cs" />
+    <Compile Include="Components\ActStats.cs" />
     <Compile Include="Components\ChapterSelectState.cs" />
     <Compile Include="Commands\Say.cs" />
     <Compile Include="Commands\Disconnect.cs" />
     <Compile Include="Commands\Connect.cs" />
     <Compile Include="Components\DeathLinkMessage.cs" />
     <Compile Include="Components\GlassDisabler.cs" />
+    <Compile Include="Components\PlayerHelper.cs" />
     <Compile Include="Components\ReverseDoorCloser.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="LevelManager.cs" />
@@ -340,7 +342,6 @@
     <Compile Include="Patches\LevelStatsEnabler.cs" />
     <Compile Include="Patches\NewMovement.cs" />
     <Compile Include="Patches\PlayerActivatorRelay.cs" />
-    <Compile Include="Patches\PowerUpMeter.cs" />
     <Compile Include="Patches\RocketLauncher.cs" />
     <Compile Include="Patches\SecretMissionPit.cs" />
     <Compile Include="Patches\ShopButton.cs" />
@@ -353,7 +354,7 @@
     <Compile Include="Powerups\DoubleJumpPowerup.cs" />
     <Compile Include="Powerups\RadianceTrap.cs" />
     <Compile Include="Powerups\StaminaPowerup.cs" />
-    <Compile Include="Powerups\WalljumpTrap.cs" />
+    <Compile Include="Powerups\WallJumpTrap.cs" />
     <Compile Include="Powerups\DashTrap.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Core.cs" />
@@ -363,10 +364,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Structures\AItem.cs" />
     <Compile Include="Structures\APItem.cs" />
+    <Compile Include="Structures\Colors.cs" />
+    <Compile Include="Structures\LevelInfo.cs" />
     <Compile Include="Structures\Message.cs" />
     <Compile Include="Structures\RawLocationData.cs" />
-    <Compile Include="Structures\UKLocation.cs" />
+    <Compile Include="Structures\Location.cs" />
     <Compile Include="Structures\Enums.cs" />
     <Compile Include="Structures\UKItem.cs" />
     <Compile Include="UIManager.cs" />
@@ -380,7 +384,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\trpg_archipelago.assetBundle" />
+    <None Include="Resources\trpg_archipelago" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

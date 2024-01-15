@@ -8,7 +8,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static bool Prefix(NewMovement __instance)
         {
-            if (Core.DataExists() && Core.playerActive && !Core.data.canSlide)
+            if (Core.DataExists() && Core.IsPlaying && !Core.data.canSlide)
             {
                 //Debug.Log("Attempted to slide, canSlide is false.");
                 __instance.StopSlide();

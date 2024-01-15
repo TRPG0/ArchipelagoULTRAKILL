@@ -1,3 +1,17 @@
+## 2.0.0
+
+- A large portion of the mod has been rewritten.
+	- Note that games started on 1.2.5 or older **will not** be playable on this version. Finish your games in progress before updating.
+- Added new content from Layer 7.
+- Added a summary of levels unlocked or completed, secrets found, and etc. which can be seen when hovering over an act on the act select screen.
+- Several trap items have been buffed.
+	- Stamina Limiters and Wall Jump Limiters both set stamina or wall jumps to 0, instead of reducing by 1.
+	- Hard Damage now adds 75 instead of 50 hard damage.
+	- Radiant Aura now lasts for 15 seconds instead of 10, the same as all other trap items.
+- Fixed incorrect logic for 4-1 Secret #5 and Challenge.
+- Tweaked how items are received, which hopefully fixes instances of not actually getting items when sent by other players.
+- Fixed various bugs related to the shop.
+
 ## 1.2.5
 
 - Quick update so that randomizer can be played on the current version.

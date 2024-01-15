@@ -14,34 +14,34 @@ namespace ArchipelagoULTRAKILL
                 yield return www.SendWebRequest();
                 if (www == null)
                 {
-                    Core.logger.LogError("Web request was null.");
+                    Core.Logger.LogError("Web request was null.");
                     yield break;
                 }
                 if (www.isNetworkError)
                 {
-                    Core.logger.LogError("Couldn't get version from url: " + www.error);
+                    Core.Logger.LogError("Couldn't get version from url: " + www.error);
                     yield break;
                 }
                 string text = www.downloadHandler.text;
                 JArray jObjects = JArray.Parse(text);
                 string latest = jObjects[0].Value<string>("name");
-                if (Core.ModVersion != latest)
+                if (Core.PluginVersion != latest)
                 {
-                    if (Core.ModVersion.CompareTo(latest) < 0)
+                    if (Core.PluginVersion.CompareTo(latest) < 0)
                     {
-                        Core.logger.LogWarning("A new version of Archipelago is available: " + latest + " | Current version: " + Core.ModVersion);
-                        GameConsole.Console.Instance.PrintLine("[Archipelago] A new version of Archipelago is available: " + latest + " | Current version: " + Core.ModVersion, GameConsole.ConsoleLogType.Warning);
+                        Core.Logger.LogWarning("A new version of Archipelago is available: " + latest + " | Current version: " + Core.PluginVersion);
+                        GameConsole.Console.Instance.PrintLine("[Archipelago] A new version of Archipelago is available: " + latest + " | Current version: " + Core.PluginVersion, GameConsole.ConsoleLogType.Warning);
                         new ConfigHeader(ConfigManager.config.rootPanel, "A new version of Archipelago is available!") { textColor = UnityEngine.Color.yellow };
                     }
                     else
                     {
-                        Core.logger.LogMessage("The current version (" + Core.ModVersion + ") is newer than the latest release. (" + latest + ")");
-                        GameConsole.Console.Instance.PrintLine("[Archipelago] The current version (" + Core.ModVersion + ") is newer than the latest release. (" + latest + ")");
+                        Core.Logger.LogMessage("The current version (" + Core.PluginVersion + ") is newer than the latest release. (" + latest + ")");
+                        GameConsole.Console.Instance.PrintLine("[Archipelago] The current version (" + Core.PluginVersion + ") is newer than the latest release. (" + latest + ")");
                     }
                 }
                 else
                 {
-                    Core.logger.LogMessage("Archipelago is up to date.");
+                    Core.Logger.LogMessage("Archipelago is up to date.");
                     GameConsole.Console.Instance.PrintLine("[Archipelago] Archipelago is up to date.");
                 }
                 yield break;

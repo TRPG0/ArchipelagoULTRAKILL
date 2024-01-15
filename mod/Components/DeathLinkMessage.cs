@@ -107,13 +107,13 @@ namespace ArchipelagoULTRAKILL.Components
                 if (specialMessages.ContainsKey(SceneHelper.CurrentScene))
                 {
                     index = Random.Range(0, specialMessages[SceneHelper.CurrentScene].Count);
-                    Core.logger.LogWarning($"Sending Death Link with message: {string.Format(specialMessages[SceneHelper.CurrentScene][index], Core.data.slot_name)}");
+                    Core.Logger.LogWarning($"Sending Death Link with message: {string.Format(specialMessages[SceneHelper.CurrentScene][index], Core.data.slot_name)}");
                     Multiworld.DeathLinkService.SendDeathLink(new DeathLink(Core.data.slot_name, string.Format(specialMessages[SceneHelper.CurrentScene][index], Core.data.slot_name)));
                 }
                 else
                 {
                     index = Random.Range(0, deathMessages.Count);
-                    Core.logger.LogWarning($"Sending Death Link with message: {string.Format(deathMessages[index], Core.data.slot_name)}");
+                    Core.Logger.LogWarning($"Sending Death Link with message: {string.Format(deathMessages[index], Core.data.slot_name)}");
                     Multiworld.DeathLinkService.SendDeathLink(new DeathLink(Core.data.slot_name, string.Format(deathMessages[index], Core.data.slot_name)));
                 }
             }

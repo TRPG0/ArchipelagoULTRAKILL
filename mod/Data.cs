@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ArchipelagoULTRAKILL.Structures;
+using System.Collections.Generic;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -17,7 +18,7 @@ namespace ArchipelagoULTRAKILL
 
         public string goal = "6-2";
         public int goalRequirement = 20;
-        public int bossRewards = 0;
+        public BossOptions bossRewards = BossOptions.Disabled;
         public bool challengeRewards = false;
         public bool pRankRewards = false;
         public bool fishRewards = false;

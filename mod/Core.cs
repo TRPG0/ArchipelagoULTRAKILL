@@ -9,116 +9,158 @@ using System.IO;
 using Newtonsoft.Json;
 using ArchipelagoULTRAKILL.Structures;
 using ArchipelagoULTRAKILL.Components;
-using ArchipelagoULTRAKILL.Powerups;
 using BepInEx.Logging;
 using System.Reflection;
-// using UnityEngine.AddressableAssets;
-// using UnityEngine.AddressableAssets.ResourceLocators;
+using UnityEngine.AddressableAssets;
+using UnityEngine.AddressableAssets.ResourceLocators;
 
 namespace ArchipelagoULTRAKILL
 {
-    [BepInPlugin(ModGUID, ModName, ModVersion)]
+    [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     public class Core : BaseUnityPlugin
     {
-        public const string ModGUID = "trpg.archipelagoultrakill";
-        public const string ModName = "Archipelago";
-        public const string ModVersion = "1.2.5";
+        public const string PluginGUID = "trpg.archipelagoultrakill";
+        public const string PluginName = "Archipelago";
+        public const string PluginVersion = "2.0.0";
 
         public static string workingPath;
         public static string workingDir;
 
-        public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("Archipelago");
+        public static new ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("Archipelago");
 
         public static GameObject obj;
         public static UIManager uim;
 
-        public static bool inIntro => GameStateManager.Instance.IsStateActive("intro");
-        public static bool inLevel => !GameStateManager.Instance.IsStateActive("main-menu") && !GameStateManager.Instance.IsStateActive("intro");
+        public static bool IsInIntro => GameStateManager.Instance.IsStateActive("intro");
+        public static bool IsPitFalling => GameStateManager.Instance.IsStateActive("pit-falling");
+        public static bool IsPaused => GameStateManager.Instance.IsStateActive("pause") || GameStateManager.Instance.IsStateActive("pit-falling");
+        public static bool IsInLevel => !GameStateManager.Instance.IsStateActive("main-menu") && !GameStateManager.Instance.IsStateActive("intro");
+        public static bool IsPlaying => IsInLevel && !IsPaused && PlayerHelper.Instance != null;
+        public static bool CanGetWeapon => IsPlaying && GunSetter.Instance != null;
 
         public static Data data = new Data();
         public static bool firstTimeLoad = false;
 
-        public static readonly List<string> allLevels = new List<string>()
+        public static readonly List<LevelInfo> levelInfos = new List<LevelInfo>()
         {
-            "0-2",
-            "0-3",
-            "0-4",
-            "0-5",
-            "1-1",
-            "1-2",
-            "1-3",
-            "1-4",
-            "2-1",
-            "2-2",
-            "2-3",
-            "2-4",
-            "3-1",
-            "3-2",
-            "4-1",
-            "4-2",
-            "4-3",
-            "4-4",
-            "5-1",
-            "5-2",
-            "5-3",
-            "5-4",
-            "6-1",
-            "6-2",
-            "7-1",
-            "7-2",
-            "7-3",
-            "7-4",
-            "P-1",
-            "P-2"
+            new LevelInfo("0-1", 1, 0, true, MusicType.Normal, SkullsType.None),
+            new LevelInfo("0-2", 2, 0, true, MusicType.Normal, SkullsType.Normal, new List<string>() { "2_b" }),
+            new LevelInfo("0-3", 3, 0, true, MusicType.Normal, SkullsType.None),
+            new LevelInfo("0-4", 4, 0, true, MusicType.Normal, SkullsType.None),
+            new LevelInfo("0-5", 5, 0, false, MusicType.Special2, SkullsType.None),
+            new LevelInfo("1-1", 6, 1, true, MusicType.Special, SkullsType.Normal, new List<string>() { "6_b", "6_r" }),
+            new LevelInfo("1-2", 7, 1, true, MusicType.Special, SkullsType.Normal, new List<string>() { "7_r", "7_b" }),
+            new LevelInfo("1-3", 8, 1, true, MusicType.Normal, SkullsType.Normal, new List<string>() { "8_r", "8_b" }),
+            new LevelInfo("1-4", 9, 1, false, MusicType.Special, SkullsType.Special),
+            new LevelInfo("2-1", 10, 2, true, MusicType.Special, SkullsType.None),
+            new LevelInfo("2-2", 11, 2, true, MusicType.Normal, SkullsType.None),
+            new LevelInfo("2-3", 12, 2, true, MusicType.Normal, SkullsType.Normal, new List<string>() { "12_r", "12_b" }),
+            new LevelInfo("2-4", 13, 2, false, MusicType.Special, SkullsType.Normal, new List<string>() { "13_r", "13_b" }),
+            new LevelInfo("3-1", 14, 3, true, MusicType.Special, SkullsType.None),
+            new LevelInfo("3-2", 15, 3, false, MusicType.Special, SkullsType.None),
+            new LevelInfo("4-1", 16, 4, true, MusicType.Normal, SkullsType.None),
+            new LevelInfo("4-2", 17, 4, true, MusicType.Normal, SkullsType.Normal, new List<string>() { "17_r", "17_b" }),
+            new LevelInfo("4-3", 18, 4, true, MusicType.Special, SkullsType.Normal, new List<string>() { "18_b" }),
+            new LevelInfo("4-4", 19, 4, false, MusicType.Special, SkullsType.Normal, new List<string>() { "19_b" }),
+            new LevelInfo("5-1", 20, 5, true, MusicType.Normal, SkullsType.Special),
+            new LevelInfo("5-2", 21, 5, true, MusicType.Skip, SkullsType.Normal, new List<string>() { "21_r", "21_b" }),
+            new LevelInfo("5-3", 22, 5, true, MusicType.Special, SkullsType.Normal, new List<string>() { "22_r", "22_b" }),
+            new LevelInfo("5-4", 23, 5, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("6-1", 24, 6, true, MusicType.Special, SkullsType.Normal, new List<string>() { "24_r" }),
+            new LevelInfo("6-2", 25, 6, false, MusicType.Special, SkullsType.None),
+            new LevelInfo("7-1", 26, 7, true, MusicType.Special, SkullsType.Normal, new List<string>() { "26_b", "26_r" }),
+            new LevelInfo("7-2", 27, 7, true, MusicType.Special, SkullsType.Normal, new List<string>() { "27_r" }),
+            new LevelInfo("7-3", 28, 7, true, MusicType.Special, SkullsType.None),
+            new LevelInfo("7-4", 29, 7, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("P-1", 666, 666, false, MusicType.Special, SkullsType.None),
+            new LevelInfo("P-2", 667, 667, false, MusicType.Special, SkullsType.None)
         };
 
-        public static readonly List<string> allSecrets = new List<string>()
+        public static List<string> AllLevels
         {
-            "0-S",
-            "1-S",
-            "2-S",
-            "4-S",
-            "5-S"
-        };
+            get
+            {
+                List<string> list = new List<string>();
+                foreach (LevelInfo info in levelInfos)
+                {
+                    if (info.Name == "0-1") continue;
+                    list.Add(info.Name);
+                }
+                return list;
+            }
+        }
 
-        public static readonly Dictionary<int, string> idToLevel = new Dictionary<int, string>()
+        public static bool CurrentLevelHasInfo
         {
-            [1] = "0-1",
-            [2] = "0-2",
-            [3] = "0-3",
-            [4] = "0-4",
-            [5] = "0-5",
-            [6] = "1-1",
-            [7] = "1-2",
-            [8] = "1-3",
-            [9] = "1-4",
-            [10] = "2-1",
-            [11] = "2-2",
-            [12] = "2-3",
-            [13] = "2-4",
-            [14] = "3-1",
-            [15] = "3-2",
-            [16] = "4-1",
-            [17] = "4-2",
-            [18] = "4-3",
-            [19] = "4-4",
-            [20] = "5-1",
-            [21] = "5-2",
-            [22] = "5-3",
-            [23] = "5-4",
-            [24] = "6-1",
-            [25] = "6-2",
-            [666] = "P-1",
-            [667] = "P-2"
+            get
+            {
+                if (SceneHelper.CurrentScene == "Level 0-S") return true;
+                else return SceneHelper.CurrentScene.Contains("Level ") && !SceneHelper.IsSceneRankless;
+            }
+        }
+
+        public static LevelInfo CurrentLevelInfo
+        {
+            get
+            {
+                if (SceneHelper.CurrentScene == "Level 0-S") return new LevelInfo("0-S", 0, 0, false, MusicType.Skip, SkullsType.Normal);
+                else if (CurrentLevelHasInfo) return GetLevelInfo(SceneHelper.CurrentLevelNumber);
+                else return null;
+            }
+        }
+
+        public static LevelInfo GetLevelInfo(int id)
+        {
+            foreach (LevelInfo info in levelInfos)
+            {
+                if (info.Id == id) return info;
+            }
+            Logger.LogWarning($"No level info for ID {id}.");
+            return null;
+        }
+
+        public static LevelInfo GetLevelInfo(string name)
+        {
+            foreach (LevelInfo info in levelInfos)
+            {
+                if (info.Name == name) return info;
+            }
+            Logger.LogWarning($"No level info for name {name}.");
+            return null;
+        }
+
+        public static int GetLevelIdFromName(string name)
+        {
+            LevelInfo info = GetLevelInfo(name);
+            if (info == null)
+            {
+                Logger.LogWarning($"No level info for name {name}.");
+                return 0;
+            }
+            return info.Id;
+        }
+
+        public static string GetLevelNameFromId(int id)
+        {
+            LevelInfo info = GetLevelInfo(id);
+            if (info == null)
+            {
+                Logger.LogWarning($"No level info for ID {id}.");
+                return null;
+            }
+            return info.Name;
+        }
+
+        public static readonly Dictionary<string, int> shopPrices = new Dictionary<string, int>()
+        {
+            ["rev2"] = 7500,
+            ["rev1"] = 12500,
+            ["sho1"] = 12500,
+            ["nai1"] = 25000,
+            ["rai1"] = 100000,
+            ["rai2"] = 100000,
+            ["rock1"] = 75000
         };
-
-        public static bool playerActive = false;
-        public static bool poweredUp = false;
-
-        public static bool dashTrap = false;
-        public static bool walljumpTrap = false;
-        public static bool staminaPowerup = false;
-        public static bool doublejumpPowerup = false;
 
         public void Awake()
         {
@@ -131,26 +173,12 @@ namespace ArchipelagoULTRAKILL
 
             ConfigManager.Initialize();
 
-            obj = this.gameObject;
+            obj = gameObject;
             obj.transform.localPosition = new Vector3(960, 540, 0);
 
             uim = obj.AddComponent<UIManager>();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
-            //UKAPI.OnLevelChanged += ChangedLevel;
-
-            UIManager.skullsInLevel["0-2"] = new List<string>{ "2_b" };
-            UIManager.skullsInLevel["1-1"] = new List<string>{ "6_b", "6_r" };
-            UIManager.skullsInLevel["1-2"] = new List<string> { "7_r", "7_b" };
-            UIManager.skullsInLevel["1-3"] = new List<string> { "8_r", "8_b" };
-            UIManager.skullsInLevel["2-3"] = new List<string> { "12_r", "12_b" };
-            UIManager.skullsInLevel["2-4"] = new List<string> { "13_r", "13_b" };
-            UIManager.skullsInLevel["4-2"] = new List<string> { "17_r", "17_b" };
-            UIManager.skullsInLevel["4-3"] = new List<string> { "18_b" };
-            UIManager.skullsInLevel["4-4"] = new List<string> { "19_b" };
-            UIManager.skullsInLevel["5-2"] = new List<string> { "21_r", "21_b" };
-            UIManager.skullsInLevel["5-3"] = new List<string> { "22_r", "22_b" };
-            UIManager.skullsInLevel["6-1"] = new List<string> { "24_r" };
 
             GameConsole.Console.Instance.RegisterCommand(new Commands.Connect());
             GameConsole.Console.Instance.RegisterCommand(new Commands.Disconnect());
@@ -161,30 +189,8 @@ namespace ArchipelagoULTRAKILL
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            /*
-            foreach (var locator in Addressables.ResourceLocators)
-            {
-                if (locator is ResourceLocationMap)
-                {
-                    foreach (string key in locator.Keys)
-                    {
-                        if (key.ToLower().Contains("4-3")) logger.LogInfo(key);
-                    }
-                }
-            }
-            */
-            /*
-            foreach (MusicChanger changer in Resources.FindObjectsOfTypeAll<MusicChanger>())
-            {
-                if (changer.gameObject.scene.name == SceneManager.GetActiveScene().name)
-                {
-                    logger.LogInfo(changer.gameObject.name);
-                    if (changer.transform.parent != null) logger.LogInfo(changer.transform.parent.name);
-                }
-            }
-            */
             if (SceneHelper.CurrentScene == "Intro" || SceneHelper.CurrentScene == "Bootstrap" || SceneHelper.CurrentScene == null) return;
-            obj.GetComponent<Core>().StopCoroutine("DisplayMessage");
+            uim.StopCoroutine("DisplayMessage");
 
             UIManager.displayingMessage = false;
             UIManager.levels.Clear();
@@ -193,25 +199,17 @@ namespace ArchipelagoULTRAKILL
             uim.deathLinkMessage = null;
 
             LevelManager.skulls.Clear();
-            LevelManager.shopPanels.Clear();
-
-            playerActive = false;
-            poweredUp = false;
-            staminaPowerup = false;
-            doublejumpPowerup = false;
-            dashTrap = false;
-            walljumpTrap = false;
 
             ConfigManager.connectionInfo.text = "";
-            if (ConfigManager.uiColorRandomizer.value == Enums.ColorOptions.EveryLoad) ColorRandomizer.RandomizeUIColors();
-            if (ConfigManager.gunColorRandomizer.value == Enums.ColorOptions.EveryLoad) ColorRandomizer.RandomizeGunColors();
+            if (ConfigManager.uiColorRandomizer.value == ColorOptions.EveryLoad) ColorRandomizer.RandomizeUIColors();
+            if (ConfigManager.gunColorRandomizer.value == ColorOptions.EveryLoad) ColorRandomizer.RandomizeGunColors();
 
             if (SceneHelper.CurrentScene == "Main Menu")
             {
                 UIManager.FindMenuObjects();
 
-                if (DataExists() && Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["green"];
-                else if (DataExists() && !Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
+                if (DataExists() && Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
+                else if (DataExists() && !Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
 
                 if (UIManager.log == null) UIManager.CreateLogObject();
 
@@ -231,17 +229,13 @@ namespace ArchipelagoULTRAKILL
                     if (!data.unlockedLevels.Contains(data.goal)) data.unlockedLevels.Add(data.goal);
                 }
             }
-            else if (inLevel && DataExists())
+            else if (IsInLevel && DataExists())
             {
                 UIManager.CreateMessageUI();
-                LevelManager.FindShopObjects();
-                if (data.musicRandomizer)
-                {
-                    if (SceneHelper.CurrentScene != "Level 0-5") AudioManager.ChangeMusic();
-                }
+                if (data.musicRandomizer && CurrentLevelHasInfo && CurrentLevelInfo.Music > MusicType.Skip && CurrentLevelInfo.Music < MusicType.Special2) AudioManager.ChangeMusic();
             }
             else if (SceneHelper.CurrentScene == "Endless" && Multiworld.HintMode) UIManager.CreateMessageUI();
-            if (!inIntro) OptionsManager.Instance.optionsMenu.gameObject.AddComponent<OptionsMenuState>();
+            if (!IsInIntro) OptionsManager.Instance.optionsMenu.gameObject.AddComponent<OptionsMenuState>();
 
             if (DataExists() && UIManager.log != null) UIManager.AdjustLogBounds();
             if (DataExists() && SceneHelper.CurrentScene == "Level 1-2" && GameProgressSaver.GetGeneralProgress().nai0 == 0) LevelManager.DeactivateNailgun();
@@ -272,7 +266,7 @@ namespace ArchipelagoULTRAKILL
             }
             else
             {
-                logger.LogError("Archipelago data for slot " + (GameProgressSaver.currentSlot + 1) + " does not exist.");
+                Logger.LogError("Archipelago data for slot " + (GameProgressSaver.currentSlot + 1) + " does not exist.");
             }
         }
 
@@ -282,91 +276,42 @@ namespace ArchipelagoULTRAKILL
             if (File.Exists(filePath)) File.Delete(filePath);
         }
 
-        public void AddPowerup()
+        public static bool IsFire2Unlocked(string weapon)
         {
-            Enums.Powerup powerup = LocationManager.powerupQueue[0];
-            LocationManager.powerupQueue.RemoveAt(0);
-            GameObject gameObject = new GameObject();
-            poweredUp = true;
-            switch (powerup)
-            {
-                case Enums.Powerup.DualWield:
-                    gameObject = Instantiate(AssetHelper.LoadPrefab("Assets/Prefabs/Levels/DualWieldPowerup.prefab"), NewMovement.Instance.transform);
-                    gameObject.transform.position = NewMovement.Instance.transform.position;
-                    Traverse.Create(gameObject.GetComponent<DualWieldPickup>()).Method("PickedUp").GetValue();
-                    //Destroy(gameObject);
-                    break;
-                case Enums.Powerup.InfiniteStamina:
-                    gameObject.transform.SetParent(obj.transform);
-                    gameObject.AddComponent<StaminaPowerup>();
-                    break;
-                case Enums.Powerup.DoubleJump:
-                    gameObject.transform.SetParent(obj.transform);
-                    gameObject.AddComponent<DoubleJumpPowerup>();
-                    break;
-                case Enums.Powerup.StaminaLimiter:
-                    gameObject.transform.SetParent(obj.transform);
-                    gameObject.AddComponent<DashTrap>();
-                    break;
-                case Enums.Powerup.WalljumpLimiter:
-                    gameObject.transform.SetParent(obj.transform);
-                    gameObject.AddComponent<WalljumpTrap>();
-                    break;
-                case Enums.Powerup.Radiance:
-                    gameObject.transform.SetParent(obj.transform);
-                    gameObject.AddComponent<RadianceTrap>();
-                    break;
-                case Enums.Powerup.EmptyAmmo:
-                    WeaponCharges.Instance.rev0charge = 0;
-                    WeaponCharges.Instance.rev1charge = 0;
-                    WeaponCharges.Instance.naiMagnetCharge = 0;
-                    WeaponCharges.Instance.naiHeatsinks = 0;
-                    WeaponCharges.Instance.naiSawHeatsinks = 0;
-                    WeaponCharges.Instance.raicharge = 0;
-                    WeaponCharges.Instance.rocketFreezeTime = 0;
-                    WeaponCharges.Instance.rocketCannonballCharge = 0;
-                    poweredUp = false;
-                    if (LocationManager.powerupQueue.Count > 0) AddPowerup();
-                    break;
-                default: break;
-            }
-        }
-
-        public static bool HasNoArms()
-        {
-            bool hasNoArms = true;
-            if (data.hasArm || GameProgressSaver.GetGeneralProgress().arm1 == 1) hasNoArms = false;
-            return hasNoArms;
+            if (!data.randomizeFire2) return true;
+            return data.unlockedFire2.Contains(weapon);
         }
 
         public static bool CanBreakGlass()
         {
-            if (LocationManager.ukitems.ContainsKey("1_w1"))
-            {
-                switch (LocationManager.ukitems["1_w1"].item_name)
-                {
-                    case "Revolver - Piercer":
-                    case "Revolver - Marksman":
-                    case "Revolver - Sharpshooter":
-                    case "Shotgun - Core Eject":
-                    case "Shotgun - Pump Charge":
-                        if (data.randomizeFire2) return false;
-                        else return true;
-                    case "Railcannon - Electric":
-                    case "Railcannon - Malicious":
-                    case "Rocket Launcher - Freezeframe":
-                    case "Rocket Launcher - S.R.S. Cannon":
-                    case "Knuckleblaster":
-                        return true;
-                    case "Nailgun - Attractor":
-                    case "Nailgun - Overheat":
-                    case "Feedbacker":
-                        return false;
-                    default:
-                        return false;
-                }
-            }
-            else return false;
+            GameProgressMoneyAndGear save = GameProgressSaver.GetGeneralProgress();
+
+            // Piercer
+            if (save.rev0 > 0 && IsFire2Unlocked("rev0")) return true;
+            // Sharpshooter
+            if (save.rev1 > 0 && IsFire2Unlocked("rev1")) return true;
+            // Marksman
+            if (save.rev2 > 0 && IsFire2Unlocked("rev2")) return true;
+
+            // Core Eject
+            if (save.sho0 > 0 && IsFire2Unlocked("sho0")) return true;
+            // Pump Charge
+            if (save.sho1 > 0 && IsFire2Unlocked("sho1")) return true;
+
+            // Electric
+            if (save.rai0 > 0) return true;
+            // Malicious
+            if (save.rai2 > 0) return true;
+
+            // Freezeframe
+            if (save.rock0 > 0) return true;
+            // S.R.S. Cannon
+            if (save.rock1 > 0) return true;
+
+            // Knuckleblaster
+            if (save.arm1 > 0) return true;
+
+            return false;
         }
 
         public static void SpawnSoap()
@@ -384,144 +329,33 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
-        public static string GetHeldWeapon()
+        public static List<string> SearchAssetKeys(string contains)
         {
-            if (GunControl.Instance.currentWeapon == null) return "?";
-
-            if (GunControl.Instance.currentWeapon.GetComponent<Revolver>())
+            List<string> keys = new List<string>();
+            foreach (var locator in Addressables.ResourceLocators)
             {
-                switch (GunControl.Instance.currentWeapon.GetComponent<Revolver>().gunVariation)
+                if (locator is ResourceLocationMap)
                 {
-                    case 0:
-                    default:
-                        return "rev0";
-                    case 1:
-                        return "rev2";
-                    case 2:
-                        return "rev1";
-                }
-            }
-            else if (GunControl.Instance.currentWeapon.GetComponent<Shotgun>()) return $"sho{GunControl.Instance.currentWeapon.GetComponent<Shotgun>().variation}";
-            else if (GunControl.Instance.currentWeapon.GetComponent <Nailgun>())
-            {
-                switch (GunControl.Instance.currentWeapon.GetComponent<Nailgun>().variation)
-                {
-                    case 0:
-                    default:
-                        return "nai1";
-                    case 1:
-                        return "nai0";
-                }
-            }
-            else if (GunControl.Instance.currentWeapon.GetComponent<Railcannon>()) return $"rai{GunControl.Instance.currentWeapon.GetComponent<Railcannon>().variation}";
-            else if (GunControl.Instance.currentWeapon.GetComponent<RocketLauncher>()) return $"rock{GunControl.Instance.currentWeapon.GetComponent<RocketLauncher>().variation}";
-            else return "?";
-        }
-
-        void Update()
-        {
-            if (playerActive && DataExists())
-            {
-                if (walljumpTrap)
-                {
-                    if (data.walljumps > 0 && NewMovement.Instance.currentWallJumps < (3 - (data.walljumps - 1)))
-                        NewMovement.Instance.currentWallJumps = (3 - (data.walljumps - 1));
-                    else if (data.walljumps == 0) NewMovement.Instance.currentWallJumps = 3;
-                }
-                else
-                {
-                    if (data.walljumps < 3 && NewMovement.Instance.currentWallJumps < (3 - data.walljumps))
-                        NewMovement.Instance.currentWallJumps = 3 - data.walljumps;
-                }
-
-                if (staminaPowerup)
-                {
-                    NewMovement.Instance.boostCharge = 300;
-                }
-                else if (dashTrap)
-                {
-                    if (data.dashes > 0 && NewMovement.Instance.boostCharge > ((data.dashes - 1) * 100))
-                        NewMovement.Instance.boostCharge = (data.dashes * 100) - 100;
-                    else if (data.dashes == 0) NewMovement.Instance.boostCharge = 0;
-                }
-                else
-                {
-                    if (data.dashes < 3 && NewMovement.Instance.boostCharge > (data.dashes * 100))
-                        NewMovement.Instance.boostCharge = data.dashes * 100;
-                }
-
-                //if (!data.canSlam && data.playerActivated && NewMovement.Instance.GetFieldValue<float>("fallTime", true) > 0.3)
-                if (!data.canSlam && Traverse.Create(NewMovement.Instance).Field<float>("fallTime").Value > 0.3)
-                {
-                    Traverse.Create(NewMovement.Instance).Field<float>("fallTime").Value = 0.3f;
-                    if (!NewMovement.Instance.gc.onGround) Traverse.Create(NewMovement.Instance).Field<bool>("falling").Value = true;
-                }
-
-                if (!data.hasArm && FistControl.Instance.currentPunch.type == FistType.Standard && SceneHelper.CurrentScene != "Level 5-S")
-                {
-                    FistControl.Instance.currentPunch.ready = false;
-                }
-
-                if (data.randomizeFire2 && !data.unlockedFire2.Contains("rev0") && GetHeldWeapon() == "rev0" && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
-                {
-                    if (GameProgressSaver.GetGeneralProgress().rev0 == 1)
+                    foreach (string key in locator.Keys)
                     {
-                        Traverse.Create(GunControl.Instance.currentWeapon.GetComponent<Revolver>()).Field<bool>("pierceReady").Value = false;
-                        GunControl.Instance.currentWeapon.GetComponent<Revolver>().pierceCharge = 0;
-
-                        if (Traverse.Create(PowerUpMeter.Instance).Field<bool>("hasPowerUp").Value == true)
-                        {
-                            foreach (DualWield dw in GunControl.Instance.gameObject.GetComponentsInChildren<DualWield>())
-                            {
-                                Traverse.Create(dw.gameObject.transform.GetChild(0).GetComponent<Revolver>()).Field<bool>("pierceReady").Value = false;
-                                dw.gameObject.transform.GetChild(0).GetComponent<Revolver>().pierceCharge = 0;
-                            }
-                        }
+                        if (key.Contains(contains)) keys.Add(key);
                     }
-                    WeaponCharges.Instance.rev0charge = 0;
-                }
-
-                if (data.randomizeFire2 && !data.unlockedFire2.Contains("rev2") && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
-                {
-                    WeaponCharges.Instance.rev1charge = 0;
-                }
-
-                if (data.randomizeFire2 && !data.unlockedFire2.Contains("rev1") && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
-                {
-                    WeaponCharges.Instance.rev2charge = 0;
-                }
-
-                if (data.randomizeFire2 && ((!data.unlockedFire2.Contains("sho0") && GetHeldWeapon() == "sho0") || (!data.unlockedFire2.Contains("sho1") && GetHeldWeapon() == "sho1")) && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
-                {
-                    Traverse.Create(InputManager.Instance.InputSource.Fire2).Property("IsPressed").SetValue(false);
-                }
-
-                if (data.randomizeFire2 && !data.unlockedFire2.Contains("nai0") && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
-                {
-                    WeaponCharges.Instance.naiMagnetCharge = 0;
-                }
-
-                if (data.randomizeFire2 && !data.unlockedFire2.Contains("nai1") && GetHeldWeapon() == "nai1" && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
-                {
-                    Traverse.Create(GunControl.Instance.currentWeapon.GetComponent<Nailgun>()).Field<float>("heatSinks").Value = 0;
-                    WeaponCharges.Instance.naiHeatsinks = 0;
-                    WeaponCharges.Instance.naiSawHeatsinks = 0;
-                }
-
-                if (data.randomizeFire2 && !data.unlockedFire2.Contains("rock1") && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
-                {
-                    WeaponCharges.Instance.rocketCannonballCharge = 0;
                 }
             }
+            return keys;
         }
 
-        void FixedUpdate()
+        public static List<T> FindAllComponentsInCurrentScene<T>() where T : Behaviour
         {
-            if (LocationManager.tempItems.Count > 0)
+            List<T> list = new List<T>();
+            foreach (T component in Resources.FindObjectsOfTypeAll<T>())
             {
-                LocationManager.GetUKItem(LocationManager.tempItems[0].Value, LocationManager.tempItems[0].Key);
-                LocationManager.tempItems.RemoveAt(0);
+                if (component.gameObject.scene.name == SceneManager.GetActiveScene().name)
+                {
+                    list.Add(component);
+                }
             }
+            return list;
         }
     }
 }

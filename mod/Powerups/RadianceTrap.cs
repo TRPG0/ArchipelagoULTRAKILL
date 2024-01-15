@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using ArchipelagoULTRAKILL.Components;
+using ArchipelagoULTRAKILL.Structures;
+using UnityEngine;
 
 namespace ArchipelagoULTRAKILL.Powerups
 {
@@ -11,13 +13,13 @@ namespace ArchipelagoULTRAKILL.Powerups
         private void Start()
         {
             meter = PowerUpMeter.Instance;
-            if (juiceAmount == 0f) juiceAmount = 10f;
+            if (juiceAmount == 0f) juiceAmount = 15f;
             if (meter.juice < juiceAmount)
             {
                 meter.latestMaxJuice = juiceAmount;
                 meter.juice = juiceAmount;
             }
-            meter.powerUpColor = ConfigManager.trapColor.value;
+            meter.powerUpColor = Colors.Trap;
             juiceGiven = true;
 
             OptionsManager.forceRadiance = true;
@@ -47,8 +49,7 @@ namespace ArchipelagoULTRAKILL.Powerups
             {
                 ei.UpdateBuffs(false);
             }
-            Core.poweredUp = false;
-            if (LocationManager.powerupQueue.Count > 0) Core.obj.GetComponent<Core>().Invoke("AddPowerup", 1f);
+            PlayerHelper.Instance.EndPowerup();
             Destroy(gameObject);
         }
     }

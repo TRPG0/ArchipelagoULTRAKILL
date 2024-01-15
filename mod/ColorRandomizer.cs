@@ -67,7 +67,7 @@ namespace ArchipelagoULTRAKILL
                 }
             }
 
-            if (Core.inLevel)
+            if (Core.IsPlaying)
             {
                 GunColorController.Instance.UpdateGunColors();
 
@@ -102,7 +102,7 @@ namespace ArchipelagoULTRAKILL
                 PrefsManager.Instance.SetFloat("hudColor.var3" + rgb, Random.Range(0f, 1f));
             }
 
-            if (Core.inLevel)
+            if (Core.IsPlaying)
             {
                 ColorBlindSettings.Instance.UpdateHudColors();
                 ColorBlindSettings.Instance.UpdateWeaponColors();

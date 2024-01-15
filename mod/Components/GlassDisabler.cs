@@ -6,9 +6,12 @@ namespace ArchipelagoULTRAKILL.Components
     {
         private void OnEnable()
         {
-            foreach (Glass glass in gameObject.GetComponentsInChildren<Glass>())
+            if (!Core.CanBreakGlass())
             {
-                glass.transform.parent.gameObject.SetActive(false);
+                foreach (Glass glass in gameObject.GetComponentsInChildren<Glass>())
+                {
+                    glass.transform.parent.gameObject.SetActive(false);
+                }
             }
         }
     }

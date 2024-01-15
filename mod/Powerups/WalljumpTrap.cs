@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using ArchipelagoULTRAKILL.Components;
+using ArchipelagoULTRAKILL.Structures;
+using UnityEngine;
 
 namespace ArchipelagoULTRAKILL.Powerups
 {
-    public class WalljumpTrap : MonoBehaviour
+    public class WallJumpTrap : MonoBehaviour
     {
         private PowerUpMeter meter;
         public float juiceAmount;
@@ -17,9 +19,8 @@ namespace ArchipelagoULTRAKILL.Powerups
                 meter.latestMaxJuice = juiceAmount;
                 meter.juice = juiceAmount;
             }
-            meter.powerUpColor = ConfigManager.trapColor.value;
+            meter.powerUpColor = Colors.Trap;
             juiceGiven = true;
-            Core.walljumpTrap = true;
         }
 
         private void Update()
@@ -33,9 +34,7 @@ namespace ArchipelagoULTRAKILL.Powerups
 
         public void EndPowerUp()
         {
-            Core.walljumpTrap = false; 
-            Core.poweredUp = false;
-            if (LocationManager.powerupQueue.Count > 0) Core.obj.GetComponent<Core>().Invoke("AddPowerup", 1f);
+            PlayerHelper.Instance.EndPowerup();
             Destroy(gameObject);
         }
     }

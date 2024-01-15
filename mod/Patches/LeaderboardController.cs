@@ -9,7 +9,7 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists())
             {
-                Core.logger.LogInfo("Current save file is randomized. Skipped leaderboard submission.");
+                Core.Logger.LogInfo("Current save file is randomized. Skipped leaderboard submission.");
                 return false;
             }
             else return true;
@@ -23,7 +23,7 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists())
             {
-                Core.logger.LogInfo("Current save file is randomized. Skipped leaderboard submission.");
+                Core.Logger.LogInfo("Current save file is randomized. Skipped leaderboard submission.");
                 return false;
             }
             else return true;

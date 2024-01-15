@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ArchipelagoULTRAKILL.Components;
+using UnityEngine;
 
 namespace ArchipelagoULTRAKILL.Powerups
 {
@@ -19,7 +20,6 @@ namespace ArchipelagoULTRAKILL.Powerups
             }
             meter.powerUpColor = ColorBlindSettings.Instance.staminaColor;
             juiceGiven = true;
-            Core.staminaPowerup = true;
         }
 
         private void Update()
@@ -33,9 +33,7 @@ namespace ArchipelagoULTRAKILL.Powerups
 
         public void EndPowerUp()
         {
-            Core.staminaPowerup = false;
-            Core.poweredUp = false;
-            if (LocationManager.powerupQueue.Count > 0) Core.obj.GetComponent<Core>().Invoke("AddPowerup", 1f);
+            PlayerHelper.Instance.EndPowerup();
             Destroy(gameObject);
         }
     }

@@ -1,4 +1,5 @@
-﻿using GameConsole;
+﻿using ArchipelagoULTRAKILL.Structures;
+using GameConsole;
 using UnityEngine.UI;
 
 namespace ArchipelagoULTRAKILL.Commands
@@ -29,7 +30,7 @@ namespace ArchipelagoULTRAKILL.Commands
                     ConfigManager.connectionInfo.text = "Disconnected from server.";
                     if (SceneHelper.CurrentScene == "Main Menu")
                     {
-                        UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
+                        UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
                     }
 
                     return;

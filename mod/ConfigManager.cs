@@ -36,7 +36,7 @@ namespace ArchipelagoULTRAKILL
         public static StringField goal;
         public static StringField goalProgress;
         public static StringField locationsChecked;
-        public static StringField bossRewards;
+        public static EnumField<BossOptions> bossRewards;
         public static BoolField challengeRewards;
         public static BoolField pRankRewards;
         public static BoolField fishRewards;
@@ -54,8 +54,8 @@ namespace ArchipelagoULTRAKILL
 
         public static ConfigPanel colorPanel;
 
-        public static EnumField<Enums.ColorOptions> uiColorRandomizer;
-        public static EnumField<Enums.ColorOptions> gunColorRandomizer;
+        public static EnumField<ColorOptions> uiColorRandomizer;
+        public static EnumField<ColorOptions> gunColorRandomizer;
         public static ButtonField enableCustomButton;
         public static ButtonField disableCustomButton;
 
@@ -74,6 +74,7 @@ namespace ArchipelagoULTRAKILL
         public static ColorField layer4Color;
         public static ColorField layer5Color;
         public static ColorField layer6Color;
+        public static ColorField layer7Color;
         public static ColorField primeColor;
         public static ColorField altColor;
         public static ColorField arm0Color;
@@ -95,7 +96,7 @@ namespace ArchipelagoULTRAKILL
         {
             if (config != null) return;
 
-            config = PluginConfigurator.Create("Archipelago", Core.ModGUID);
+            config = PluginConfigurator.Create("Archipelago", Core.PluginGUID);
 
             string iconPath = Path.Combine(Core.workingDir, "icon.png");
             if (File.Exists(iconPath)) config.SetIconWithURL(iconPath);
@@ -116,6 +117,8 @@ namespace ArchipelagoULTRAKILL
             serverPassword = new StringField(playerPanel, "PASSWORD", "serverPassword", "", true, true);
             hintMode = new BoolField(playerPanel, "HINT MODE", "hintMode", false, false);
             new ConfigHeader(playerPanel, "Hint mode disables all randomization, and allows connecting to other games' slots to unlock hints while playing The Cyber Grind.", 12, TextAnchor.UpperLeft);
+
+            connectionInfo = new ConfigHeader(playerPanel, "", 16, TextAnchor.UpperCenter);
 
             connectButton = new ButtonField(playerPanel, "CONNECT", "connectButton");
             connectButton.onClick += () =>
@@ -156,12 +159,10 @@ namespace ArchipelagoULTRAKILL
                     connectionInfo.text = "Disconnected from server.";
                     if (SceneHelper.CurrentScene == "Main Menu")
                     {
-                        UIManager.menuIcon.GetComponent<Image>().color = LocationManager.colors["red"];
+                        UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
                     }
                 }
             };
-
-            connectionInfo = new ConfigHeader(playerPanel, "", 16, TextAnchor.UpperCenter);
 
             deathLinkOnButton = new ButtonField(playerPanel, "ENABLE DEATH LINK", "deathLinkOnButton");
             deathLinkOnButton.onClick += () =>
@@ -196,7 +197,10 @@ namespace ArchipelagoULTRAKILL
             goal = new StringField(playerPanel, "GOAL", "goal", "?", false, false) { interactable = false };
             goalProgress = new StringField(playerPanel, "LEVELS COMPLETED", "goalProgress", "?", false, false) { interactable = false };
             locationsChecked = new StringField(playerPanel, "LOCATIONS CHECKED", "locationsChecked", "?", false, false) { interactable = false };
-            bossRewards = new StringField(playerPanel, "BOSS REWARDS", "bossRewards", "?", false) { interactable = false };
+            bossRewards = new EnumField<BossOptions>(playerPanel, "BOSS REWARDS", "bossRewards", BossOptions.Disabled, false) { interactable = false };
+            bossRewards.SetEnumDisplayName(BossOptions.Disabled, "DISABLED");
+            bossRewards.SetEnumDisplayName(BossOptions.Standard, "STANDARD");
+            bossRewards.SetEnumDisplayName(BossOptions.Extended, "EXTENDED");
             challengeRewards = new BoolField(playerPanel, "CHALLENGE REWARDS", "challengeRewards", false, false) { interactable = false };
             pRankRewards = new BoolField(playerPanel, "P RANK REWARDS", "pRankRewards", false, false) { interactable = false };
             fishRewards = new BoolField(playerPanel, "FISH REWARDS", "fishRewards", false, false) { interactable = false };
@@ -234,15 +238,15 @@ namespace ArchipelagoULTRAKILL
             };
 
             // color settings
-            uiColorRandomizer = new EnumField<Enums.ColorOptions>(colorPanel, "UI COLOR RANDOMIZER", "uiColorRandomizer", Enums.ColorOptions.Off, true);
-            uiColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.Off, "DISABLED");
-            uiColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.Once, "ONCE");
-            uiColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.EveryLoad, "EVERY NEW LEVEL LOADED");
+            uiColorRandomizer = new EnumField<ColorOptions>(colorPanel, "UI COLOR RANDOMIZER", "uiColorRandomizer", ColorOptions.Off, true);
+            uiColorRandomizer.SetEnumDisplayName(ColorOptions.Off, "DISABLED");
+            uiColorRandomizer.SetEnumDisplayName(ColorOptions.Once, "ONCE");
+            uiColorRandomizer.SetEnumDisplayName(ColorOptions.EveryLoad, "EVERY NEW LEVEL LOADED");
 
-            gunColorRandomizer = new EnumField<Enums.ColorOptions>(colorPanel, "GUN COLOR RANDOMIZER", "gunColorRandomizer", Enums.ColorOptions.Off, true);
-            gunColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.Off, "DISABLED");
-            gunColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.Once, "ONCE");
-            gunColorRandomizer.SetEnumDisplayName(Enums.ColorOptions.EveryLoad, "EVERY NEW LEVEL LOADED");
+            gunColorRandomizer = new EnumField<ColorOptions>(colorPanel, "GUN COLOR RANDOMIZER", "gunColorRandomizer", ColorOptions.Off, true);
+            gunColorRandomizer.SetEnumDisplayName(ColorOptions.Off, "DISABLED");
+            gunColorRandomizer.SetEnumDisplayName(ColorOptions.Once, "ONCE");
+            gunColorRandomizer.SetEnumDisplayName(ColorOptions.EveryLoad, "EVERY NEW LEVEL LOADED");
 
             enableCustomButton = new ButtonField(colorPanel, "ENABLE ALL CUSTOM WEAPON COLORS", "enableCustomButton");
             enableCustomButton.onClick += () =>
@@ -285,6 +289,7 @@ namespace ArchipelagoULTRAKILL
             layer4Color = new ColorField(colorPanel, "LAYER 4", "layer4Color", new Color(1, 1, 0.25f), true);
             layer5Color = new ColorField(colorPanel, "LAYER 5", "layer5Color", new Color(0.251f, 0.9059f, 1), true);
             layer6Color = new ColorField(colorPanel, "LAYER 6", "layer6Color", new Color(1, 0.2353f, 0.2353f), true);
+            layer7Color = new ColorField(colorPanel, "LAYER 7", "layer7Color", new Color(0.8f, 0.8f, 0.8f), true);
             primeColor = new ColorField(colorPanel, "PRIME SANCTUMS", "primeColor", new Color(1, 0.2353f, 0.2353f), true);
             altColor = new ColorField(colorPanel, "ALTERNATE WEAPON", "altColor", new Color(1, 0.65f, 0), true);
             arm0Color = new ColorField(colorPanel, "FEEDBACKER", "arm0Color", new Color(0.251f, 0.9059f, 1), true);
@@ -343,21 +348,7 @@ namespace ArchipelagoULTRAKILL
             string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
             locationsChecked.value = $"{Core.data.@checked.Count} / {totalLocations}";
 
-            switch (Core.data.bossRewards)
-            {
-                case 0:
-                    bossRewards.value = "DISABLED";
-                    break;
-                case 1:
-                    bossRewards.value = "STANDARD";
-                    break;
-                case 2:
-                    bossRewards.value = "EXTENDED";
-                    break;
-                default:
-                    break;
-            }
-            
+            bossRewards.value = Core.data.bossRewards;
             challengeRewards.value = Core.data.challengeRewards;
             pRankRewards.value = Core.data.pRankRewards;
             fishRewards.value = Core.data.fishRewards;
@@ -373,7 +364,7 @@ namespace ArchipelagoULTRAKILL
             goal.value = "?";
             goalProgress.value = "?";
             locationsChecked.value = "?";
-            bossRewards.value = "?";
+            bossRewards.value = BossOptions.Disabled;
             challengeRewards.value = false;
             pRankRewards.value = false;
             fishRewards.value = false;

@@ -2,141 +2,19 @@
 using ArchipelagoULTRAKILL.Components;
 using ArchipelagoULTRAKILL.Structures;
 using HarmonyLib;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 
 namespace ArchipelagoULTRAKILL
 {
     public static class LevelManager
     {
-        public static List<GameObject> shopPanels = new List<GameObject>();
-
-        public static readonly Dictionary<string, int> shopPrices = new Dictionary<string, int>()
-        {
-            ["rev2"] = 7500,
-            ["rev1"] = 12500,
-            ["sho1"] = 12500,
-            ["nai1"] = 25000,
-            ["rai1"] = 100000,
-            ["rai2"] = 100000,
-            ["rock1"] = 75000
-        };
-
         public static Dictionary<string, GameObject> skulls = new Dictionary<string, GameObject>();
-
-        public static void FindShopObjects()
-        {
-            foreach (VariationInfo vi in Resources.FindObjectsOfTypeAll<VariationInfo>())
-            {
-                if (vi.gameObject.scene.name == SceneManager.GetActiveScene().name && vi.equipSprites.Count() > 0) shopPanels.Add(vi.gameObject);
-            }
-        }
-
-        public static void UpdateShopObjects()
-        {
-            GameProgressMoneyAndGear generalProgress = GameProgressSaver.GetGeneralProgress();
-            for (int i = 0; i < shopPanels.Count; i++)
-            {
-                GameObject panel = shopPanels[i];
-                string weapon = panel.GetComponent<VariationInfo>().weaponName;
-
-                if (weapon == "arm0" && !Core.data.hasArm)
-                {
-                    VariationInfo info = panel.GetComponent<VariationInfo>();
-                    info.costText.text = "<color=red>UNAVAILABLE</color>";
-                    info.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "UNAVAILABLE";
-                    info.equipButton.gameObject.SetActive(false);
-                }
-                else if (weapon == "arm0" && Core.data.hasArm) continue;
-                else if (weapon == "arm1" || weapon == "arm2") continue;
-                else
-                {
-                    FieldInfo field = typeof(GameProgressMoneyAndGear).GetField(weapon, BindingFlags.Instance | BindingFlags.Public);
-
-                    VariationInfo vi = panel.GetComponent<VariationInfo>();
-
-                    Core.logger.LogInfo(weapon + ": " + field.GetValue(generalProgress));
-                    if (!weapon.Contains("0"))
-                    {
-                        string description = "";
-
-                        if (LocationManager.locations.ContainsKey("shop_" + vi.weaponName))
-                        {
-                            if (LocationManager.locations["shop_" + vi.weaponName].ukitem)
-                            {
-                                UKItem item = LocationManager.ukitems["shop_" + vi.weaponName];
-                                description = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.GetUKMessageColor(item.item_name)) + "FF>" + item.item_name + "</color>\n";
-                                if (item.player_name != Core.data.slot_name) description += "for <color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APPlayerOther.value) + "FF>" + item.player_name + "</color>\n";
-                                else description += "\n";
-                            }
-                            else
-                            {
-                                APItem item = LocationManager.apitems["shop_" + vi.weaponName];
-                                description = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.GetAPMessageColor(item.type)) + "FF>" + item.item_name + "</color>\n";
-                                description += "for <color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APPlayerOther.value) + "FF>" + item.player_name + "</color>\n\n";
-                                if (item.type == ItemFlags.Advancement) description += "You don't know what this is, but it seems <color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APItemAdvancement.value) + "FF>important.</color>";
-                                else if (item.type == ItemFlags.NeverExclude) description += "You don't know what this is, but it seems like it could be <color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APItemNeverExclude.value) + "FF>useful.</color>";
-                                else if (item.type == ItemFlags.Trap) description += "You don't know what this is, but it seems like they're probably <color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APItemTrap.value) + "FF>better off without it.</color>";
-                                else description += "You don't know what this is, but it seems like you could probably <color=#" + ColorUtility.ToHtmlStringRGB(ConfigManager.APItemFiller.value) + "FF>skip this</color> if you wanted to.";
-                            }
-                        }
-                        else description = "???";
-
-                        vi.varPage.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = description;
-                    }
-
-                    if (int.Parse(field.GetValue(generalProgress).ToString()) == 1 && !weapon.Contains("0") && !Core.data.purchasedItems.Contains(weapon))
-                    {
-                        bool canAfford = false;
-                        string cost;
-                        if (GameProgressSaver.GetMoney() >= shopPrices[weapon]) canAfford = true;
-                        if (canAfford) cost = MoneyText.DivideMoney(shopPrices[weapon]) + "<color=orange>P</color>";
-                        else cost = "<color=red>" + MoneyText.DivideMoney(shopPrices[weapon]) + "P</color>";
-
-                        vi.costText.text = cost;
-
-                        vi.equipButton.transform.GetChild(0).GetComponent<Image>().sprite = vi.equipSprites[PrefsManager.Instance.GetInt("weapon." + weapon, 1)];
-                        vi.orderButtons.SetActive(true);
-                        Traverse.Create(vi).Field<int>("equipStatus").Value = PrefsManager.Instance.GetInt("weapon." + weapon, 1);
-                        Traverse.Create(vi).Field<int>("money").Value = GameProgressSaver.GetMoney();
-                        vi.costText.text = MoneyText.DivideMoney(GameProgressSaver.GetMoney()) + "<color=orange>P</color>";
-
-                        vi.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = cost;
-                        if (canAfford)
-                        {
-                            vi.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(1, 1, 1);
-                            vi.buyButton.gameObject.GetComponent<Image>().color = new Color(1, 1, 1);
-                        }
-                        else
-                        {
-                            vi.buyButton.gameObject.GetComponent<Image>().color = new Color(1, 0, 0);
-                        }
-                    }
-                    else if (int.Parse(field.GetValue(generalProgress).ToString()) == 0 && !weapon.Contains("0") && Core.data.purchasedItems.Contains(weapon))
-                    {
-                        vi.costText.text = "ALREADY OWNED";
-                        vi.buyButton.deactivated = true;
-                        vi.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "ALREADY OWNED";
-                        vi.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(0.5882f, 0.5882f, 0.5882f);
-                        vi.equipButton.gameObject.SetActive(false);
-                    }
-                    else if (int.Parse(field.GetValue(generalProgress).ToString()) == 0 && weapon.Contains("0"))
-                    {
-                        vi.costText.text = "<color=red>UNAVAILABLE</color>";
-                        vi.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "UNAVAILABLE";
-                        vi.equipButton.gameObject.SetActive(false);
-                    }
-                }
-            }
-        }
 
         public static void FindSkulls()
         {
@@ -158,6 +36,8 @@ namespace ArchipelagoULTRAKILL
             for (int j = 0; j < skulls.Count; j++)
             {
                 KeyValuePair<string, GameObject> pair = skulls.ElementAt(j);
+                string id = Core.CurrentLevelInfo.Id.ToString();
+                if (Core.CurrentLevelInfo.Name == "0-S") id = "S";
                 switch (SceneHelper.CurrentScene)
                 {
                     case "Level 1-4":
@@ -169,28 +49,124 @@ namespace ArchipelagoULTRAKILL
                     default:
                         if (pair.Value.name.Contains("Blue"))
                         {
-                            if (!Core.data.unlockedSkulls.Contains(StatsManager.Instance.levelNumber.ToString() + "_b")) pair.Value.SetActive(false);
+                            if (!Core.data.unlockedSkulls.Contains(id + "_b")) pair.Value.SetActive(false);
                         }
                         else if (pair.Value.name.Contains("Red"))
                         {
-                            if (!Core.data.unlockedSkulls.Contains(StatsManager.Instance.levelNumber.ToString() + "_r")) pair.Value.SetActive(false);
+                            if (!Core.data.unlockedSkulls.Contains(id + "_r")) pair.Value.SetActive(false);
                         }
                         break;
                 }
             }
         }
 
-        public static void CloseReverseDoors()
+        public static void UpdateShopVariation(VariationInfo variation)
         {
-            foreach (ItemPlaceZone ipz in Resources.FindObjectsOfTypeAll<ItemPlaceZone>())
+            // Set Feedbacker text to unavailable if not owned
+            if (variation.weaponName == "arm0" && !Core.data.hasArm)
             {
-                if (ipz.reverseDoors.Count() > 0)
+                variation.costText.text = "<color=red>UNAVAILABLE</color>";
+                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "UNAVAILABLE";
+                variation.equipButton.gameObject.SetActive(false);
+                Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is not unlocked");
+                return;
+            }
+            // Set Feedbacker text back to default if owned
+            else if (variation.weaponName == "arm0" && Core.data.hasArm)
+            {
+                variation.costText.text = "ALREADY OWNED";
+                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "ALREADY OWNED";
+                variation.equipButton.gameObject.SetActive(true);
+                Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is unlocked");
+                return;
+            }
+            // Do nothing for other arms
+            else if (variation.weaponName == "arm1" || variation.weaponName == "arm2")
+            {
+                Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Skipping");
+                return;
+            }
+
+            // Set shop item description (Skip blue variations)
+            if (!variation.weaponName.Contains("0"))
+            {
+                string description = "[Purchase to unlock: ";
+
+                if (LocationManager.locations.ContainsKey("shop_" + variation.weaponName))
                 {
-                    for (int i = 0; i < ipz.reverseDoors.Count(); i++)
+                    if (LocationManager.locations["shop_" + variation.weaponName].item is UKItem ukitem)
                     {
-                        ipz.reverseDoors[i].Close(true);
+                        description += "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.GetUKMessageColor(ukitem.itemName)) + "FF>" + ukitem.itemName + "</color>";
+                        if (ukitem.playerName != Core.data.slot_name) description += "for <color=#" + ColorUtility.ToHtmlStringRGB(Colors.PlayerOther) + "FF>" + ukitem.playerName + "</color>";
+                        description += "]\n\n";
+                    }
+                    else if (LocationManager.locations["shop_" + variation.weaponName].item is APItem apitem)
+                    {
+                        description = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.GetAPMessageColor(apitem.type)) + "FF>" + apitem.itemName + "</color>";
+                        description += "for <color=#" + ColorUtility.ToHtmlStringRGB(Colors.PlayerOther) + "FF>" + apitem.playerName + "</color>";
+                        description += "]\n\n";
+
+                        if (apitem.type == ItemFlags.Advancement) description += "You don't know what this is, but it seems <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemAdvancement) + "FF>important.</color>";
+                        else if (apitem.type == ItemFlags.NeverExclude) description += "You don't know what this is, but it seems like it could be <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemNeverExclude) + "FF>useful.</color>";
+                        else if (apitem.type == ItemFlags.Trap) description += "You don't know what this is, but it seems like they're probably <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemTrap) + "FF>better off without it.</color>";
+                        else description += "You don't know what this is, but it seems like you could probably <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemFiller) + "FF>skip this</color> if you wanted to.";
                     }
                 }
+                else description = "???";
+                variation.varPage.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = description;
+            }
+
+            GameProgressMoneyAndGear generalProgress = GameProgressSaver.GetGeneralProgress();
+            FieldInfo field = typeof(GameProgressMoneyAndGear).GetField(variation.weaponName, BindingFlags.Instance | BindingFlags.Public);
+            bool unlocked = int.Parse(field.GetValue(generalProgress).ToString()) == 1;
+
+            // Weapon is unlocked, weapon is not blue variation, weapon has not been purchased
+            if (unlocked && !variation.weaponName.Contains("0") && !Core.data.purchasedItems.Contains(variation.weaponName))
+            {
+                bool canAfford = false;
+                string cost;
+                if (GameProgressSaver.GetMoney() >= Core.shopPrices[variation.weaponName]) canAfford = true;
+                if (canAfford) cost = MoneyText.DivideMoney(Core.shopPrices[variation.weaponName]) + "<color=orange>P</color>";
+                else cost = "<color=red>" + MoneyText.DivideMoney(Core.shopPrices[variation.weaponName]) + "P</color>";
+
+                variation.costText.text = cost;
+
+                variation.equipButton.transform.GetChild(0).GetComponent<Image>().sprite = variation.equipSprites[PrefsManager.Instance.GetInt("weapon." + variation.weaponName, 1)];
+                variation.orderButtons.SetActive(true);
+                Traverse variationT = Traverse.Create(variation);
+                variationT.Field<int>("equipStatus").Value = PrefsManager.Instance.GetInt("weapon." + variation.weaponName, 1);
+                variationT.Field<int>("money").Value = GameProgressSaver.GetMoney();
+                variation.varPage.GetComponentInChildren<MoneyText>().UpdateMoney();
+
+                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = cost;
+                if (canAfford)
+                {
+                    variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(1, 1, 1);
+                    variation.buyButton.gameObject.GetComponent<Image>().color = new Color(1, 1, 1);
+                }
+                else
+                {
+                    variation.buyButton.gameObject.GetComponent<Image>().color = new Color(1, 0, 0);
+                }
+                Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is unlocked, is not purchased");
+            }
+            // Weapon is not unlocked, weapon is not blue variation, weapon has been purchased
+            else if (!unlocked && !variation.weaponName.Contains("0") && Core.data.purchasedItems.Contains(variation.weaponName))
+            {
+                variation.costText.text = "ALREADY OWNED";
+                variation.buyButton.deactivated = true;
+                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "ALREADY OWNED";
+                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(0.5882f, 0.5882f, 0.5882f);
+                variation.equipButton.gameObject.SetActive(false);
+                Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is unlocked, is purchased");
+            }
+            // Weapon is not unlocked, weapon is blue variation
+            else if (!unlocked && variation.weaponName.Contains("0"))
+            {
+                variation.costText.text = "<color=red>UNAVAILABLE</color>";
+                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "UNAVAILABLE";
+                variation.equipButton.gameObject.SetActive(false);
+                Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is not unlocked");
             }
         }
 
@@ -260,6 +236,8 @@ namespace ArchipelagoULTRAKILL
 
         public static void AddGlassComponents()
         {
+            if (!Core.CurrentLevelHasInfo || Core.CurrentLevelInfo.Id != 1) return;
+
             GameObject room5 = null;
             GameObject room11 = null;
 

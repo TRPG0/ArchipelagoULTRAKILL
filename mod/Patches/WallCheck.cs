@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using ArchipelagoULTRAKILL.Components;
+using ArchipelagoULTRAKILL.Structures;
+using HarmonyLib;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
@@ -7,7 +9,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static bool Prefix(WallCheck __instance)
         {
-            if (Core.doublejumpPowerup)
+            if (PlayerHelper.CurrentPowerup == Powerup.DoubleJump)
             {
                 __instance.onWall = true;
                 return false;
@@ -21,7 +23,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix(WallCheck __instance, ref bool __result)
         {
-            if (Core.doublejumpPowerup)
+            if (PlayerHelper.CurrentPowerup == Powerup.DoubleJump)
             {
                 if (__instance.cols.Count == 0) __instance.poc = __instance.transform.position;
                 __result = true;

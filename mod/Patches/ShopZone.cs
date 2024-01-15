@@ -1,14 +1,17 @@
 ﻿using HarmonyLib;
+using UnityEngine;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
-    // update shop objects when entering zone
     [HarmonyPatch(typeof(ShopZone), "TurnOn")]
-    class ShopZone_TurnOn_Patch
+    public class ShopZone_TurnOn_Patch
     {
-        public static void Prefix()
+        public static void Postfix(ShopZone __instance)
         {
-            if (Core.DataExists()) LevelManager.UpdateShopObjects();
+            foreach (VariationInfo variation in Traverse.Create(__instance).Field<Canvas>("shopCanvas").Value.GetComponentsInChildren<VariationInfo>())
+            {
+                LevelManager.UpdateShopVariation(variation);
+            }
         }
     }
 }

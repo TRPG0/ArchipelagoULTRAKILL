@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ArchipelagoULTRAKILL.Components;
+using HarmonyLib;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
@@ -8,7 +9,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix()
         {
-            Core.poweredUp = false;
+            PlayerHelper.Instance.EndPowerup();
             if (LocationManager.powerupQueue.Count > 0) Core.obj.GetComponent<Core>().Invoke("AddPowerup", 1f);
         }
     }

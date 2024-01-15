@@ -1,10 +1,10 @@
 ﻿namespace ArchipelagoULTRAKILL.Structures
 {
-    public class UKLocation
+    public class Location
     {
         public string id;
         public long ap_id;
-        public bool ukitem;
+        public AItem item;
         public bool @checked;
     }
 }

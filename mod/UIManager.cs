@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
+using TMPro;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -20,6 +21,7 @@ namespace ArchipelagoULTRAKILL
 
         public static GameObject canvas;
         public static GameObject chapterSelect;
+        public static Text actStats;
         public static Dictionary<string, GameObject> chapters = new Dictionary<string, GameObject>();
         public static Dictionary<string, GameObject> layers = new Dictionary<string, GameObject>();
         public static Dictionary<string, GameObject> levels = new Dictionary<string, GameObject>();
@@ -29,26 +31,6 @@ namespace ArchipelagoULTRAKILL
         public static GameObject menuIcon;
         public static GameObject goalCount;
 
-        public static readonly List<string> skullLevels = new List<string>()
-        {
-            "Level 0-2",
-            "Level 0-S",
-            "Level 1-1",
-            "Level 1-2",
-            "Level 1-3",
-            "Level 1-4",
-            "Level 2-3",
-            "Level 2-4",
-            "Level 4-2",
-            "Level 4-3",
-            "Level 4-4",
-            "Level 5-1",
-            "Level 5-2",
-            "Level 5-3",
-            "Level 6-1",
-        };
-
-        public static Dictionary<string, List<string>> skullsInLevel = new Dictionary<string, List<string>>();
         public static List<GameObject> skullIcons = new List<GameObject>();
 
         public static GameObject hud;
@@ -79,7 +61,7 @@ namespace ArchipelagoULTRAKILL
 
         public static void AdjustLogBounds()
         {
-            if (PrefsManager.Instance.GetInt("hudType") >= 2 && !Core.inLevel)
+            if (PrefsManager.Instance.GetInt("hudType") >= 2 && !Core.IsPlaying)
             {
                 log.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, ((float)Math.Round(Screen.height * 0.77f)));
             }
@@ -114,6 +96,19 @@ namespace ArchipelagoULTRAKILL
 
             chapterSelect = chapters["prelude"].gameObject.transform.parent.gameObject;
             chapterSelect.AddComponent<ChapterSelectState>();
+
+            actStats = GameObject.Instantiate(chapterSelect.transform.Find("Prelude").Find("Name"), chapterSelect.transform).GetComponent<Text>();
+            Vector3 rankPos = chapterSelect.transform.Find("Prelude").Find("RankPanel").transform.position;
+            actStats.transform.position = new Vector3(rankPos.x + 77, rankPos.y, rankPos.z);
+            actStats.verticalOverflow = VerticalWrapMode.Overflow;
+            actStats.alignment = TextAnchor.UpperLeft;
+            actStats.lineSpacing = 1.2f;
+            actStats.gameObject.SetActive(false);
+
+            chapterSelect.transform.Find("Prelude").gameObject.AddComponent<ActStats>().Init(1, 5);
+            chapterSelect.transform.Find("Act I").gameObject.AddComponent<ActStats>().Init(6, 15);
+            chapterSelect.transform.Find("Act II").gameObject.AddComponent<ActStats>().Init(16, 25);
+            chapterSelect.transform.Find("Act III").gameObject.AddComponent<ActStats>().Init(26, 29);
 
             foreach (LayerSelect component in canvas.GetComponentsInChildren<LayerSelect>(true))
             {
@@ -317,9 +312,9 @@ namespace ArchipelagoULTRAKILL
             menuText.GetComponent<Text>().alignment = TextAnchor.UpperRight;
             menuText.GetComponent<Text>().fontSize = 24;
             string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
-            if (Core.DataExists()) menuText.GetComponent<Text>().text = "Archipelago\n" + Core.ModVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
-            else if (Multiworld.HintMode) menuText.GetComponent<Text>().text = "Archipelago\n" + Core.ModVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\nHint Mode";
-            else menuText.GetComponent<Text>().text = "Archipelago\n" + Core.ModVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\nNo data.";
+            if (Core.DataExists()) menuText.GetComponent<Text>().text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
+            else if (Multiworld.HintMode) menuText.GetComponent<Text>().text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\nHint Mode";
+            else menuText.GetComponent<Text>().text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\nNo data.";
             font = menuText.GetComponent<Text>().font;
             menuIcon = new GameObject();
             menuIcon.gameObject.name = "Archipelago Logo";
@@ -352,7 +347,7 @@ namespace ArchipelagoULTRAKILL
         public static void UpdateLevels()
         {
             Sprite locked = Addressables.LoadAssetAsync<Sprite>("Assets/Textures/UI/Level Thumbnails/Locked.png").WaitForCompletion();
-            foreach (string level in Core.allLevels)
+            foreach (string level in Core.AllLevels)
             {
                 if ((!Core.data.unlockedLevels.Contains(level) && level != Core.data.goal) || (level == Core.data.goal && Core.data.completedLevels.Count < Core.data.goalRequirement))
                 {
@@ -362,38 +357,48 @@ namespace ArchipelagoULTRAKILL
                     }
                     levels[level].GetComponent<Button>().interactable = false;
                 }
+                else if (Core.data.unlockedLevels.Contains(level))
+                {
+                    foreach (Image component in levels[level].GetComponentsInChildren<Image>())
+                    {
+                        if (component.gameObject.name == "Image" && component.sprite.Equals(locked)) component.sprite = Traverse.Create(component.transform.parent.GetComponent<LevelSelectPanel>()).Field<Sprite>("origSprite").Value;
+                    }
+                    levels[level].GetComponent<Button>().interactable = true;
+                }
             }
         }
 
         public static void CreateSkullIcons()
         {
             Sprite sprite = bundle.LoadAsset<Sprite>("assets/skull.png");
-            foreach (string level in Core.allLevels)
+            foreach (LevelInfo info in Core.levelInfos)
             {
-                if (skullsInLevel.ContainsKey(level))
+                if (info.Skulls == SkullsType.Normal)
                 {
-                    foreach (string skull in skullsInLevel[level])
+                    if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}.");
+
+                    foreach (string skull in info.SkullsList)
                     {
                         GameObject go = new GameObject();
                         go.name = skull;
-                        go.transform.SetParent(levels[level].transform);
+                        go.transform.SetParent(levels[info.Name].transform);
                         go.transform.localScale = new Vector3(0.4f, 0.4f, 1);
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(70 - (38 * skullsInLevel[level].FindIndex(a => a == skull)), 135, 0);
-                        else go.transform.localPosition = new Vector3(70 - (38 * skullsInLevel[level].FindIndex(a => a == skull)), 60, 0);
+                        if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(70 - (38 * info.SkullsList.FindIndex(a => a == skull)), 135, 0);
+                        else go.transform.localPosition = new Vector3(70 - (38 * info.SkullsList.FindIndex(a => a == skull)), 60, 0);
                         skullIcons.Add(go);
                     }
                 }
-                else if (level == "1-4")
+                else if (info.Name == "1-4")
                 {
                     for (int i = 0; i < 4; i++)
                     {
                         string skull = "9_b" + (i + 1);
                         GameObject go = new GameObject();
                         go.name = skull;
-                        go.transform.SetParent(levels[level].transform);
+                        go.transform.SetParent(levels[info.Name].transform);
                         go.transform.localScale = new Vector3(0.4f, 0.4f, 1);
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
@@ -404,14 +409,14 @@ namespace ArchipelagoULTRAKILL
                         skullIcons.Add(go);
                     }
                 }
-                else if (level == "5-1")
+                else if (info.Name == "5-1")
                 {
                     for (int i = 0; i < 3; i++)
                     {
                         string skull = "20_b" + (i + 1);
                         GameObject go = new GameObject();
                         go.name = skull;
-                        go.transform.SetParent(levels[level].transform);
+                        go.transform.SetParent(levels[info.Name].transform);
                         go.transform.localScale = new Vector3(0.4f, 0.4f, 1);
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
@@ -433,24 +438,24 @@ namespace ArchipelagoULTRAKILL
 
                 if (skull.name.Contains("9") && !skull.name.Contains("19"))
                 {
-                    if (Core.data.unlockedSkulls1_4 >= int.Parse(skull.name.Substring(skull.name.Length - 1, 1))) skull.GetComponent<Image>().color = ConfigManager.blueSkullColor.value;
-                    else skull.GetComponent<Image>().color = LocationManager.colors["gray"];
+                    if (Core.data.unlockedSkulls1_4 >= int.Parse(skull.name.Substring(skull.name.Length - 1, 1))) skull.GetComponent<Image>().color = Colors.BlueSkull;
+                    else skull.GetComponent<Image>().color = Colors.Gray;
                 }
                 else if (skull.name.Contains("20"))
                 {
-                    if (Core.data.unlockedSkulls5_1 >= int.Parse(skull.name.Substring(skull.name.Length - 1, 1))) skull.GetComponent<Image>().color = ConfigManager.blueSkullColor.value;
-                    else skull.GetComponent<Image>().color = LocationManager.colors["gray"];
+                    if (Core.data.unlockedSkulls5_1 >= int.Parse(skull.name.Substring(skull.name.Length - 1, 1))) skull.GetComponent<Image>().color = Colors.BlueSkull;
+                    else skull.GetComponent<Image>().color = Colors.Gray;
                 }
                 else
                 {
                     if (Core.data.unlockedSkulls.Contains(skull.name))
                     {
-                        if (skull.name.Contains("_b")) skull.GetComponent<Image>().color = ConfigManager.blueSkullColor.value;
-                        else if (skull.name.Contains("_r")) skull.GetComponent<Image>().color = ConfigManager.redSkullColor.value;
+                        if (skull.name.Contains("_b")) skull.GetComponent<Image>().color = Colors.BlueSkull;
+                        else if (skull.name.Contains("_r")) skull.GetComponent<Image>().color = Colors.RedSkull;
                     }
                     else
                     {
-                        skull.GetComponent<Image>().color = LocationManager.colors["gray"];
+                        skull.GetComponent<Image>().color = Colors.Gray;
                     }
                 }
             }
@@ -493,7 +498,7 @@ namespace ArchipelagoULTRAKILL
             popupCanvas.transform.GetChild(0).gameObject.SetActive(true);
             popupCanvas.SetActive(false);
             popupImage.GetComponent<Image>().sprite = bundle.LoadAsset<Sprite>("assets/layer4.png");
-            popupImage.GetComponent<Image>().color = ConfigManager.layer4Color.value;
+            popupImage.GetComponent<Image>().color = Colors.Layer4;
             popupText = new GameObject();
             popupText.name = "APText";
             popupText.transform.SetParent(popupCanvas.transform.GetChild(0));
@@ -509,7 +514,6 @@ namespace ArchipelagoULTRAKILL
             popupText.transform.localPosition = new Vector3(100.6437f, 23.9347f, 0);
             popupText.transform.localScale = new Vector3(0.25f, 0.25f, 1);
             popupText.transform.localRotation = new Quaternion();
-            // fix HUDOptions masks
         }
 
         public IEnumerator DisplayMessage()
@@ -527,7 +531,7 @@ namespace ArchipelagoULTRAKILL
             popupCanvas.SetActive(true);
             yield return new WaitForSeconds(3f);
             popupCanvas.SetActive(false);
-            if (LocationManager.messages.Count > 0 && Core.inLevel) StartCoroutine(DisplayMessage());
+            if (LocationManager.messages.Count > 0 && Core.IsPlaying) StartCoroutine(DisplayMessage());
             else displayingMessage = false;
         }
 
@@ -549,6 +553,123 @@ namespace ArchipelagoULTRAKILL
             go2.AddComponent<Text>();
             deathLinkMessage = go2.AddComponent<DeathLinkMessage>();
             deathLinkMessage.Initialize();
+        }
+
+        public static Sprite GetLevelThumbnail(string name)
+        {
+            string file;
+
+            switch (name)
+            {
+                case "0-1":
+                    file = "0-1 Into the Fire";
+                    break;
+                case "0-2":
+                    file = "0-2 The Meatgrinder";
+                    break;
+                case "0-3":
+                    file = "0-3 Double Down";
+                    break;
+                case "0-4":
+                    file = "0-4 A One-Machine Army";
+                    break;
+                case "0-5":
+                    file = "0-5 Cerberus";
+                    break;
+                case "1-1":
+                    file = "1-1 Heart of the Sunrise";
+                    break;
+                case "1-2":
+                    file = "1-2 The Burning World";
+                    break;
+                case "1-3":
+                    file = "1-3 Halls of Sacred Remains";
+                    break;
+                case "1-4":
+                    file = "1-4 Clair de Lune";
+                    break;
+                case "2-1":
+                    file = "2-1 In the Air Tonight";
+                    break;
+                case "2-2":
+                    file = "2-2 Death at 20,000 Volts";
+                    break;
+                case "2-3":
+                    file = "2-3 Sheer Heart Attack";
+                    break;
+                case "2-4":
+                    file = "2-4 Court of the Corpse King";
+                    break;
+                case "3-1":
+                    file = "3-1 Belly of the Beast";
+                    break;
+                case "3-2":
+                    file = "3-2 In the Flesh";
+                    break;
+                case "4-1":
+                    file = "4-1 Slaves to Power";
+                    break;
+                case "4-2":
+                    file = "4-2 God Damn the Sun";
+                    break;
+                case "4-3":
+                    file = "4-3 A Shot in the Dark";
+                    break;
+                case "4-4":
+                    file = "4-4 Clair de Soleil";
+                    break;
+                case "5-1":
+                    file = "5-1 In the Wake of Poseidon";
+                    break;
+                case "5-2":
+                    file = "5-2 Waves of the Starless Sea";
+                    break;
+                case "5-3":
+                    file = "5-3 Ship of Fools";
+                    break;
+                case "5-4":
+                    file = "5-4 Leviathan";
+                    break;
+                case "6-1":
+                    file = "6-1 Cry for the Weeper";
+                    break;
+                case "6-2":
+                    file = "6-2 Aesthetics of Hate";
+                    break;
+                case "7-1":
+                    file = "7-1 Garden of Forking Paths";
+                    break;
+                case "7-2":
+                    file = "7-2 Light Up the Night";
+                    break;
+                case "7-3":
+                    file = "7-3 No Sound No Memory";
+                    break;
+                case "7-4":
+                    file = "7-4 Like Antennas to Heaven";
+                    break;
+                case "P-1":
+                    file = "P-1 Soul Survivor";
+                    break;
+                case "P-2":
+                    file = "P-2 Wait of the World";
+                    break;
+                default:
+                    file = "Locked";
+                    break;
+            }
+
+            return Addressables.LoadAssetAsync<Sprite>($"Assets/Textures/UI/Level Thumbnails/{file}.png").WaitForCompletion();
+        }
+
+        public static Sprite GetLevelThumbnail(int id)
+        {
+            return GetLevelThumbnail(Core.GetLevelNameFromId(id));
+        }
+
+        public static Sprite GetLevelThumbnail(LevelInfo info)
+        {
+            return GetLevelThumbnail(info.Name);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ArchipelagoULTRAKILL.Components;
+using HarmonyLib;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
@@ -23,26 +24,25 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists())
             {
-                Core.playerActive = false;
-                Core.poweredUp = false;
+                PlayerHelper.Instance.EndPowerup();
                 if (AssistController.Instance.cheatsEnabled)
                 {
-                    Core.logger.LogWarning("Cheats enabled! Completion not counted.");
+                    Core.Logger.LogWarning("Cheats enabled! Completion not counted.");
                 }
                 else
                 {
-                    if (Core.idToLevel.ContainsKey(StatsManager.Instance.levelNumber))
+                    if (Core.CurrentLevelInfo != null)
                     {
-                        if (Core.idToLevel[StatsManager.Instance.levelNumber] == Core.data.goal && Multiworld.Authenticated)
+                        if (Core.CurrentLevelInfo.Name == Core.data.goal && Multiworld.Authenticated)
                         {
                             Multiworld.SendCompletion();
                         }
                         else
                         {
-                            Core.logger.LogInfo("Completed level: " + Core.idToLevel[StatsManager.Instance.levelNumber]);
-                            if (!Core.data.completedLevels.Contains(Core.idToLevel[StatsManager.Instance.levelNumber]))
+                            Core.Logger.LogInfo($"Completed level: {Core.CurrentLevelInfo.Name} | {Core.CurrentLevelInfo.Id}");
+                            if (!Core.data.completedLevels.Contains(Core.CurrentLevelInfo.Name))
                             {
-                                Core.data.completedLevels.Add(Core.idToLevel[StatsManager.Instance.levelNumber]);
+                                Core.data.completedLevels.Add(Core.CurrentLevelInfo.Name);
                             }
                         }
                     }

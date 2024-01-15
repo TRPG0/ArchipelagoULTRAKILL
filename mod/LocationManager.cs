@@ -1,285 +1,242 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Packets;
 using ArchipelagoULTRAKILL.Structures;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace ArchipelagoULTRAKILL
 {
     public static class LocationManager
     {
-        public static readonly Dictionary<string, Color> colors = new Dictionary<string, Color>()
-        {
-            ["white"] = new Color(1, 1, 1),
-            ["gray"] = new Color (0.7f, 0.7f, 0.7f),
-            ["red"] = new Color(1, 0.2353f, 0.2353f),
-            ["green"] = new Color(0.2667f, 1, 0.2706f),
-        };
-
-        public static Dictionary<string, UKLocation> locations = new Dictionary<string, UKLocation>();
-        public static Dictionary<string, UKItem> ukitems = new Dictionary<string, UKItem>();
-        public static Dictionary<string, APItem> apitems = new Dictionary<string, APItem>();
+        public static Dictionary<string, Location> locations = new Dictionary<string, Location>();
 
         public static List<Message> messages = new List<Message>();
-        public static List<Enums.Powerup> powerupQueue = new List<Enums.Powerup>();
+        public static List<Powerup> powerupQueue = new List<Powerup>();
         public static bool overhealWaiting = false;
         public static bool hardDmgWaiting = false;
         public static bool soapWaiting = false;
 
-        private static System.Random Random = new System.Random();
-
-        public static List<KeyValuePair<string, UKItem>> tempItems = new List<KeyValuePair<string, UKItem>>();
+        public static List<KeyValuePair<string, UKItem>> itemQueue = new List<KeyValuePair<string, UKItem>>();
 
         public static void CheckLocation(string loc)
         {
             if (!AssistController.Instance.cheatsEnabled)
             {
-                Core.logger.LogInfo("Checking location \"" + loc + "\"");
+                Core.Logger.LogInfo("Checking location \"" + loc + "\"");
                 if (!Core.data.@checked.Contains(loc)) Core.data.@checked.Add(loc);
 
                 if (locations.ContainsKey(loc))
                 {
                     if (Multiworld.Authenticated) Multiworld.Session.Locations.CompleteLocationChecks(locations[loc].ap_id);
-                    if (locations[loc].ukitem && !locations[loc].@checked) GetUKItem(ukitems[loc]);
-                    else if (!locations[loc].ukitem && !locations[loc].@checked) AddAPItemMessage(apitems[loc]);
+                    if (locations[loc].item is UKItem ukitem && !locations[loc].@checked)
+                    {
+                        if (CanGetItemTypeWhileNotPlaying(ukitem.type)) GetUKItem(ukitem);
+                        else itemQueue.Add(new KeyValuePair<string, UKItem>(null, ukitem));
+                    }
+                    else if (locations[loc].item is APItem apitem && !locations[loc].@checked) AddAPItemMessage(apitem);
                     locations[loc].@checked = true;
                 }
-                else Core.logger.LogWarning("Location \"" + loc + "\" does not exist.");
+                else Core.Logger.LogWarning("Location \"" + loc + "\" does not exist.");
             }
-            else Core.logger.LogWarning("Tried to check location \"" + loc + "\", but cheats are enabled!");
+            else Core.Logger.LogWarning("Tried to check location \"" + loc + "\", but cheats are enabled!");
+        }
+
+        public static bool CanGetItemTypeWhileNotPlaying(UKType type)
+        {
+            if (!Core.IsInLevel || (Core.IsInLevel && Core.IsPitFalling))
+            {
+                if (type == UKType.Level || type == UKType.Layer || type == UKType.Skull) return true;
+            }
+            return false;
         }
 
         public static void GetUKItem(UKItem item, string sendingPlayer = null)
         {
-            string itemColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(item.item_name));
-            string playerColor = ColorUtility.ToHtmlStringRGB(ConfigManager.APPlayerOther.value);
+            string itemColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(item.itemName));
+            string playerColor = ColorUtility.ToHtmlStringRGB(Colors.PlayerOther);
             string text = "";
 
-            if (item.player_name == Core.data.slot_name)
+            if (item.playerName == Core.data.slot_name)
             {
                 switch (item.type)
                 {
-                    case Enums.UKItemType.Weapon:
-                        GameProgressSaver.AddGear(GetWeaponIdFromName(item.item_name));
-                        PrefsManager.Instance.SetInt("weapon." + GetWeaponIdFromName(item.item_name), 1);
-                        if (Core.playerActive && Core.inLevel)
+                    case UKType.Weapon:
+                        GameProgressSaver.AddGear(GetWeaponIdFromName(item.itemName));
+                        PrefsManager.Instance.SetInt("weapon." + GetWeaponIdFromName(item.itemName), 1);
+                        //Core.logger.LogInfo($"CanGetWeapon = {Core.CanGetWeapon}");
+                        if (Core.CanGetWeapon)
                         {
                             GunSetter.Instance.ResetWeapons();
-                            GunSetter.Instance.ForceWeapon(GetWeaponIdFromName(item.item_name));
+                            GunSetter.Instance.ForceWeapon(GetWeaponIdFromName(item.itemName));
+                            if (FistControl.Instance.shopping) GunControl.Instance.NoWeapon();
                         }
                         text = "WEAPON: ";
                         break;
 
-                    case Enums.UKItemType.WeaponAlt:
+                    case UKType.WeaponAlt:
                         //Core.logger.LogInfo("WeaponAlt: " + GetWeaponIdFromName(item.item_name));
-                        GameProgressSaver.AddGear(GetWeaponIdFromName(item.item_name));
+                        GameProgressSaver.AddGear(GetWeaponIdFromName(item.itemName));
                         text = "WEAPON: ";
                         break;
 
-                    case Enums.UKItemType.Arm:
-                        if (item.item_name == "Feedbacker")
+                    case UKType.Arm:
+                        if (item.itemName == "Feedbacker")
                         {
                             Core.data.hasArm = true;
                             PrefsManager.Instance.SetInt("weapon.arm0", 1);
-                            if (Core.playerActive && Core.inLevel)
+                            if (Core.CanGetWeapon)
                             {
                                 FistControl.Instance.ResetFists();
-                                FistControl.Instance.ForceArm(int.Parse(GetWeaponIdFromName(item.item_name).Substring(3, 1)), false);
+                                FistControl.Instance.ForceArm(int.Parse(GetWeaponIdFromName(item.itemName).Substring(3, 1)), false);
                             }
                         }
                         else
                         {
-                            if (!Core.data.hasArm && item.item_name == "Knuckleblaster") PrefsManager.Instance.SetInt("weapon.arm0", 0);
-                            GameProgressSaver.AddGear(GetWeaponIdFromName(item.item_name));
-                            PrefsManager.Instance.SetInt("weapon." + GetWeaponIdFromName(item.item_name), 1);
-                            if (Core.playerActive && Core.inLevel)
+                            if (!Core.data.hasArm && item.itemName == "Knuckleblaster") PrefsManager.Instance.SetInt("weapon.arm0", 0);
+                            GameProgressSaver.AddGear(GetWeaponIdFromName(item.itemName));
+                            PrefsManager.Instance.SetInt("weapon." + GetWeaponIdFromName(item.itemName), 1);
+                            if (Core.CanGetWeapon)
                             {
                                 FistControl.Instance.ResetFists();
-                                FistControl.Instance.ForceArm(int.Parse(GetWeaponIdFromName(item.item_name).Substring(3, 1)), false);
+                                FistControl.Instance.ForceArm(int.Parse(GetWeaponIdFromName(item.itemName).Substring(3, 1)), false);
                             }
                         }
                         text = "ARM: ";
                         break;
 
-                    case Enums.UKItemType.Ability:
-                        if (item.item_name == "Stamina Bar" && Core.data.dashes < 3) Core.data.dashes++;
-                        else if (item.item_name == "Wall Jump" && Core.data.walljumps < 3) Core.data.walljumps++;
-                        else if (item.item_name == "Slide") Core.data.canSlide = true;
-                        else if (item.item_name == "Slam") Core.data.canSlam = true;
+                    case UKType.Ability:
+                        if (item.itemName == "Stamina Bar" && Core.data.dashes < 3) Core.data.dashes++;
+                        else if (item.itemName == "Wall Jump" && Core.data.walljumps < 3) Core.data.walljumps++;
+                        else if (item.itemName == "Slide") Core.data.canSlide = true;
+                        else if (item.itemName == "Slam") Core.data.canSlam = true;
                         text = "ABILITY: ";
                         break;
 
-                    case Enums.UKItemType.Skull:
+                    case UKType.Skull:
                         if (!Core.data.randomizeSkulls) return;
-                        if (item.item_name.Contains("1-4"))
+                        if (item.itemName.Contains("1-4"))
                         {
                             if (Core.data.unlockedSkulls1_4 == 4) return;
                             Core.data.unlockedSkulls1_4++;
                         }
-                        else if (item.item_name.Contains("5-1"))
+                        else if (item.itemName.Contains("5-1"))
                         {
                             if (Core.data.unlockedSkulls5_1 == 3) return;
                             Core.data.unlockedSkulls5_1++;
                         }
-                        else if (item.item_name.Contains("0-S"))
+                        else if (item.itemName.Contains("0-S"))
                         {
-                            if (item.item_name.Contains("Blue")) Core.data.unlockedSkulls.Add("S_b");
-                            else if (item.item_name.Contains("Red")) Core.data.unlockedSkulls.Add("S_r");
+                            if (item.itemName.Contains("Blue")) Core.data.unlockedSkulls.Add("S_b");
+                            else if (item.itemName.Contains("Red")) Core.data.unlockedSkulls.Add("S_r");
                         }
                         else
                         {
-                            Core.logger.LogInfo(item.item_name.Substring(item.item_name.Length - 4, 3));
-                            string skull = Core.idToLevel.FirstOrDefault(x => x.Value == item.item_name.Substring(item.item_name.Length - 4, 3)).Key.ToString();
-                            if (item.item_name.Contains("Blue")) skull += "_b";
-                            else if (item.item_name.Contains("Red")) skull += "_r";
-                            Core.logger.LogInfo("Skull: " + skull);
+                            Core.Logger.LogInfo(item.itemName.Substring(item.itemName.Length - 4, 3));
+                            string skull = Core.GetLevelIdFromName(item.itemName.Substring(item.itemName.Length - 4, 3)).ToString();
+                            if (item.itemName.Contains("Blue")) skull += "_b";
+                            else if (item.itemName.Contains("Red")) skull += "_r";
+                            Core.Logger.LogInfo("Skull: " + skull);
                             Core.data.unlockedSkulls.Add(skull);
                         }
                         if (SceneHelper.CurrentScene == "Level 1-4") LevelManager.skulls.ElementAt(Core.data.unlockedSkulls1_4 - 1).Value.SetActive(true);
                         else if (SceneHelper.CurrentScene == "Level 5-1") LevelManager.skulls.ElementAt(Core.data.unlockedSkulls5_1 - 1).Value.SetActive(true);
                         else if (SceneHelper.CurrentScene == "Level 0-S")
                         {
-                            if (item.item_name.Contains("Blue")) LevelManager.skulls["SkullBlue"].SetActive(true);
-                            else if (item.item_name.Contains("Red")) LevelManager.skulls["SkullRed"].SetActive(true);
+                            if (item.itemName == "Blue Skull (0-S)") LevelManager.skulls["SkullBlue"].SetActive(true);
+                            else if (item.itemName == "Red Skull (0-S)") LevelManager.skulls["SkullRed"].SetActive(true);
                         }
                         else if (StatsManager.Instance.levelNumber != 0)
                         {
-                            if (Core.playerActive && item.item_name.Contains(Core.idToLevel[StatsManager.Instance.levelNumber]))
+                            if (Core.IsInLevel && item.itemName.Contains(Core.GetLevelNameFromId(StatsManager.Instance.levelNumber)))
                             {
-                                if (item.item_name.Contains("Blue")) LevelManager.skulls["SkullBlue"].SetActive(true);
-                                else if (item.item_name.Contains("Red")) LevelManager.skulls["SkullRed"].SetActive(true);
+                                if (item.itemName.Contains("Blue")) LevelManager.skulls["SkullBlue"].SetActive(true);
+                                else if (item.itemName.Contains("Red")) LevelManager.skulls["SkullRed"].SetActive(true);
                             }
                         }
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";
                         break;
 
-                    case Enums.UKItemType.Level:
-                        //APULTRAKILL.logger.LogInfo(item.item_name.Substring(0, 3));
-                        Core.data.unlockedLevels.Add(item.item_name.Substring(0, 3));
+                    case UKType.Level:
+                        Core.data.unlockedLevels.Add(item.itemName.Substring(0, 3));
                         text = "UNLOCKED: ";
                         break;
 
-                    case Enums.UKItemType.Layer:
-                        if (item.item_name.Contains("OVERTURE"))
+                    case UKType.Layer:
+                        int layer;
+                        if (item.itemName.Contains("OVERTURE")) layer = 0;
+                        else layer = int.Parse(item.itemName[6].ToString());
+                        //Core.Logger.LogInfo(layer);
+
+                        foreach (LevelInfo info in Core.levelInfos)
                         {
-                            Core.data.unlockedLevels.Add("0-2");
-                            Core.data.unlockedLevels.Add("0-3");
-                            Core.data.unlockedLevels.Add("0-4");
-                            Core.data.unlockedLevels.Add("0-5");
+                            if (info.Layer == layer) Core.data.unlockedLevels.Add(info.Name);
                         }
-                        else if (item.item_name.Contains("1"))
-                        {
-                            Core.data.unlockedLevels.Add("1-1");
-                            Core.data.unlockedLevels.Add("1-2");
-                            Core.data.unlockedLevels.Add("1-3");
-                            if (Core.data.goal != "1-4") Core.data.unlockedLevels.Add("1-4");
-                        }
-                        else if (item.item_name.Contains("2"))
-                        {
-                            Core.data.unlockedLevels.Add("2-1");
-                            Core.data.unlockedLevels.Add("2-2");
-                            Core.data.unlockedLevels.Add("2-3");
-                            if (Core.data.goal != "2-4") Core.data.unlockedLevels.Add("2-4");
-                        }
-                        else if (item.item_name.Contains("3"))
-                        {
-                            Core.data.unlockedLevels.Add("3-1");
-                            if (Core.data.goal != "3-2") Core.data.unlockedLevels.Add("3-2");
-                        }
-                        else if (item.item_name.Contains("4"))
-                        {
-                            Core.data.unlockedLevels.Add("4-1");
-                            Core.data.unlockedLevels.Add("4-2");
-                            Core.data.unlockedLevels.Add("4-3");
-                            if (Core.data.goal != "4-4") Core.data.unlockedLevels.Add("4-4");
-                        }
-                        else if (item.item_name.Contains("5"))
-                        {
-                            Core.data.unlockedLevels.Add("5-1");
-                            Core.data.unlockedLevels.Add("5-2");
-                            Core.data.unlockedLevels.Add("5-3");
-                            if (Core.data.goal != "5-4") Core.data.unlockedLevels.Add("5-4");
-                        }
-                        else if (item.item_name.Contains("6"))
-                        {
-                            Core.data.unlockedLevels.Add("6-1");
-                            if (Core.data.goal != "6-2") Core.data.unlockedLevels.Add("6-2");
-                        }
+
                         text = "UNLOCKED: ";
                         break;
 
-                    case Enums.UKItemType.Points:
+                    case UKType.Points:
                         GameProgressSaver.AddMoney(10000);
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";
                         break;
 
-                    case Enums.UKItemType.Powerup:
-                        if (item.item_name == "Overheal")
-                        {
-                            if (Core.playerActive && Core.inLevel) NewMovement.Instance.SuperCharge();
-                            else overhealWaiting = true;
-                        }
-                        else if (item.item_name == "Dual Wield") powerupQueue.Add(Enums.Powerup.DualWield);
-                        else if (item.item_name == "Infinite Stamina") powerupQueue.Add(Enums.Powerup.InfiniteStamina);
-                        else if (item.item_name == "Air Jump") powerupQueue.Add(Enums.Powerup.DoubleJump);
+                    case UKType.Powerup:
+                        if (item.itemName == "Overheal") powerupQueue.Add(Powerup.Overheal);
+                        else if (item.itemName == "Dual Wield") powerupQueue.Add(Powerup.DualWield);
+                        else if (item.itemName == "Infinite Stamina") powerupQueue.Add(Powerup.InfiniteStamina);
+                        else if (item.itemName == "Air Jump") powerupQueue.Add(Powerup.DoubleJump);
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";
                         break;
 
-                    case Enums.UKItemType.Trap:
-                        if (item.item_name == "Hard Damage")
-                        {
-                            if (Core.playerActive && Core.inLevel) NewMovement.Instance.ForceAntiHP(50);
-                            else hardDmgWaiting = true;
-                        }
-                        else if (item.item_name == "Stamina Limiter") powerupQueue.Add(Enums.Powerup.StaminaLimiter);
-                        else if (item.item_name == "Wall Jump Limiter") powerupQueue.Add(Enums.Powerup.WalljumpLimiter);
-                        else if (item.item_name == "Empty Ammunition") powerupQueue.Add(Enums.Powerup.EmptyAmmo);
-                        else if (item.item_name == "Radiant Aura") powerupQueue.Add(Enums.Powerup.Radiance);
+                    case UKType.Trap:
+                        if (item.itemName == "Hard Damage") powerupQueue.Add(Powerup.HardDamage);
+                        else if (item.itemName == "Stamina Limiter") powerupQueue.Add(Powerup.StaminaLimiter);
+                        else if (item.itemName == "Wall Jump Limiter") powerupQueue.Add(Powerup.WalljumpLimiter);
+                        else if (item.itemName == "Empty Ammunition") powerupQueue.Add(Powerup.EmptyAmmo);
+                        else if (item.itemName == "Radiant Aura") powerupQueue.Add(Powerup.Radiance);
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";
                         break;
 
-                    case Enums.UKItemType.Soap:
-                        if (Core.playerActive && Core.inLevel) Core.SpawnSoap();
-                        else soapWaiting = true;
+                    case UKType.Soap:
+                        if (Core.IsPlaying) Core.SpawnSoap();
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";
                         break;
 
-                    case Enums.UKItemType.Fire2:
-                        Core.data.unlockedFire2.Add(GetWeaponIdFromName(item.item_name));
+                    case UKType.Fire2:
+                        Core.data.unlockedFire2.Add(GetWeaponIdFromName(item.itemName));
                         text = "UNLOCKED: ";
                         break;
 
                     default: break;
                 }
 
-                text += "<color=#" + itemColor + "FF>" + item.item_name.ToUpper() + "</color>";
+                text += "<color=#" + itemColor + "FF>" + item.itemName.ToUpper() + "</color>";
                 if (sendingPlayer != null) text += " (<color=#" + playerColor + "FF>" + sendingPlayer + "</color>)";
                 messages.Add(new Message
                 {
-                    image = GetUKMessageImage(item.item_name),
-                    color = GetUKMessageColor(item.item_name),
+                    image = GetUKMessageImage(item.itemName),
+                    color = GetUKMessageColor(item.itemName),
                     message = text
                 });
             }
             else
             {
-                text = "FOUND: <color=#" + itemColor + "FF>" + item.item_name.ToUpper() + "</color> (<color=#" + playerColor + "FF>" + item.player_name + "</color>)";
+                text = "FOUND: <color=#" + itemColor + "FF>" + item.itemName.ToUpper() + "</color> (<color=#" + playerColor + "FF>" + item.playerName + "</color>)";
                 messages.Add(new Message
                 {
-                    image = GetUKMessageImage(item.item_name),
-                    color = colors["gray"],
+                    image = GetUKMessageImage(item.itemName),
+                    color = Colors.Gray,
                     message = text
                 });
             }
-            if (!UIManager.displayingMessage && Core.playerActive) Core.uim.StartCoroutine("DisplayMessage");
-            if (powerupQueue.Count > 0 && Core.playerActive && Core.inLevel && !Core.poweredUp) Core.obj.GetComponent<Core>().Invoke("AddPowerup", 1f);
+            //if (!UIManager.displayingMessage && Core.IsPlaying) Core.uim.StartCoroutine("DisplayMessage");
         }
 
         public static void GetRandomHint()
@@ -294,7 +251,7 @@ namespace ArchipelagoULTRAKILL
 
             if (available.Any())
             {
-                var locationId = available[Random.Next(0, available.Length)];
+                var locationId = available[Random.Range(0, available.Length)];
 
                 Multiworld.Session.Locations.ScoutLocationsAsync(true, locationId);
                 LocationInfoPacket info = Multiworld.Session.Locations.ScoutLocationsAsync(false, locationId).Result;
@@ -306,7 +263,7 @@ namespace ArchipelagoULTRAKILL
                     itemColor = ColorUtility.ToHtmlStringRGB(GetAPMessageColor(info.Locations[0].Flags));
                     color = GetAPMessageColor(info.Locations[0].Flags);
                 }
-                string playerColor = ColorUtility.ToHtmlStringRGB(ConfigManager.APPlayerOther.value);
+                string playerColor = ColorUtility.ToHtmlStringRGB(Colors.PlayerOther);
                 string locationColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(Multiworld.Session.Locations.GetLocationNameFromId(info.Locations[0].Location).Substring(0, 3)));
 
                 string hint = "HINT: <color=#" + itemColor + "FF>";
@@ -321,19 +278,19 @@ namespace ArchipelagoULTRAKILL
                     color = color,
                     message = hint
                 });
-                if (!UIManager.displayingMessage && Core.playerActive) Core.uim.StartCoroutine("DisplayMessage");
+                if (!UIManager.displayingMessage && Core.IsPlaying) Core.uim.StartCoroutine("DisplayMessage");
             }
             else
             {
-                Core.logger.LogWarning("No locations available to hint.");
+                Core.Logger.LogWarning("No locations available to hint.");
             }
         }
 
         public static void AddAPItemMessage(APItem item)
         {
             string itemColor = ColorUtility.ToHtmlStringRGB(GetAPMessageColor(item.type));
-            string playerColor = ColorUtility.ToHtmlStringRGB(ConfigManager.APPlayerOther.value);
-            string text = "FOUND: <color=#" + itemColor + "FF>" + item.item_name + "</color> (<color=#" + playerColor + "FF>" + item.player_name + "</color>)";
+            string playerColor = ColorUtility.ToHtmlStringRGB(Colors.PlayerOther);
+            string text = "FOUND: <color=#" + itemColor + "FF>" + item.itemName + "</color> (<color=#" + playerColor + "FF>" + item.playerName + "</color>)";
 
             messages.Add(new Message
             {
@@ -341,7 +298,7 @@ namespace ArchipelagoULTRAKILL
                 color = GetAPMessageColor(item.type),
                 message = text
             });
-            if (!UIManager.displayingMessage && Core.playerActive) Core.uim.StartCoroutine("DisplayMessage");
+            if (!UIManager.displayingMessage && Core.IsPlaying) Core.uim.StartCoroutine("DisplayMessage");
         }
 
         public static string GetUKMessageImage(string itemName)
@@ -415,6 +372,9 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (5-3)":
                 case "Blue Skull (5-4)":
                 case "Red Skull (6-1)":
+                case "Red Skull (7-1)":
+                case "Blue Skull (7-1)":
+                case "Red Skull (7-2)":
                     return "skull";
                 case "0-2: THE MEATGRINDER":
                 case "0-3: DOUBLE DOWN":
@@ -454,6 +414,12 @@ namespace ArchipelagoULTRAKILL
                 case "6-2: AESTHETICS OF HATE":
                 case "LAYER 6: HERESY":
                     return "layer6";
+                case "7-1: GARDEN OF FORKING PATHS":
+                case "7-2: LIGHT UP THE NIGHT":
+                case "7-3: NO SOUND, NO MEMORY":
+                case "7-4: ...LIKE ANTENNAS TO HEAVEN":
+                case "LAYER 7: VIOLENCE":
+                    return "layer7";
                 // TO DO: make prime sanctum icons
                 case "P-1: SOUL SURVIVOR":
                 case "P-2: WAIT OF THE WORLD":
@@ -512,7 +478,7 @@ namespace ArchipelagoULTRAKILL
                     return ColorBlindSettings.Instance.variationColors[2]; // red
                 case "Revolver - Alternate":
                 case "Nailgun - Alternate":
-                    return ConfigManager.altColor.value;
+                    return Colors.WeaponAlt;
                 case "Stamina Bar":
                 case "Wall Jump":
                 case "Slide":
@@ -520,7 +486,7 @@ namespace ArchipelagoULTRAKILL
                 case "Infinite Stamina":
                     return ColorBlindSettings.Instance.staminaColor;
                 case "Feedbacker":
-                    return ConfigManager.arm0Color.value;
+                    return Colors.Arm0;
                 case "5-1: IN THE WAKE OF POSEIDON":
                 case "5-2: WAVES OF THE STARLESS SEA":
                 case "5-3: SHIP OF FOOLS":
@@ -530,7 +496,7 @@ namespace ArchipelagoULTRAKILL
                 case "5-3":
                 case "5-4":
                 case "LAYER 5: WRATH":
-                    return ConfigManager.layer5Color.value;
+                    return Colors.Layer5;
                 case "Blue Skull (0-2)":
                 case "Blue Skull (0-S)":
                 case "Blue Skull (1-1)":
@@ -546,9 +512,10 @@ namespace ArchipelagoULTRAKILL
                 case "Blue Skull (5-2)":
                 case "Blue Skull (5-3)":
                 case "Blue Skull (5-4)":
-                    return ConfigManager.blueSkullColor.value;
+                case "Blue Skull (7-1)":
+                    return Colors.BlueSkull;
                 case "Whiplash":
-                    return ConfigManager.arm2Color.value;
+                    return Colors.Arm2;
                 case "1-1: HEART OF THE SUNRISE":
                 case "1-2: THE BURNING WORLD":
                 case "1-3: HALLS OF SACRED REMAINS":
@@ -558,18 +525,28 @@ namespace ArchipelagoULTRAKILL
                 case "1-3":
                 case "1-4":
                 case "LAYER 1: LIMBO":
-                    return ConfigManager.layer1Color.value;
+                    return Colors.Layer1;
                 case "Knuckleblaster":
-                    return ConfigManager.arm1Color.value;
+                    return Colors.Arm1;
                 case "6-1: CRY FOR THE WEEPER":
                 case "6-2: AESTHETICS OF HATE":
                 case "6-1":
                 case "6-2":
                 case "LAYER 6: HERESY":
-                    return ConfigManager.layer6Color.value;
+                    return Colors.Layer6;
+                case "7-1: GARDEN OF FORKING PATHS":
+                case "7-2: LIGHT UP THE NIGHT":
+                case "7-3: NO SOUND, NO MEMORY":
+                case "7-4: ...LIKE ANTENNAS TO HEAVEN":
+                case "7-1":
+                case "7-2":
+                case "7-3":
+                case "7-4":
+                case "LAYER 7: VIOLENCE":
+                    return Colors.Layer7;
                 case "P-1: SOUL SURVIVOR":
                 case "P-2: WAIT OF THE WORLD":
-                    return ConfigManager.primeColor.value;
+                    return Colors.Prime;
                 case "Red Skull (0-S)":
                 case "Red Skull (1-1)":
                 case "Red Skull (1-2)":
@@ -580,7 +557,9 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (5-2)":
                 case "Red Skull (5-3)":
                 case "Red Skull (6-1)":
-                    return ConfigManager.redSkullColor.value;
+                case "Red Skull (7-1)":
+                case "Red Skull (7-2)":
+                    return Colors.RedSkull;
                 case "0-2: THE MEATGRINDER":
                 case "0-3: DOUBLE DOWN":
                 case "0-4: A ONE-MACHINE ARMY":
@@ -591,7 +570,7 @@ namespace ArchipelagoULTRAKILL
                 case "0-3":
                 case "0-4":
                 case "0-5":
-                    return ConfigManager.layer0Color.value;
+                    return Colors.Layer0;
                 case "2-1: BRIDGEBURNER":
                 case "2-2: DEATH AT 20,000 VOLTS":
                 case "2-3: SHEER HEART ATTACK":
@@ -601,13 +580,13 @@ namespace ArchipelagoULTRAKILL
                 case "2-2":
                 case "2-3":
                 case "2-4":
-                    return ConfigManager.layer2Color.value;
+                    return Colors.Layer2;
                 case "3-1: BELLY OF THE BEAST":
                 case "3-2: IN THE FLESH":
                 case "3-1":
                 case "3-2":
                 case "LAYER 3: GLUTTONY":
-                    return ConfigManager.layer3Color.value;
+                    return Colors.Layer3;
                 case "4-1: SLAVES TO POWER":
                 case "4-2: GOD DAMN THE SUN":
                 case "4-3: A SHOT IN THE DARK":
@@ -617,24 +596,24 @@ namespace ArchipelagoULTRAKILL
                 case "4-2":
                 case "4-3":
                 case "4-4":
-                    return ConfigManager.layer4Color.value;
+                    return Colors.Layer4;
                 case "Dual Wield":
-                    return ConfigManager.dualwieldColor.value;
+                    return Colors.DualWield;
                 case "Air Jump":
-                    return ConfigManager.doublejumpColor.value;
+                    return Colors.DoubleJump;
                 case "Overheal":
                     return ColorBlindSettings.Instance.overHealColor;
                 case "+10,000P":
                 case "Sho":
-                    return ConfigManager.pointsColor.value;
+                    return Colors.Points;
                 case "Hard Damage":
                 case "Stamina Limiter":
                 case "Wall Jump Limiter":
                 case "Empty Ammunition":
                 case "Radiant Aura":
-                    return ConfigManager.trapColor.value;
+                    return Colors.Trap;
                 default:
-                    return colors["white"];
+                    return Colors.White;
             }
         }
 
@@ -643,17 +622,17 @@ namespace ArchipelagoULTRAKILL
             switch (flag)
             {
                 case ItemFlags.Advancement:
-                    return ConfigManager.APItemAdvancement.value;
+                    return Colors.ItemAdvancement;
                 case ItemFlags.NeverExclude:
-                    return ConfigManager.APItemNeverExclude.value;
+                    return Colors.ItemNeverExclude;
                 case ItemFlags.Trap:
-                    return ConfigManager.APItemTrap.value;
+                    return Colors.ItemTrap;
                 default:
-                    return ConfigManager.APItemFiller.value;
+                    return Colors.ItemFiller;
             }
         }
 
-        public static Enums.UKItemType GetTypeFromName(string name)
+        public static UKType GetTypeFromName(string name)
         {
             switch (name)
             {
@@ -669,19 +648,19 @@ namespace ArchipelagoULTRAKILL
                 case "Railcannon - Malicious":
                 case "Rocket Launcher - Freezeframe":
                 case "Rocket Launcher - S.R.S. Cannon":
-                    return Enums.UKItemType.Weapon;
+                    return UKType.Weapon;
                 case "Revolver - Alternate":
                 case "Nailgun - Alternate":
-                    return Enums.UKItemType.WeaponAlt;
+                    return UKType.WeaponAlt;
                 case "Feedbacker":
                 case "Knuckleblaster":
                 case "Whiplash":
-                    return Enums.UKItemType.Arm;
+                    return UKType.Arm;
                 case "Stamina Bar":
                 case "Wall Jump":
                 case "Slide":
                 case "Slam":
-                    return Enums.UKItemType.Ability;
+                    return UKType.Ability;
                 case "Blue Skull (0-2)":
                 case "Blue Skull (0-S)":
                 case "Red Skull (0-S)":
@@ -707,7 +686,10 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (5-3)":
                 case "Blue Skull (5-4)":
                 case "Red Skull (6-1)":
-                    return Enums.UKItemType.Skull;
+                case "Red Skull (7-1)":
+                case "Blue Skull (7-1)":
+                case "Red Skull (7-2)":
+                    return UKType.Skull;
                 case "0-2: THE MEATGRINDER":
                 case "0-3: DOUBLE DOWN":
                 case "0-4: A ONE-MACHINE ARMY":
@@ -732,9 +714,13 @@ namespace ArchipelagoULTRAKILL
                 case "5-4: LEVIATHAN":
                 case "6-1: CRY FOR THE WEEPER":
                 case "6-2: AESTHETICS OF HATE":
+                case "7-1: GARDEN OF FORKING PATHS":
+                case "7-2: LIGHT UP THE NIGHT":
+                case "7-3: NO SOUND, NO MEMORY":
+                case "7-4: ...LIKE ANTENNAS TO HEAVEN":
                 case "P-1: SOUL SURVIVOR":
                 case "P-2: WAIT OF THE WORLD":
-                    return Enums.UKItemType.Level;
+                    return UKType.Level;
                 case "OVERTURE: THE MOUTH OF HELL":
                 case "LAYER 1: LIMBO":
                 case "LAYER 2: LUST":
@@ -742,22 +728,23 @@ namespace ArchipelagoULTRAKILL
                 case "LAYER 4: GREED":
                 case "LAYER 5: WRATH":
                 case "LAYER 6: HERESY":
-                    return Enums.UKItemType.Layer;
+                case "LAYER 7: VIOLENCE":
+                    return UKType.Layer;
                 case "+10,000P":
-                    return Enums.UKItemType.Points;
+                    return UKType.Points;
                 case "Overheal":
                 case "Dual Wield":
                 case "Infinite Stamina":
                 case "Air Jump":
-                    return Enums.UKItemType.Powerup;
+                    return UKType.Powerup;
                 case "Hard Damage":
                 case "Stamina Limiter":
                 case "Wall Jump Limiter":
                 case "Empty Ammunition":
                 case "Radiant Aura":
-                    return Enums.UKItemType.Trap;
+                    return UKType.Trap;
                 case "Soap":
-                    return Enums.UKItemType.Soap;
+                    return UKType.Soap;
                 case "Secondary Fire - Piercer":
                 case "Secondary Fire - Marksman":
                 case "Secondary Fire - Sharpshooter":
@@ -767,9 +754,9 @@ namespace ArchipelagoULTRAKILL
                 case "Secondary Fire - Overheat":
                 case "Secondary Fire - Freezeframe":
                 case "Secondary Fire - S.R.S. Cannon":
-                    return Enums.UKItemType.Fire2;
+                    return UKType.Fire2;
                 default: 
-                    return Enums.UKItemType.Points;
+                    return UKType.Points;
             }
         }
 

@@ -430,6 +430,16 @@ def challenge_4_1(state: CollectionState, player: int, slam: bool, fire2: bool, 
             and dashes(state, player, has_dashes, 2)
             and can_slam(state, player, slam)
         )
+        or (
+            (
+                rai2(state, player)
+                or sho1_fire2(state, player, fire2)
+            )
+            and (
+                walljumps(state, player, has_walljumps, 1)
+                or can_slam(state, player, slam)
+            )
+        )
     )
 
 
@@ -642,6 +652,27 @@ def rules(ultrakillworld):
             lambda state: (
                 state.has("6-2: AESTHETICS OF HATE", player)
                 or state.has("LAYER 6: HERESY", player)
+            ))
+    set_rule(world.get_entrance("To 7-1", player),
+        lambda state: (
+            state.has("7-1: GARDEN OF FORKING PATHS", player)
+            or state.has("LAYER 7: VIOLENCE", player)
+        ))
+    set_rule(world.get_entrance("To 7-2", player),
+        lambda state: (
+            state.has("7-2: LIGHT UP THE NIGHT", player)
+            or state.has("LAYER 7: VIOLENCE", player)
+        ))
+    set_rule(world.get_entrance("To 7-3", player),
+        lambda state: (
+            state.has("7-3: NO SOUND, NO MEMORY", player)
+            or state.has("LAYER 7: VIOLENCE", player)
+        ))
+    if goal.value != 8:
+        set_rule(world.get_entrance("To 7-4", player),
+            lambda state: (
+                state.has("7-4: ...LIKE ANTENNAS TO HEAVEN", player)
+                or state.has("LAYER 7: VIOLENCE", player)
             ))
 
     # secret mission entrances
@@ -1069,6 +1100,7 @@ def rules(ultrakillworld):
             lambda state: (
                 can_slide(state, player, slide)
                 or dashes(state, player, dash, 2)
+                or rock0_fire2(state, player, fire2)
             ))
 
     if prank:
@@ -1228,7 +1260,21 @@ def rules(ultrakillworld):
     set_rule(world.get_location("4-1: Secret #3", player),
         lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
     set_rule(world.get_location("4-1: Secret #5", player),
-        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
+        lambda state: (
+            (
+                jump_general(state, player, slam, fire2, arm, walljump, 1)
+                and can_break_walls(state, player, fire2, arm)
+            )
+            or (
+                can_slam(state, player, slam)
+                or sho0_fire2(state, player, fire2)
+                or sho1_fire2(state, player, fire2)
+                or can_proj_boost(state, player, arm)
+                or rock0(state, player)
+                or rock1(state, player)
+                or rai2(state, player)
+            )
+        ))
 
     if challenge:
         set_rule(world.get_location("4-1: Don't activate any enemies", player),
@@ -1628,9 +1674,9 @@ def rules(ultrakillworld):
 
 
     # 6-1
-    add_rule(world.get_location("6-1: Secret #2", player),
+    set_rule(world.get_location("6-1: Secret #2", player),
         lambda state: grab_item(state, player, arm))
-    add_rule(world.get_location("6-1: Secret #3", player),
+    set_rule(world.get_location("6-1: Secret #3", player),
         lambda state: grab_item(state, player, arm))
     set_rule(world.get_location("6-1: Secret #4", player),
         lambda state: (
@@ -1643,7 +1689,7 @@ def rules(ultrakillworld):
             and grab_item(state, player, arm)
             and can_punch(state, player, arm)
         ))
-    add_rule(world.get_location("Cleared 6-1", player),
+    set_rule(world.get_location("Cleared 6-1", player),
         lambda state: (
             jump_general(state, player, slam, fire2, arm, walljump, 1)
             and grab_item(state, player, arm)
@@ -1735,6 +1781,170 @@ def rules(ultrakillworld):
                         or rock0_fire2(state, player, fire2)
                     )
                     and good_weapon(state, player, fire2, arm, slide, dash)
+                ))
+            
+
+    # 7-1
+    set_rule(world.get_location("7-1: Secret #1", player),
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 2))
+    set_rule(world.get_location("7-1: Secret #2", player),
+        lambda state: (
+            jump_general(state, player, slam, fire2, arm, walljump, 1)
+            and can_slide(state, player, slide)
+        ))
+    set_rule(world.get_location("7-1: Secret #3", player),
+        lambda state: (
+            jump_general(state, player, slam, fire2, arm, walljump, 1)
+            and grab_item(state, player, arm)
+        ))
+    set_rule(world.get_location("7-1: Secret #4", player),
+        lambda state: (
+            jump_general(state, player, slam, fire2, arm, walljump, 2)
+            and grab_item(state, player, arm)
+        ))
+    set_rule(world.get_location("7-1: Secret #5", player),
+        lambda state: (
+            jump_general(state, player, slam, fire2, arm, walljump, 2)
+            and grab_item(state, player, arm)
+        ))
+    set_rule(world.get_location("Cleared 7-1", player),
+        lambda state: (
+            jump_general(state, player, slam, fire2, arm, walljump, 1)
+            and grab_item(state, player, arm)
+        ))
+    if challenge:
+        set_rule(world.get_location("7-1: Beat the secret encounter", player),
+            lambda state: grab_item(state, player, arm))
+    if prank:
+        set_rule(world.get_location("7-1: Perfect Rank", player),
+            lambda state: (
+                jump_general(state, player, slam, fire2, arm, walljump, 2)
+                and grab_item(state, player, arm)
+                and good_weapon(state, player, fire2, arm, slide, dash)
+            ))
+    if skulls:
+        add_rule(world.get_location("7-1: Secret #3", player),
+            lambda state: (
+                state.has("Red Skull (7-1)", player)
+                and state.has("Blue Skull (7-1)", player)
+            ))
+        add_rule(world.get_location("7-1: Secret #4", player),
+            lambda state: (
+                state.has("Red Skull (7-1)", player)
+                and state.has("Blue Skull (7-1)", player)
+            ))
+        add_rule(world.get_location("7-1: Secret #5", player),
+            lambda state: (
+                state.has("Red Skull (7-1)", player)
+                and state.has("Blue Skull (7-1)", player)
+            ))
+        add_rule(world.get_location("Cleared 7-1", player),
+            lambda state: (
+                state.has("Red Skull (7-1)", player)
+                and state.has("Blue Skull (7-1)", player)
+            ))
+        if challenge:
+            add_rule(world.get_location("7-1: Secret #3", player),
+                lambda state: (
+                    state.has("Red Skull (7-1)", player)
+                    and state.has("Blue Skull (7-1)", player)
+                ))
+        if prank:
+            add_rule(world.get_location("7-1: Secret #3", player),
+                lambda state: (
+                    state.has("Red Skull (7-1)", player)
+                    and state.has("Blue Skull (7-1)", player)
+                ))
+
+
+    # 7-2
+    set_rule(world.get_location("7-2: Secret #1", player),
+        lambda state: (
+            arm2(state, player)
+            and (
+                walljumps(state, player, walljump, 1)
+                or dashes(state, player, dash, 1)
+            )
+        ))
+    set_rule(world.get_location("7-2: Secret #2", player),
+        lambda state: arm2(state, player))
+    set_rule(world.get_location("7-2: Secret #3", player),
+        lambda state: arm2(state, player))
+    set_rule(world.get_location("7-2: Secret #4", player),
+        lambda state: arm2(state, player))
+    set_rule(world.get_location("7-2: Secret #5", player),
+        lambda state: arm2(state, player))
+    set_rule(world.get_location("Cleared 7-2", player),
+        lambda state: arm2(state, player))
+    if challenge:
+        set_rule(world.get_location("7-2: Don't kill any enemies", player),
+            lambda state: arm2(state, player))
+    if prank:
+        set_rule(world.get_location("7-2: Perfect Rank", player),
+            lambda state: (
+                arm2(state, player)
+                and good_weapon(state, player, fire2, arm, slide, dash)
+            ))
+    if skulls:
+        add_rule(world.get_location("Cleared 7-2", player),
+            lambda state: state.has("Red Skull (7-2)", player))
+        if challenge:
+            set_rule(world.get_location("7-2: Don't kill any enemies", player),
+                lambda state: state.has("Red Skull (7-2)", player))
+        if prank:
+            set_rule(world.get_location("7-2: Perfect Rank", player),
+                lambda state: state.has("Red Skull (7-2)", player))
+            
+    
+    # 7-3
+    set_rule(world.get_location("7-3: Secret #5", player),
+        lambda state: can_slide(state, player, slide))
+    if challenge:
+        set_rule(world.get_location("7-3: Become marked for death", player),
+            lambda state: good_weapon(state, player, fire2, arm, slide, dash))
+    if prank:
+        set_rule(world.get_location("7-3: Perfect Rank", player),
+            lambda state: good_weapon(state, player, fire2, arm, slide, dash))
+        
+
+    # 7-4
+    set_rule(world.get_location("Cleared 7-4", player),
+        lambda state: (
+            can_slide(state, player, slide)
+            and (
+                arm2(state, player)
+                or slam_storage(state, player, slam, walljump)
+            )
+            and can_punch(state, player, arm)
+        ))
+    if goal != 8:
+        if boss > 0:
+            set_rule(world.get_location('7-4: Defeat 1000-THR "Earthmover"', player),
+                lambda state: (
+                    can_slide(state, player, slide)
+                    and (
+                        arm2(state, player)
+                        or slam_storage(state, player, slam, walljump)
+                    )
+                    and can_punch(state, player, arm)
+                ))
+        if challenge:
+            set_rule(world.get_location("7-4: Don't fight the security system", player),
+                lambda state: (
+                    can_slide(state, player, slide)
+                    and (
+                        arm2(state, player)
+                        or slam_storage(state, player, slam, walljump)
+                    )
+                    and can_punch(state, player, arm)
+                    and rai0(state, player)
+                ))
+        if prank:
+            set_rule(world.get_location("7-4: Perfect Rank", player),
+                lambda state: (
+                    can_slide(state, player, slide)
+                    and arm2(state, player)
+                    and can_punch(state, player, arm)
                 ))
 
 

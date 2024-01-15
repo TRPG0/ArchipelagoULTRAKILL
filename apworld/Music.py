@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 
 multilayer_music: Dict[str, str] = {
@@ -23,6 +23,10 @@ multilayer_music: Dict[str, str] = {
     "22A": "DEATH ODYSSEY",
     "22B": "DEATH ODYSSEY AFTERMATH",
     "24A": "ALTARS OF APOSTASY",
+    "26B": "THE WORLD LOOKS RED",
+    "27A": "DO ROBOTS DREAM OF ETERNAL SLEEP?",
+    "27B": "HEAR! THE SIREN SONG CALL OF DEATH",
+    "28B": "DANSE MACABRE",
     "667A": "TENEBRE ROSSO SANGUE"
 }
 
@@ -40,8 +44,59 @@ singlelayer_music: Dict[str, str] = {
     "24B": "HALL OF SACRELIGIOUS REMAINS",
     "25A": "FALLEN ANGEL",
     "25B": "THE DEATH OF GOD'S WILL",
+    "26A": "THE WORLD LOOKS WHITE",
+    "26C": "themeofcancer.wav",
+    "26D": "BULL OF HELL (PHASE 1)",
+    "26E": "BULL OF HELL (PHASE 2)",
+    "28A": "SUFFERING LEAVES SUFFERING LEAVES",
     "666A": "CHAOS",
     "666B": "ORDER",
     "667B": "PANDEMONIUM",
     "667C": "WAR"
 }
+
+ordered_list: List[str] = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6A",
+    "6B",
+    "7A",
+    "7B",
+    "8",
+    "9A",
+    "9B",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14A",
+    "14B",
+    "15A",
+    "15B",
+    "16",
+    "17",
+    "18A",
+    "18B",
+    "18C",
+    "18D",
+    "19",
+    "20",
+    "22A",
+    "22B",
+    "24A",
+    "24B",
+    "25A",
+    "25B",
+    "26A",
+    "26B",
+    "26C",
+    "26D",
+    "26E",
+    "27A",
+    "27B",
+    "28A",
+    "28B"
+]

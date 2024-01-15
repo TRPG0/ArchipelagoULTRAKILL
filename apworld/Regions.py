@@ -33,6 +33,10 @@ region_table: Dict[str, str] = {
     "5-S": "5-S: I ONLY SAY MORNING",
     "6-1": "6-1: CRY FOR THE WEEPER",
     "6-2": "6-2: AESTHETICS OF HATE",
+    "7-1": "7-1: GARDEN OF FORKING PATHS",
+    "7-2": "7-2: LIGHT UP THE NIGHT",
+    "7-3": "7-3: NO SOUND, NO MEMORY",
+    "7-4": "7-4: ...LIKE ANTENNAS TO HEAVEN",
     "P-1": "P-1: SOUL SURVIVOR",
     "P-2": "P-2: WAIT OF THE WORLD"
 }

@@ -6,7 +6,7 @@ from .Locations import location_table, event_table, ext_bosses
 from .Regions import region_table, secret_levels
 from .Rules import rules
 from .Options import ultrakill_options, Goal, UnlockType, StartingWeapon
-from .Music import multilayer_music, singlelayer_music
+from .Music import multilayer_music, singlelayer_music, ordered_list
 from worlds.generic.Rules import set_rule
 
 
@@ -59,9 +59,9 @@ class UltrakillWorld(World):
         world = self.multiworld
         player = self.player
         
-        if not world.include_secret_mission_completion[self.player] and world.goal_requirement[self.player].value > 24:
-            print(f"[ULTRAKILL - '{world.get_player_name(player)}'] Secret mission completion is disabled. Goal requirement lowered to 24.")
-            world.goal_requirement[self.player].value = 24
+        if not world.include_secret_mission_completion[self.player] and world.goal_requirement[self.player].value > 28:
+            print(f"[ULTRAKILL - '{world.get_player_name(player)}'] Secret mission completion is disabled. Goal requirement lowered to 28.")
+            world.goal_requirement[self.player].value = 28
 
         if self.multiworld.starting_weapon[self.player] != StartingWeapon.option_revolver:
             weapons: Set[str] = group_table["start_weapons"]
@@ -121,10 +121,8 @@ class UltrakillWorld(World):
                 tempDict[id1] = id2
                 single1.remove(id1)
                 single2.remove(id2)
-            
-            tempKeys = list(tempDict.keys())
-            tempKeys.sort()
-            self.music = {i: tempDict[i] for i in tempKeys}
+
+            self.music = {i: tempDict[i] for i in ordered_list}
             #print(self.music)
 
     
@@ -259,6 +257,8 @@ class UltrakillWorld(World):
             self.goal_name = "5-4"
         elif world.goal[player] == Goal.option_6_2:
             self.goal_name = "6-2"
+        elif world.goal[player] == Goal.option_7_4:
+            self.goal_name = "7-4"
         elif world.goal[player] == Goal.option_P_1:
             self.goal_name = "P-1"
         elif world.goal[player] == Goal.option_P_2:
@@ -310,12 +310,6 @@ class UltrakillWorld(World):
 
         locations = []
 
-        color_int_to_enum: Dict[int, str] = {
-            0: "Off",
-            1: "Once",
-            2: "EveryLoad"
-        }
-
         for loc in world.get_filled_locations(player):
             if "Cleared" in loc.name:
                 continue
@@ -328,10 +322,10 @@ class UltrakillWorld(World):
                 }
 
                 if loc.item.game == "ULTRAKILL":
-                    data["item_type"] = self.item_name_to_type[loc.item.name].name
+                    data["item_type"] = self.item_name_to_type[loc.item.name].value
                     data["ukitem"] = True
                 else:
-                    data["item_type"] = loc.item.classification.name
+                    data["item_type"] = loc.item.classification.value
                     data["ukitem"] = False
 
                 locations.append(data)
@@ -352,8 +346,8 @@ class UltrakillWorld(World):
             "start_with_slam": bool(world.start_with_slam[player]),
             "randomize_skulls": bool(world.randomize_skulls[player]),
             "point_multiplier": world.point_multiplier[player].value,
-            "ui_color_randomizer": color_int_to_enum[world.ui_color_randomizer[player].value],
-            "gun_color_randomizer": color_int_to_enum[world.gun_color_randomizer[player].value],
+            "ui_color_randomizer": world.ui_color_randomizer[player].value,
+            "gun_color_randomizer": world.gun_color_randomizer[player].value,
             "music_randomizer": bool(world.music_randomizer[player]),
             "music": self.music,
             "cybergrind_hints": bool(world.cybergrind_hints[player]),

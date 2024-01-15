@@ -8,14 +8,15 @@ namespace ArchipelagoULTRAKILL.Components
         {
             if (Core.DataExists())
             {
-                Core.logger.LogInfo("Chapter Select inactive. Updating levels.");
+                Core.Logger.LogInfo("Chapter Select inactive. Updating levels.");
                 UIManager.UpdateLevels();
                 if (Core.data.randomizeSkulls)
                 {
-                    Core.logger.LogInfo("Skulls randomized. Updating skull icons.");
+                    Core.Logger.LogInfo("Skulls randomized. Updating skull icons.");
                     UIManager.UpdateSkullIcons();
                 }
             }
+            if (UIManager.actStats != null) UIManager.actStats.gameObject.SetActive(false);
         }
     }
 }

@@ -3,16 +3,6 @@ using System.Reflection;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
-    // update item descriptions in shop
-    [HarmonyPatch(typeof(VariationInfo), "Start")]
-    class VariationInfo_Start_Patch
-    {
-        public static void Postfix(VariationInfo __instance)
-        {
-            if (Core.DataExists()) LevelManager.UpdateShopObjects();
-        }
-    }
-
     // update item prices in shop
     [HarmonyPatch(typeof(VariationInfo), "UpdateMoney")]
     class VariationInfo_UpdateMoney_Patch
@@ -34,11 +24,10 @@ namespace ArchipelagoULTRAKILL.Patches
                 {
                     GameProgressMoneyAndGear generalProgress = GameProgressSaver.GetGeneralProgress();
                     FieldInfo field = typeof(GameProgressMoneyAndGear).GetField(__instance.weaponName, BindingFlags.Instance | BindingFlags.Public);
-                    if (int.Parse(field.GetValue(generalProgress).ToString()) != 0 && !__instance.weaponName.Contains("0") && !Core.data.purchasedItems.Contains(__instance.weaponName))
-                    {
-                        return false;
-                    }
-                    else if (int.Parse(field.GetValue(generalProgress).ToString()) == 0 && !__instance.weaponName.Contains("0") && Core.data.purchasedItems.Contains(__instance.weaponName))
+                    bool unlocked = int.Parse(field.GetValue(generalProgress).ToString()) == 1;
+                    if ((unlocked && !__instance.weaponName.Contains("0") && !Core.data.purchasedItems.Contains(__instance.weaponName))
+                        || (!unlocked && !__instance.weaponName.Contains("0") && Core.data.purchasedItems.Contains(__instance.weaponName))
+                        || (!unlocked && __instance.weaponName.Contains("0")))
                     {
                         return false;
                     }

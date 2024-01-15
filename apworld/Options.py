@@ -10,6 +10,7 @@ class Goal(Choice):
     option_4_4 = 3
     option_5_4 = 4
     option_6_2 = 5
+    option_7_4 = 8
     option_P_1 = 6
     option_P_2 = 7
     default = 5
@@ -19,7 +20,7 @@ class GoalRequirement(Range):
     """Choose the number of levels that must be completed to unlock the goal."""
     display_name = "Goal Requirement"
     range_start = 5
-    range_end = 29
+    range_end = 33
     default = 15
 
 

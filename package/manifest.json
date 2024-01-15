@@ -1,10 +1,10 @@
 {
     "name": "Archipelago",
-    "version_number": "1.2.5",
+    "version_number": "2.0.0",
     "website_url": "https://github.com/TRPG0/ArchipelagoULTRAKILL",
     "description": "Connect to an Archipelago server to play ULTRAKILL randomizer.",
     "dependencies": [
         "BepInEx-BepInExPack-5.4.2100",
-        "EternalsTeam-PluginConfigurator-1.8.3"
+        "EternalsTeam-PluginConfigurator-1.8.4"
     ]
 }

@@ -2,10 +2,8 @@
 
 namespace ArchipelagoULTRAKILL.Structures
 {
-    public class APItem
+    public class APItem : AItem
     {
-        public string item_name;
         public ItemFlags type;
-        public string player_name;
     }
 }
