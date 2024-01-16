@@ -36,9 +36,7 @@ First, download and install the Archipelago mod with r2modman, or manually by ex
 
 5. Host a game, either manually, or by [uploading](https://archipelago.gg/uploads) it to the Archipelago website.
 
-6. Enable Archipelago in game, then restart ULTRAKILL.
-
-7. To connect to the server, first select a new save file. Then open the options menu, click the PLUGIN CONFIG button, click Configure next to Archipelago, and open the PLAYER SETTINGS menu. Enter your name, the server's address in the form of `address:port`, and a password if necessary, then click the Connect button.
+6. To connect to the server, first select a new save file. Then open the options menu, click the PLUGIN CONFIG button, click Configure next to Archipelago, and open the PLAYER SETTINGS menu. Enter your name, the server's address in the form of `address:port`, and a password if necessary, then click the Connect button.
 
 There are some additional commands that can be used by pressing `F8` to open the console:
 
