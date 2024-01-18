@@ -1844,13 +1844,13 @@ def rules(ultrakillworld):
                 and state.has("Blue Skull (7-1)", player)
             ))
         if challenge:
-            add_rule(world.get_location("7-1: Secret #3", player),
+            add_rule(world.get_location("7-1: Beat the secret encounter", player),
                 lambda state: (
                     state.has("Red Skull (7-1)", player)
                     and state.has("Blue Skull (7-1)", player)
                 ))
         if prank:
-            add_rule(world.get_location("7-1: Secret #3", player),
+            add_rule(world.get_location("7-1: Perfect Rank", player),
                 lambda state: (
                     state.has("Red Skull (7-1)", player)
                     and state.has("Blue Skull (7-1)", player)
