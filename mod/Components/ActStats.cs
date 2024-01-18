@@ -9,10 +9,13 @@ namespace ArchipelagoULTRAKILL.Components
         public int StartLevelId { get; private set; }
         public int EndLevelId { get; private set; }
 
-        public void Init(int start, int end)
+        public bool Prime { get; private set; }
+
+        public void Init(int start, int end, bool prime = false)
         {
             StartLevelId = start;
             EndLevelId = end;
+            Prime = prime;
         }
 
         public bool ActIncludes(int id)
@@ -106,7 +109,7 @@ namespace ArchipelagoULTRAKILL.Components
                 bool isPerfect = false;
                 foreach (int grade in rank.ranks)
                 {
-                    if (grade > 0)
+                    if (grade >= 0)
                     {
                         if (!isCompleted) completed++;
                         isCompleted = true;
@@ -142,18 +145,8 @@ namespace ArchipelagoULTRAKILL.Components
                 if (rank.challenge) challenges++;
             }
 
-            /*
-            string result = $"Levels unlocked: <color=red>{unlocked}/{total}</color>";
-            result += $"\nLevels completed: <color=red>{completed}/{total}</color>";
-            result += $"\nSecret missions: <color=red>{missionsCompleted}/{missionsTotal}</color>";
-            result += $"\nSecrets: <color=red>{secretsFound}/{secretsTotal}</color>";
-            if (Core.data.challengeRewards) result += $"\nChallenges: <color=red>{challenges}/{total}</color>";
-            if (Core.data.pRankRewards) result += $"\nPerfect Ranks: <color=red>{perfects}/{total}</color>";
-            if (Core.data.bossRewards > BossOptions.Disabled) result += $"\nBosses: <color=red>{bossesDefeated}/{bossesTotal}</color>";
-            if (ActIncludes(20) && Core.data.fishRewards) result += $"\nFish: <color=red>{FishCaught()}/12</color>";
-            */
-
-            string result = BuildString("Levels unlocked", unlocked, total);
+            string result = BuildStringGoal(Core.data.goal, Core.data.completedLevels.Count, Core.data.goalRequirement);
+            result += BuildString("Levels unlocked", unlocked, total);
             result += BuildString("\nLevels completed", completed, total);
             result += BuildString("\nSecret missions", missionsCompleted, missionsTotal);
             result += BuildString("\nSecrets", secretsFound, secretsTotal);
@@ -161,6 +154,36 @@ namespace ArchipelagoULTRAKILL.Components
             if (Core.data.pRankRewards) result += BuildString("\nPerfect Ranks", perfects, total);
             if (Core.data.bossRewards > BossOptions.Disabled) result += BuildString("\nBosses", bossesDefeated, bossesTotal);
             if (ActIncludes(20) && Core.data.fishRewards) result += BuildString("\nFish", FishCaught(), 12);
+
+            return result;
+        }
+
+        public string GetPrimeStats()
+        {
+            int total = EndLevelId - (StartLevelId - 1);
+            int unlocked = 0;
+            int completed = 0;
+
+            for (int i = StartLevelId; i <= EndLevelId; i++)
+            {
+                RankData rank = GameProgressSaver.GetRank(i);
+                bool isUnlocked = Core.data.unlockedLevels.Contains(Core.GetLevelNameFromId(i));
+                if (isUnlocked) unlocked++;
+
+                bool isCompleted = false;
+                foreach (int grade in rank.ranks)
+                {
+                    if (grade >= 0)
+                    {
+                        if (!isCompleted) completed++;
+                        isCompleted = true;
+                    }
+                }
+            }
+
+            string result = BuildStringGoal(Core.data.goal, Core.data.completedLevels.Count, Core.data.goalRequirement);
+            result += BuildString("Levels unlocked", unlocked, total);
+            result += BuildString("\nLevels completed", completed, total);
 
             return result;
         }
@@ -173,6 +196,25 @@ namespace ArchipelagoULTRAKILL.Components
             return $"{part}: <color={color}>{value}/{total}</color>";
         }
 
+        public string BuildStringGoal(string goal, int value, int total)
+        {
+            if (!ActIncludes(Core.GetLevelIdFromName(goal))) return "";
+
+            RankData rank = GameProgressSaver.GetRank(Core.GetLevelIdFromName(goal));
+            foreach (int grade in rank.ranks)
+            {
+                if (grade >= 0)
+                {
+                    return "Goal: <color=green>Completed</color>\n";
+                }
+            }
+
+            string color = "red";
+            if (value >= total) color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.Perfect);
+
+            return $"Goal: <color={color}>{value}/{total}</color>\n";
+        }
+
         public void ShowStats()
         {
             if (UIManager.actStats == null)
@@ -183,7 +225,10 @@ namespace ArchipelagoULTRAKILL.Components
 
             Vector3 actPos = transform.localPosition;
             UIManager.actStats.transform.localPosition = new Vector3(UIManager.actStats.transform.localPosition.x, actPos.y - UIManager.actStats.fontSize * 0.75f, UIManager.actStats.transform.localPosition.z);
-            UIManager.actStats.text = GetActStats();
+
+            if (Prime) UIManager.actStats.text = GetPrimeStats();
+            else UIManager.actStats.text = GetActStats();
+
             UIManager.actStats.gameObject.SetActive(true);
         }
 

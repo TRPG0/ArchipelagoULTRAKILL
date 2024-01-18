@@ -17,16 +17,18 @@ using UnityEngine.AddressableAssets.ResourceLocators;
 namespace ArchipelagoULTRAKILL
 {
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
+    [BepInDependency("com.eternalUnion.pluginConfigurator")]
     public class Core : BaseUnityPlugin
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "2.0.0";
+        public const string PluginVersion = "2.0.1";
 
         public static string workingPath;
         public static string workingDir;
 
-        public static new ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("Archipelago");
+        public static new ManualLogSource Logger { get; } = BepInEx.Logging.Logger.CreateLogSource("Archipelago");
+        public static plog.Logger PLogger { get; } = new plog.Logger("Archipelago");
 
         public static GameObject obj;
         public static UIManager uim;

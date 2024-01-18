@@ -1,6 +1,5 @@
 ﻿using GameConsole;
-using HarmonyLib;
-using System.IO;
+using plog.Models;
 
 namespace ArchipelagoULTRAKILL.Commands
 {
@@ -16,7 +15,7 @@ namespace ArchipelagoULTRAKILL.Commands
             {
                 if (args.Length != 0)
                 {
-                    con.PrintLine("Usage: connect <address:port> <name> <password> | connect");
+                    Core.PLogger.Log("Usage: connect <address:port> <name> <password> | connect", Level.Info);
                     return;
 
                 }
@@ -24,7 +23,7 @@ namespace ArchipelagoULTRAKILL.Commands
                 {
                     if (Core.data.host_name == "" || Core.data.slot_name == "" || !Core.DataExists())
                     {
-                        con.PrintLine("No saved connection info found. Usage: connect <address:port> <name> <password>");
+                        Core.PLogger.Log("No saved connection info found. Usage: connect <address:port> <name> <password>", Level.Info);
                         return;
                     }
                     else
@@ -38,12 +37,12 @@ namespace ArchipelagoULTRAKILL.Commands
             {
                 if (SceneHelper.CurrentScene != "Main Menu")
                 {
-                    con.PrintLine("Can't do that right now. Can only connect to an Archipelago server on the main menu.");
+                    Core.PLogger.Log("Can't do that right now. Can only connect to an Archipelago server on the main menu.", Level.Info);
                     return;
                 }
                 else if ((GameProgressSaver.GetTutorial() || GameProgressSaver.GetIntro()) && !Core.DataExists())
                 {
-                    con.PrintLine("No Archipelago data found. Please start a new save file before connecting.");
+                    Core.PLogger.Log("No Archipelago data found. Please start a new save file before connecting.", Level.Info);
                     return;
                 }
                 else

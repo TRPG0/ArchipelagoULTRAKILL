@@ -109,6 +109,7 @@ namespace ArchipelagoULTRAKILL
             chapterSelect.transform.Find("Act I").gameObject.AddComponent<ActStats>().Init(6, 15);
             chapterSelect.transform.Find("Act II").gameObject.AddComponent<ActStats>().Init(16, 25);
             chapterSelect.transform.Find("Act III").gameObject.AddComponent<ActStats>().Init(26, 29);
+            chapterSelect.transform.Find("Prime").gameObject.AddComponent<ActStats>().Init(666, 667, true);
 
             foreach (LayerSelect component in canvas.GetComponentsInChildren<LayerSelect>(true))
             {

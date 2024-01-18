@@ -1,3 +1,11 @@
+## 2.0.1
+
+- Fixed to work on patch 14c.
+- Fixed completed levels not being counted in the stats if the final rank was a D.
+- Added a goal counter to the stats.
+- Added stats for Prime Sanctums.
+- Fixed music randomizer not working in P-1 and P-2.
+
 ## 2.0.0
 
 - A large portion of the mod has been rewritten.

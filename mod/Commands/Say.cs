@@ -1,5 +1,6 @@
 ﻿using Archipelago.MultiClient.Net.Packets;
 using GameConsole;
+using plog.Models;
 
 namespace ArchipelagoULTRAKILL.Commands
 {
@@ -13,7 +14,7 @@ namespace ArchipelagoULTRAKILL.Commands
         {
             if (!Multiworld.Authenticated)
             {
-                con.PrintLine("You aren't connected to an Archipelago server.");
+                Core.PLogger.Log("You aren't connected to an Archipelago server.", Level.Info);
                 return;
             }
             else

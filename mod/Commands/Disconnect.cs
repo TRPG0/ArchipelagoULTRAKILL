@@ -1,6 +1,7 @@
-﻿using ArchipelagoULTRAKILL.Structures;
-using GameConsole;
+﻿using GameConsole;
 using UnityEngine.UI;
+using plog.Models;
+using Colors = ArchipelagoULTRAKILL.Structures.Colors;
 
 namespace ArchipelagoULTRAKILL.Commands
 {
@@ -14,14 +15,14 @@ namespace ArchipelagoULTRAKILL.Commands
         {
             if (args.Length != 0)
             {
-                con.PrintLine("Usage: disconnect");
+                Core.PLogger.Log("Usage: disconnect", Level.Info);
                 return;
             }
             else
             {
                 if (!Multiworld.Authenticated)
                 {
-                    con.PrintLine("You aren't connected to an Archipelago server.");
+                    Core.PLogger.Log("You aren't connected to an Archipelago server.", Level.Info);
                     return;
                 }
                 else

@@ -2,6 +2,7 @@
 using PluginConfig.API.Decorators;
 using System.Collections;
 using UnityEngine.Networking;
+using plog.Models;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -29,20 +30,17 @@ namespace ArchipelagoULTRAKILL
                 {
                     if (Core.PluginVersion.CompareTo(latest) < 0)
                     {
-                        Core.Logger.LogWarning("A new version of Archipelago is available: " + latest + " | Current version: " + Core.PluginVersion);
-                        GameConsole.Console.Instance.PrintLine("[Archipelago] A new version of Archipelago is available: " + latest + " | Current version: " + Core.PluginVersion, GameConsole.ConsoleLogType.Warning);
+                        Core.PLogger.Log($"A new version of Archipelago is available: {latest} | Current version: {Core.PluginVersion}", Level.Warning);
                         new ConfigHeader(ConfigManager.config.rootPanel, "A new version of Archipelago is available!") { textColor = UnityEngine.Color.yellow };
                     }
                     else
                     {
-                        Core.Logger.LogMessage("The current version (" + Core.PluginVersion + ") is newer than the latest release. (" + latest + ")");
-                        GameConsole.Console.Instance.PrintLine("[Archipelago] The current version (" + Core.PluginVersion + ") is newer than the latest release. (" + latest + ")");
+                        Core.PLogger.Log($"The current version ({Core.PluginVersion}) is newer than the latest release. ({latest})", Level.Info);
                     }
                 }
                 else
                 {
-                    Core.Logger.LogMessage("Archipelago is up to date.");
-                    GameConsole.Console.Instance.PrintLine("[Archipelago] Archipelago is up to date.");
+                    Core.PLogger.Log("Archipelago is up to date.", Level.Info);
                 }
                 yield break;
             }
