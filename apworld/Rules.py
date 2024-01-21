@@ -1889,10 +1889,10 @@ def rules(ultrakillworld):
         add_rule(world.get_location("Cleared 7-2", player),
             lambda state: state.has("Red Skull (7-2)", player))
         if challenge:
-            set_rule(world.get_location("7-2: Don't kill any enemies", player),
+            add_rule(world.get_location("7-2: Don't kill any enemies", player),
                 lambda state: state.has("Red Skull (7-2)", player))
         if prank:
-            set_rule(world.get_location("7-2: Perfect Rank", player),
+            add_rule(world.get_location("7-2: Perfect Rank", player),
                 lambda state: state.has("Red Skull (7-2)", player))
             
     
