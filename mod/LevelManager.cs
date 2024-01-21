@@ -238,17 +238,16 @@ namespace ArchipelagoULTRAKILL
         {
             if (!Core.CurrentLevelHasInfo || Core.CurrentLevelInfo.Id != 1) return;
 
-            GameObject room5 = null;
-            GameObject room11 = null;
-
             foreach (Glass glass in Resources.FindObjectsOfTypeAll<Glass>())
             {
-                if (glass.transform.parent.parent.name == "5 Stuff(Clone)") room5 = glass.transform.parent.parent.gameObject;
-                if (glass.transform.parent.parent.name == "11 Content(Clone)") room11 = glass.transform.parent.parent.gameObject;
+                string parentName = glass.transform.parent.parent.name;
+                if (parentName == "5 Stuff" || parentName == "5 Stuff(Clone)" || parentName == "11 Content" || parentName == "11 Content(Clone)")
+                {
+                    GameObject room = glass.transform.parent.parent.gameObject;
+                    if (!room.GetComponent<GlassDisabler>()) room.AddComponent<GlassDisabler>();
+                }
             }
 
-            if (!room5.GetComponent<GlassDisabler>()) room5.AddComponent<GlassDisabler>();
-            if (!room11.GetComponent<GlassDisabler>()) room11.AddComponent<GlassDisabler>();
         }
     }
 }
