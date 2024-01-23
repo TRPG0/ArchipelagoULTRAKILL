@@ -195,18 +195,13 @@ namespace ArchipelagoULTRAKILL
                     case "Level 0-5":
                         foreach (AudioSource audio in Core.FindAllComponentsInCurrentScene<AudioSource>())
                         {
-                            try
+
+                            if (audio.transform.parent != null && (audio.transform.parent.name == "4 Contents" || audio.transform.parent.name == "4 Contents(Clone)") && audio.transform.name == "Music")
                             {
-                                if ((audio.transform.parent.name == "4 Contents(Clone)" || audio.transform.parent.name == "") && audio.transform.name == "Music")
-                                {
-                                    audio.clip = LoadNewSingleTrack(audio.clip, "5");
-                                    audio.transform.parent.Find("Enemies").Find("StatueEnemy (1)").GetComponent<SoundChanger>().newSound = LoadNewSingleTrack(audio.clip, "5");
-                                }
+                                audio.clip = LoadNewSingleTrack(audio.clip, "5");
+                                audio.transform.parent.Find("Enemies").Find("StatueEnemy (1)").GetComponent<SoundChanger>().newSound = LoadNewSingleTrack(audio.clip, "5");
                             }
-                            catch (NullReferenceException)
-                            {
-                                continue;
-                            }
+
                         }
                         break;
                     case "Level 1-1":
