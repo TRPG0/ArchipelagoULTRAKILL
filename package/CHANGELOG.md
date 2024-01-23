@@ -1,3 +1,8 @@
+## 2.0.2
+
+- Fixed glass not being removed in 0-1 after restarting from a checkpoint. [#12](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/12)
+- Fixed music reverting to default in 0-5 after restarting from a checkpoint.
+
 ## 2.0.1
 
 - Fixed to work on patch 14c.
