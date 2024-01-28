@@ -237,26 +237,14 @@ def can_break_walls(state: CollectionState, player: int, fire2: bool, arm: bool)
         or can_proj_boost(state, player, arm)
     )
 
-
-def jump_general(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool, has: int, needs: int) -> bool:
-    return (
-        can_slam(state, player, slam)
-        or walljumps(state, player, has, needs)
-        or rock0(state, player)
-        or rock1(state, player)
-        or sho0_fire2(state, player, fire2)
-        or sho1_fire2(state, player, fire2)
-        or can_proj_boost(state, player, arm)
-        or rai2(state, player)
-    )
-
-
-def challenge_0_1(state: CollectionState, player: int, fire2: bool, arm: bool) -> bool:
+def can_break_glass_or_walls(state: CollectionState, player: int, fire2: bool, arm: bool) -> bool:
     return (
         rai0(state, player)
         or rai2(state, player)
         or rock0(state, player)
         or rock1(state, player)
+        or arm1(state, player)
+        or nai1_fire2(state, player, fire2)
         or rev0_fire2(state, player, fire2)
         or rev1_fire2(state, player, fire2)
         or rev2_fire2(state, player, fire2)
@@ -269,6 +257,17 @@ def challenge_0_1(state: CollectionState, player: int, fire2: bool, arm: bool) -
         or can_proj_boost(state, player, arm)
     )
 
+def jump_general(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool, has: int, needs: int) -> bool:
+    return (
+        can_slam(state, player, slam)
+        or walljumps(state, player, has, needs)
+        or rock0(state, player)
+        or rock1(state, player)
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+        or rai2(state, player)
+    )
 
 def secret_0_2(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool, has: int) -> bool:
     return (
@@ -288,13 +287,16 @@ def secret_0_2(state: CollectionState, player: int, slam: bool, fire2: bool, arm
 
 def challenge_0_3(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool, has: int) -> bool:
     return (
-        slam_storage(state, player, slam, has)
+        (
+            slam_storage(state, player, slam, has)
+            and can_break_glass(state, player, fire2, arm)
+        )
         or (
             (
                 sho0_fire2(state, player, fire2)
                 or can_proj_boost(state, player, arm)
             )
-            and walljumps(state, player, has, 3)
+            and walljumps(state, player, has, 2)
         )
         or (
             sho1_fire2(state, player, fire2)
@@ -305,18 +307,20 @@ def challenge_0_3(state: CollectionState, player: int, slam: bool, fire2: bool, 
     )
 
 
-def level_0_5(state: CollectionState, player: int, slide: bool, fire2: bool, has_walljumps: int, has_dashes: int) -> bool:
+def level_0_5(state: CollectionState, player: int, slide: bool, fire2: bool, has_walljumps: int, has_dashes: int, arm : bool) -> bool:
     return (
         (
             can_slide(state, player, slide)
             and (
-                walljumps(state, player, has_walljumps, 2)
-                or dashes(state, player, has_dashes, 2)
+                walljumps(state, player, has_walljumps, 1)
+                or dashes(state, player, has_dashes, 1)
             )
         )
-        or rock0_fire2(state, player, fire2)
+        or rock0(state, player)
+        or rock1(state, player)
         or sho0_fire2(state, player, fire2)
         or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
         or rai2(state, player)
     )
 
@@ -716,7 +720,7 @@ def rules(ultrakillworld):
 
     # 0-1
     set_rule(world.get_location("0-1: Secret #1", player),
-        lambda state: can_break_glass(state, player, fire2, arm))
+        lambda state: can_break_glass_or_walls(state, player, fire2, arm))
 
     set_rule(world.get_location("0-1: Secret #3", player),
         lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
@@ -725,7 +729,7 @@ def rules(ultrakillworld):
 
     if challenge:
         set_rule(world.get_location("0-1: Get 5 kills with a single glass panel", player),
-            lambda state: challenge_0_1(state, player, fire2, arm))
+            lambda state: can_break_glass(state, player, fire2, arm))
 
     if prank:
         set_rule(world.get_location("0-1: Perfect Rank", player),
@@ -736,12 +740,19 @@ def rules(ultrakillworld):
     # 0-2
     set_rule(world.get_location("0-2: Secret #3", player),
         lambda state: (
-            rock0_fire2(state, player, fire2)
+            rock0(state, player)
+            or rock1(state, player)
+            or rai2(state, player)
             or sho0_fire2(state, player, fire2)
             or can_proj_boost(state, player, arm)
             or (
                 walljumps(state, player, walljump, 1)
-                and dashes(state, player, dash, 2)
+                and dashes(state, player, dash, 1)
+            )
+            or walljumps(state, player, walljump, 2)
+            or (
+                slam_storage(state, player, slam, walljump)
+                and can_slide(state, player, slide)
             )
         ))
 
@@ -771,19 +782,19 @@ def rules(ultrakillworld):
         lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
     set_rule(world.get_location("0-3: Secret #2", player),
         lambda state: (
-            (
-                jump_general(state, player, slam, fire2, arm, walljump, 2)
-                or dashes(state, player, dash, 1)
-            )
-            and can_break_walls(state, player, fire2, arm)
+            can_break_walls(state, player, fire2, arm)
+            or challenge_0_3(state, player, slam, fire2, arm, walljump)
         ))
 
     set_rule(world.get_location("0-3: Secret #3", player),
         lambda state: can_break_walls(state, player, fire2, arm))
     set_rule(world.get_location("Cleared 0-3", player),
         lambda state: (
-            can_break_walls(state, player, fire2, arm)
-            or challenge_0_3(state, player, slam, fire2, arm, walljump)
+            (
+                can_break_walls(state, player, fire2, arm)
+                or challenge_0_3(state, player, slam, fire2, arm, walljump)
+            )
+            and good_weapon(state, player, fire2, arm, slide, dash)
         ))
 
     set_rule(world.get_location("0-3: Weapon", player),
@@ -791,7 +802,10 @@ def rules(ultrakillworld):
 
     if challenge:
         set_rule(world.get_location("0-3: Kill only 1 enemy", player),
-            lambda state: challenge_0_3(state, player, slam, fire2, arm, walljump))
+            lambda state: (
+                challenge_0_3(state, player, slam, fire2, arm, walljump))
+                and good_weapon(state, player, fire2, arm, slide, dash)
+            )
 
     if prank:
         add_rule(world.get_location("0-3: Perfect Rank", player),
@@ -820,20 +834,20 @@ def rules(ultrakillworld):
 
     # 0-5
     set_rule(world.get_location("Cleared 0-5", player),
-        lambda state: level_0_5(state, player, slide, fire2, walljump, dash))
+        lambda state: level_0_5(state, player, slide, fire2, walljump, dash, arm))
     
     if boss > 0:
         set_rule(world.get_location("0-5: Defeat the Cerberi", player),
-            lambda state: level_0_5(state, player, slide, fire2, walljump, dash))
+            lambda state: level_0_5(state, player, slide, fire2, walljump, dash, arm))
 
     if challenge:
         set_rule(world.get_location("0-5: Don't inflict fatal damage to any enemy", player),
-            lambda state: level_0_5(state, player, slide, fire2, walljump, dash))
+            lambda state: level_0_5(state, player, slide, fire2, walljump, dash, arm))
 
     if prank:
         set_rule(world.get_location("0-5: Perfect Rank", player),
             lambda state: (
-                level_0_5(state, player, slide, fire2, walljump, dash)
+                level_0_5(state, player, slide, fire2, walljump, dash, arm)
                 and good_weapon(state, player, fire2, arm, slide, dash)
             ))
 
