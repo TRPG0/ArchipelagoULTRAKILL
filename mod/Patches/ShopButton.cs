@@ -19,8 +19,8 @@ namespace ArchipelagoULTRAKILL.Patches
                 if (__instance.variationInfo.weaponName.Contains("0")) return false;
                 if (GameProgressSaver.GetMoney() >= Core.shopPrices[__instance.variationInfo.weaponName] && !__instance.deactivated)
                 {
-                    GameProgressSaver.AddMoney(Core.shopPrices[__instance.variationInfo.weaponName] * -1);
                     LocationManager.CheckLocation("shop_" + __instance.variationInfo.weaponName);
+                    GameProgressSaver.AddMoney(Core.shopPrices[__instance.variationInfo.weaponName] * -1);
                     __instance.deactivated = true;
                     __instance.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "ALREADY OWNED";
                     __instance.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(0.5882f, 0.5882f, 0.5882f);
@@ -38,7 +38,7 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists() && __instance.TryGetComponent(out ShopCategory sc))
             {
-                VariationInfo[] variations = __instance.toActivate[0].transform.Find("Variation Screen").GetComponentsInChildren<VariationInfo>(true);
+                VariationInfo[] variations = __instance.toActivate[0].transform.GetComponentsInChildren<VariationInfo>(true);
                 foreach (VariationInfo variation in variations)
                 {
                     LevelManager.UpdateShopVariation(variation);

@@ -322,7 +322,7 @@ namespace ArchipelagoULTRAKILL
             GameObject obj = Instantiate(AssetHelper.LoadPrefab("Assets/Prefabs/Items/Soap.prefab"), NewMovement.Instance.transform);
             obj.transform.parent = null;
 
-            if (FistControl.Instance.currentPunch != null || !(!data.hasArm && FistControl.Instance.currentPunch.type == FistType.Standard))
+            if (FistControl.Instance.currentPunch != null)
             {
                 if (!FistControl.Instance.currentPunch.holding)
                 {
@@ -358,6 +358,30 @@ namespace ArchipelagoULTRAKILL
                 }
             }
             return list;
+        }
+
+        public static void validateArms()
+        {
+            bool resetFists = false;
+            bool unlockedArm2 = GameProgressSaver.CheckGear("arm1") == 1;
+            if (unlockedArm2 && !data.hasArm && PrefsManager.Instance.GetInt("weapon.arm0") == 1)
+            {
+                PrefsManager.Instance.SetInt("weapon.arm0", 0);
+                resetFists = true;
+            }
+            if (PrefsManager.Instance.GetInt("weapon.arm0") == 0 && PrefsManager.Instance.GetInt("weapon.arm1") == 0)
+            {
+                if (unlockedArm2)
+                {
+                    PrefsManager.Instance.SetInt("weapon.arm1", 1);
+                }
+                else
+                {
+                    PrefsManager.Instance.SetInt("weapon.arm0", 1);
+                }
+                resetFists = true;
+            }
+            if (resetFists) FistControl.Instance.ResetFists();
         }
     }
 }
