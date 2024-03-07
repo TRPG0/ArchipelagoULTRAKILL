@@ -1,3 +1,9 @@
+## 2.0.3
+
+- Fixed more weird arm bugs. [#15](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/15)
+- Fixed item and location names not being parsed correctly in chat if the IDs were too large.
+- Added a failsafe for handling missing items when connecting to a server.
+
 ## 2.0.2
 
 - Fixed glass not being removed in 0-1 after restarting from a checkpoint. [#12](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/12)

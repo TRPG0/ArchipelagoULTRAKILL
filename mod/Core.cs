@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "2.0.2";
+        public const string PluginVersion = "2.0.3";
 
         public static string workingPath;
         public static string workingDir;
@@ -360,7 +360,7 @@ namespace ArchipelagoULTRAKILL
             return list;
         }
 
-        public static void validateArms()
+        public static void ValidateArms()
         {
             bool resetFists = false;
             bool unlockedArm2 = GameProgressSaver.CheckGear("arm1") == 1;

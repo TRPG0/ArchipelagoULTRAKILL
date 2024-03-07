@@ -227,6 +227,10 @@ namespace ArchipelagoULTRAKILL
                         foreach (string loc in Core.data.@checked)
                         {
                             LocationManager.CheckLocation(loc);
+                            if (LocationManager.locations[loc].item is UKItem ukitem && LocationManager.ShouldGetItemAgain(ukitem.type))
+                            {
+                                LocationManager.GetUKItem(ukitem, null, true);
+                            }
                         }
                     }
                 }
@@ -387,7 +391,7 @@ namespace ArchipelagoULTRAKILL
                                             color = "<color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemFiller) + "FF>";
                                             break;
                                     }
-                                    if (int.TryParse(messagePart.Text, out int itemId))
+                                    if (long.TryParse(messagePart.Text, out long itemId))
                                     {
                                         string itemName = Session.Items.GetItemName(itemId) ?? $"Item: {itemId}";
                                         richText += color + itemName + "</color>";
@@ -401,7 +405,7 @@ namespace ArchipelagoULTRAKILL
                                     break;
                                 case JsonMessagePartType.LocationId:
                                     color = "<color=#" + ColorUtility.ToHtmlStringRGB(Colors.Location) + "FF>";
-                                    if (int.TryParse(messagePart.Text, out int locationId))
+                                    if (long.TryParse(messagePart.Text, out long locationId))
                                     {
                                         string locationName = Session.Locations.GetLocationNameFromId(locationId) ?? $"Location: {locationId}";
                                         richText += color + locationName + "</color>";
@@ -429,11 +433,12 @@ namespace ArchipelagoULTRAKILL
 
         public static void ItemReceived(ReceivedItemsHelper helper)
         {
-            if (helper.Index > Core.data.index)
+            bool shouldGetItemAgain = LocationManager.ShouldGetItemAgain(LocationManager.GetTypeFromName(helper.PeekItemName()));
+            if (helper.Index > Core.data.index || shouldGetItemAgain)
             {
                 string name = helper.PeekItemName();
                 string player = (Session.Players.GetPlayerAlias(helper.PeekItem().Player) == "") ? "?" : Session.Players.GetPlayerAlias(helper.PeekItem().Player);
-                Core.Logger.LogInfo("Name: \"" + name + "\" | Type: " + LocationManager.GetTypeFromName(name) + " | Player: \"" + player + "\"");
+                if (helper.Index > Core.data.index) Core.Logger.LogInfo("Name: \"" + name + "\" | Type: " + LocationManager.GetTypeFromName(name) + " | Player: \"" + player + "\"");
 
                 UKItem item = new UKItem()
                 {
@@ -442,8 +447,8 @@ namespace ArchipelagoULTRAKILL
                     playerName = Core.data.slot_name
                 };
 
-                if (item.type == UKType.Level || item.type == UKType.Layer || item.type == UKType.Skull) LocationManager.GetUKItem(item, player);
-                else LocationManager.itemQueue.Add(new KeyValuePair<string, UKItem>(player, item));
+                if (item.type == UKType.Level || item.type == UKType.Layer || item.type == UKType.Skull) LocationManager.GetUKItem(item, player, shouldGetItemAgain);
+                else LocationManager.itemQueue.Add(new QueuedItem(item, player, shouldGetItemAgain));
 
                 Core.data.index++;
             }

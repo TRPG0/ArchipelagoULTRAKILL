@@ -30,7 +30,7 @@ First, download and install the Archipelago mod with r2modman, or manually by ex
 
 2. Download `ultrakill.apworld` from the mod's [releases page](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases) and add it to your `worlds` folder. (Default path: `C:\ProgramData\Archipelago\lib\worlds`)
 
-3. Set up all `.yaml` files for each player in the multiworld, then add them to the `Players` folder. A template can be downloaded for ULTRAKILL from the mod's [releases page.](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases)
+3. Set up all `.yaml` files for each player in the multiworld, then add them to the `Players` folder. A template can be downloaded for ULTRAKILL from the mod's [releases page.](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases) A guide for advanced settings can be found [here.](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en)
 
 4. Run `ArchipelagoGenerate.exe` to generate a game, which will appear in the `output` folder.
 

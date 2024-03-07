@@ -20,7 +20,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix()
         {
-            if (Core.DataExists()) Core.validateArms();
+            if (Core.DataExists()) Core.ValidateArms();
         }
     }
 }

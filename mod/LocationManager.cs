@@ -14,11 +14,9 @@ namespace ArchipelagoULTRAKILL
 
         public static List<Message> messages = new List<Message>();
         public static List<Powerup> powerupQueue = new List<Powerup>();
-        public static bool overhealWaiting = false;
-        public static bool hardDmgWaiting = false;
         public static bool soapWaiting = false;
 
-        public static List<KeyValuePair<string, UKItem>> itemQueue = new List<KeyValuePair<string, UKItem>>();
+        public static List<QueuedItem> itemQueue = new List<QueuedItem>();
 
         public static void CheckLocation(string loc)
         {
@@ -33,7 +31,7 @@ namespace ArchipelagoULTRAKILL
                     if (locations[loc].item is UKItem ukitem && !locations[loc].@checked)
                     {
                         if (CanGetItemTypeWhileNotPlaying(ukitem.type)) GetUKItem(ukitem);
-                        else itemQueue.Add(new KeyValuePair<string, UKItem>(null, ukitem));
+                        else itemQueue.Add(new QueuedItem(ukitem, null));
                     }
                     else if (locations[loc].item is APItem apitem && !locations[loc].@checked) AddAPItemMessage(apitem);
                     locations[loc].@checked = true;
@@ -52,7 +50,24 @@ namespace ArchipelagoULTRAKILL
             return false;
         }
 
-        public static void GetUKItem(UKItem item, string sendingPlayer = null)
+        public static bool ShouldGetItemAgain(UKType type)
+        {
+            List<UKType> types = new List<UKType>()
+            {
+                UKType.Weapon,
+                UKType.WeaponAlt,
+                UKType.Arm,
+                UKType.Skull,
+                UKType.Level,
+                UKType.Layer,
+                UKType.Fire2
+            };
+
+            if (types.Contains(type)) return true;
+            return false;
+        }
+
+        public static void GetUKItem(UKItem item, string sendingPlayer = null, bool silent = false)
         {
             string itemColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(item.itemName));
             string playerColor = ColorUtility.ToHtmlStringRGB(Colors.PlayerOther);
@@ -219,24 +234,30 @@ namespace ArchipelagoULTRAKILL
 
                 text += "<color=#" + itemColor + "FF>" + item.itemName.ToUpper() + "</color>";
                 if (sendingPlayer != null) text += " (<color=#" + playerColor + "FF>" + sendingPlayer + "</color>)";
-                messages.Add(new Message
+                if (!silent)
                 {
-                    image = GetUKMessageImage(item.itemName),
-                    color = GetUKMessageColor(item.itemName),
-                    message = text
-                });
+                    messages.Add(new Message
+                    {
+                        image = GetUKMessageImage(item.itemName),
+                        color = GetUKMessageColor(item.itemName),
+                        message = text
+                    });
+                }
             }
             else
             {
                 text = "FOUND: <color=#" + itemColor + "FF>" + item.itemName.ToUpper() + "</color> (<color=#" + playerColor + "FF>" + item.playerName + "</color>)";
-                messages.Add(new Message
+                if (!silent)
                 {
-                    image = GetUKMessageImage(item.itemName),
-                    color = Colors.Gray,
-                    message = text
-                });
+                    messages.Add(new Message
+                    {
+                        image = GetUKMessageImage(item.itemName),
+                        color = Colors.Gray,
+                        message = text
+                    });
+                }
             }
-            //if (!UIManager.displayingMessage && Core.IsPlaying) Core.uim.StartCoroutine("DisplayMessage");
+            Core.SaveData();
         }
 
         public static void GetRandomHint()
