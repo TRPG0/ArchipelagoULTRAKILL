@@ -1,3 +1,7 @@
+## 2.0.4
+
+- Fixed item notifications not appearing most of the time when receiving items from other players.
+
 ## 2.0.3
 
 - Fixed more weird arm bugs. [#15](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/15)

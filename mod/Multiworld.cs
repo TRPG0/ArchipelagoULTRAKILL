@@ -434,6 +434,7 @@ namespace ArchipelagoULTRAKILL
         public static void ItemReceived(ReceivedItemsHelper helper)
         {
             bool shouldGetItemAgain = LocationManager.ShouldGetItemAgain(LocationManager.GetTypeFromName(helper.PeekItemName()));
+            bool silent = !(helper.Index > Core.data.index) && shouldGetItemAgain;
             if (helper.Index > Core.data.index || shouldGetItemAgain)
             {
                 string name = helper.PeekItemName();
@@ -447,8 +448,8 @@ namespace ArchipelagoULTRAKILL
                     playerName = Core.data.slot_name
                 };
 
-                if (item.type == UKType.Level || item.type == UKType.Layer || item.type == UKType.Skull) LocationManager.GetUKItem(item, player, shouldGetItemAgain);
-                else LocationManager.itemQueue.Add(new QueuedItem(item, player, shouldGetItemAgain));
+                if (item.type == UKType.Level || item.type == UKType.Layer || item.type == UKType.Skull) LocationManager.GetUKItem(item, player, silent);
+                else LocationManager.itemQueue.Add(new QueuedItem(item, player, silent));
 
                 Core.data.index++;
             }
