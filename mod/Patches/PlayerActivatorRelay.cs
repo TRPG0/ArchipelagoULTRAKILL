@@ -22,6 +22,10 @@ namespace ArchipelagoULTRAKILL.Patches
                     LevelManager.AddGlassComponents();
                 }
                 if ((SceneHelper.CurrentScene == "Level 1-1" || SceneHelper.CurrentScene == "Level 1-2" || SceneHelper.CurrentScene == "Level 2-3" || SceneHelper.CurrentScene == "Level 4-4" || SceneHelper.CurrentScene == "Level 5-2" || SceneHelper.CurrentScene == "Level 5-3" || SceneHelper.CurrentScene == "Level 6-1") && Core.data.randomizeSkulls) LevelManager.AddDoorClosers();
+                if (SceneHelper.CurrentScene.Contains("Level ") || SceneHelper.CurrentScene == "Endless")
+                {
+                    Core.validateArms();
+                }
                 if (Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.Skulls >= SkullsType.Normal && Core.data.randomizeSkulls)
                 {
                     LevelManager.FindSkulls();
