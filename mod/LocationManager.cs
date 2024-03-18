@@ -67,7 +67,7 @@ namespace ArchipelagoULTRAKILL
             return false;
         }
 
-        public static void GetUKItem(UKItem item, string sendingPlayer = null, bool silent = false)
+        public static void GetUKItem(UKItem item, string sendingPlayer = null, bool silent = false, bool save = true)
         {
             string itemColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(item.itemName));
             string playerColor = ColorUtility.ToHtmlStringRGB(Colors.PlayerOther);
@@ -257,7 +257,7 @@ namespace ArchipelagoULTRAKILL
                     });
                 }
             }
-            Core.SaveData();
+            if (save) Core.SaveData();
         }
 
         public static void GetRandomHint()

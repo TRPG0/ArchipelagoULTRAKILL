@@ -229,9 +229,10 @@ namespace ArchipelagoULTRAKILL
                             LocationManager.CheckLocation(loc);
                             if (LocationManager.locations[loc].item is UKItem ukitem && LocationManager.ShouldGetItemAgain(ukitem.type))
                             {
-                                LocationManager.GetUKItem(ukitem, null, true);
+                                LocationManager.GetUKItem(ukitem, null, true, false);
                             }
                         }
+                        Core.SaveData();
                     }
                 }
 

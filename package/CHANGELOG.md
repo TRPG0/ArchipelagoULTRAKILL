@@ -1,3 +1,9 @@
+## 2.0.5
+
+- Fixed generation failing on newer Archipelago versions due to duplicate entrance names.
+- Fixed no arm being equipped in 5-S.
+- Fixed a bug that could immediately disconnect the player after connecting.
+
 ## 2.0.4
 
 - Fixed item notifications not appearing most of the time when receiving items from other players.
