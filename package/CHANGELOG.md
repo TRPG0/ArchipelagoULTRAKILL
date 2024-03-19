@@ -1,3 +1,7 @@
+## 2.0.6
+
+- Fixed being unable to receive some items from other players after reconnecting to a server.
+
 ## 2.0.5
 
 - Fixed generation failing on newer Archipelago versions due to duplicate entrance names.

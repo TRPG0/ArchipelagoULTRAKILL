@@ -452,7 +452,7 @@ namespace ArchipelagoULTRAKILL
                 if (item.type == UKType.Level || item.type == UKType.Layer || item.type == UKType.Skull) LocationManager.GetUKItem(item, player, silent);
                 else LocationManager.itemQueue.Add(new QueuedItem(item, player, silent));
 
-                Core.data.index++;
+                if (helper.Index > Core.data.index) Core.data.index++;
             }
             helper.DequeueItem();
         }
