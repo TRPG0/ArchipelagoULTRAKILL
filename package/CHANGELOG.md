@@ -1,3 +1,8 @@
+## 2.0.7
+
+- Fixed to work on patch 15.
+- Fixed sounds not playing when buying weapons from the shop.
+
 ## 2.0.6
 
 - Fixed being unable to receive some items from other players after reconnecting to a server.

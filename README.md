@@ -24,6 +24,8 @@ Note that the logic for the randomizer assumes that the player is willing to tak
 
 First, download and install the Archipelago mod with r2modman, or manually by extracting the contents of the zip file into the `plugins` folder. If you decide to install manually, you will also need to install [PluginConfigurator](https://github.com/eternalUnion/UKPluginConfigurator).
 
+Optionally, you can also download [NoTutorial](https://github.com/TRPG0/UK-NoTutorial) to avoid accidentally entering the tutorial when making new save files.
+
 *Note that only one player in the multiworld will need to complete steps 1-5.*
 
 1. Download and install [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
