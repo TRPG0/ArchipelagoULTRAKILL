@@ -15,53 +15,72 @@ namespace ArchipelagoULTRAKILL
     {
         public static AssetBundle bundle = AssetBundle.LoadFromMemory(Properties.Resources.trpg_archipelago);
 
-        public static Font font;
-        public static GameObject log;
+        public static TMP_FontAsset font;
+        public static TextMeshProUGUI log;
+        public static TextMeshProUGUI logBlack;
         public static int lines = 5;
 
         public static GameObject canvas;
         public static GameObject chapterSelect;
-        public static Text actStats;
+        public static TextMeshProUGUI actStats;
         public static Dictionary<string, GameObject> chapters = new Dictionary<string, GameObject>();
         public static Dictionary<string, GameObject> layers = new Dictionary<string, GameObject>();
         public static Dictionary<string, GameObject> levels = new Dictionary<string, GameObject>();
         public static Dictionary<string, GameObject> secrets = new Dictionary<string, GameObject>();
 
-        public static GameObject menuText;
+        public static TextMeshProUGUI menuText;
         public static GameObject menuIcon;
-        public static GameObject goalCount;
+        public static TextMeshProUGUI goalCount;
 
         public static List<GameObject> skullIcons = new List<GameObject>();
 
         public static GameObject hud;
         public static GameObject popupCanvas;
-        public static GameObject popupText;
+        public static TextMeshProUGUI popupText;
         public static GameObject popupImage;
         public static bool displayingMessage = false;
 
         public DeathLinkMessage deathLinkMessage = null;
 
-        public static void CreateLogObject()
+        public void CreateLogObject()
         {
-            log = new GameObject();
-            log.name = "Archipelago Log";
-            log.transform.parent = Core.obj.transform;
-            log.transform.localPosition = new Vector3(0, 0, 0);
+            StartCoroutine(VersionChecker.CheckVersion());
+
+            GameConsole.Console.Instance.RegisterCommand(new Commands.Connect());
+            GameConsole.Console.Instance.RegisterCommand(new Commands.Disconnect());
+            GameConsole.Console.Instance.RegisterCommand(new Commands.Say());
+
+            GameObject go = new GameObject();
+            go.name = "Log";
+            go.transform.parent = Core.obj.transform;
+            go.transform.localPosition = new Vector3(0, 0, 0);
 
             Core.obj.AddComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
             Core.obj.GetComponent<Canvas>().sortingOrder = 256;
 
-            log.AddComponent<Text>().font = font;
-            log.GetComponent<Text>().fontSize = ConfigManager.logFontSize.value;
-            log.GetComponent<Text>().alignment = TextAnchor.LowerCenter;
-            log.GetComponent<Text>().alignByGeometry = true;
-            log.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
+            log = go.AddComponent<TextMeshProUGUI>();
+            log.font = font;
+            log.fontSize = ConfigManager.logFontSize.value;
+            log.alignment = TextAlignmentOptions.BottomGeoAligned;
             log.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, Screen.height - 10);
+
+            logBlack = GameObject.Instantiate(log.gameObject, log.transform.parent).GetComponent<TextMeshProUGUI>();
+            logBlack.gameObject.name = "Shadow";
+            logBlack.color = new Color(0, 0, 0, 0.7f);
+            logBlack.overrideColorTags = true;
+            logBlack.transform.localPosition = new Vector3(0, -1.5f, 0);
+            logBlack.transform.SetAsFirstSibling();
+        }
+
+        public static void SetLogText(string text)
+        {
+            if (log != null) log.text = text;
+            if (logBlack != null) logBlack.text = text;
         }
 
         public static void AdjustLogBounds()
         {
-            if (PrefsManager.Instance.GetInt("hudType") >= 2 && !Core.IsPlaying)
+            if (PrefsManager.Instance.GetInt("hudType") >= 2 && Core.IsPlaying)
             {
                 log.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, ((float)Math.Round(Screen.height * 0.77f)));
             }
@@ -86,6 +105,9 @@ namespace ArchipelagoULTRAKILL
                     case "Act II":
                         chapters["act2"] = component.gameObject;
                         break;
+                    case "Act III":
+                        chapters["act3"] = component.gameObject;
+                        break;
                     case "Prime":
                         chapters["prime"] = component.gameObject;
                         break;
@@ -97,11 +119,11 @@ namespace ArchipelagoULTRAKILL
             chapterSelect = chapters["prelude"].gameObject.transform.parent.gameObject;
             chapterSelect.AddComponent<ChapterSelectState>();
 
-            actStats = GameObject.Instantiate(chapterSelect.transform.Find("Prelude").Find("Name"), chapterSelect.transform).GetComponent<Text>();
+            actStats = GameObject.Instantiate(chapterSelect.transform.Find("Prelude").Find("Name"), chapterSelect.transform).GetComponent<TextMeshProUGUI>();
             Vector3 rankPos = chapterSelect.transform.Find("Prelude").Find("RankPanel").transform.position;
             actStats.transform.position = new Vector3(rankPos.x + 77, rankPos.y, rankPos.z);
-            actStats.verticalOverflow = VerticalWrapMode.Overflow;
-            actStats.alignment = TextAnchor.UpperLeft;
+            actStats.overflowMode = TextOverflowModes.Overflow;
+            actStats.alignment = TextAlignmentOptions.TopLeft;
             actStats.lineSpacing = 1.2f;
             actStats.gameObject.SetActive(false);
 
@@ -301,22 +323,23 @@ namespace ArchipelagoULTRAKILL
         
         public static void CreateMenuUI()
         {
-            foreach (Text component in canvas.GetComponentsInChildren<Text>())
+            foreach (TextMeshProUGUI tmp in canvas.GetComponentsInChildren<TextMeshProUGUI>())
             {
-                if (component.text == "-- EARLY ACCESS --")
+                if (tmp.text == "-- EARLY ACCESS --")
                 {
-                    menuText = Instantiate(component.gameObject, component.gameObject.transform.parent);
+                    menuText = Instantiate(tmp.gameObject, tmp.gameObject.transform.parent).GetComponent<TextMeshProUGUI>();
+                    break;
                 }
             }
             menuText.gameObject.name = "Archipelago Text";
             menuText.transform.localPosition = new Vector3(-6, -148, 0);
-            menuText.GetComponent<Text>().alignment = TextAnchor.UpperRight;
-            menuText.GetComponent<Text>().fontSize = 24;
+            menuText.alignment = TextAlignmentOptions.TopRight;
+            menuText.fontSize = 24;
             string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
-            if (Core.DataExists()) menuText.GetComponent<Text>().text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
-            else if (Multiworld.HintMode) menuText.GetComponent<Text>().text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\nHint Mode";
-            else menuText.GetComponent<Text>().text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\nNo data.";
-            font = menuText.GetComponent<Text>().font;
+            if (Core.DataExists()) menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
+            else if (Multiworld.HintMode) menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n<color=yellow>Hint Mode</color>";
+            else menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\nNo data.";
+            font = menuText.font;
             menuIcon = new GameObject();
             menuIcon.gameObject.name = "Archipelago Logo";
             menuIcon.transform.SetParent(menuText.transform.parent.gameObject.transform);
@@ -329,20 +352,21 @@ namespace ArchipelagoULTRAKILL
 
         public static void CreateGoalCounter()
         {
-            goalCount = new GameObject();
-            goalCount.transform.SetParent(levels[Core.data.goal].transform);
-            if (Core.data.goal.Contains("P")) goalCount.transform.localPosition = new Vector3(0, 20, 0);
-            else if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) goalCount.transform.localPosition = new Vector3(0, 90, 0);
-            else goalCount.transform.localPosition = new Vector3(0, 22.5f, 0);
-            goalCount.layer = 5;
-            goalCount.AddComponent<Text>().text = (Core.data.goalRequirement - Core.data.completedLevels.Count).ToString();
-            goalCount.GetComponent<Text>().font = font;
-            goalCount.GetComponent<Text>().fontSize = 100;
-            goalCount.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
-            goalCount.GetComponent<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+            GameObject go = new GameObject();
+            go.transform.SetParent(levels[Core.data.goal].transform);
+            if (Core.data.goal.Contains("P")) go.transform.localPosition = new Vector3(0, 20, 0);
+            else if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(0, 90, 0);
+            else go.transform.localPosition = new Vector3(0, 22.5f, 0);
+            go.layer = 5;
+            goalCount = go.AddComponent<TextMeshProUGUI>();
+            goalCount.text = (Core.data.goalRequirement - Core.data.completedLevels.Count).ToString();
+            goalCount.font = font;
+            goalCount.fontSize = 100;
+            goalCount.alignment = TextAlignmentOptions.Center;
+            goalCount.overflowMode = TextOverflowModes.Overflow;
 
             levels[Core.data.goal].transform.GetChild(2).gameObject.GetComponent<Image>().color = new Color(0.3f, 0.3f, 0.3f);
-            if (!Multiworld.Authenticated) goalCount.SetActive(false);
+            if (!Multiworld.Authenticated) goalCount.gameObject.SetActive(false);
         }
 
         public static void UpdateLevels()
@@ -500,17 +524,18 @@ namespace ArchipelagoULTRAKILL
             popupCanvas.SetActive(false);
             popupImage.GetComponent<Image>().sprite = bundle.LoadAsset<Sprite>("assets/layer4.png");
             popupImage.GetComponent<Image>().color = Colors.Layer4;
-            popupText = new GameObject();
-            popupText.name = "APText";
-            popupText.transform.SetParent(popupCanvas.transform.GetChild(0));
-            popupText.layer = 13;
-            popupText.AddComponent<Text>().font = font;
-            popupText.GetComponent<Text>().alignment = TextAnchor.MiddleRight;
-            popupText.GetComponent<Text>().resizeTextForBestFit = true;
-            popupText.GetComponent<Text>().resizeTextMaxSize = 120;
-            popupText.GetComponent<Text>().lineSpacing = 1.1f;
-            popupText.GetComponent<Text>().material = HUDOptions.Instance.hudMaterial;
-            popupText.GetComponent<Text>().text = "UNLOCKED: <color=#ffe800ff>4-2 GOD DAMN THE SUN</color> (<color=#fafad2ff>Trev</color>)";
+            GameObject go = new GameObject();
+            go.name = "APText";
+            go.transform.SetParent(popupCanvas.transform.GetChild(0));
+            go.layer = 13;
+            popupText = go.AddComponent<TextMeshProUGUI>();
+            popupText.font = font;
+            popupText.alignment = TextAlignmentOptions.Right;
+            popupText.enableAutoSizing = true;
+            popupText.fontSizeMax = 120;
+            popupText.lineSpacing = 1.1f;
+            popupText.material = HUDOptions.Instance.hudMaterial;
+            popupText.text = "UNLOCKED: <color=#ffe800ff>4-2 GOD DAMN THE SUN</color> (<color=#fafad2ff>Trev</color>)";
             popupText.GetComponent<RectTransform>().sizeDelta = new Vector2(750, 150);
             popupText.transform.localPosition = new Vector3(100.6437f, 23.9347f, 0);
             popupText.transform.localScale = new Vector3(0.25f, 0.25f, 1);
@@ -523,15 +548,17 @@ namespace ArchipelagoULTRAKILL
             Message message = LocationManager.messages[0];
             LocationManager.messages.RemoveAt(0);
 
-            popupText.GetComponent<Text>().text = message.message;
+            popupText.text = message.message;
             popupImage.GetComponent<Image>().color = message.color;
 
             if (bundle.Contains("assets/" + message.image + ".png")) popupImage.GetComponent<Image>().sprite = bundle.LoadAsset<Sprite>("assets/" + message.image + ".png");
             else popupImage.GetComponent<Image>().sprite = bundle.LoadAsset<Sprite>("assets/archipelago.png");
 
             popupCanvas.SetActive(true);
+            popupText.isOverlay = true;
             yield return new WaitForSeconds(3f);
             popupCanvas.SetActive(false);
+            popupText.isOverlay = false;
             if (LocationManager.messages.Count > 0 && Core.IsPlaying) StartCoroutine(DisplayMessage());
             else displayingMessage = false;
         }

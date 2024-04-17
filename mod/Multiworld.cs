@@ -10,6 +10,7 @@ using ArchipelagoULTRAKILL.Structures;
 using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 using Newtonsoft.Json;
+using TMPro;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -163,7 +164,7 @@ namespace ArchipelagoULTRAKILL
                     try { ConfigManager.gunColorRandomizer.value = (ColorOptions)Enum.Parse(typeof(ColorOptions), success.SlotData["gun_color_randomizer"].ToString()); }
                     catch (KeyNotFoundException) { ConfigManager.gunColorRandomizer.value = ColorOptions.Off; }
 
-                    PrefsManager.Instance.SetInt("difficulty", 3);
+                    PrefsManager.Instance.SetInt("difficulty", 4);
                     PrefsManager.Instance.SetInt("weapon.arm0", 1);
                     GameProgressSaver.SetIntro(true);
                     GameProgressSaver.SetTutorial(true);
@@ -241,7 +242,7 @@ namespace ArchipelagoULTRAKILL
                 ConfigManager.connectionInfo.text = "Successfully connected to server as player \"" + Core.data.slot_name + "\".";
                 UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
                 string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
-                UIManager.menuText.GetComponent<Text>().text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
+                UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
             }
             else if (loginResult is LoginFailure failure)
             {
@@ -294,7 +295,7 @@ namespace ArchipelagoULTRAKILL
                 Core.Logger.LogInfo("Successfully connected to server in hint mode as player \"" + Core.data.slot_name + "\".");
                 ConfigManager.connectionInfo.text = "Successfully connected to server in hint mode as player \"" + Core.data.slot_name + "\".";
                 UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
-                UIManager.menuText.GetComponent<Text>().text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\nHint Mode";
+                UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n<color=yellow>Hint Mode</color>";
             }
             else if (loginResult is LoginFailure failure)
             {
@@ -322,7 +323,7 @@ namespace ArchipelagoULTRAKILL
             if (SceneHelper.CurrentScene == "Main Menu") UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
             //GameConsole.Console.Instance.PrintLine("Disconnected from Archipelago server.");
             //Debug.Log("Disconnected from Archipelago server.");
-            UIManager.log.GetComponent<Text>().text = "";
+            UIManager.SetLogText("");
             messages.Clear();
             Session = null;
             DeathLinkService = null;
@@ -426,7 +427,7 @@ namespace ArchipelagoULTRAKILL
                         }
                         messages.Add(richText);
                         //GameConsole.Console.Instance.PrintLine("[AP] " + plainText);
-                        UIManager.log.GetComponent<Text>().text = string.Join("\n", messages.ToArray());
+                        UIManager.SetLogText(string.Join("\n", messages.ToArray()));
                         break;
                     }
             }

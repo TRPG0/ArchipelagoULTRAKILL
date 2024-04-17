@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "2.0.6";
+        public const string PluginVersion = "2.0.7";
 
         public static string workingPath;
         public static string workingDir;
@@ -158,10 +158,13 @@ namespace ArchipelagoULTRAKILL
             ["rev2"] = 7500,
             ["rev1"] = 12500,
             ["sho1"] = 12500,
+            ["sho2"] = 25000,
             ["nai1"] = 25000,
+            ["nai2"] = 35000,
             ["rai1"] = 100000,
             ["rai2"] = 100000,
-            ["rock1"] = 75000
+            ["rock1"] = 75000,
+            ["rock2"] = 75000
         };
 
         public void Awake()
@@ -175,23 +178,24 @@ namespace ArchipelagoULTRAKILL
 
             ConfigManager.Initialize();
 
-            obj = gameObject;
-            obj.transform.localPosition = new Vector3(960, 540, 0);
-
-            uim = obj.AddComponent<UIManager>();
-
             SceneManager.sceneLoaded += OnSceneLoaded;
-
-            GameConsole.Console.Instance.RegisterCommand(new Commands.Connect());
-            GameConsole.Console.Instance.RegisterCommand(new Commands.Disconnect());
-            GameConsole.Console.Instance.RegisterCommand(new Commands.Say());
-
-            StartCoroutine(VersionChecker.CheckVersion());
         }
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (SceneHelper.CurrentScene == "Intro" || SceneHelper.CurrentScene == "Bootstrap" || SceneHelper.CurrentScene == null) return;
+
+            if (obj == null)
+            {
+                obj = new GameObject()
+                {
+                    name = "Archipelago"
+                };
+                DontDestroyOnLoad(obj);
+                obj.transform.localPosition = new Vector3(960, 540, 0);
+                uim = obj.AddComponent<UIManager>();
+            }
+
             uim.StopCoroutine("DisplayMessage");
 
             UIManager.displayingMessage = false;
@@ -213,7 +217,7 @@ namespace ArchipelagoULTRAKILL
                 if (DataExists() && Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
                 else if (DataExists() && !Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
 
-                if (UIManager.log == null) UIManager.CreateLogObject();
+                if (UIManager.log == null) uim.CreateLogObject();
 
                 if (DataExists() && !firstTimeLoad)
                 {

@@ -80,8 +80,8 @@ namespace ArchipelagoULTRAKILL
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is unlocked");
                 return;
             }
-            // Do nothing for other arms
-            else if (variation.weaponName == "arm1" || variation.weaponName == "arm2")
+            // Do nothing for other arms and unimplemented weapons
+            if (variation.weaponName == "arm1" || variation.weaponName == "arm2" || variation.weaponName == "sho2" || variation.weaponName == "nai2" || variation.weaponName == "rock2")
             {
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Skipping");
                 return;
