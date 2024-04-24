@@ -24,13 +24,15 @@ Note that the logic for the randomizer assumes that the player is willing to tak
 
 First, download and install the Archipelago mod with r2modman, or manually by extracting the contents of the zip file into the `plugins` folder. If you decide to install manually, you will also need to install [PluginConfigurator](https://github.com/eternalUnion/UKPluginConfigurator).
 
+Optionally, you can also download [NoTutorial](https://thunderstore.io/c/ultrakill/p/TRPG/NoTutorial/) to avoid accidentally entering the tutorial when making new save files.
+
 *Note that only one player in the multiworld will need to complete steps 1-5.*
 
 1. Download and install [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 
 2. Download `ultrakill.apworld` from the mod's [releases page](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases) and add it to your `worlds` folder. (Default path: `C:\ProgramData\Archipelago\lib\worlds`)
 
-3. Set up all `.yaml` files for each player in the multiworld, then add them to the `Players` folder. A template can be downloaded for ULTRAKILL from the mod's [releases page.](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases)
+3. Set up all `.yaml` files for each player in the multiworld, then add them to the `Players` folder. A template can be downloaded for ULTRAKILL from the mod's [releases page.](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases) A guide for advanced settings can be found [here.](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en)
 
 4. Run `ArchipelagoGenerate.exe` to generate a game, which will appear in the `output` folder.
 

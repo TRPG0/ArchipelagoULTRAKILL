@@ -43,9 +43,8 @@ namespace ArchipelagoULTRAKILL.Components
         {
             if (LocationManager.itemQueue.Count > 0)
             {
-                UKItem item = LocationManager.itemQueue[0].Value;
-                string player = LocationManager.itemQueue[0].Key;
-                LocationManager.GetUKItem(item, player);
+                QueuedItem qItem = LocationManager.itemQueue[0];
+                LocationManager.GetUKItem(qItem.item, qItem.sendingPlayer, qItem.silent);
                 LocationManager.itemQueue.RemoveAt(0);
             }
         }

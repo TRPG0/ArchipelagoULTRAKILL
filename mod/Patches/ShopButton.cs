@@ -14,22 +14,28 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static bool Prefix(ShopButton __instance)
         {
-            if (__instance.variationInfo != null && Core.DataExists())
+            if (__instance.variationInfo != null && Core.DataExists() && !(__instance.variationInfo.weaponName == "sho2" || __instance.variationInfo.weaponName == "nai2" || __instance.variationInfo.weaponName == "rock2"))
             {
                 if (__instance.variationInfo.weaponName.Contains("0")) return false;
                 if (GameProgressSaver.GetMoney() >= Core.shopPrices[__instance.variationInfo.weaponName] && !__instance.deactivated)
                 {
-                    GameProgressSaver.AddMoney(Core.shopPrices[__instance.variationInfo.weaponName] * -1);
                     LocationManager.CheckLocation("shop_" + __instance.variationInfo.weaponName);
+                    GameProgressSaver.AddMoney(Core.shopPrices[__instance.variationInfo.weaponName] * -1);
                     __instance.deactivated = true;
                     __instance.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "ALREADY OWNED";
                     __instance.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(0.5882f, 0.5882f, 0.5882f);
                     __instance.variationInfo.costText.text = "ALREADY OWNED";
                     Core.data.purchasedItems.Add(__instance.variationInfo.weaponName);
                     Core.Logger.LogInfo("Bought " + __instance.variationInfo.weaponName + " from shop.");
+                    if (__instance.variationInfo.buySound != null) Object.Instantiate(__instance.variationInfo.buySound);
+                    if (__instance.clickSound != null) Object.Instantiate(__instance.clickSound);
                 }
-                else Core.Logger.LogInfo("Tried to buy " + __instance.variationInfo.weaponName + " from shop. Can't afford.");
-                return false;
+                else
+                {
+                    Core.Logger.LogInfo("Tried to buy " + __instance.variationInfo.weaponName + " from shop. Can't afford.");
+                    if (__instance.failSound != null) Object.Instantiate(__instance.failSound);
+                }
+                    return false;
             }
             else return true;
         }
@@ -38,7 +44,7 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists() && __instance.TryGetComponent(out ShopCategory sc))
             {
-                VariationInfo[] variations = __instance.toActivate[0].transform.Find("Variation Screen").GetComponentsInChildren<VariationInfo>(true);
+                VariationInfo[] variations = __instance.toActivate[0].transform.GetComponentsInChildren<VariationInfo>(true);
                 foreach (VariationInfo variation in variations)
                 {
                     LevelManager.UpdateShopVariation(variation);

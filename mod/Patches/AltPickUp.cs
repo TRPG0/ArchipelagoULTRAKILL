@@ -10,7 +10,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static bool Prefix(AltPickUp __instance)
         {
-            if (Core.DataExists())
+            if (Core.DataExists() && StatsManager.Instance.levelNumber != 27)
             {
                 UnityEvent unityEvent = __instance.onPickUp;
                 if (unityEvent != null) unityEvent.Invoke();

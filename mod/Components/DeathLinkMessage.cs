@@ -85,7 +85,7 @@ namespace ArchipelagoULTRAKILL.Components
             if (transform.parent.parent.GetChild(1).TryGetComponent(out RectTransform component4)) skullRT = component4;
             if (transform.parent.TryGetComponent(out RectTransform component5)) parentRT = component5;
 
-            text.font = UIManager.font;
+            text.font = text.transform.parent.parent.Find("YouDiedText").GetComponent<Text>().font;
             text.resizeTextForBestFit = true;
             text.resizeTextMaxSize = 200;
             text.alignment = TextAnchor.UpperCenter;

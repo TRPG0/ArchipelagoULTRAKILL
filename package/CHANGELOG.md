@@ -1,3 +1,28 @@
+## 2.0.7
+
+- Fixed to work on patch 15.
+- Fixed sounds not playing when buying weapons from the shop.
+
+## 2.0.6
+
+- Fixed being unable to receive some items from other players after reconnecting to a server.
+
+## 2.0.5
+
+- Fixed generation failing on newer Archipelago versions due to duplicate entrance names.
+- Fixed no arm being equipped in 5-S.
+- Fixed a bug that could immediately disconnect the player after connecting.
+
+## 2.0.4
+
+- Fixed item notifications not appearing most of the time when receiving items from other players.
+
+## 2.0.3
+
+- Fixed more weird arm bugs. [#15](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/15)
+- Fixed item and location names not being parsed correctly in chat if the IDs were too large.
+- Added a failsafe for handling missing items when connecting to a server.
+
 ## 2.0.2
 
 - Fixed glass not being removed in 0-1 after restarting from a checkpoint. [#12](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/12)

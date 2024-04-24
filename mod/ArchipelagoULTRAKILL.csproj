@@ -334,6 +334,7 @@
     <Compile Include="Patches\BestiaryData.cs" />
     <Compile Include="Patches\BigDoorOpener.cs" />
     <Compile Include="Patches\ChallengeManager.cs" />
+    <Compile Include="Patches\ChessManager.cs" />
     <Compile Include="Patches\DualWield.cs" />
     <Compile Include="Patches\EndlessGrid.cs" />
     <Compile Include="Patches\FinalDoorOpener.cs" />
@@ -373,6 +374,7 @@
     <Compile Include="Structures\Colors.cs" />
     <Compile Include="Structures\LevelInfo.cs" />
     <Compile Include="Structures\Message.cs" />
+    <Compile Include="Structures\QueuedItem.cs" />
     <Compile Include="Structures\RawLocationData.cs" />
     <Compile Include="Structures\Location.cs" />
     <Compile Include="Structures\Enums.cs" />

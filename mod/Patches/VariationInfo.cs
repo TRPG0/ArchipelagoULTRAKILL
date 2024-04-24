@@ -9,7 +9,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static bool Prefix(VariationInfo __instance)
         {
-            if (Core.DataExists())
+            if (Core.DataExists() && !(__instance.weaponName == "sho2" || __instance.weaponName == "nai2" || __instance.weaponName == "rock2"))
             {
                 if (__instance.weaponName.Contains("arm"))
                 {

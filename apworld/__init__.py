@@ -226,60 +226,68 @@ class UltrakillWorld(World):
     def create_regions(self):
         
         player = self.player
-        world = self.multiworld
+        multiworld = self.multiworld
 
-        menu = Region("Menu", player, world)
+        menu = Region("Menu", player, multiworld)
 
         for number, name in region_table.items():
-            r = Region(name, player, world)
-            entrance = Entrance(player, "To " + number, menu)
-            entrance.connect(r)
+            multiworld.regions += [Region(name, player, multiworld)]
             if "S" in number:
-                world.get_region(region_table[secret_levels[number]], player).exits.append(entrance)
+                multiworld.get_region(region_table[secret_levels[number]], player).add_exits({name})
             else:
-                menu.exits.append(entrance)
-            exit = Entrance(player, "To Menu", r)
-            exit.connect(menu)
-            r.exits.append(exit)
-            world.regions.append(r)
+                menu.add_exits({name})
+            
 
-        world.regions.append(menu)
+        #for number, name in region_table.items():
+        #    r = Region(name, player, world)
+        #    entrance = Entrance(player, "To " + number, menu)
+        #    entrance.connect(r)
+        #    if "S" in number:
+        #        world.get_region(region_table[secret_levels[number]], player).exits.append(entrance)
+        #    else:
+        #        menu.exits.append(entrance)
+        #    exit = Entrance(player, "To Menu", r)
+        #    exit.connect(menu)
+        #    r.exits.append(exit)
+        #    world.regions.append(r)
 
-        if world.goal[player] == Goal.option_1_4:
+        multiworld.regions.append(menu)
+
+        if multiworld.goal[player] == Goal.option_1_4:
             self.goal_name = "1-4"
-        elif world.goal[player] == Goal.option_2_4:
+        elif multiworld.goal[player] == Goal.option_2_4:
             self.goal_name = "2-4"
-        elif world.goal[player] == Goal.option_3_2:
+        elif multiworld.goal[player] == Goal.option_3_2:
             self.goal_name = "3-2"
-        elif world.goal[player] == Goal.option_4_4:
+        elif multiworld.goal[player] == Goal.option_4_4:
             self.goal_name = "4-4"
-        elif world.goal[player] == Goal.option_5_4:
+        elif multiworld.goal[player] == Goal.option_5_4:
             self.goal_name = "5-4"
-        elif world.goal[player] == Goal.option_6_2:
+        elif multiworld.goal[player] == Goal.option_6_2:
             self.goal_name = "6-2"
-        elif world.goal[player] == Goal.option_7_4:
+        elif multiworld.goal[player] == Goal.option_7_4:
             self.goal_name = "7-4"
-        elif world.goal[player] == Goal.option_P_1:
+        elif multiworld.goal[player] == Goal.option_P_1:
             self.goal_name = "P-1"
-        elif world.goal[player] == Goal.option_P_2:
+        elif multiworld.goal[player] == Goal.option_P_2:
             self.goal_name = "P-2"
 
         for loc in location_table:
             if self.goal_name in loc["name"] and not "_w" in loc["game_id"]:
                 continue
-            elif "_b" in loc["game_id"] and world.boss_rewards[player].value == 0:
+            elif "_b" in loc["game_id"] and multiworld.boss_rewards[player].value == 0:
                 continue
-            elif loc["name"] in ext_bosses and world.boss_rewards[player].value < 2:
+            elif loc["name"] in ext_bosses and multiworld.boss_rewards[player].value < 2:
                 continue
-            elif "_c" in loc["game_id"] and not world.challenge_rewards[player]:
+            elif "_c" in loc["game_id"] and not multiworld.challenge_rewards[player]:
                 continue
-            elif "_p" in loc["game_id"] and not world.p_rank_rewards[player]:
+            elif "_p" in loc["game_id"] and not multiworld.p_rank_rewards[player]:
                 continue
-            elif "fish" in loc["game_id"] and not world.fish_rewards[player]:
+            elif "fish" in loc["game_id"] and not multiworld.fish_rewards[player]:
                 continue
             else:
                 id = base_id + location_table.index(loc)
-                region: Region = world.get_region(region_table[loc["region"]], player)
+                region: Region = multiworld.get_region(region_table[loc["region"]], player)
                 location: UltrakillLocation = UltrakillLocation(player, loc["name"], id, region)
                 #print(location.name + ", " + region.name)
                 region.locations.append(location)
@@ -288,29 +296,29 @@ class UltrakillWorld(World):
             if "P-" in loc["name"] and not self.goal_name in loc["name"]:
                 continue
 
-            if "-S" in loc["name"] and not world.include_secret_mission_completion[self.player]:
+            if "-S" in loc["name"] and not multiworld.include_secret_mission_completion[self.player]:
                 continue
 
-            region: Region = world.get_region(region_table[loc["region"]], player)
+            region: Region = multiworld.get_region(region_table[loc["region"]], player)
 
             location: UltrakillLocation = UltrakillLocation(player, loc["name"], None, region)
             if not self.goal_name in loc["name"]:
                 location.place_locked_item(self.create_event("Level Completed"))
             region.locations.append(location)
 
-        victory: Location = world.get_location("Cleared " + self.goal_name, player)
+        victory: Location = multiworld.get_location("Cleared " + self.goal_name, player)
         victory.place_locked_item(self.create_event("Victory"))
 
-        world.completion_condition[player] = lambda state: state.has("Victory", player)
+        multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        world = self.multiworld
+        multiworld = self.multiworld
         player = self.player
 
         locations = []
 
-        for loc in world.get_filled_locations(player):
+        for loc in multiworld.get_filled_locations(player):
             if "Cleared" in loc.name:
                 continue
             else:
@@ -318,7 +326,7 @@ class UltrakillWorld(World):
                     "id": self.location_name_to_game_id[loc.name],
                     "ap_id": loc.address,
                     "item_name": loc.item.name,
-                    "player_name": world.player_name[loc.item.player]
+                    "player_name": multiworld.player_name[loc.item.player]
                 }
 
                 if loc.item.game == "ULTRAKILL":
@@ -332,26 +340,26 @@ class UltrakillWorld(World):
 
         slot_data: Dict[str, Any] = {
             "locations": locations,
-            "goal": world.goal[player].value,
-            "goal_requirement": world.goal_requirement[player].value,
-            "boss_rewards": world.boss_rewards[player].value,
-            "challenge_rewards": bool(world.challenge_rewards[player]),
-            "p_rank_rewards": bool(world.p_rank_rewards[player]),
-            "fish_rewards": bool(world.fish_rewards[player]),
-            "randomize_secondary_fire": bool(world.randomize_secondary_fire[player]),
-            "start_with_arm": bool(world.start_with_arm[player]),
-            "starting_stamina": world.starting_stamina[player].value,
-            "starting_walljumps": world.starting_walljumps[player].value,
-            "start_with_slide": bool(world.start_with_slide[player]),
-            "start_with_slam": bool(world.start_with_slam[player]),
-            "randomize_skulls": bool(world.randomize_skulls[player]),
-            "point_multiplier": world.point_multiplier[player].value,
-            "ui_color_randomizer": world.ui_color_randomizer[player].value,
-            "gun_color_randomizer": world.gun_color_randomizer[player].value,
-            "music_randomizer": bool(world.music_randomizer[player]),
+            "goal": multiworld.goal[player].value,
+            "goal_requirement": multiworld.goal_requirement[player].value,
+            "boss_rewards": multiworld.boss_rewards[player].value,
+            "challenge_rewards": bool(multiworld.challenge_rewards[player]),
+            "p_rank_rewards": bool(multiworld.p_rank_rewards[player]),
+            "fish_rewards": bool(multiworld.fish_rewards[player]),
+            "randomize_secondary_fire": bool(multiworld.randomize_secondary_fire[player]),
+            "start_with_arm": bool(multiworld.start_with_arm[player]),
+            "starting_stamina": multiworld.starting_stamina[player].value,
+            "starting_walljumps": multiworld.starting_walljumps[player].value,
+            "start_with_slide": bool(multiworld.start_with_slide[player]),
+            "start_with_slam": bool(multiworld.start_with_slam[player]),
+            "randomize_skulls": bool(multiworld.randomize_skulls[player]),
+            "point_multiplier": multiworld.point_multiplier[player].value,
+            "ui_color_randomizer": multiworld.ui_color_randomizer[player].value,
+            "gun_color_randomizer": multiworld.gun_color_randomizer[player].value,
+            "music_randomizer": bool(multiworld.music_randomizer[player]),
             "music": self.music,
-            "cybergrind_hints": bool(world.cybergrind_hints[player]),
-            "death_link": bool(world.death_link[player]),
+            "cybergrind_hints": bool(multiworld.cybergrind_hints[player]),
+            "death_link": bool(multiworld.death_link[player]),
         }
         return slot_data
 

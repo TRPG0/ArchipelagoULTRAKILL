@@ -214,7 +214,7 @@ namespace ArchipelagoULTRAKILL
             showLog = new BoolField(logPanel, "SHOW LOG", "showLog", true, true);
             showLog.onValueChange += (BoolField.BoolValueChangeEvent e) =>
             {
-                UIManager.log.SetActive(e.value);
+                UIManager.log.gameObject.SetActive(e.value);
             };
 
             logLines = new IntField(logPanel, "NUMBER OF MESSAGES", "logLines", 5, 1, 16, true, true);
@@ -227,13 +227,13 @@ namespace ArchipelagoULTRAKILL
             logFontSize = new IntField(logPanel, "FONT SIZE", "logFontSize", 16, 1, 32, true, true);
             logFontSize.onValueChange += (IntField.IntValueChangeEvent e) =>
             {
-                UIManager.log.GetComponent<Text>().fontSize = e.value;
+                UIManager.log.fontSize = e.value;
             };
 
             logClear = new ButtonField(logPanel, "CLEAR LOG", "logClear");
             logClear.onClick += () =>
             {
-                UIManager.log.GetComponent<Text>().text = "";
+                UIManager.SetLogText("");
                 Multiworld.messages.Clear();
             };
 

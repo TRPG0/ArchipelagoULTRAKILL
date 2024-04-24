@@ -80,8 +80,8 @@ namespace ArchipelagoULTRAKILL
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is unlocked");
                 return;
             }
-            // Do nothing for other arms
-            else if (variation.weaponName == "arm1" || variation.weaponName == "arm2")
+            // Do nothing for other arms and unimplemented weapons
+            if (variation.weaponName == "arm1" || variation.weaponName == "arm2" || variation.weaponName == "sho2" || variation.weaponName == "nai2" || variation.weaponName == "rock2")
             {
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Skipping");
                 return;
@@ -103,7 +103,7 @@ namespace ArchipelagoULTRAKILL
                     else if (LocationManager.locations["shop_" + variation.weaponName].item is APItem apitem)
                     {
                         description = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.GetAPMessageColor(apitem.type)) + "FF>" + apitem.itemName + "</color>";
-                        description += "for <color=#" + ColorUtility.ToHtmlStringRGB(Colors.PlayerOther) + "FF>" + apitem.playerName + "</color>";
+                        description += " for <color=#" + ColorUtility.ToHtmlStringRGB(Colors.PlayerOther) + "FF>" + apitem.playerName + "</color>";
                         description += "]\n\n";
 
                         if (apitem.type == ItemFlags.Advancement) description += "You don't know what this is, but it seems <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemAdvancement) + "FF>important.</color>";

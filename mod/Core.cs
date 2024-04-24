@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "2.0.2";
+        public const string PluginVersion = "2.0.7";
 
         public static string workingPath;
         public static string workingDir;
@@ -158,10 +158,13 @@ namespace ArchipelagoULTRAKILL
             ["rev2"] = 7500,
             ["rev1"] = 12500,
             ["sho1"] = 12500,
+            ["sho2"] = 25000,
             ["nai1"] = 25000,
+            ["nai2"] = 35000,
             ["rai1"] = 100000,
             ["rai2"] = 100000,
-            ["rock1"] = 75000
+            ["rock1"] = 75000,
+            ["rock2"] = 75000
         };
 
         public void Awake()
@@ -175,23 +178,24 @@ namespace ArchipelagoULTRAKILL
 
             ConfigManager.Initialize();
 
-            obj = gameObject;
-            obj.transform.localPosition = new Vector3(960, 540, 0);
-
-            uim = obj.AddComponent<UIManager>();
-
             SceneManager.sceneLoaded += OnSceneLoaded;
-
-            GameConsole.Console.Instance.RegisterCommand(new Commands.Connect());
-            GameConsole.Console.Instance.RegisterCommand(new Commands.Disconnect());
-            GameConsole.Console.Instance.RegisterCommand(new Commands.Say());
-
-            StartCoroutine(VersionChecker.CheckVersion());
         }
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (SceneHelper.CurrentScene == "Intro" || SceneHelper.CurrentScene == "Bootstrap" || SceneHelper.CurrentScene == null) return;
+
+            if (obj == null)
+            {
+                obj = new GameObject()
+                {
+                    name = "Archipelago"
+                };
+                DontDestroyOnLoad(obj);
+                obj.transform.localPosition = new Vector3(960, 540, 0);
+                uim = obj.AddComponent<UIManager>();
+            }
+
             uim.StopCoroutine("DisplayMessage");
 
             UIManager.displayingMessage = false;
@@ -213,7 +217,7 @@ namespace ArchipelagoULTRAKILL
                 if (DataExists() && Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
                 else if (DataExists() && !Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
 
-                if (UIManager.log == null) UIManager.CreateLogObject();
+                if (UIManager.log == null) uim.CreateLogObject();
 
                 if (DataExists() && !firstTimeLoad)
                 {
@@ -322,7 +326,7 @@ namespace ArchipelagoULTRAKILL
             GameObject obj = Instantiate(AssetHelper.LoadPrefab("Assets/Prefabs/Items/Soap.prefab"), NewMovement.Instance.transform);
             obj.transform.parent = null;
 
-            if (FistControl.Instance.currentPunch != null || !(!data.hasArm && FistControl.Instance.currentPunch.type == FistType.Standard))
+            if (FistControl.Instance.currentPunch != null)
             {
                 if (!FistControl.Instance.currentPunch.holding)
                 {
@@ -358,6 +362,30 @@ namespace ArchipelagoULTRAKILL
                 }
             }
             return list;
+        }
+
+        public static void ValidateArms()
+        {
+            bool resetFists = false;
+            bool unlockedArm2 = GameProgressSaver.CheckGear("arm1") == 1;
+            if (unlockedArm2 && !data.hasArm && PrefsManager.Instance.GetInt("weapon.arm0") == 1)
+            {
+                PrefsManager.Instance.SetInt("weapon.arm0", 0);
+                resetFists = true;
+            }
+            if (PrefsManager.Instance.GetInt("weapon.arm0") == 0 && PrefsManager.Instance.GetInt("weapon.arm1") == 0)
+            {
+                if (unlockedArm2)
+                {
+                    PrefsManager.Instance.SetInt("weapon.arm1", 1);
+                }
+                else
+                {
+                    PrefsManager.Instance.SetInt("weapon.arm0", 1);
+                }
+                resetFists = true;
+            }
+            if (resetFists) FistControl.Instance.ResetFists();
         }
     }
 }
