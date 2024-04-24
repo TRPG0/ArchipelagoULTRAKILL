@@ -54,6 +54,9 @@ def rev2_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
     """Revolver - Marksman"""
     return state.has_all({"Revolver - Marksman", "Secondary Fire - Marksman"}, player) if fire2 else rev2(state, player)
 
+def rev_any(state: CollectionState, player: int) -> bool:
+    return state.has_any({"Revolver - Piercer", "Revolver - Sharpshooter", "Revolver - Marksman"}, player)
+
 
 def revalt(state: CollectionState, player: int):
     return state.has("Revolver - Alternate", player)
@@ -78,6 +81,9 @@ def sho1_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
     """Shotgun - Pump Charge"""
     return state.has_all({"Shotgun - Pump Charge", "Secondary Fire - Pump Charge"}, player) if fire2 else sho1(state, player)
 
+def sho_any(state: CollectionState, player: int) -> bool:
+    return state.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge"}, player)
+
 
 def nai0(state: CollectionState, player: int) -> bool:
     """Nailgun - Attractor"""
@@ -98,6 +104,8 @@ def nai1_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
     """Nailgun - Overheat"""
     return state.has_all({"Nailgun - Overheat", "Secondary Fire - Overheat"}, player) if fire2 else nai1(state, player)
 
+def nai_any(state: CollectionState, player : int) -> bool:
+    state.has_any({"Nailgun - Attractor", "Nailgun - Overheat"}, player)
 
 def naialt(state: CollectionState, player: int):
     return state.has("Nailgun - Alternate", player)
@@ -136,6 +144,9 @@ def rock1(state: CollectionState, player: int) -> bool:
 def rock1_fire2(state: CollectionState, player: int, fire2: bool) -> bool:
     """Rocket Launcher - S.R.S. Cannon"""
     return state.has_all({"Rocket Launcher - S.R.S. Cannon", "Secondary Fire - S.R.S. Cannon"}, player) if fire2 else rock1(state, player)
+
+def rock_any(state: CollectionState, player: int) -> bool:
+    return state.has_any({"Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon"}, player)
 
 
 def arm0(state: CollectionState, player: int) -> bool:
@@ -187,9 +198,7 @@ def slam_storage(state: CollectionState, player: int, slam: bool, has: int) -> b
 def good_weapon(state: CollectionState, player: int, fire2: bool, arm: bool, slide: bool, dash: int) -> bool:
     return (
         (
-            rev0(state, player)
-            or rev1(state, player)
-            or rev2(state, player)
+            rev_any(state, player)
             or sho0_fire2(state, player, fire2)
             or sho1_fire2(state, player, fire2)
             or can_proj_boost(state, player, arm)
@@ -225,12 +234,26 @@ def can_break_walls(state: CollectionState, player: int, fire2: bool, arm: bool)
     return (
         rai0(state, player)
         or rai2(state, player)
-        or rock0(state, player)
-        or rock1(state, player)
+        or rock_any(state, player)
         or arm1(state, player)
         or nai1_fire2(state, player, fire2)
         or (
-            state.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player)
+            rev_any(state, player)
+            and revalt(state, player)
+        )
+        or sho0_fire2(state, player, fire2)
+        or sho1_fire2(state, player, fire2)
+        or can_proj_boost(state, player, arm)
+    )
+
+def can_break_wall_cancerous_rodent(state: CollectionState, player: int, fire2: bool, arm: bool) -> bool:
+    return (
+        rai0(state, player)
+        or rai2(state, player)
+        or rock_any(state, player)
+        or arm1(state, player)
+        or (
+            rev_any(state, player)
             and revalt(state, player)
         )
         or sho0_fire2(state, player, fire2)
@@ -250,7 +273,7 @@ def can_break_glass_or_walls(state: CollectionState, player: int, fire2: bool, a
         or rev1_fire2(state, player, fire2)
         or rev2_fire2(state, player, fire2)
         or (
-            state.has_any({"Revolver - Piercer", "Revolver - Marksman", "Revolver - Sharpshooter"}, player)
+            rev_any(state, player)
             and revalt(state, player)
         )
         or sho0_fire2(state, player, fire2)
@@ -281,8 +304,7 @@ def secret_0_2(state: CollectionState, player: int, slam: bool, fire2: bool, arm
         or sho1_fire2(state, player, fire2)
         or can_proj_boost(state, player, arm)
         or rai2(state, player)
-        or rock0(state, player)
-        or rock1(state, player)
+        or rock_any(state, player)
     )
 
 
@@ -329,8 +351,7 @@ def level_0_5(state: CollectionState, player: int, slide: bool, fire2: bool, has
 def jump_1_1(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool) -> bool:
     return (
         can_slam(state, player, slam)
-        or rock0(state, player)
-        or rock1(state, player)
+        or rock_any(state, player)
         or sho0_fire2(state, player, fire2)
         or sho1_fire2(state, player, fire2)
         or can_proj_boost(state, player, arm)
@@ -338,17 +359,97 @@ def jump_1_1(state: CollectionState, player: int, slam: bool, fire2: bool, arm: 
     )
 
 
-def secret1_2_1(state: CollectionState, player: int, fire2: bool, arm: bool, has: int) -> bool:
+def secret1_2_1(state: CollectionState, player: int, fire2: bool, arm: bool, has_dashes: int, has_walljumps: int, slide : bool) -> bool:
     return (
-        dashes(state, player, has, 1)
+        dashes(state, player, has_dashes, 1)
         or sho0_fire2(state, player, fire2)
         or sho1_fire2(state, player, fire2)
         or can_proj_boost(state, player, arm)
         or rai2(state, player)
-        or rock0(state, player)
-        or rock1(state, player)
+        or rock_any(state, player)
+        or can_slide(state, player, slide)
+        or walljumps(state, player, has_walljumps, 3)
     )
 
+def challenge_2_1(state:CollectionState, player: int, slam: bool, fire2: bool, arm: bool, has_walljumps: int, has_dashes: int, slide: bool):
+    # reach secret #1 without dying
+    if not (
+        (
+            rai0(state, player)
+            or rai2(state, player)
+            or rock_any(state, player)
+            or arm1(state, player)
+            or nai1_fire2(state, player, fire2)
+            or (
+                rev_any(state, player)
+                and revalt(state, player)
+            )
+            or sho0_fire2(state, player, fire2)
+            or can_proj_boost(state, player, arm)
+        ) and (
+            dashes(state, player, has_dashes, 1)
+            or sho0_fire2(state, player, fire2)
+            or can_proj_boost(state, player, arm)
+            or rai2(state, player)
+            or rock_any(state, player)
+            or can_slide(state, player, slide)
+            or walljumps(state, player, has_walljumps, 3)
+        )
+        # sho1_fire2 without dash can be used to do either but not both
+        or sho1_fire2(state, player, fire2) and (
+            rai0(state, player)
+            or arm1(state, player)
+            or nai1_fire2(state, player, fire2)
+            or (
+                rev_any(state, player)
+                and revalt(state, player)
+            )
+            or dashes(state, player, has_dashes, 1)
+            or can_slide(state, player, slide)
+            or walljumps(state, player, has_walljumps, 3)
+        )
+    ):
+        return False
+
+    # reach end of level
+    return (
+        rock0_fire2(state, player, fire2)
+        or slam_storage(state, player, slam, has_walljumps)
+    )
+
+def challenge_2_2(state: CollectionState, player: int, has_dashes: int, slide: bool, fire2: bool, arm: bool) -> bool:
+    # pass corridor
+    if not (
+        rev_any(state, player)
+        or sho_any(state, player)
+        or nai_any(state, player)
+        or rai0(state, player)
+        or can_slide(state, player, slide)
+        or dashes(state, player, has_dashes, 1)
+        or can_punch(state, player, arm)
+    ):
+        return False
+
+    return (
+        (
+            (
+                rev_any(state, player)
+                or nai0(state, player)
+                or nai1_fire2(state, player, fire2)
+                or can_proj_boost(state, player, arm)
+                or arm2(state, player)
+                or rock_any(state, player)
+            ) and (
+                can_slide(state, player, slide)
+                or dashes(state, player, has_dashes, 1)
+            )
+        ) or (
+            sho_any(state, player)
+            and can_slide(state, player, slide)
+            and dashes(state, player, has_dashes, 1)
+        )
+        or rock0_fire2(state, player, fire2)
+    )
 
 def secret3_2_1(state: CollectionState, player: int, fire2: bool, has_walljumps: int, has_dashes: int) -> bool:
     return (
@@ -369,12 +470,11 @@ def secret3_2_1(state: CollectionState, player: int, fire2: bool, has_walljumps:
     )
 
 
-def secret5_2_1(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool, has_walljumps: int, has_dashes: int) -> bool:
+def bridge_and_tower_2_1(state: CollectionState, player: int, slam: bool, fire2: bool, arm: bool, has_walljumps: int, has_dashes: int) -> bool:
     return (
         can_slam(state, player, slam)
         or rai2(state, player)
-        or rock0(state, player)
-        or rock1(state, player)
+        or rock_any(state, player)
         or (
             walljumps(state, player, has_walljumps, 1)
             and dashes(state, player, has_dashes, 1)
@@ -385,31 +485,15 @@ def secret5_2_1(state: CollectionState, player: int, slam: bool, fire2: bool, ar
     )
 
 
-def challenge_2_1(state: CollectionState, player: int, slam: bool, fire2: bool, has_walljumps: int, has_dashes: int) -> bool:
-    return (
-        (
-            dashes(state, player, has_dashes, 1)
-            and walljumps(state, player, has_walljumps, 1)
-            and can_slam(state, player, slam)
-        )
-        or rock0_fire2(state, player, fire2)
-    )
-
-
-def secret3_2_3(state: CollectionState, player: int, slam: bool, fire2: bool, has_walljumps: int, has_dashes: int) -> bool:
+def secret3_2_3(state: CollectionState, player: int, slam: bool, fire2: bool, has_walljumps: int, arm: bool) -> bool:
     return (
         can_slam(state, player, slam)
         or rai2(state, player)
-        or (
-            walljumps(state, player, has_walljumps, 2)
-            or (
-                walljumps(state, player, has_walljumps, 1)
-                and dashes(state, player, has_dashes, 1)
-            )
-        )
+        or walljumps(state, player, has_walljumps, 1)
         or sho0_fire2(state, player, fire2)
         or sho1_fire2(state, player, fire2)
-        or rock0_fire2(state, player, fire2)
+        or rock_any(state, player)
+        or can_proj_boost(state, player, arm)
     )
 
 
@@ -417,8 +501,7 @@ def jump_3_2(state: CollectionState, player: int, slam: bool, fire2: bool, arm: 
     return (
         can_slam(state, player, slam)
         or rai2(state, player)
-        or rock0(state, player)
-        or rock1(state, player)
+        or rock_any(state, player)
         or walljumps(state, player, has_walljumps, 1)
         or dashes(state, player, has_dashes, 1)
         or sho0_fire2(state, player, fire2)
@@ -693,7 +776,7 @@ def rules(ultrakillworld):
         lambda state: rev2_fire2(state, player, fire2))
     set_rule(world.get_entrance("2-3: SHEER HEART ATTACK -> 2-S: ALL-IMPERFECT LOVE SONG", player),
         lambda state: (
-            secret3_2_3(state, player, slam, fire2, walljump, dash)
+            secret3_2_3(state, player, slam, fire2, walljump, arm)
             and can_slide(state, player, slide)
         ))
     if skulls:
@@ -867,7 +950,10 @@ def rules(ultrakillworld):
         lambda state: grab_item(state, player, arm))
     if prank:
         set_rule(world.get_location("1-1: Perfect Rank", player),
-            lambda state: grab_item(state, player, arm))
+            lambda state: (
+                good_weapon(state, player, fire2, arm, slide, dash)
+                and grab_item(state, player, arm)
+            ))
 
     if skulls:
         set_rule(world.get_location("Cleared 1-1", player),
@@ -888,7 +974,7 @@ def rules(ultrakillworld):
         add_rule(world.get_location("1-1: Secret #5", player),
             lambda state: state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)"}, player))
         if prank:
-            set_rule(world.get_location("1-1: Perfect Rank", player),
+            add_rule(world.get_location("1-1: Perfect Rank", player),
                 lambda state: state.has_all({"Red Skull (1-1)", "Blue Skull (1-1)"}, player))
     else:
         set_rule(world.get_location("Cleared 1-1", player),
@@ -897,18 +983,9 @@ def rules(ultrakillworld):
                 or rev2_fire2(state, player, fire2)
             ))
 
-
     if challenge:
         set_rule(world.get_location("1-1: Complete the level in under 10 seconds", player),
             lambda state: rev2_fire2(state, player, fire2))
-
-    if prank:
-        add_rule(world.get_location("1-1: Perfect Rank", player),
-            lambda state: (
-                good_weapon(state, player, fire2, arm, slide, dash)
-                and grab_item(state, player, arm)
-            ))
-
 
     # 1-2
     if challenge:
@@ -947,7 +1024,7 @@ def rules(ultrakillworld):
                         and grab_item(state, player, arm)
                         or rai0(state, player)
                     )
-                    and can_break_walls(state, player, fire2, arm)
+                    and can_break_wall_cancerous_rodent(state, player, fire2, arm)
                 ))
         if prank:
             set_rule(world.get_location("1-2: Perfect Rank", player),
@@ -978,7 +1055,7 @@ def rules(ultrakillworld):
                         grab_item(state, player, arm)
                         or rai0(state, player)
                     )
-                    and can_break_walls(state, player, fire2, arm)
+                    and can_break_wall_cancerous_rodent(state, player, fire2, arm)
                 ))
         if prank:
             set_rule(world.get_location("1-2: Perfect Rank", player),
@@ -1040,7 +1117,9 @@ def rules(ultrakillworld):
         lambda state: (
             jump_1_1(state, player, slam, fire2, arm)
             and can_break_glass(state, player, fire2, arm)
-            and can_break_walls(state, player, fire2, arm)
+            and can_break_wall_cancerous_rodent(state, player, fire2, arm)
+            and good_weapon(state, player, fire2, arm, slide, dash)
+            and grab_item(state, player, arm)
         ))
 
     if skulls:
@@ -1052,9 +1131,6 @@ def rules(ultrakillworld):
                     rai0(state, player)
                 )
             ))
-
-    add_rule(world.get_location("1-4: Secret Weapon", player),
-        lambda state: grab_item(state, player, arm))
 
     if boss > 0:
         set_rule(world.get_location("1-4: Defeat V2", player),
@@ -1072,51 +1148,61 @@ def rules(ultrakillworld):
     # 2-1
     set_rule(world.get_location("2-1: Secret #1", player),
         lambda state: (
-            secret1_2_1(state, player, fire2, arm, dash)
+            secret1_2_1(state, player, fire2, arm, dash, walljump, slide)
             and can_break_walls(state, player, fire2, arm)
+            or slam_storage(state, player, slam, walljump)
         ))
+
+    set_rule(world.get_location("2-1: Secret #2", player),
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
 
     set_rule(world.get_location("2-1: Secret #3", player),
         lambda state: secret3_2_1(state, player, fire2, walljump, dash))
 
+    set_rule(world.get_location("2-1: Secret #4", player),
+        lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
+
     set_rule(world.get_location("2-1: Secret #5", player),
-        lambda state: secret5_2_1(state, player, slam, fire2, arm, walljump, dash))
+        lambda state: bridge_and_tower_2_1(state, player, slam, fire2, arm, walljump, dash))
     set_rule(world.get_location("Cleared 2-1", player),
-        lambda state: secret5_2_1(state, player, slam, fire2, arm, walljump, dash))
+        lambda state: bridge_and_tower_2_1(state, player, slam, fire2, arm, walljump, dash))
 
     if challenge:
         set_rule(world.get_location("2-1: Don't open any normal doors", player),
-            lambda state: (
-                challenge_2_1(state, player, slam, fire2, walljump, dash)
-                and can_break_walls(state, player, fire2, arm)
-            ))
+            lambda state: challenge_2_1(state, player, slam, fire2, arm, walljump, dash, slide))
 
     if prank:
         set_rule(world.get_location("2-1: Perfect Rank", player),
             lambda state: (
-                secret5_2_1(state, player, slam, fire2, arm, walljump, dash)
+                bridge_and_tower_2_1(state, player, slam, fire2, arm, walljump, dash)
                 and good_weapon(state, player, fire2, arm, slide, dash)
             ))            
 
     # 2-2
-    set_rule(world.get_location("2-2: Secret #4", player),
-        lambda state: can_slide(state, player, slide))
+    set_rule(world.get_location("2-2: Secret #1", player),
+        lambda state: (
+            rev_any(state, player)
+            or sho_any(state, player)
+            or nai_any(state, player)
+            or rai0(state, player)
+            or rai2(state, player)
+            or rock_any(state, player)
+            or grab_item(state, player, arm)
+            or can_slam(state, player, slam)
+        ))
 
     set_rule(world.get_location("2-2: Secret #2", player),
         lambda state: jump_general(state, player, slam, fire2, arm, walljump, 1))
     set_rule(world.get_location("2-2: Secret #3", player),
         lambda state: jump_general(state, player, slam, fire2, arm, walljump, 2))
-
+    set_rule(world.get_location("2-2: Secret #4", player),
+        lambda state: can_slide(state, player, slide))
     set_rule(world.get_location("2-2: Secret #5", player),
         lambda state: can_break_walls(state, player, fire2, arm))
 
     if challenge:
         set_rule(world.get_location("2-2: Beat the level in under 60 seconds", player),
-            lambda state: (
-                can_slide(state, player, slide)
-                or dashes(state, player, dash, 2)
-                or rock0_fire2(state, player, fire2)
-            ))
+            lambda state: challenge_2_2(state, player, dash, slide, fire2, arm))
 
     if prank:
         add_rule(world.get_location("2-2: Perfect Rank", player),
@@ -1129,7 +1215,7 @@ def rules(ultrakillworld):
     set_rule(world.get_location("2-3: Secret #3", player),
         lambda state: (
             grab_item(state, player, arm)
-            and secret3_2_3(state, player, slam, fire2, walljump, dash)
+            and secret3_2_3(state, player, slam, fire2, walljump, arm)
         ))
     set_rule(world.get_location("2-3: Secret #4", player),
         lambda state: grab_item(state, player, arm))
@@ -1146,7 +1232,7 @@ def rules(ultrakillworld):
         add_rule(world.get_location("Cleared 2-3", player),
             lambda state: (
                 (
-                    secret3_2_3(state, player, slam, fire2, walljump, dash)
+                    secret3_2_3(state, player, slam, fire2, walljump, arm)
                     and state.has("Blue Skull (2-3)", player)
                     and can_slide(state, player, slide)
                 )
@@ -1154,7 +1240,7 @@ def rules(ultrakillworld):
             ))
         if challenge:
             set_rule(world.get_location("2-3: Don't touch any water", player),
-                lambda state: state.has_all({"Blue Skull (2-3)", "Red Skull (2-3)"}, player))
+                lambda state: state.has("Blue Skull (2-3)", player))
         if prank:
             set_rule(world.get_location("2-3: Perfect Rank", player),
                 lambda state: state.has_all({"Blue Skull (2-3)", "Red Skull (2-3)"}, player))
@@ -1162,9 +1248,10 @@ def rules(ultrakillworld):
     if challenge:
         add_rule(world.get_location("2-3: Don't touch any water", player),
             lambda state: (
-                secret3_2_3(state, player, slam, fire2, walljump, dash)
+                secret3_2_3(state, player, slam, fire2, walljump, arm)
                 and can_slide(state, player, slide)
                 and grab_item(state, player, arm)
+                and can_break_walls(state, player, fire2, arm)
             ))
 
     if prank:
@@ -1965,30 +2052,18 @@ def rules(ultrakillworld):
 
     # shop
     set_rule(world.get_location("Shop: Buy Revolver Variant 1", player),
-        lambda state: (
-            rev0(state, player)
-            or rev1(state, player)
-            or rev2(state, player)
-        ))
+        lambda state: rev_any(state, player))
 
     set_rule(world.get_location("Shop: Buy Revolver Variant 2", player),
         lambda state: (
-            rev0(state, player)
-            or rev1(state, player)
-            or rev2(state, player)
+            rev_any(state, player)
         ))
 
     set_rule(world.get_location("Shop: Buy Shotgun Variant", player),
-        lambda state: (
-            sho0(state, player)
-            or sho1(state, player)
-        ))
+        lambda state: sho_any(state, player))
 
     set_rule(world.get_location("Shop: Buy Nailgun Variant", player),
-        lambda state: (
-            nai0(state, player)
-            or nai1(state, player)
-        ))
+        lambda state: nai_any(state,player))
 
     set_rule(world.get_location("Shop: Buy Railcannon Variant 1", player),
         lambda state: (
@@ -2005,7 +2080,4 @@ def rules(ultrakillworld):
         ))
 
     set_rule(world.get_location("Shop: Buy Rocket Launcher Variant", player),
-        lambda state: (
-            rock0(state, player)
-            or rock1(state, player)
-        ))
+        lambda state: rock_any(state, player))
