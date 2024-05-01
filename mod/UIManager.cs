@@ -90,11 +90,16 @@ namespace ArchipelagoULTRAKILL
 
         public static void AdjustLogBounds()
         {
-            if (PrefsManager.Instance.GetInt("hudType") >= 2 && Core.IsPlaying)
+            if (PrefsManager.Instance.GetInt("hudType") >= 2 && Core.IsInLevel)
             {
-                log.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, ((float)Math.Round(Screen.height * 0.77f)));
+                log.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, (float)Math.Round(Screen.height * 0.77f));
+                logBlack.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, (float)Math.Round(Screen.height * 0.77f));
             }
-            else log.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, Screen.height - 10);
+            else
+            {
+                log.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, Screen.height - 10);
+                logBlack.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, Screen.height - 10);
+            }
         }
 
         public static void FindMenuObjects()

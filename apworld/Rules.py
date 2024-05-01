@@ -2480,7 +2480,7 @@ def rules(ultrakillworld):
                 and dashes(state, player, dash, 1)
             ))
         if skulls:
-            add_rule(multiworld.get_location("7-2: Switch #2", player),
+            add_rule(multiworld.get_location("7-2: Switch #3", player),
                 lambda state: state.has("Red Skull (7-2)", player))
         set_rule(multiworld.get_location("7-2: Secret Weapon", player),
             lambda state: state.has_all({"Violence Switch I", "Violence Switch II", "Violence Switch III"}, player))
@@ -2513,9 +2513,9 @@ def rules(ultrakillworld):
     # 7-3
     set_rule(multiworld.get_location("7-3: Secret #5", player),
         lambda state: can_slide(state, player, slide))
-    if challenge:
-        set_rule(multiworld.get_location("7-3: Become marked for death", player),
-            lambda state: good_weapon(state, player, fire2, arm, slide, dash, shoalt, naialt))
+    #if challenge: <- can cheese by going thru secret exit now
+    #    set_rule(multiworld.get_location("7-3: Become marked for death", player),
+    #        lambda state: good_weapon(state, player, fire2, arm, slide, dash, shoalt, naialt))
     if prank:
         set_rule(multiworld.get_location("7-3: Perfect Rank", player),
             lambda state: good_weapon(state, player, fire2, arm, slide, dash, shoalt, naialt))

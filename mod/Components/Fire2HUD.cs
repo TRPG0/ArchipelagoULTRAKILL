@@ -14,7 +14,9 @@ namespace ArchipelagoULTRAKILL.Components
         public Image sec;
         public Image secGlow;
         public Image alt1;
+        public GameObject alt1shadow;
         public Image alt2;
+        public GameObject alt2shadow;
 
         public float timer = 0f;
 
@@ -64,7 +66,9 @@ namespace ArchipelagoULTRAKILL.Components
                 sec.gameObject.SetActive(false);
                 secGlow.gameObject.SetActive(false);
                 if (alt1 != null) alt1.gameObject.SetActive(false);
+                if (alt1shadow != null) alt1shadow.SetActive(false);
                 if (alt2 != null) alt2.gameObject.SetActive(false);
+                if (alt2shadow != null) alt2shadow.SetActive(false);
                 return;
             }
             else
@@ -72,7 +76,9 @@ namespace ArchipelagoULTRAKILL.Components
                 sec.gameObject.SetActive(true);
                 secGlow.gameObject.SetActive(true);
                 if (alt1 != null) alt1.gameObject.SetActive(true);
+                if (alt1shadow != null) alt1shadow.SetActive(true);
                 if (alt2 != null) alt2.gameObject.SetActive(true);
+                if (alt2shadow != null) alt2shadow.SetActive(true);
             }
 
             if (CurrentIsUnlocked)
