@@ -2522,8 +2522,9 @@ def rules(ultrakillworld):
         
 
     # 7-S
-    set_rule(multiworld.get_location("Cleared 7-S", player),
-        lambda state: grab_item(state, player, arm))
+    if secretcompletion:
+        set_rule(multiworld.get_location("Cleared 7-S", player),
+            lambda state: grab_item(state, player, arm))
     
     if clean:
         set_rule(multiworld.get_location("7-S: Cleaned Courtyard", player),
@@ -2538,8 +2539,9 @@ def rules(ultrakillworld):
             lambda state: grab_item(state, player, arm))
 
     if skulls:
-        add_rule(multiworld.get_location("Cleared 7-S", player),
-            lambda state: state.has_all({"Red Skull (7-S)", "Blue Skull (7-S)"}, player))
+        if secretcompletion:
+            add_rule(multiworld.get_location("Cleared 7-S", player),
+                lambda state: state.has_all({"Red Skull (7-S)", "Blue Skull (7-S)"}, player))
         
         if clean:
             add_rule(multiworld.get_location("7-S: Cleaned Courtyard", player),

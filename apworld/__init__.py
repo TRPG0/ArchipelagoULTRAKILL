@@ -302,6 +302,8 @@ class UltrakillWorld(World):
                 continue
             elif "fish" in loc["game_id"] and not self.options.fish_rewards:
                 continue
+            elif "clean" in loc["game_id"] and not self.options.cleaning_rewards:
+                continue
             elif loc["name"] in limbo_switches and not self.options.randomize_limbo_switches:
                 continue
             elif loc["name"] in violence_switches and not self.options.randomize_violence_switches:
