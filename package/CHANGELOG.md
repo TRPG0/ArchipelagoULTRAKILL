@@ -1,3 +1,10 @@
+## 2.1.1
+
+- Fixed "7-2: Secret Weapon" not being checked properly.
+- Fixed incorrect logic for switches in 7-2.
+- Fixed secondary fire indicator being visible for weapons that don't have one when using Classic HUD.
+- Fixed text log not repositioning itself when using Classic HUD.
+
 ## 2.1.0
 
 It has been over a year since the first version of Archipelago for ULTRAKILL! Thanks for playing :)
