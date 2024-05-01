@@ -18,7 +18,7 @@ namespace ArchipelagoULTRAKILL
             {
                 for (int j = 1; j <= 2; j++) // is alternate?
                 {
-                    if (j == 2 && (i == 2 || i == 4 || i == 5)) continue; // skip shotgun, railcannon, rocket launcher - no alts
+                    if (j == 2 && (i == 4 || i == 5)) continue; // skip railcannon, rocket launcher - no alts
                     bool alt = false;
                     if (j == 2) alt = true;
 

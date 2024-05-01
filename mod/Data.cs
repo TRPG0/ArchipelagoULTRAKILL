@@ -21,13 +21,30 @@ namespace ArchipelagoULTRAKILL
         public BossOptions bossRewards = BossOptions.Disabled;
         public bool challengeRewards = false;
         public bool pRankRewards = false;
+        public bool hankRewards = false;
+        public bool clashReward = false;
         public bool fishRewards = false;
+        public bool cleanRewards = false;
+        public bool chessReward = false;
+        public bool rocketReward = false;
         public bool hasArm = true;
         public int dashes = 3;
         public int walljumps = 3;
         public bool canSlide = true;
         public bool canSlam = true;
         public int multiplier = 1;
+
+        public WeaponForm revForm = WeaponForm.Standard;
+        public bool revstd = true;
+        public bool revalt = false;
+
+        public WeaponForm shoForm = WeaponForm.Standard;
+        public bool shostd = true;
+        public bool shoalt = false;
+
+        public WeaponForm naiForm = WeaponForm.Standard;
+        public bool naistd = true;
+        public bool naialt = false;
 
         public bool randomizeFire2 = false;
         public HashSet<string> unlockedFire2 = new HashSet<string>();
@@ -36,6 +53,11 @@ namespace ArchipelagoULTRAKILL
         public HashSet<string> unlockedSkulls = new HashSet<string>();
         public int unlockedSkulls1_4 = 0;
         public int unlockedSkulls5_1 = 0;
+
+        public bool l1switch = false;
+        public bool l7switch = false;
+        public bool[] limboSwitches = new bool[4];
+        public bool[] shotgunSwitches = new bool[3];
 
         public bool musicRandomizer = false;
         public Dictionary<string, string> music = new Dictionary<string, string>();

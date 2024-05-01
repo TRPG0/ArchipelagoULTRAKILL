@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 using System.Reflection;
+using UnityEngine.Android;
+using UnityEngine.UI;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
@@ -33,6 +35,77 @@ namespace ArchipelagoULTRAKILL.Patches
                     }
                     else return true;
                 }
+            }
+            else return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(VariationInfo), "ChangeEquipment")]
+    class VariationInfo_ChangeEquipment_Patch
+    {
+        public static bool Prefix(VariationInfo __instance, int value)
+        {
+            if (Core.DataExists())
+            {
+                bool def, alt;
+                if (__instance.weaponName.Contains("rev"))
+                {
+                    def = Core.data.revstd;
+                    alt = Core.data.revalt;
+                }
+                else if (__instance.weaponName.Contains("sho"))
+                {
+                    def = Core.data.shostd;
+                    alt = Core.data.shoalt;
+                }
+                else if (__instance.weaponName.Contains("nai"))
+                {
+                    def = Core.data.naistd;
+                    alt = Core.data.naialt;
+                }
+                else return true;
+
+                Traverse traverse = Traverse.Create(__instance);
+                int equipStatus = traverse.Field<int>("equipStatus").Value;
+
+                if (value > 0) equipStatus++;
+                else equipStatus--;
+
+                int state = equipStatus;
+                if (equipStatus < 0)
+                {
+                    if (alt) state = 2;
+                    else if (def) state = 1;
+                    else state = 0;
+                }
+                else if (equipStatus == 1)
+                {
+                    if (!def)
+                    {
+                        if (alt && value > 0) state = 2;
+                        else state = 0;
+                    }
+                    else state = 1;
+                }
+                else if (equipStatus == 2)
+                {
+                    if (alt) state = 2;
+                    else if (def && value < 0) state = 1;
+                    else state = 0;
+                }
+                else if (equipStatus > 2) state = 0;
+
+                traverse.Field<int>("equipStatus").Value = state;
+                traverse.Field<Image>("equipImage").Value.sprite = __instance.equipSprites[state];
+                PrefsManager.Instance.SetInt("weapon." + __instance.weaponName, state);
+                if (__instance.orderButtons)
+                {
+                    if (state == 0) __instance.orderButtons.SetActive(false);
+                    else __instance.orderButtons.SetActive(true);
+                }
+                if (GunSetter.Instance != null) GunSetter.Instance.ResetWeapons(false);
+                if (FistControl.Instance != null) FistControl.Instance.ResetFists();
+                return false;
             }
             else return true;
         }

@@ -24,6 +24,12 @@ namespace ArchipelagoULTRAKILL
             {
                 if ((item.itemType == ItemType.SkullBlue || item.itemType == ItemType.SkullRed) && item.gameObject.scene.name == SceneManager.GetActiveScene().name)
                 {
+                    if (SceneHelper.CurrentScene == "Level 7-S")
+                    {
+                        if (item.itemType == ItemType.SkullBlue && !item.transform.parent.parent.parent) continue;
+                        else if (item.itemType == ItemType.SkullRed && item.transform.parent.parent.parent.name != "Interactives") continue;
+                    }
+
                     if (skulls.ContainsKey(item.itemType.ToString()))
                     {
                         i++;
@@ -37,7 +43,8 @@ namespace ArchipelagoULTRAKILL
             {
                 KeyValuePair<string, GameObject> pair = skulls.ElementAt(j);
                 string id = Core.CurrentLevelInfo.Id.ToString();
-                if (Core.CurrentLevelInfo.Name == "0-S") id = "S";
+                if (Core.CurrentLevelInfo.Name == "0-S") id = "0S";
+                else if (Core.CurrentLevelInfo.Name == "7-S") id = "7S";
                 switch (SceneHelper.CurrentScene)
                 {
                     case "Level 1-4":
@@ -80,8 +87,8 @@ namespace ArchipelagoULTRAKILL
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is unlocked");
                 return;
             }
-            // Do nothing for other arms and unimplemented weapons
-            if (variation.weaponName == "arm1" || variation.weaponName == "arm2" || variation.weaponName == "sho2" || variation.weaponName == "nai2" || variation.weaponName == "rock2")
+            // Do nothing for other arms
+            if (variation.weaponName == "arm1" || variation.weaponName == "arm2")
             {
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Skipping");
                 return;
@@ -94,13 +101,13 @@ namespace ArchipelagoULTRAKILL
 
                 if (LocationManager.locations.ContainsKey("shop_" + variation.weaponName))
                 {
-                    if (LocationManager.locations["shop_" + variation.weaponName].item is UKItem ukitem)
+                    if (LocationManager.shopScouts["shop_" + variation.weaponName] is UKItem ukitem)
                     {
                         description += "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.GetUKMessageColor(ukitem.itemName)) + "FF>" + ukitem.itemName + "</color>";
-                        if (ukitem.playerName != Core.data.slot_name) description += "for <color=#" + ColorUtility.ToHtmlStringRGB(Colors.PlayerOther) + "FF>" + ukitem.playerName + "</color>";
+                        if (ukitem.playerName != Core.data.slot_name) description += " for <color=#" + ColorUtility.ToHtmlStringRGB(Colors.PlayerOther) + "FF>" + ukitem.playerName + "</color>";
                         description += "]\n\n";
                     }
-                    else if (LocationManager.locations["shop_" + variation.weaponName].item is APItem apitem)
+                    else if (LocationManager.shopScouts["shop_" + variation.weaponName] is APItem apitem)
                     {
                         description = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.GetAPMessageColor(apitem.type)) + "FF>" + apitem.itemName + "</color>";
                         description += " for <color=#" + ColorUtility.ToHtmlStringRGB(Colors.PlayerOther) + "FF>" + apitem.playerName + "</color>";
@@ -234,6 +241,31 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
+        public static void ChangeIntro()
+        {
+            if (!Core.CurrentLevelHasInfo || Core.CurrentLevelInfo.Id != 1) return;
+
+            TextMeshProUGUI text = GameObject.Find("/Canvas").transform.Find("HurtScreen").Find("Text 2 Sound").Find("Text (2)").GetComponent<TextMeshProUGUI>();
+            text.text = text.text + "\nARCHIPELAGO BY   <color=#fec24c>TRPG</color>";
+            text.lineSpacing = 25;
+            TextMeshProUGUI text2 = GameObject.Instantiate(text.gameObject, text.transform.parent).GetComponent<TextMeshProUGUI>();
+            text2.text = "and others!";
+            text2.fontSize = 32;
+            text2.transform.localPosition = new Vector3(270, -70, 0);
+            text2.transform.Rotate(new Vector3(0, 0, 6));
+            GameObject iconObj = GameObject.Instantiate(text.gameObject, text.transform.parent);
+            Component.DestroyImmediate(iconObj.GetComponent<TextMeshProUGUI>());
+            Component.DestroyImmediate(iconObj.GetComponent<TMP_SpriteAnimator>());
+            Image icon = iconObj.AddComponent<Image>();
+            icon.sprite = UIManager.bundle.LoadAsset<Sprite>("assets/trpg.png");
+            icon.color = new Color(0.992f, 0.758f, 0.297f);
+            icon.preserveAspect = true;
+            icon.transform.localPosition = new Vector3(150, -32, 0);
+            icon.transform.localScale = new Vector3(0.08f, 0.08f, 0.08f);
+            text.gameObject.AddComponent<LinkedDisabler>().objects.Add(text2.gameObject);
+            text.gameObject.AddComponent<LinkedDisabler>().objects.Add(icon.gameObject);
+        }
+
         public static void AddGlassComponents()
         {
             if (!Core.CurrentLevelHasInfo || Core.CurrentLevelInfo.Id != 1) return;
@@ -247,7 +279,39 @@ namespace ArchipelagoULTRAKILL
                     if (!room.GetComponent<GlassDisabler>()) room.AddComponent<GlassDisabler>();
                 }
             }
+        }
 
+        public static void FindHank()
+        {
+            if (!Core.CurrentLevelHasInfo) return;
+            foreach (HudMessage hm in Resources.FindObjectsOfTypeAll<HudMessage>())
+            {
+                if ((Core.CurrentLevelInfo.Id == 9 || Core.CurrentLevelInfo.Id == 22) && hm.name == "EasterEgg")
+                {
+                    string message = hm.message;
+                    message = message.Replace("Nothing", "Something");
+                    message = message.Replace("but", "and");
+                    hm.message = message;
+                    hm.gameObject.AddComponent<Hank>();
+                }
+            }
+        }
+
+        public static void ForceBlueArm()
+        {
+            if (!FistControl.Instance)
+            {
+                Core.Logger.LogWarning("FistControl.Instance is null!");
+                return;
+            }
+            FistControl.Instance.forcedLoadout.arm.blueVariant = VariantOption.ForceOn;
+            FistControl.Instance.ResetFists();
+        }
+
+        public static void FindRocketRaceButton()
+        {
+            if (SceneHelper.CurrentScene != "CreditsMuseum2" || !Core.data.rocketReward) return;
+            GameObject.Find("/PuzzleScreen (2)/Canvas/Background/Start").AddComponent<RocketRaceCheck>();
         }
     }
 }

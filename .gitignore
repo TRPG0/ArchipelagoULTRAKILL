@@ -2,3 +2,4 @@
 bin/
 obj/
 package/*.dll
+package/*.zip

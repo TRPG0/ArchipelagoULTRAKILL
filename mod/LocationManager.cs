@@ -1,6 +1,8 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Packets;
+using ArchipelagoULTRAKILL.Components;
 using ArchipelagoULTRAKILL.Structures;
+using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,7 +12,8 @@ namespace ArchipelagoULTRAKILL
 {
     public static class LocationManager
     {
-        public static Dictionary<string, Location> locations = new Dictionary<string, Location>();
+        public static Dictionary<string, long> locations = new Dictionary<string, long>();
+        public static Dictionary<string, AItem> shopScouts = new Dictionary<string, AItem>();
 
         public static List<Message> messages = new List<Message>();
         public static List<Powerup> powerupQueue = new List<Powerup>();
@@ -20,34 +23,25 @@ namespace ArchipelagoULTRAKILL
 
         public static void CheckLocation(string loc)
         {
-            if (!AssistController.Instance.cheatsEnabled)
+            bool isCheating = AssistController.Instance.cheatsEnabled;
+            if (SceneHelper.CurrentScene == "CreditsMuseum2") isCheating = false;
+
+            if (!isCheating)
             {
-                Core.Logger.LogInfo("Checking location \"" + loc + "\"");
                 if (!Core.data.@checked.Contains(loc)) Core.data.@checked.Add(loc);
 
-                if (locations.ContainsKey(loc))
+                if (locations.ContainsKey(loc) && Multiworld.Authenticated)
                 {
-                    if (Multiworld.Authenticated) Multiworld.Session.Locations.CompleteLocationChecks(locations[loc].ap_id);
-                    if (locations[loc].item is UKItem ukitem && !locations[loc].@checked)
-                    {
-                        if (CanGetItemTypeWhileNotPlaying(ukitem.type)) GetUKItem(ukitem);
-                        else itemQueue.Add(new QueuedItem(ukitem, null));
-                    }
-                    else if (locations[loc].item is APItem apitem && !locations[loc].@checked) AddAPItemMessage(apitem);
-                    locations[loc].@checked = true;
+                    if (SceneHelper.CurrentScene != "Level 7-S") Core.Logger.LogInfo($"Checking location \"{loc}\" | {locations[loc]}");
+                    Multiworld.Session.Locations.CompleteLocationChecks(locations[loc]);
                 }
                 else Core.Logger.LogWarning("Location \"" + loc + "\" does not exist.");
             }
-            else Core.Logger.LogWarning("Tried to check location \"" + loc + "\", but cheats are enabled!");
-        }
-
-        public static bool CanGetItemTypeWhileNotPlaying(UKType type)
-        {
-            if (!Core.IsInLevel || (Core.IsInLevel && Core.IsPitFalling))
+            else
             {
-                if (type == UKType.Level || type == UKType.Layer || type == UKType.Skull) return true;
+                if (HudMessageReceiver.Instance) HudMessageReceiver.Instance.SendHudMessage("Skipping location check because cheats are enabled!");
+                Core.Logger.LogWarning("Skipping location check \"" + loc + "\" because cheats are enabled!");
             }
-            return false;
         }
 
         public static bool ShouldGetItemAgain(UKType type)
@@ -60,7 +54,10 @@ namespace ArchipelagoULTRAKILL
                 UKType.Skull,
                 UKType.Level,
                 UKType.Layer,
-                UKType.Fire2
+                UKType.Fire2,
+                UKType.LimboSwitch,
+                UKType.ShotgunSwitch,
+                UKType.ClashMode
             };
 
             if (types.Contains(type)) return true;
@@ -78,13 +75,21 @@ namespace ArchipelagoULTRAKILL
                 switch (item.type)
                 {
                     case UKType.Weapon:
-                        GameProgressSaver.AddGear(GetWeaponIdFromName(item.itemName));
-                        PrefsManager.Instance.SetInt("weapon." + GetWeaponIdFromName(item.itemName), 1);
+                        string wid = GetWeaponIdFromName(item.itemName);
+                        int equip = 1;
+                        if ((wid.Contains("rev") && Core.data.revForm == WeaponForm.Alternate)
+                            || (wid.Contains("sho") && Core.data.shoForm == WeaponForm.Alternate)
+                            || (wid.Contains("nai") && Core.data.naiForm == WeaponForm.Alternate))
+                            equip = 2;
+
+                        //Core.Logger.LogInfo(equip);
+                        GameProgressSaver.AddGear(wid);
+                        PrefsManager.Instance.SetInt("weapon." + wid, equip);
                         //Core.logger.LogInfo($"CanGetWeapon = {Core.CanGetWeapon}");
                         if (Core.CanGetWeapon)
                         {
                             GunSetter.Instance.ResetWeapons();
-                            GunSetter.Instance.ForceWeapon(GetWeaponIdFromName(item.itemName));
+                            GunSetter.Instance.ForceWeapon(wid);
                             if (FistControl.Instance.shopping) GunControl.Instance.NoWeapon();
                         }
                         text = "WEAPON: ";
@@ -92,7 +97,36 @@ namespace ArchipelagoULTRAKILL
 
                     case UKType.WeaponAlt:
                         //Core.logger.LogInfo("WeaponAlt: " + GetWeaponIdFromName(item.item_name));
-                        GameProgressSaver.AddGear(GetWeaponIdFromName(item.itemName));
+                        //GameProgressSaver.AddGear(GetWeaponIdFromName(item.itemName));
+                        string id = GetWeaponIdFromName(item.itemName);
+                        if (id == "revalt")
+                        {
+                            if (Core.data.revForm == WeaponForm.Standard)
+                            {
+                                Core.data.revalt = true;
+                                GameProgressSaver.AddGear(id);
+                            }
+                            else Core.data.revstd = true;
+                        }
+                        else if (id == "shoalt")
+                        {
+                            if (Core.data.shoForm == WeaponForm.Standard)
+                            {
+                                Core.data.shoalt = true;
+                                GameProgressSaver.AddGear(id);
+                            }
+                            else Core.data.shostd = true;
+                        }
+                        else if (id == "naialt")
+                        {
+                            if (Core.data.naiForm == WeaponForm.Standard)
+                            {
+                                Core.data.naialt = true;
+                                GameProgressSaver.AddGear(id);
+                            }
+                            else Core.data.naistd = true;
+                        }
+                        else Core.Logger.LogWarning($"Unknown WeaponAlt: {id}");
                         text = "WEAPON: ";
                         break;
 
@@ -135,16 +169,23 @@ namespace ArchipelagoULTRAKILL
                         {
                             if (Core.data.unlockedSkulls1_4 == 4) return;
                             Core.data.unlockedSkulls1_4++;
+                            if (SceneHelper.CurrentScene == "Level 1-4") LevelManager.skulls.ElementAt(Core.data.unlockedSkulls1_4 - 1).Value.SetActive(true);
                         }
                         else if (item.itemName.Contains("5-1"))
                         {
                             if (Core.data.unlockedSkulls5_1 == 3) return;
                             Core.data.unlockedSkulls5_1++;
+                            if (SceneHelper.CurrentScene == "Level 5-1") LevelManager.skulls.ElementAt(Core.data.unlockedSkulls5_1 - 1).Value.SetActive(true);
                         }
                         else if (item.itemName.Contains("0-S"))
                         {
-                            if (item.itemName.Contains("Blue")) Core.data.unlockedSkulls.Add("S_b");
-                            else if (item.itemName.Contains("Red")) Core.data.unlockedSkulls.Add("S_r");
+                            if (item.itemName.Contains("Blue")) Core.data.unlockedSkulls.Add("0S_b");
+                            else if (item.itemName.Contains("Red")) Core.data.unlockedSkulls.Add("0S_r");
+                        }
+                        else if (item.itemName.Contains("7-S"))
+                        {
+                            if (item.itemName.Contains("Blue")) Core.data.unlockedSkulls.Add("7S_b");
+                            else if (item.itemName.Contains("Red")) Core.data.unlockedSkulls.Add("7S_r");
                         }
                         else
                         {
@@ -155,12 +196,16 @@ namespace ArchipelagoULTRAKILL
                             Core.Logger.LogInfo("Skull: " + skull);
                             Core.data.unlockedSkulls.Add(skull);
                         }
-                        if (SceneHelper.CurrentScene == "Level 1-4") LevelManager.skulls.ElementAt(Core.data.unlockedSkulls1_4 - 1).Value.SetActive(true);
-                        else if (SceneHelper.CurrentScene == "Level 5-1") LevelManager.skulls.ElementAt(Core.data.unlockedSkulls5_1 - 1).Value.SetActive(true);
-                        else if (SceneHelper.CurrentScene == "Level 0-S")
+
+                        if (SceneHelper.CurrentScene == "Level 0-S")
                         {
                             if (item.itemName == "Blue Skull (0-S)") LevelManager.skulls["SkullBlue"].SetActive(true);
                             else if (item.itemName == "Red Skull (0-S)") LevelManager.skulls["SkullRed"].SetActive(true);
+                        }
+                        else if (SceneHelper.CurrentScene == "Level 7-S")
+                        {
+                            if (item.itemName == "Blue Skull (7-S)") LevelManager.skulls["SkullBlue"].SetActive(true);
+                            else if (item.itemName == "Red Skull (7-S)") LevelManager.skulls["SkullRed"].SetActive(true);
                         }
                         else if (StatsManager.Instance.levelNumber != 0)
                         {
@@ -170,6 +215,15 @@ namespace ArchipelagoULTRAKILL
                                 else if (item.itemName.Contains("Red")) LevelManager.skulls["SkullRed"].SetActive(true);
                             }
                         }
+
+                        if (SceneHelper.CurrentScene == "Main Menu")
+                        {
+                            foreach (SkullIcon skullIcon in Object.FindObjectsOfType<SkullIcon>())
+                            {
+                                skullIcon.CheckSkull();
+                            }
+                        }
+
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";
                         break;
@@ -226,6 +280,41 @@ namespace ArchipelagoULTRAKILL
 
                     case UKType.Fire2:
                         Core.data.unlockedFire2.Add(GetWeaponIdFromName(item.itemName));
+                        if (Fire2HUD.Instance != null) Fire2HUD.Instance.UpdateCurrentWeapon();
+                        text = "UNLOCKED: ";
+                        break;
+
+                    case UKType.LimboSwitch:
+                        if (item.itemName == "Limbo Switch I") Core.data.limboSwitches[0] = true;
+                        else if (item.itemName == "Limbo Switch II") Core.data.limboSwitches[1] = true;
+                        else if (item.itemName == "Limbo Switch III") Core.data.limboSwitches[2] = true;
+                        else if (item.itemName == "Limbo Switch IV") Core.data.limboSwitches[3] = true;
+                        if (Object.FindObjectOfType<LimboSwitchLock>())
+                        {
+                            Traverse.Create(Object.FindObjectOfType<LimboSwitchLock>()).Field<int>("openedLocks").Value = 0;
+                            Object.FindObjectOfType<LimboSwitchLock>().CheckSaves();
+                            Traverse.Create(Object.FindObjectOfType<LimboSwitchLock>()).Method("CheckLocks").GetValue();
+                        }
+                        text = "ACTIVATED: ";
+                        break;
+
+                    case UKType.ShotgunSwitch:
+                        if (item.itemName == "Violence Switch I") Core.data.shotgunSwitches[0] = true;
+                        else if (item.itemName == "Violence Switch II") Core.data.shotgunSwitches[1] = true;
+                        else if (item.itemName == "Violence Switch III") Core.data.shotgunSwitches[2] = true;
+                        if (Object.FindObjectOfType<LimboSwitchLock>())
+                        {
+                            Traverse.Create(Object.FindObjectOfType<LimboSwitchLock>()).Field<int>("openedLocks").Value = 0;
+                            Object.FindObjectOfType<LimboSwitchLock>().CheckSaves();
+                            Traverse.Create(Object.FindObjectOfType<LimboSwitchLock>()).Method("CheckLocks").GetValue();
+                        }
+                        text = "ACTIVATED: ";
+                        break;
+
+                    case UKType.ClashMode:
+                        GameProgressMoneyAndGear gameProgress = GameProgressSaver.GetGeneralProgress();
+                        gameProgress.clashModeUnlocked = true;
+                        Traverse.Create(typeof(GameProgressSaver)).Method("WriteFile", new object[] { Traverse.Create(typeof(GameProgressSaver)).Property<string>("generalProgressPath").Value, gameProgress }).GetValue();
                         text = "UNLOCKED: ";
                         break;
 
@@ -288,7 +377,7 @@ namespace ArchipelagoULTRAKILL
                 string locationColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(Multiworld.Session.Locations.GetLocationNameFromId(info.Locations[0].Location).Substring(0, 3)));
 
                 string hint = "HINT: <color=#" + itemColor + "FF>";
-                hint += Multiworld.Session.Items.GetItemName(info.Locations[0].Item) + "</color> ";
+                hint += Multiworld.Session.Items.GetItemName(info.Locations[0].Item).ToUpper() + "</color> ";
                 if (Multiworld.Session.Players.GetPlayerName(info.Locations[0].Player) != Core.data.slot_name) 
                     hint += "(<color=#" + playerColor + "FF>" + Multiworld.Session.Players.GetPlayerAlias(info.Locations[0].Player) + "</color>) ";
                 hint += "at <color=#" + locationColor + "FF>" + Multiworld.Session.Locations.GetLocationNameFromId(info.Locations[0].Location) + "</color>";
@@ -307,21 +396,6 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
-        public static void AddAPItemMessage(APItem item)
-        {
-            string itemColor = ColorUtility.ToHtmlStringRGB(GetAPMessageColor(item.type));
-            string playerColor = ColorUtility.ToHtmlStringRGB(Colors.PlayerOther);
-            string text = "FOUND: <color=#" + itemColor + "FF>" + item.itemName + "</color> (<color=#" + playerColor + "FF>" + item.playerName + "</color>)";
-
-            messages.Add(new Message
-            {
-                image = "archipelago",
-                color = GetAPMessageColor(item.type),
-                message = text
-            });
-            if (!UIManager.displayingMessage && Core.IsPlaying) Core.uim.StartCoroutine("DisplayMessage");
-        }
-
         public static string GetUKMessageImage(string itemName)
         {
             switch (itemName)
@@ -329,33 +403,63 @@ namespace ArchipelagoULTRAKILL
                 case "Revolver - Piercer":
                 case "Revolver - Marksman":
                 case "Revolver - Sharpshooter":
+                    if (Core.data.revForm == WeaponForm.Standard) return "rev";
+                    else return "revalt";
                 case "Secondary Fire - Piercer":
+                    return "rev0_fire2";
                 case "Secondary Fire - Marksman":
+                    return "rev2_fire2";
                 case "Secondary Fire - Sharpshooter":
-                    return "rev";
+                    return "rev1_fire2";
                 case "Shotgun - Core Eject":
                 case "Shotgun - Pump Charge":
+                case "Shotgun - Sawed-On":
+                    if (Core.data.shoForm == WeaponForm.Standard) return "sho";
+                    else return "shoalt";
                 case "Secondary Fire - Core Eject":
+                    return "sho0_fire2";
                 case "Secondary Fire - Pump Charge":
-                    return "sho";
+                    return "sho1_fire2";
+                case "Secondary Fire - Sawed-On":
+                    return "sho2_fire2";
                 case "Nailgun - Attractor":
                 case "Nailgun - Overheat":
+                case "Nailgun - JumpStart":
+                    if (Core.data.naiForm == WeaponForm.Standard) return "nai";
+                    else return "naialt";
                 case "Secondary Fire - Attractor":
+                    return "nai0_fire2";
                 case "Secondary Fire - Overheat":
-                    return "nai";
+                    if (Core.data.naiForm == WeaponForm.Standard) return "naistd1_fire2";
+                    else return "naialt1_fire2";
+                case "Secondary Fire - JumpStart":
+                    return "nai2_fire2";
                 case "Railcannon - Electric":
                 case "Railcannon - Screwdriver":
                 case "Railcannon - Malicious":
                     return "rai";
                 case "Rocket Launcher - Freezeframe":
                 case "Rocket Launcher - S.R.S. Cannon":
-                case "Secondary Fire - Freezeframe":
-                case "Secondary Fire - S.R.S. Cannon":
+                case "Rocket Launcher - Firestarter":
                     return "rock";
+                case "Secondary Fire - Freezeframe":
+                    return "rock0_fire2";
+                case "Secondary Fire - S.R.S. Cannon":
+                    return "rock1_fire2";
+                case "Secondary Fire - Firestarter":
+                    return "rock2_fire2";
+                case "Revolver - Standard":
                 case "Revolver - Alternate":
-                    return "revalt";
+                    if (Core.data.revForm == WeaponForm.Standard) return "revalt";
+                    else return "rev";
+                case "Shotgun - Standard":
+                case "Shotgun - Alternate":
+                    if (Core.data.shoForm == WeaponForm.Standard) return "shoalt";
+                    else return "sho";
+                case "Nailgun - Standard":
                 case "Nailgun - Alternate":
-                    return "naialt";
+                    if (Core.data.naiForm == WeaponForm.Standard) return "naialt";
+                    else return "nai";
                 case "Feedbacker":
                 case "Knuckleblaster":
                 case "Whiplash":
@@ -396,6 +500,8 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (7-1)":
                 case "Blue Skull (7-1)":
                 case "Red Skull (7-2)":
+                case "Red Skull (7-S)":
+                case "Blue Skull (7-S)":
                     return "skull";
                 case "0-2: THE MEATGRINDER":
                 case "0-3: DOUBLE DOWN":
@@ -464,6 +570,19 @@ namespace ArchipelagoULTRAKILL
                     return "radiance";
                 case "Soap":
                     return "soap";
+                case "Limbo Switch I":
+                case "Violence Switch I":
+                    return "switch1";
+                case "Limbo Switch II":
+                case "Violence Switch II":
+                    return "switch2";
+                case "Limbo Switch III":
+                case "Violence Switch III":
+                    return "switch3";
+                case "Limbo Switch IV":
+                    return "switch4";
+                case "Clash Mode":
+                    return "clash";
                 default:
                     return "archipelago";
             }
@@ -494,10 +613,20 @@ namespace ArchipelagoULTRAKILL
                 case "Secondary Fire - S.R.S. Cannon":
                     return ColorBlindSettings.Instance.variationColors[1]; // green
                 case "Revolver - Sharpshooter":
+                case "Shotgun - Sawed-On":
+                case "Nailgun - JumpStart":
                 case "Railcannon - Malicious":
+                case "Rocket Launcher - Firestarter":
                 case "Secondary Fire - Sharpshooter":
+                case "Secondary Fire - Sawed-On":
+                case "Secondary Fire - JumpStart":
+                case "Secondary Fire - Firestarter":
                     return ColorBlindSettings.Instance.variationColors[2]; // red
+                case "Revolver - Standard":
                 case "Revolver - Alternate":
+                case "Shotgun - Standard":
+                case "Shotgun - Alternate":
+                case "Nailgun - Standard":
                 case "Nailgun - Alternate":
                     return Colors.WeaponAlt;
                 case "Stamina Bar":
@@ -534,6 +663,7 @@ namespace ArchipelagoULTRAKILL
                 case "Blue Skull (5-3)":
                 case "Blue Skull (5-4)":
                 case "Blue Skull (7-1)":
+                case "Blue Skull (7-S)":
                     return Colors.BlueSkull;
                 case "Whiplash":
                     return Colors.Arm2;
@@ -546,6 +676,10 @@ namespace ArchipelagoULTRAKILL
                 case "1-3":
                 case "1-4":
                 case "LAYER 1: LIMBO":
+                case "Limbo Switch I":
+                case "Limbo Switch II":
+                case "Limbo Switch III":
+                case "Limbo Switch IV":
                     return Colors.Layer1;
                 case "Knuckleblaster":
                     return Colors.Arm1;
@@ -564,6 +698,9 @@ namespace ArchipelagoULTRAKILL
                 case "7-3":
                 case "7-4":
                 case "LAYER 7: VIOLENCE":
+                case "Violence Switch I":
+                case "Violence Switch II":
+                case "Violence Switch III":
                     return Colors.Layer7;
                 case "P-1: SOUL SURVIVOR":
                 case "P-2: WAIT OF THE WORLD":
@@ -580,6 +717,7 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (6-1)":
                 case "Red Skull (7-1)":
                 case "Red Skull (7-2)":
+                case "Red Skull (7-S)":
                     return Colors.RedSkull;
                 case "0-2: THE MEATGRINDER":
                 case "0-3: DOUBLE DOWN":
@@ -617,6 +755,7 @@ namespace ArchipelagoULTRAKILL
                 case "4-2":
                 case "4-3":
                 case "4-4":
+                case "Clash Mode":
                     return Colors.Layer4;
                 case "Dual Wield":
                     return Colors.DualWield;
@@ -653,7 +792,7 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
-        public static UKType GetTypeFromName(string name)
+        public static UKType? GetTypeFromName(string name)
         {
             switch (name)
             {
@@ -662,15 +801,22 @@ namespace ArchipelagoULTRAKILL
                 case "Revolver - Sharpshooter":
                 case "Shotgun - Core Eject":
                 case "Shotgun - Pump Charge":
+                case "Shotgun - Sawed-On":
                 case "Nailgun - Attractor":
                 case "Nailgun - Overheat":
+                case "Nailgun - JumpStart":
                 case "Railcannon - Electric":
                 case "Railcannon - Screwdriver":
                 case "Railcannon - Malicious":
                 case "Rocket Launcher - Freezeframe":
                 case "Rocket Launcher - S.R.S. Cannon":
+                case "Rocket Launcher - Firestarter":
                     return UKType.Weapon;
+                case "Revolver - Standard":
                 case "Revolver - Alternate":
+                case "Shotgun - Standard":
+                case "Shotgun - Alternate":
+                case "Nailgun - Standard":
                 case "Nailgun - Alternate":
                     return UKType.WeaponAlt;
                 case "Feedbacker":
@@ -710,6 +856,8 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (7-1)":
                 case "Blue Skull (7-1)":
                 case "Red Skull (7-2)":
+                case "Red Skull (7-S)":
+                case "Blue Skull (7-S)":
                     return UKType.Skull;
                 case "0-2: THE MEATGRINDER":
                 case "0-3: DOUBLE DOWN":
@@ -771,13 +919,27 @@ namespace ArchipelagoULTRAKILL
                 case "Secondary Fire - Sharpshooter":
                 case "Secondary Fire - Core Eject":
                 case "Secondary Fire - Pump Charge":
+                case "Secondary Fire - Sawed-On":
                 case "Secondary Fire - Attractor":
                 case "Secondary Fire - Overheat":
+                case "Secondary Fire - JumpStart":
                 case "Secondary Fire - Freezeframe":
                 case "Secondary Fire - S.R.S. Cannon":
+                case "Secondary Fire - Firestarter":
                     return UKType.Fire2;
+                case "Limbo Switch I":
+                case "Limbo Switch II":
+                case "Limbo Switch III":
+                case "Limbo Switch IV":
+                    return UKType.LimboSwitch;
+                case "Violence Switch I":
+                case "Violence Switch II":
+                case "Violence Switch III":
+                    return UKType.ShotgunSwitch;
+                case "Clash Mode":
+                    return UKType.ClashMode;
                 default: 
-                    return UKType.Points;
+                    return null;
             }
         }
 
@@ -800,12 +962,18 @@ namespace ArchipelagoULTRAKILL
                 case "Shotgun - Pump Charge":
                 case "Secondary Fire - Pump Charge":
                     return "sho1";
+                case "Shotgun - Sawed-On":
+                case "Secondary Fire - Sawed-On":
+                    return "sho2";
                 case "Nailgun - Attractor":
                 case "Secondary Fire - Attractor":
                     return "nai0";
                 case "Nailgun - Overheat":
                 case "Secondary Fire - Overheat":
                     return "nai1";
+                case "Nailgun - JumpStart":
+                case "Secondary Fire - JumpStart":
+                    return "nai2";
                 case "Railcannon - Electric":
                     return "rai0";
                 case "Railcannon - Screwdriver":
@@ -818,8 +986,16 @@ namespace ArchipelagoULTRAKILL
                 case "Rocket Launcher - S.R.S. Cannon":
                 case "Secondary Fire - S.R.S. Cannon":
                     return "rock1";
+                case "Rocket Launcher - Firestarter":
+                case "Secondary Fire - Firestarter":
+                    return "rock2";
+                case "Revolver - Standard":
                 case "Revolver - Alternate":
                     return "revalt";
+                case "Shotgun - Standard":
+                case "Shotgun - Alternate":
+                    return "shoalt";
+                case "Nailgun - Standard":
                 case "Nailgun - Alternate":
                     return "naialt";
                 case "Knuckleblaster":

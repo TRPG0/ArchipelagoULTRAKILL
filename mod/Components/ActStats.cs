@@ -39,7 +39,7 @@ namespace ArchipelagoULTRAKILL.Components
                 case 12:
                 case 17:
                 case 20:
-                //case 28:
+                case 28:
                     if (GameProgressSaver.GetGeneralProgress().secretMissions[Core.GetLevelInfo(id).Layer] >= 2) return 1;
                     return 0;
                 default:
@@ -81,6 +81,16 @@ namespace ArchipelagoULTRAKILL.Components
             for (int i = 0; i <= 11; i++)
             {
                 if (Core.data.@checked.Contains($"fish{i}")) total++;
+            }
+            return total;
+        }
+
+        public int RoomsCleaned()
+        {
+            int total = 0;
+            for (int i = 0; i <= 4; i++)
+            {
+                if (Core.data.@checked.Contains($"clean{i}")) total++;
             }
             return total;
         }
@@ -154,6 +164,7 @@ namespace ArchipelagoULTRAKILL.Components
             if (Core.data.pRankRewards) result += BuildString("\nPerfect Ranks", perfects, total);
             if (Core.data.bossRewards > BossOptions.Disabled) result += BuildString("\nBosses", bossesDefeated, bossesTotal);
             if (ActIncludes(20) && Core.data.fishRewards) result += BuildString("\nFish", FishCaught(), 12);
+            if (ActIncludes(28) && Core.data.cleanRewards) result += BuildString("\nRooms cleaned", RoomsCleaned(), 5);
 
             return result;
         }

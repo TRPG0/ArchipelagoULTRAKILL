@@ -124,6 +124,9 @@ location_table: List[LocationDict] = [
     {'name': "1-1: Secret #5",
         'region': "1-1",
         'game_id': "6_s5"},
+    {'name': "1-1: Switch",
+        'region': "1-1",
+        'game_id': "6_sw"},
     {'name': "1-1: Complete the level in under 10 seconds",
         'region': "1-1",
         'game_id': "6_c"},
@@ -147,6 +150,9 @@ location_table: List[LocationDict] = [
     {'name': "1-2: Secret #5",
         'region': "1-2",
         'game_id': "7_s5"},
+    {'name': "1-2: Switch",
+        'region': "1-2",
+        'game_id': "7_sw"},
     {'name': "1-2: Defeat the Very Cancerous Rodent",
         'region': "1-2",
         'game_id': "7_b"},
@@ -173,6 +179,9 @@ location_table: List[LocationDict] = [
     {'name': "1-3: Secret #5",
         'region': "1-3",
         'game_id': "8_s5"},
+    {'name': "1-3: Switch",
+        'region': "1-3",
+        'game_id': "8_sw"},
     {'name': "1-3: Beat the secret encounter",
         'region': "1-3",
         'game_id': "8_c"},
@@ -181,6 +190,12 @@ location_table: List[LocationDict] = [
         'game_id': "8_p"},
 
     # 1-4: CLAIR DE LUNE
+    {'name': "1-4: Switch",
+        'region': "1-4",
+        'game_id': "9_sw"},
+    {'name': "1-4: Assemble Hank",
+        'region': "1-4",
+        'game_id': "9_ha"},
     {'name': "1-4: V2's Arm",
         'region': "1-4",
         'game_id': "9_w1"},
@@ -360,6 +375,11 @@ location_table: List[LocationDict] = [
         'region': "4-2",
         'game_id': "17_p"},
 
+    # 4-S: CLASH OF THE BRANDICOOT
+    {'name': "4-S: Destroy all crates",
+        'region': "4-S",
+        'game_id': "clash"},
+
     # 4-3: A SHOT IN THE DARK
     {'name': "4-3: Secret #1",
         'region': "4-3",
@@ -427,40 +447,40 @@ location_table: List[LocationDict] = [
         'game_id': "20_p"},
 
     # 5-S: I ONLY SAY MORNING
-    {'name': "Funny Stupid Fish (Friend)",
+    {'name': "5-S: Funny Stupid Fish (Friend)",
         'region': "5-S",
         'game_id': "fish0"},
-    {'name': "PITR Fish",
+    {'name': "5-S: PITR Fish",
         'region': "5-S",
         'game_id': "fish1"},
-    {'name': "Trout",
+    {'name': "5-S: Trout",
         'region': "5-S",
         'game_id': "fish2"},
-    {'name': "Metal Fish",
+    {'name': "5-S: Metal Fish",
         'region': "5-S",
         'game_id': "fish3"},
-    {'name': "Chomper",
+    {'name': "5-S: Chomper",
         'region': "5-S",
         'game_id': "fish4"},
-    {'name': "Bomb Fish",
+    {'name': "5-S: Bomb Fish",
         'region': "5-S",
         'game_id': "fish5"},
-    {'name': "Eyeball",
+    {'name': "5-S: Eyeball",
         'region': "5-S",
         'game_id': "fish6"},
-    {'name': "Frog (?)",
+    {'name': "5-S: Frog (?)",
         'region': "5-S",
         'game_id': "fish7"},
-    {'name': "Dope Fish",
+    {'name': "5-S: Dope Fish",
         'region': "5-S",
         'game_id': "fish8"},
-    {'name': "Stickfish",
+    {'name': "5-S: Stickfish",
         'region': "5-S",
         'game_id': "fish9"},
-    {'name': "Cooked Fish",
+    {'name': "5-S: Cooked Fish",
         'region': "5-S",
         'game_id': "fish10"},
-    {'name': "Shark",
+    {'name': "5-S: Shark",
         'region': "5-S",
         'game_id': "fish11"},
 
@@ -506,6 +526,9 @@ location_table: List[LocationDict] = [
     {'name': "5-3: Secret #5",
         'region': "5-3",
         'game_id': "22_s5"},
+    {'name': "5-3: Assemble Hank Jr.",
+        'region': "5-3",
+        'game_id': "22_ha"},
     {'name': "5-3: Don't touch any water",
         'region': "5-3",
         'game_id': "22_c"},
@@ -597,6 +620,18 @@ location_table: List[LocationDict] = [
     {'name': "7-2: Secret #5",
         'region': "7-2",
         'game_id': "27_s5"},
+    {'name': "7-2: Switch #1",
+        'region': "7-2",
+        'game_id': "27_sw1"},
+    {'name': "7-2: Switch #2",
+        'region': "7-2",
+        'game_id': "27_sw2"},
+    {'name': "7-2: Switch #3",
+        'region': "7-2",
+        'game_id': "27_sw3"},
+    {'name': "7-2: Secret Weapon",
+        'region': "7-2",
+        'game_id': "27_w2"},
     {'name': "7-2: Don't kill any enemies",
         'region': "7-2",
         'game_id': "27_c"},
@@ -627,6 +662,23 @@ location_table: List[LocationDict] = [
         'region': "7-3",
         'game_id': "28_p"},
 
+    # 7-S: HELL BATH NO FURY
+    {'name': "7-S: Cleaned Courtyard",
+        'region': "7-S",
+        'game_id': "clean0"},
+    {'name': "7-S: Cleaned Library",
+        'region': "7-S",
+        'game_id': "clean1"},
+    {'name': "7-S: Cleaned Lobby",
+        'region': "7-S",
+        'game_id': "clean2"},
+    {'name': "7-S: Cleaned Lounge",
+        'region': "7-S",
+        'game_id': "clean3"},
+    {'name': "7-S: Cleaned Side Room",
+        'region': "7-S",
+        'game_id': "clean4"},
+
     # 7-4: ...LIKE ANTENNAS TO HEAVEN
     {'name': '7-4: Defeat 1000-THR "Earthmover"',
         'region': "7-4",
@@ -645,21 +697,37 @@ location_table: List[LocationDict] = [
     {'name': "Shop: Buy Revolver Variant 2",
         'region': "shop",
         'game_id': "shop_rev1"},
-    {'name': "Shop: Buy Shotgun Variant",
+    {'name': "Shop: Buy Shotgun Variant 1",
         'region': "shop",
         'game_id': "shop_sho1"},
-    {'name': "Shop: Buy Nailgun Variant",
+    {'name': "Shop: Buy Shotgun Variant 2",
+        'region': "shop",
+        'game_id': "shop_sho2"},
+    {'name': "Shop: Buy Nailgun Variant 1",
         'region': "shop",
         'game_id': "shop_nai1"},
+    {'name': "Shop: Buy Nailgun Variant 2",
+        'region': "shop",
+        'game_id': "shop_nai2"},
     {'name': "Shop: Buy Railcannon Variant 1",
         'region': "shop",
         'game_id': "shop_rai1"},
     {'name': "Shop: Buy Railcannon Variant 2",
         'region': "shop",
         'game_id': "shop_rai2"},
-    {'name': "Shop: Buy Rocket Launcher Variant",
+    {'name': "Shop: Buy Rocket Launcher Variant 1",
         'region': "shop",
         'game_id': "shop_rock1"},
+    {'name': "Shop: Buy Rocket Launcher Variant 2",
+        'region': "shop",
+        'game_id': "shop_rock2"},
+
+    {'name': "Museum: Win chess",
+        'region': "museum",
+        'game_id': "chess"},
+    {'name': "Museum: Win rocket race",
+        'region': "museum",
+        'game_id': "rr"},
 ]
 
 
@@ -732,6 +800,8 @@ event_table: List[LocationDict] = [
         'region': "7-3"},
     {'name': "Cleared 7-4",
         'region': "7-4"},
+    {'name': "Cleared 7-S",
+        'region': "7-S"},
     {'name': "Cleared P-1",
         'region': "P-1"},
     {'name': "Cleared P-2",
@@ -739,7 +809,22 @@ event_table: List[LocationDict] = [
 ]
 
 
-ext_bosses: Set[str] = [
+ext_bosses: Set[str] = {
     "1-2: Defeat the Very Cancerous Rodent",
     "4-3: Defeat the Mysterious Druid Knight (& Owl)"
-]
+}
+
+
+limbo_switches: Set[str] = {
+    "1-1: Switch",
+    "1-2: Switch",
+    "1-3: Switch",
+    "1-4: Switch"
+}
+
+
+violence_switches: Set[str] = {
+    "7-2: Switch #1",
+    "7-2: Switch #2",
+    "7-2: Switch #3"
+}

@@ -21,10 +21,12 @@ namespace ArchipelagoULTRAKILL.Patches
                     case "sho":
                         if (GameProgressSaver.CheckGear("sho0") == 1) hasWeapon = true;
                         if (GameProgressSaver.CheckGear("sho1") == 1) hasWeapon = true;
+                        if (GameProgressSaver.CheckGear("sho2") == 1) hasWeapon = true;
                         break;
                     case "nai":
                         if (GameProgressSaver.CheckGear("nai0") == 1) hasWeapon = true;
                         if (GameProgressSaver.CheckGear("nai1") == 1) hasWeapon = true;
+                        if (GameProgressSaver.CheckGear("nai2") == 1) hasWeapon = true;
                         break;
                     case "rai":
                         if (GameProgressSaver.CheckGear("rai0") == 1) hasWeapon = true;
@@ -34,6 +36,7 @@ namespace ArchipelagoULTRAKILL.Patches
                     case "rock":
                         if (GameProgressSaver.CheckGear("rock0") == 1) hasWeapon = true;
                         if (GameProgressSaver.CheckGear("rock1") == 1) hasWeapon = true;
+                        if (GameProgressSaver.CheckGear("rock2") == 1) hasWeapon = true;
                         break;
                     case "arm":
                         if (Core.data.hasArm) hasWeapon = true;

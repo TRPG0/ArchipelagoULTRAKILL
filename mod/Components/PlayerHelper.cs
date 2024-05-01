@@ -12,6 +12,7 @@ namespace ArchipelagoULTRAKILL.Components
         public NewMovement nm;
         public Traverse nmT;
 
+        public bool CanGetPowerup { get; internal set; } = false;
         public static Powerup CurrentPowerup { get; private set; }
 
         public void Init(NewMovement nm)
@@ -20,6 +21,12 @@ namespace ArchipelagoULTRAKILL.Components
             this.nm = nm;
             nmT = Traverse.Create(nm);
             CurrentPowerup = Powerup.None;
+        }
+
+        public void Start()
+        {
+            GunControl.Instance.NoWeapon();
+            GunControl.Instance.YesWeapon();
         }
 
         public void OnDestroy()
@@ -31,11 +38,10 @@ namespace ArchipelagoULTRAKILL.Components
         {
             if (Core.IsPlaying)
             {
-                GetQueuedItems();
                 DisplayMessage();
                 UpdateStats();
                 UpdateWeapons();
-                if (CurrentPowerup == Powerup.None && PowerUpMeter.Instance != null) GetQueuedPowerups();
+                if (CanGetPowerup && CurrentPowerup == Powerup.None && PowerUpMeter.Instance != null) GetQueuedPowerups();
             }
         }
 
@@ -148,7 +154,7 @@ namespace ArchipelagoULTRAKILL.Components
         public void UpdateWeapons()
         {
             // feedbacker
-            if (!Core.data.hasArm && FistControl.Instance.currentPunch.type == FistType.Standard && SceneHelper.CurrentScene != "Level 5-S")
+            if (!Core.data.hasArm && FistControl.Instance.currentPunch && FistControl.Instance.currentPunch.type == FistType.Standard && SceneHelper.CurrentScene != "Level 5-S")
             {
                 FistControl.Instance.currentPunch.ready = false;
             }
@@ -193,6 +199,12 @@ namespace ArchipelagoULTRAKILL.Components
                     Traverse.Create(InputManager.Instance.InputSource.Fire2).Property("IsPressed").SetValue(false);
                 }
 
+                // sawed-on
+                if (!Core.data.unlockedFire2.Contains("sho2"))
+                {
+                    WeaponCharges.Instance.shoSawCharge = 0;
+                }
+
                 // attractor
                 if (!Core.data.unlockedFire2.Contains("nai0"))
                 {
@@ -212,10 +224,16 @@ namespace ArchipelagoULTRAKILL.Components
                 {
                     WeaponCharges.Instance.rocketCannonballCharge = 0;
                 }
+
+                // firestarter
+                if (!Core.data.unlockedFire2.Contains("rock2"))
+                {
+                    WeaponCharges.Instance.rocketNapalmFuel = 0;
+                }
             }
         }
 
-        public static string GetHeldWeapon()
+        public string GetHeldWeapon()
         {
             if (GunControl.Instance.currentWeapon == null) return "?";
 
@@ -233,6 +251,7 @@ namespace ArchipelagoULTRAKILL.Components
                 }
             }
             else if (GunControl.Instance.currentWeapon.GetComponent<Shotgun>()) return $"sho{GunControl.Instance.currentWeapon.GetComponent<Shotgun>().variation}";
+            else if (GunControl.Instance.currentWeapon.GetComponent<ShotgunHammer>()) return $"sho{GunControl.Instance.currentWeapon.GetComponent<ShotgunHammer>().variation}";
             else if (GunControl.Instance.currentWeapon.GetComponent<Nailgun>())
             {
                 switch (GunControl.Instance.currentWeapon.GetComponent<Nailgun>().variation)
@@ -242,11 +261,23 @@ namespace ArchipelagoULTRAKILL.Components
                         return "nai1";
                     case 1:
                         return "nai0";
+                    case 2:
+                        return "nai2";
                 }
             }
             else if (GunControl.Instance.currentWeapon.GetComponent<Railcannon>()) return $"rai{GunControl.Instance.currentWeapon.GetComponent<Railcannon>().variation}";
             else if (GunControl.Instance.currentWeapon.GetComponent<RocketLauncher>()) return $"rock{GunControl.Instance.currentWeapon.GetComponent<RocketLauncher>().variation}";
             else return "?";
+        }
+
+        public bool IsWeaponAlternate()
+        {
+            if (GunControl.Instance.currentWeapon == null) return false;
+
+            if (GunControl.Instance.currentWeapon.GetComponent<Revolver>()) return GunControl.Instance.currentWeapon.GetComponent<Revolver>().altVersion;
+            else if (GunControl.Instance.currentWeapon.GetComponent<ShotgunHammer>()) return true;
+            else if (GunControl.Instance.currentWeapon.GetComponent<Nailgun>()) return GunControl.Instance.currentWeapon.GetComponent<Nailgun>().altVersion;
+            else return false;
         }
     }
 }

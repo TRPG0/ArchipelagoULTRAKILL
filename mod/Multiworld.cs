@@ -10,13 +10,14 @@ using ArchipelagoULTRAKILL.Structures;
 using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 using Newtonsoft.Json;
-using TMPro;
+using Archipelago.MultiClient.Net.Models;
+using Color = UnityEngine.Color;
 
 namespace ArchipelagoULTRAKILL
 {
     public static class Multiworld
     {
-        public static int[] AP_VERSION = new int[] { 0, 4, 4 };
+        public static int[] AP_VERSION = new int[] { 0, 4, 6 };
         public static DeathLinkService DeathLinkService = null;
         public static bool DeathLinkKilling = false;
 
@@ -98,6 +99,16 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
+        public static void TryGetSlotDataValue(ref WeaponForm option, Dictionary<string, object> slotData, string key, WeaponForm defaultValue)
+        {
+            try { option = (WeaponForm)int.Parse(slotData[key].ToString()); }
+            catch (KeyNotFoundException)
+            {
+                Core.Logger.LogWarning($"No key found for option \"{key}\". Using default value ({defaultValue})");
+                option = defaultValue;
+            }
+        }
+
         public static bool Connect()
         {
             if (Authenticated)
@@ -114,7 +125,7 @@ namespace ArchipelagoULTRAKILL
             LoginResult loginResult = Session.TryConnectAndLogin(
                 "ULTRAKILL",
                 Core.data.slot_name,
-                ItemsHandlingFlags.IncludeStartingInventory,
+                ItemsHandlingFlags.AllItems,
                 new Version(AP_VERSION[0], AP_VERSION[1], AP_VERSION[2]),
                 null,
                 null,
@@ -139,14 +150,60 @@ namespace ArchipelagoULTRAKILL
                 TryGetSlotDataValue(ref Core.data.bossRewards, success.SlotData, "boss_rewards", BossOptions.Disabled);
                 TryGetSlotDataValue(ref Core.data.challengeRewards, success.SlotData, "challenge_rewards", false);
                 TryGetSlotDataValue(ref Core.data.pRankRewards, success.SlotData, "p_rank_rewards", false);
+                TryGetSlotDataValue(ref Core.data.hankRewards, success.SlotData, "hank_rewards", false);
+                TryGetSlotDataValue(ref Core.data.clashReward, success.SlotData, "randomize_clash_mode", false);
                 TryGetSlotDataValue(ref Core.data.fishRewards, success.SlotData, "fish_rewards", false);
+                TryGetSlotDataValue(ref Core.data.cleanRewards, success.SlotData, "cleaning_rewards", false);
+                TryGetSlotDataValue(ref Core.data.chessReward, success.SlotData, "chess_reward", false);
+                TryGetSlotDataValue(ref Core.data.rocketReward, success.SlotData, "rocket_race_reward", false);
                 TryGetSlotDataValue(ref Core.data.randomizeFire2, success.SlotData, "randomize_secondary_fire", false);
+                TryGetSlotDataValue(ref Core.data.revForm, success.SlotData, "revolver_form", WeaponForm.Standard);
+                TryGetSlotDataValue(ref Core.data.shoForm, success.SlotData, "shotgun_form", WeaponForm.Standard);
+                TryGetSlotDataValue(ref Core.data.naiForm, success.SlotData, "nailgun_form", WeaponForm.Standard);
                 TryGetSlotDataValue(ref Core.data.randomizeSkulls, success.SlotData, "randomize_skulls", false);
+                TryGetSlotDataValue(ref Core.data.l1switch, success.SlotData, "randomize_limbo_switches", false);
+                TryGetSlotDataValue(ref Core.data.l7switch, success.SlotData, "randomize_violence_switches", false);
 
-                if (Core.data.randomizeSkulls && UIManager.skullIcons.Count == 0) UIManager.CreateSkullIcons();
+                if (Core.data.randomizeSkulls && !UIManager.createdSkullIcons) UIManager.CreateSkullIcons();
 
                 if (!Core.DataExists())
                 {
+                    if (Core.data.revForm == WeaponForm.Standard)
+                    {
+                        Core.data.revstd = true;
+                        Core.data.revalt = false;
+                    }
+                    else
+                    {
+                        Core.data.revstd = false;
+                        Core.data.revalt = true;
+                        GameProgressSaver.AddGear("revalt");
+                    }
+
+                    if (Core.data.shoForm == WeaponForm.Standard)
+                    {
+                        Core.data.shostd = true;
+                        Core.data.shoalt = false;
+                    }
+                    else
+                    {
+                        Core.data.shostd = false;
+                        Core.data.shoalt = true;
+                        GameProgressSaver.AddGear("shoalt");
+                    }
+
+                    if (Core.data.naiForm == WeaponForm.Standard)
+                    {
+                        Core.data.naistd = true;
+                        Core.data.naialt = false;
+                    }
+                    else
+                    {
+                        Core.data.naistd = false;
+                        Core.data.naialt = true;
+                        GameProgressSaver.AddGear("naialt");
+                    }
+
                     TryGetSlotDataValue(ref Core.data.hasArm, success.SlotData, "start_with_arm", true);
                     TryGetSlotDataValue(ref Core.data.dashes, success.SlotData, "starting_stamina", 3);
                     TryGetSlotDataValue(ref Core.data.walljumps, success.SlotData, "starting_walljumps", 3);
@@ -188,54 +245,7 @@ namespace ArchipelagoULTRAKILL
 
                 PrefsManager.Instance.SetInt("weapon.arm0", 1);
 
-                LocationManager.locations.Clear();
-
-                foreach (RawLocationData data in ((JArray)success.SlotData["locations"]).ToObject<RawLocationData[]>())
-                {
-                    AItem item;
-                    if (data.ukitem)
-                    {
-                        item = new UKItem()
-                        {
-                            itemName = data.item_name,
-                            playerName = data.player_name,
-                            type = (UKType)int.Parse(data.item_type)
-                        };
-                    }
-                    else
-                    {
-                        item = new APItem()
-                        {
-                            itemName = data.item_name,
-                            playerName = data.player_name,
-                            type = (ItemFlags)int.Parse(data.item_type)
-                        };
-                    }
-
-                    LocationManager.locations.Add(data.id, new Location() 
-                    {
-                        id = data.id,
-                        ap_id = data.ap_id,
-                        item = item,
-                        @checked = Core.data.@checked.Contains(data.id)
-                    });
-                }
-
-                if (Core.DataExists())
-                {
-                    if (Core.data.@checked.Count > 0)
-                    {
-                        foreach (string loc in Core.data.@checked)
-                        {
-                            LocationManager.CheckLocation(loc);
-                            if (LocationManager.locations[loc].item is UKItem ukitem && LocationManager.ShouldGetItemAgain(ukitem.type))
-                            {
-                                LocationManager.GetUKItem(ukitem, null, true, false);
-                            }
-                        }
-                        Core.SaveData();
-                    }
-                }
+                LocationManager.locations = ((JObject)success.SlotData["locations"]).ToObject<Dictionary<string, long>>();
 
                 ConfigManager.LoadStats();
                 Core.Logger.LogInfo("Successfully connected to server as player \"" + Core.data.slot_name + "\".");
@@ -243,6 +253,38 @@ namespace ArchipelagoULTRAKILL
                 UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
                 string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
                 UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
+
+                foreach (string weapon in Core.shopPrices.Keys)
+                {
+                    LocationInfoPacket info = Session.Locations.ScoutLocationsAsync(false, LocationManager.locations[$"shop_{weapon}"]).Result;
+                    long itemId = info.Locations[0].Item;
+                    string itemName = Session.Items.GetItemName(itemId);
+                    string playerName = Session.Players.GetPlayerName(info.Locations[0].Player);
+                    UKType? type = LocationManager.GetTypeFromName(itemName);
+                    if (type.HasValue)
+                    {
+                        LocationManager.shopScouts.Add($"shop_{weapon}", new UKItem()
+                        {
+                            itemName = itemName,
+                            playerName = playerName,
+                            type = type.Value
+                        });
+                    }
+                    else
+                    {
+                        LocationManager.shopScouts.Add($"shop_{weapon}", new APItem()
+                        {
+                            itemName = itemName,
+                            playerName = playerName,
+                            type = info.Locations[0].Flags
+                        });
+                    }
+                }
+
+                foreach (string loc in Core.data.@checked)
+                {
+                    LocationManager.CheckLocation(loc);
+                }
             }
             else if (loginResult is LoginFailure failure)
             {
@@ -325,6 +367,7 @@ namespace ArchipelagoULTRAKILL
             //Debug.Log("Disconnected from Archipelago server.");
             UIManager.SetLogText("");
             messages.Clear();
+            LocationManager.shopScouts = new Dictionary<string, AItem>();
             Session = null;
             DeathLinkService = null;
             Authenticated = false;
@@ -357,6 +400,35 @@ namespace ArchipelagoULTRAKILL
                         string richText = "";
                         string plainText = "";
                         string color = "<color=#" + ColorUtility.ToHtmlStringRGB(Colors.White) + "FF>";
+
+                        if (p.Data[0].Type == JsonMessagePartType.PlayerId
+                            && Session.Players.GetPlayerName(int.Parse(p.Data[0].Text)) == Core.data.slot_name
+                            && p.Data[1].Text == " sent ")
+                        {
+                            string itemName = Session.Items.GetItemName(long.Parse(p.Data[2].Text));
+                            string forPlayer = Session.Players.GetPlayerAlias(int.Parse(p.Data[4].Text));
+                            Color messageColor = Color.white;
+
+                            UKType? type = LocationManager.GetTypeFromName(itemName);
+                            if (type.HasValue)
+                            {
+                                LocationManager.messages.Add(new Message()
+                                {
+                                    image = LocationManager.GetUKMessageImage(itemName),
+                                    color = Colors.Gray,
+                                    message = $"FOUND: <color=#{ColorUtility.ToHtmlStringRGBA(messageColor)}>{itemName.ToUpper()}</color> (<color=#{ColorUtility.ToHtmlStringRGBA(Colors.PlayerOther)}>{forPlayer}</color>)"
+                                });
+                            }
+                            else
+                            {
+                                LocationManager.messages.Add(new Message()
+                                {
+                                    image = "archipelago",
+                                    color = LocationManager.GetAPMessageColor(p.Data[2].Flags.Value),
+                                    message = $"FOUND: <color=#{ColorUtility.ToHtmlStringRGBA(messageColor)}>{itemName.ToUpper()}</color> (<color=#{ColorUtility.ToHtmlStringRGBA(Colors.PlayerOther)}>{forPlayer}</color>)"
+                                });
+                            }
+                        }
 
                         foreach (var messagePart in p.Data)
                         {
@@ -435,24 +507,24 @@ namespace ArchipelagoULTRAKILL
 
         public static void ItemReceived(ReceivedItemsHelper helper)
         {
-            bool shouldGetItemAgain = LocationManager.ShouldGetItemAgain(LocationManager.GetTypeFromName(helper.PeekItemName()));
+            bool shouldGetItemAgain = LocationManager.ShouldGetItemAgain(LocationManager.GetTypeFromName(helper.PeekItemName()).Value);
             bool silent = !(helper.Index > Core.data.index) && shouldGetItemAgain;
             if (helper.Index > Core.data.index || shouldGetItemAgain)
             {
                 string name = helper.PeekItemName();
-                string player = (Session.Players.GetPlayerAlias(helper.PeekItem().Player) == "") ? "?" : Session.Players.GetPlayerAlias(helper.PeekItem().Player);
+                string player = Session.Players.GetPlayerName(helper.PeekItem().Player);
+                if (player == Core.data.slot_name) player = null;
+                else player = (Session.Players.GetPlayerAlias(helper.PeekItem().Player) == "") ? "?" : Session.Players.GetPlayerAlias(helper.PeekItem().Player);
                 if (helper.Index > Core.data.index) Core.Logger.LogInfo("Name: \"" + name + "\" | Type: " + LocationManager.GetTypeFromName(name) + " | Player: \"" + player + "\"");
 
                 UKItem item = new UKItem()
                 {
                     itemName = name,
-                    type = LocationManager.GetTypeFromName(name),
+                    type = LocationManager.GetTypeFromName(name).Value,
                     playerName = Core.data.slot_name
                 };
 
-                if (item.type == UKType.Level || item.type == UKType.Layer || item.type == UKType.Skull) LocationManager.GetUKItem(item, player, silent);
-                else LocationManager.itemQueue.Add(new QueuedItem(item, player, silent));
-
+                LocationManager.itemQueue.Add(new QueuedItem(item, player, silent));
                 if (helper.Index > Core.data.index) Core.data.index++;
             }
             helper.DequeueItem();

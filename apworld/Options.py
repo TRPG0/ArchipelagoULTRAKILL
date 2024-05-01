@@ -1,4 +1,5 @@
-from Options import Choice, Range, Toggle, DefaultOnToggle, DeathLink
+from dataclasses import dataclass
+from Options import Choice, Range, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions
 
 
 class Goal(Choice):
@@ -65,9 +66,34 @@ class PRanks(Toggle):
     display_name = "P Rank Rewards"
 
 
+class HankRewards(Toggle):
+    """Adds rewards for giving Hank and Hank Jr. a head in 1-4 and 5-3."""
+    display_name = "Hank Rewards"
+
+
+class ClashReward(Toggle):
+    """Randomizes the unlock for destroying all crates in 4-S."""
+    display_name = "Randomize Clash Mode"
+
+
 class FishRewards(Toggle):
     """Adds rewards for catching each fish in 5-S."""
     display_name = "Fish Rewards"
+
+
+class CleanRewards(Toggle):
+    """Adds rewards for cleaning every room in 7-S."""
+    display_name = "Cleaning Rewards"
+
+
+class ChessReward(Toggle):
+    """Adds a reward for winning chess against a bot in the Developer Museum."""
+    display_name = "Chess Reward"
+
+
+class RocketRaceReward(Toggle):
+    """Adds a reward for winning the rocket race in the Developer Museum."""
+    display_name = "Rocket Race Reward"
 
 
 class StartingWeapon(Choice):
@@ -75,7 +101,8 @@ class StartingWeapon(Choice):
     display_name = "Starting Weapon"
     option_revolver = 0
     option_any_weapon = 1
-    option_any_weapon_or_arm = 2
+    option_any_arm = 2
+    option_any_weapon_or_arm = 3
     default = 1
 
 
@@ -115,9 +142,46 @@ class StartWithSlam(DefaultOnToggle):
     display_name = "Start with Slam"
 
 
+class RevForm(Choice):
+    """Choose whether the revolver should be in its standard or alternate form initially.
+    The other form must be unlocked."""
+    display_name = "Revolver Form"
+    option_standard = 0
+    option_alternate = 1
+    default = 0
+
+
+class ShoForm(Choice):
+    """Choose whether the shotgun should be in its standard or alternate form initially.
+    The other form must be unlocked."""
+    display_name = "Shotgun Form"
+    option_standard = 0
+    option_alternate = 1
+    default = 0
+
+
+class NaiForm(Choice):
+    """Choose whether the nailgun should be in its standard or alternate form initially.
+    The other form must be unlocked."""
+    display_name = "Nailgun Form"
+    option_standard = 0
+    option_alternate = 1
+    default = 0
+
+
 class RandomizeSkulls(Toggle):
     """Turns the red and blue skulls into items that must be found before they will appear in levels."""
     display_name = "Randomize Skulls"
+
+
+class LimboSwitch(Toggle):
+    """Randomizes the four switches in the Limbo layer."""
+    display_name = "Randomize Limbo Switches"
+
+
+class ViolenceSwitch(Toggle):
+    """Randomizes the three switches in 7-2."""
+    display_name = "Randomize Violence Switches"
 
 
 class PointMultiplier(Range):
@@ -166,28 +230,38 @@ class UltrakillDeathLink(DeathLink):
     This option can be changed later."""
 
 
-ultrakill_options = {
-    "goal": Goal,
-    "goal_requirement": GoalRequirement,
-    "include_secret_mission_completion": SecretMissionClear,
-    "unlock_type": UnlockType,
-    "trap_percent": TrapPercent,
-    "boss_rewards": BossRewards,
-    "challenge_rewards": Challenges,
-    "p_rank_rewards": PRanks,
-    "fish_rewards": FishRewards,
-    "starting_weapon": StartingWeapon,
-    "randomize_secondary_fire": RandomizeFire2,
-    "start_with_arm": StartWithArm,
-    "starting_stamina": StartingStamina,
-    "starting_walljumps": StartingWalljumps,
-    "start_with_slide": StartWithSlide,
-    "start_with_slam": StartWithSlam,
-    "randomize_skulls": RandomizeSkulls,
-    "point_multiplier": PointMultiplier,
-    "ui_color_randomizer": UIColorRando,
-    "gun_color_randomizer": GunColorRando,
-    "music_randomizer": MusicRando,
-    "cybergrind_hints": CybergrindHints,
-    "death_link": UltrakillDeathLink
-}
+@dataclass
+class UltrakillOptions(PerGameCommonOptions):
+    goal: Goal
+    goal_requirement: GoalRequirement
+    include_secret_mission_completion: SecretMissionClear
+    unlock_type: UnlockType
+    trap_percent: TrapPercent
+    boss_rewards: BossRewards
+    challenge_rewards: Challenges
+    p_rank_rewards: PRanks
+    hank_rewards: HankRewards
+    randomize_clash_mode: ClashReward
+    fish_rewards: FishRewards
+    cleaning_rewards: CleanRewards
+    chess_reward: ChessReward
+    rocket_race_reward: RocketRaceReward
+    starting_weapon: StartingWeapon
+    randomize_secondary_fire: RandomizeFire2
+    start_with_arm: StartWithArm
+    starting_stamina: StartingStamina
+    starting_walljumps: StartingWalljumps
+    start_with_slide: StartWithSlide
+    start_with_slam: StartWithSlam
+    revolver_form: RevForm
+    shotgun_form: ShoForm
+    nailgun_form: NaiForm
+    randomize_skulls: RandomizeSkulls
+    randomize_limbo_switches: LimboSwitch
+    randomize_violence_switches: ViolenceSwitch
+    point_multiplier: PointMultiplier
+    ui_color_randomizer: UIColorRando
+    gun_color_randomizer: GunColorRando
+    music_randomizer: MusicRando
+    cybergrind_hints: CybergrindHints
+    death_link: UltrakillDeathLink

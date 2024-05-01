@@ -24,7 +24,12 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists())
             {
-                PlayerHelper.Instance.EndPowerup();
+                if (PlayerHelper.Instance)
+                {
+                    PlayerHelper.Instance.EndPowerup();
+                    PlayerHelper.Instance.CanGetPowerup = false;
+                }
+                
                 if (AssistController.Instance.cheatsEnabled)
                 {
                     Core.Logger.LogWarning("Cheats enabled! Completion not counted.");

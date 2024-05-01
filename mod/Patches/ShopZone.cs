@@ -8,9 +8,12 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix(ShopZone __instance)
         {
-            foreach (VariationInfo variation in Traverse.Create(__instance).Field<Canvas>("shopCanvas").Value.GetComponentsInChildren<VariationInfo>())
+            if (Core.DataExists())
             {
-                LevelManager.UpdateShopVariation(variation);
+                foreach (VariationInfo variation in Traverse.Create(__instance).Field<Canvas>("shopCanvas").Value.GetComponentsInChildren<VariationInfo>())
+                {
+                    LevelManager.UpdateShopVariation(variation);
+                }
             }
         }
     }

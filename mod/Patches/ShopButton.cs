@@ -14,7 +14,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static bool Prefix(ShopButton __instance)
         {
-            if (__instance.variationInfo != null && Core.DataExists() && !(__instance.variationInfo.weaponName == "sho2" || __instance.variationInfo.weaponName == "nai2" || __instance.variationInfo.weaponName == "rock2"))
+            if (__instance.variationInfo != null && Core.DataExists())
             {
                 if (__instance.variationInfo.weaponName.Contains("0")) return false;
                 if (GameProgressSaver.GetMoney() >= Core.shopPrices[__instance.variationInfo.weaponName] && !__instance.deactivated)

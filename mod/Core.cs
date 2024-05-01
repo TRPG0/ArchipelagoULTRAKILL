@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "2.0.7";
+        public const string PluginVersion = "2.1.0";
 
         public static string workingPath;
         public static string workingDir;
@@ -37,8 +37,8 @@ namespace ArchipelagoULTRAKILL
         public static bool IsPitFalling => GameStateManager.Instance.IsStateActive("pit-falling");
         public static bool IsPaused => GameStateManager.Instance.IsStateActive("pause") || GameStateManager.Instance.IsStateActive("pit-falling");
         public static bool IsInLevel => !GameStateManager.Instance.IsStateActive("main-menu") && !GameStateManager.Instance.IsStateActive("intro");
-        public static bool IsPlaying => IsInLevel && !IsPaused && PlayerHelper.Instance != null;
-        public static bool CanGetWeapon => IsPlaying && GunSetter.Instance != null;
+        public static bool IsPlaying => IsInLevel && !IsPaused && PlayerHelper.Instance;
+        public static bool CanGetWeapon => IsInLevel && PlayerHelper.Instance && GunSetter.Instance;
 
         public static Data data = new Data();
         public static bool firstTimeLoad = false;
@@ -78,6 +78,12 @@ namespace ArchipelagoULTRAKILL
             new LevelInfo("P-2", 667, 667, false, MusicType.Special, SkullsType.None)
         };
 
+        public static readonly List<LevelInfo> secretMissionInfos = new List<LevelInfo>()
+        {
+            new LevelInfo("0-S", 0, 0, false, MusicType.Skip, SkullsType.Normal, new List<string> { "0S_r", "0S_b" }),
+            new LevelInfo("7-S", 0, 7, false, MusicType.Skip, SkullsType.Normal, new List<string> { "7S_b", "7S_r" })
+        };
+
         public static List<string> AllLevels
         {
             get
@@ -96,7 +102,7 @@ namespace ArchipelagoULTRAKILL
         {
             get
             {
-                if (SceneHelper.CurrentScene == "Level 0-S") return true;
+                if (SceneHelper.CurrentScene == "Level 0-S" || SceneHelper.CurrentScene == "Level 7-S") return true;
                 else return SceneHelper.CurrentScene.Contains("Level ") && !SceneHelper.IsSceneRankless;
             }
         }
@@ -105,7 +111,8 @@ namespace ArchipelagoULTRAKILL
         {
             get
             {
-                if (SceneHelper.CurrentScene == "Level 0-S") return new LevelInfo("0-S", 0, 0, false, MusicType.Skip, SkullsType.Normal);
+                if (SceneHelper.CurrentScene == "Level 0-S") return secretMissionInfos[0];
+                else if (SceneHelper.CurrentScene == "Level 7-S") return secretMissionInfos[1];
                 else if (CurrentLevelHasInfo) return GetLevelInfo(SceneHelper.CurrentLevelNumber);
                 else return null;
             }
@@ -201,7 +208,7 @@ namespace ArchipelagoULTRAKILL
             UIManager.displayingMessage = false;
             UIManager.levels.Clear();
             UIManager.secrets.Clear();
-            UIManager.skullIcons.Clear();
+            UIManager.createdSkullIcons = false;
             uim.deathLinkMessage = null;
 
             LevelManager.skulls.Clear();
@@ -219,7 +226,7 @@ namespace ArchipelagoULTRAKILL
 
                 if (UIManager.log == null) uim.CreateLogObject();
 
-                if (DataExists() && !firstTimeLoad)
+                if (DataExists() && GameProgressSaver.GetTutorial() && !firstTimeLoad)
                 {
                     LoadData();
                     ConfigManager.LoadConnectionInfo();
@@ -244,12 +251,22 @@ namespace ArchipelagoULTRAKILL
             if (!IsInIntro) OptionsManager.Instance.optionsMenu.gameObject.AddComponent<OptionsMenuState>();
 
             if (DataExists() && UIManager.log != null) UIManager.AdjustLogBounds();
-            if (DataExists() && SceneHelper.CurrentScene == "Level 1-2" && GameProgressSaver.GetGeneralProgress().nai0 == 0) LevelManager.DeactivateNailgun();
+
+            if (DataExists() && SceneHelper.CurrentScene == "Level 0-1") LevelManager.ChangeIntro();
+            else if (DataExists() && SceneHelper.CurrentScene == "Level 1-2" && GameProgressSaver.GetGeneralProgress().nai0 == 0) LevelManager.DeactivateNailgun();
+            else if (DataExists() && (SceneHelper.CurrentScene == "Level 1-4" || SceneHelper.CurrentScene == "Level 5-3") && data.hankRewards) LevelManager.FindHank();
+            else if (DataExists() && SceneHelper.CurrentScene == "CreditsMuseum2") LevelManager.FindRocketRaceButton();
         }
 
         public static bool DataExists()
         {
             string filePath = Path.Combine(GameProgressSaver.BaseSavePath, string.Format("Slot{0}", GameProgressSaver.currentSlot + 1)) + "\\archipelago.json";
+            return File.Exists(filePath);
+        }
+
+        public static bool DataExists(int slotId)
+        {
+            string filePath = Path.Combine(GameProgressSaver.BaseSavePath, string.Format("Slot{0}", slotId)) + "\\archipelago.json";
             return File.Exists(filePath);
         }
 
@@ -293,16 +310,38 @@ namespace ArchipelagoULTRAKILL
             GameProgressMoneyAndGear save = GameProgressSaver.GetGeneralProgress();
 
             // Piercer
-            if (save.rev0 > 0 && IsFire2Unlocked("rev0")) return true;
+            if (save.rev0 > 0)
+            {
+                if (data.revForm == WeaponForm.Standard && IsFire2Unlocked("rev0")) return true;
+                else if (data.revForm == WeaponForm.Alternate) return true;
+            }
             // Sharpshooter
-            if (save.rev1 > 0 && IsFire2Unlocked("rev1")) return true;
+            if (save.rev1 > 0)
+            {
+                if (data.revForm == WeaponForm.Standard && IsFire2Unlocked("rev1")) return true;
+                else if (data.revForm == WeaponForm.Alternate) return true;
+            }
             // Marksman
-            if (save.rev2 > 0 && IsFire2Unlocked("rev2")) return true;
+            if (save.rev2 > 0)
+            {
+                if (data.revForm == WeaponForm.Standard && IsFire2Unlocked("rev2")) return true;
+                else if (data.revForm == WeaponForm.Alternate) return true;
+            }
 
             // Core Eject
-            if (save.sho0 > 0 && IsFire2Unlocked("sho0")) return true;
+            if (save.sho0 > 0)
+            {
+                if (data.shoForm == WeaponForm.Standard && IsFire2Unlocked("sho0")) return true;
+                else if (data.shoForm == WeaponForm.Alternate) return true;
+            }
             // Pump Charge
-            if (save.sho1 > 0 && IsFire2Unlocked("sho1")) return true;
+            if (save.sho1 > 0)
+            {
+                if (data.shoForm == WeaponForm.Standard && IsFire2Unlocked("sho1")) return true;
+                else if (data.shoForm == WeaponForm.Alternate) return true;
+            }
+            // Sawed-On
+            if (save.sho2 > 0 && data.shoForm == WeaponForm.Alternate) return true;
 
             // Electric
             if (save.rai0 > 0) return true;
@@ -313,6 +352,8 @@ namespace ArchipelagoULTRAKILL
             if (save.rock0 > 0) return true;
             // S.R.S. Cannon
             if (save.rock1 > 0) return true;
+            // Firestarter
+            if (save.rock2 > 0) return true;
 
             // Knuckleblaster
             if (save.arm1 > 0) return true;
@@ -328,6 +369,7 @@ namespace ArchipelagoULTRAKILL
 
             if (FistControl.Instance.currentPunch != null)
             {
+                if (FistControl.Instance.currentPunch.type == FistType.Standard && !data.hasArm) return;
                 if (!FistControl.Instance.currentPunch.holding)
                 {
                     FistControl.Instance.currentPunch.ForceHold(obj.GetComponent<ItemIdentifier>());

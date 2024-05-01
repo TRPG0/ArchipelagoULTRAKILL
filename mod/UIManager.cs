@@ -32,7 +32,7 @@ namespace ArchipelagoULTRAKILL
         public static GameObject menuIcon;
         public static TextMeshProUGUI goalCount;
 
-        public static List<GameObject> skullIcons = new List<GameObject>();
+        public static bool createdSkullIcons = false;
 
         public static GameObject hud;
         public static GameObject popupCanvas;
@@ -41,6 +41,16 @@ namespace ArchipelagoULTRAKILL
         public static bool displayingMessage = false;
 
         public DeathLinkMessage deathLinkMessage = null;
+
+        public void Update()
+        {
+            if (LocationManager.itemQueue.Count > 0)
+            {
+                QueuedItem qItem = LocationManager.itemQueue[0];
+                LocationManager.GetUKItem(qItem.item, qItem.sendingPlayer, qItem.silent);
+                LocationManager.itemQueue.RemoveAt(0);
+            }
+        }
 
         public void CreateLogObject()
         {
@@ -296,7 +306,7 @@ namespace ArchipelagoULTRAKILL
             foreach (SecretMissionPanel component in canvas.GetComponentsInChildren<SecretMissionPanel>(true))
             {
                 //logger.LogInfo(component.gameObject.transform.parent.name + ", " + component.gameObject.name);
-                switch (component.gameObject.transform.parent.name)
+                switch (component.gameObject.transform.parent.parent.name)
                 {
                     case "Overture":
                         secrets["0-S"] = component.gameObject;
@@ -312,6 +322,9 @@ namespace ArchipelagoULTRAKILL
                         break;
                     case "Layer 5 Wrath":
                         secrets["5-S"] = component.gameObject;
+                        break;
+                    case "Layer 7 Violence":
+                        secrets["7-S"] = component.gameObject;
                         break;
                     default:
                         break;
@@ -396,6 +409,7 @@ namespace ArchipelagoULTRAKILL
         public static void CreateSkullIcons()
         {
             Sprite sprite = bundle.LoadAsset<Sprite>("assets/skull.png");
+
             foreach (LevelInfo info in Core.levelInfos)
             {
                 if (info.Skulls == SkullsType.Normal)
@@ -413,7 +427,7 @@ namespace ArchipelagoULTRAKILL
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
                         if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(70 - (38 * info.SkullsList.FindIndex(a => a == skull)), 135, 0);
                         else go.transform.localPosition = new Vector3(70 - (38 * info.SkullsList.FindIndex(a => a == skull)), 60, 0);
-                        skullIcons.Add(go);
+                        go.AddComponent<SkullIcon>().SetId(skull);
                     }
                 }
                 else if (info.Name == "1-4")
@@ -430,8 +444,7 @@ namespace ArchipelagoULTRAKILL
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
                         if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(70 - (38 * i), 135, 0);
                         else go.transform.localPosition = new Vector3(70 - (38 * i), 60, 0);
-
-                        skullIcons.Add(go);
+                        go.AddComponent<SkullIcon>().SetId(skull);
                     }
                 }
                 else if (info.Name == "5-1")
@@ -448,42 +461,40 @@ namespace ArchipelagoULTRAKILL
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
                         if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(70 - (38 * i), 135, 0);
                         else go.transform.localPosition = new Vector3(70 - (38 * i), 60, 0);
-                        skullIcons.Add(go);
+                        go.AddComponent<SkullIcon>().SetId(skull);
                     }
                 }
             }
-        }
 
-        public static void UpdateSkullIcons()
-        {
-            foreach (GameObject skull in skullIcons)
+            foreach (LevelInfo info in Core.secretMissionInfos)
             {
-                if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) skull.transform.localPosition = new Vector3(skull.transform.localPosition.x, 135, skull.transform.localPosition.z);
-                else skull.transform.localPosition = new Vector3(skull.transform.localPosition.x, 60, skull.transform.localPosition.z);
+                if (info.Skulls == SkullsType.Normal)
+                {
+                    if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}.");
 
-                if (skull.name.Contains("9") && !skull.name.Contains("19"))
-                {
-                    if (Core.data.unlockedSkulls1_4 >= int.Parse(skull.name.Substring(skull.name.Length - 1, 1))) skull.GetComponent<Image>().color = Colors.BlueSkull;
-                    else skull.GetComponent<Image>().color = Colors.Gray;
-                }
-                else if (skull.name.Contains("20"))
-                {
-                    if (Core.data.unlockedSkulls5_1 >= int.Parse(skull.name.Substring(skull.name.Length - 1, 1))) skull.GetComponent<Image>().color = Colors.BlueSkull;
-                    else skull.GetComponent<Image>().color = Colors.Gray;
-                }
-                else
-                {
-                    if (Core.data.unlockedSkulls.Contains(skull.name))
+                    int xPos = 275;
+                    if (info.Name == "0-S") xPos = 290;
+
+                    GameObject rankPanel = secrets[info.Name].transform.parent.Find("RankPanel").gameObject;
+                    Vector3 rankPos = rankPanel.transform.localPosition;
+                    rankPos.x = xPos - (34 * info.SkullsList.Count);
+                    rankPanel.transform.localPosition = rankPos;
+
+                    foreach (string skull in info.SkullsList)
                     {
-                        if (skull.name.Contains("_b")) skull.GetComponent<Image>().color = Colors.BlueSkull;
-                        else if (skull.name.Contains("_r")) skull.GetComponent<Image>().color = Colors.RedSkull;
-                    }
-                    else
-                    {
-                        skull.GetComponent<Image>().color = Colors.Gray;
+                        GameObject go = new GameObject();
+                        go.name = skull;
+                        go.transform.SetParent(secrets[info.Name].transform.parent);
+                        go.transform.localScale = new Vector3(0.4f, 0.4f, 1);
+                        go.layer = 5;
+                        go.AddComponent<Image>().sprite = sprite;
+                        go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
+                        go.transform.localPosition = new Vector3(xPos - (38 * info.SkullsList.FindIndex(a => a == skull)), 10, 0);
+                        go.AddComponent<SkullIcon>().SetId(skull, true);
                     }
                 }
             }
+            createdSkullIcons = true;
         }
 
         public static void CreateMessageUI()

@@ -3,6 +3,7 @@ from typing import Dict
 
 region_table: Dict[str, str] = {
     "shop": "Shop",
+    "museum": "Developer Museum",
     "0-1": "0-1: INTO THE FIRE",
     "0-2": "0-2: THE MEATGRINDER",
     "0-3": "0-3: DOUBLE DOWN",
@@ -37,6 +38,7 @@ region_table: Dict[str, str] = {
     "7-2": "7-2: LIGHT UP THE NIGHT",
     "7-3": "7-3: NO SOUND, NO MEMORY",
     "7-4": "7-4: ...LIKE ANTENNAS TO HEAVEN",
+    "7-S": "7-S: HELL BATH NO FURY",
     "P-1": "P-1: SOUL SURVIVOR",
     "P-2": "P-2: WAIT OF THE WORLD"
 }
@@ -46,5 +48,6 @@ secret_levels: Dict[str, str] = {
     "1-S": "1-1",
     "2-S": "2-3",
     "4-S": "4-2",
-    "5-S": "5-1"
+    "5-S": "5-1",
+    "7-S": "7-3"
 }

@@ -1,3 +1,32 @@
+## 2.1.0
+
+It has been over a year since the first version of Archipelago for ULTRAKILL! Thanks for playing :)
+Note that games started on 2.0.7 or older **will not** be playable on this version. Finish your games in progress before updating.
+
+- Various adjustments/improvements for logic in Prelude and Act I. [#13](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/13) [#16](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/16)
+- All items are now remote.
+- Added the Sawed-On, JumpStart, Firestarter, and alternate shotgun to randomizer.
+- Added a visual for whether the secondary fire is unlocked for the currently held weapon.
+- Added custom graphics for the secondary fire of the Piercer, Core Eject, Attractor, and Freezeframe.
+- Secondary fire items now have unique icons.
+- You can now choose for the revolver, shotgun, and nailgun to be in their default or alternate forms. The form that isn't chosen must be unlocked.
+- The switches in the Limbo layer and in 7-2 can now be randomized.
+- Clash Mode can now be randomized.
+- Added an option for rewards for every room cleaned in 7-S.
+- Added an option for rewards for giving Hank a head in 1-4 and 5-3.
+- Added an option for a reward for winning chess against a bot in the Developer Museum.
+- Added an option for a reward for winning the rocket race in the Developer Museum.
+- Powerups will now wait until the timer starts before activating.
+- Powerups will no longer activate in secret missions, the sandbox, or the Developer Museum.
+- Added skull icons for secret missions.
+- Fixed secret missions not ending properly.
+- Fixed sometimes being able to use the Core Eject and Pump Charge even when they are not unlocked.
+- Fixed soap immediately being held even when no arms are unlocked.
+- Fixed not having any arms equipped in 5-S.
+- The save slot menu will now display the name and number of locations checked for randomized slots.
+- Added new death link messages.
+- Added links to Thunderstore, Github, and the AP After Dark Discord in the options menu. 
+
 ## 2.0.7
 
 - Fixed to work on patch 15.

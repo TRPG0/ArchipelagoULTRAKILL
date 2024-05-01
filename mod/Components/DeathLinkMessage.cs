@@ -14,12 +14,35 @@ namespace ArchipelagoULTRAKILL.Components
         public RectTransform parentRT;
         public RectTransform skullRT;
 
+        public static string DifficultyName
+        {
+            get
+            {
+                int difficulty = PrefsManager.Instance.GetInt("difficulty");
+                switch (difficulty)
+                {
+                    default:
+                    case 0: 
+                        return "Harmless";
+                    case 1: 
+                        return "Lenient";
+                    case 2: 
+                        return "Standard";
+                    case 3: 
+                        return "Violent";
+                    case 4: 
+                        return "Brutal";
+                }
+            }
+        }
+
         List<string> deathMessages = new List<string>()
             {
                 "{0} wasn't skilled enough.",
                 "{0} ran out of blood.",
                 "{0} forgot how to aim.",
-                "{0} got ULTRAKILLed."
+                "{0} got ULTRAKILLed.",
+                "Things got too " + DifficultyName.ToLower() + " for {0}."
             };
 
         Dictionary<string, List<string>> specialMessages = new Dictionary<string, List<string>>();
@@ -31,6 +54,7 @@ namespace ArchipelagoULTRAKILL.Components
                 "{0} did that on purpose.",
                 "{0} has some explaining to do."
             };
+            specialMessages["CreditsMuseum2"] = specialMessages["uk_construct"];
             specialMessages["Level 0-S"] = new List<string>()
             {
                 "{0} got caught by something.",
@@ -65,6 +89,11 @@ namespace ArchipelagoULTRAKILL.Components
             {
                 "{0} experienced perfect hatred.",
                 "{0} was ended, there and then."
+            };
+            specialMessages["Level 7-4"] = new List<string>()
+            {
+                "{0} 0 - Earthmover 1000",
+                "Security threat \"{0}\" eliminated."
             };
             specialMessages["Level P-1"] = new List<string>()
             {

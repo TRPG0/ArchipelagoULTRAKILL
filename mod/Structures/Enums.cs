@@ -35,7 +35,10 @@
         Powerup,
         Trap,
         Soap,
-        Fire2
+        Fire2,
+        LimboSwitch,
+        ShotgunSwitch,
+        ClashMode
     }
 
     public enum Powerup
@@ -64,5 +67,11 @@
         Off,
         Once,
         EveryLoad
+    }
+
+    public enum WeaponForm
+    {
+        Standard,
+        Alternate
     }
 }

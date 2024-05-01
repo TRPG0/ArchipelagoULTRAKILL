@@ -39,9 +39,19 @@ namespace ArchipelagoULTRAKILL
         public static EnumField<BossOptions> bossRewards;
         public static BoolField challengeRewards;
         public static BoolField pRankRewards;
+        public static BoolField hankRewards;
+        public static BoolField clashReward;
         public static BoolField fishRewards;
+        public static BoolField cleanRewards;
+        public static BoolField chessReward;
+        public static BoolField rocketReward;
         public static BoolField randomizeFire2;
+        public static EnumField<WeaponForm> revForm;
+        public static EnumField<WeaponForm> shoForm;
+        public static EnumField<WeaponForm> naiForm;
         public static BoolField randomizeSkulls;
+        public static BoolField randomizeLimbo;
+        public static BoolField randomizeViolence;
         public static BoolField musicRandomizer;
         public static BoolField cybergrindHints;
         public static BoolField deathLink;
@@ -92,6 +102,11 @@ namespace ArchipelagoULTRAKILL
         public static ButtonField hintRefresh;
         public static ConfigDivision hintList;
 
+        public static ConfigPanel linksPanel;
+        public static ButtonField thunderstoreButton;
+        public static ButtonField githubButton;
+        public static ButtonField discordButton;
+
         public static void Initialize()
         {
             if (config != null) return;
@@ -107,6 +122,7 @@ namespace ArchipelagoULTRAKILL
             logPanel = new ConfigPanel(config.rootPanel, "LOG SETTINGS", "logPanel");
             colorPanel = new ConfigPanel(config.rootPanel, "COLOR SETTINGS", "colorPanel");
             hintsPanel = new ConfigPanel(config.rootPanel, "HINTS", "hintsPanel");
+            linksPanel = new ConfigPanel(config.rootPanel, "LINKS", "linksPanel");
 
             // player settings
             isConnected = new BoolField(playerPanel, "CONNECTED TO SERVER?", "isConnected", false, false);
@@ -203,9 +219,25 @@ namespace ArchipelagoULTRAKILL
             bossRewards.SetEnumDisplayName(BossOptions.Extended, "EXTENDED");
             challengeRewards = new BoolField(playerPanel, "CHALLENGE REWARDS", "challengeRewards", false, false) { interactable = false };
             pRankRewards = new BoolField(playerPanel, "P RANK REWARDS", "pRankRewards", false, false) { interactable = false };
+            hankRewards = new BoolField(playerPanel, "HANK REWARDS", "hankRewards", false, false) { interactable = false };
+            clashReward = new BoolField(playerPanel, "RANDOMIZE CLASH MODE", "clashReward", false, false) { interactable = false };
             fishRewards = new BoolField(playerPanel, "FISH REWARDS", "fishRewards", false, false) { interactable = false };
+            cleanRewards = new BoolField(playerPanel, "CLEANING REWARDS", "cleanRewards", false, false) { interactable = false };
+            chessReward = new BoolField(playerPanel, "CHESS REWARD", "chessReward", false, false) { interactable = false };
+            rocketReward = new BoolField(playerPanel, "ROCKET RACE REWARD", "rocketReward", false, false) { interactable = false };
             randomizeFire2 = new BoolField(playerPanel, "RANDOMIZE SECONDARY FIRE", "randomizeFire2", false, false) { interactable = false };
+            revForm = new EnumField<WeaponForm>(playerPanel, "REVOLVER FORM", "revForm", WeaponForm.Standard) { interactable = false };
+            revForm.SetEnumDisplayName(WeaponForm.Standard, "STANDARD");
+            revForm.SetEnumDisplayName(WeaponForm.Alternate, "ALTERNATE");
+            shoForm = new EnumField<WeaponForm>(playerPanel, "SHOTGUN FORM", "shoForm", WeaponForm.Standard) { interactable = false };
+            shoForm.SetEnumDisplayName(WeaponForm.Standard, "STANDARD");
+            shoForm.SetEnumDisplayName(WeaponForm.Alternate, "ALTERNATE");
+            naiForm = new EnumField<WeaponForm>(playerPanel, "NAILGUN FORM", "naiForm", WeaponForm.Standard) { interactable = false };
+            naiForm.SetEnumDisplayName(WeaponForm.Standard, "STANDARD");
+            naiForm.SetEnumDisplayName(WeaponForm.Alternate, "ALTERNATE");
             randomizeSkulls = new BoolField(playerPanel, "RANDOMIZE SKULLS", "randomizeSkulls", false, false) { interactable = false };
+            randomizeLimbo = new BoolField(playerPanel, "RANDOMIZE LIMBO SWITCHES", "randomizeLimbo", false, false) { interactable = false };
+            randomizeViolence = new BoolField(playerPanel, "RANDOMIZE VIOLENCE SWITCHES", "randomizeViolence", false, false) { interactable = false };
             musicRandomizer = new BoolField(playerPanel, "MUSIC RANDOMIZER", "musicRandomizer", false, false) { interactable = false };
             cybergrindHints = new BoolField(playerPanel, "UNLOCK HINTS IN CYBERGRIND", "cybergrindHints", false, false) { interactable = false };
             deathLink = new BoolField(playerPanel, "DEATH LINK", "deathLink", false, false) { interactable = false };
@@ -331,6 +363,14 @@ namespace ArchipelagoULTRAKILL
                     }
                 }
             };
+
+            // links
+            thunderstoreButton = new ButtonField(linksPanel, "THUNDERSTORE", "thunderstoreButton");
+            thunderstoreButton.onClick += () => { Application.OpenURL("https://thunderstore.io/c/ultrakill/p/TRPG/Archipelago/"); };
+            githubButton = new ButtonField(linksPanel, "GITHUB", "githubButton");
+            githubButton.onClick += () => { Application.OpenURL("https://github.com/TRPG0/ArchipelagoULTRAKILL"); };
+            discordButton = new ButtonField(linksPanel, "AP AFTER DARK DISCORD", "discordButton");
+            discordButton.onClick += () => { Application.OpenURL("https://discord.gg/Sbhy4ykUKn"); };
         }
 
         public static void LoadConnectionInfo()
@@ -351,9 +391,19 @@ namespace ArchipelagoULTRAKILL
             bossRewards.value = Core.data.bossRewards;
             challengeRewards.value = Core.data.challengeRewards;
             pRankRewards.value = Core.data.pRankRewards;
+            hankRewards.value = Core.data.hankRewards;
+            clashReward.value = Core.data.clashReward;
             fishRewards.value = Core.data.fishRewards;
+            cleanRewards.value = Core.data.cleanRewards;
+            chessReward.value = Core.data.chessReward;
+            rocketReward.value = Core.data.rocketReward;
             randomizeFire2.value = Core.data.randomizeFire2;
+            revForm.value = Core.data.revForm;
+            shoForm.value = Core.data.shoForm;
+            naiForm.value = Core.data.naiForm;
             randomizeSkulls.value = Core.data.randomizeSkulls;
+            randomizeLimbo.value = Core.data.l1switch;
+            randomizeViolence.value = Core.data.l7switch;
             musicRandomizer.value = Core.data.musicRandomizer;
             cybergrindHints.value = Core.data.cybergrindHints;
             deathLink.value = Core.data.deathLink;
@@ -367,9 +417,19 @@ namespace ArchipelagoULTRAKILL
             bossRewards.value = BossOptions.Disabled;
             challengeRewards.value = false;
             pRankRewards.value = false;
+            hankRewards.value = false;
+            clashReward.value = false;
             fishRewards.value = false;
+            cleanRewards.value = false;
+            chessReward.value = false;
+            rocketReward.value = false;
             randomizeFire2.value = false;
+            revForm.value = WeaponForm.Standard;
+            shoForm.value = WeaponForm.Standard;
+            naiForm.value = WeaponForm.Standard;
             randomizeSkulls.value = false;
+            randomizeLimbo.value = false;
+            randomizeViolence.value = false;
             musicRandomizer.value = false;
             cybergrindHints.value = false;
             deathLink.value = false;

@@ -36,6 +36,7 @@ namespace ArchipelagoULTRAKILL
                     else
                     {
                         Core.PLogger.Log($"The current version ({Core.PluginVersion}) is newer than the latest release. ({latest})", Level.Info);
+                        new ConfigHeader(ConfigManager.config.rootPanel, $"The current version ({Core.PluginVersion}) is newer than the latest release. ({latest}) Have fun! :)") { textSize = 16 };
                     }
                 }
                 else

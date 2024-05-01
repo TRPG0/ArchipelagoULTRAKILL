@@ -53,4 +53,46 @@ namespace ArchipelagoULTRAKILL.Patches
             }
         }
     }
+
+    [HarmonyPatch(typeof(GameProgressSaver), "GetLimboSwitch")]
+    class GameProgressSaver_GetLimboSwitch_Patch
+    {
+        public static bool Prefix(int switchNum, ref bool __result)
+        {
+            if (Core.DataExists() && Core.data.l1switch)
+            {
+                __result = Core.data.limboSwitches[switchNum];
+                return false;
+            }
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(GameProgressSaver), "GetShotgunSwitch")]
+    class GameProgressSaver_GetShotgunSwitch_Patch
+    {
+        public static bool Prefix(int switchNum, ref bool __result)
+        {
+            if (Core.DataExists() && Core.data.l7switch)
+            {
+                __result = Core.data.shotgunSwitches[switchNum];
+                return false;
+            }
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(GameProgressSaver), "SetClashModeUnlocked")]
+    class GameProgressSaver_SetClashModeUnlocked_Patch
+    {
+        public static bool Prefix()
+        {
+            if (Core.DataExists() && Core.data.clashReward)
+            {
+                LocationManager.CheckLocation("clash");
+                return false;
+            }
+            return true;
+        }
+    }
 }

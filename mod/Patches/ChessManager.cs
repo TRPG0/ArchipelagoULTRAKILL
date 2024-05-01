@@ -2,7 +2,6 @@
 
 namespace ArchipelagoULTRAKILL.Patches
 {
-    /*
     [HarmonyPatch(typeof(ChessManager), "WinTrigger")]
     public class ChessManager_WinTrigger_Patch
     {
@@ -12,7 +11,8 @@ namespace ArchipelagoULTRAKILL.Patches
             {
                 if (PlayerWinVsBot(whiteWin.Value, __instance.whiteIsBot, __instance.blackIsBot))
                 {
-                    Core.Logger.LogInfo("Player won chess.");
+                    //Core.Logger.LogInfo("Player won chess.");
+                    LocationManager.CheckLocation("chess");
                 }
             }
         }
@@ -24,5 +24,4 @@ namespace ArchipelagoULTRAKILL.Patches
             return false;
         }
     }
-    */
 }
