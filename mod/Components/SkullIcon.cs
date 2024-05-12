@@ -8,12 +8,15 @@ namespace ArchipelagoULTRAKILL.Components
     public class SkullIcon : MonoBehaviour
     {
         public string Id { get; private set; }
-        public bool SecretMission { get; private set; }
+        public bool Reposition { get; private set; }
 
-        public void SetId(string id, bool secretMission = false)
+        public const int yLeaderboard = 140;
+        public const int yNormal = 65;
+
+        public void SetId(string id, bool reposition = true)
         {
             Id = id;
-            SecretMission = secretMission;
+            Reposition = reposition;
         }
 
         public void Start()
@@ -21,16 +24,16 @@ namespace ArchipelagoULTRAKILL.Components
             if (!GetComponent<Image>())
             {
                 Core.Logger.LogWarning($"No image found for skull icon {name}");
+                Destroy(this);
             }
         }
 
         public void OnEnable()
         {
-            if (SecretMission) transform.localPosition = new Vector3(transform.localPosition.x, 10, transform.localPosition.z);
-            else
+            if (Reposition)
             {
-                if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) transform.localPosition = new Vector3(transform.localPosition.x, 135, transform.localPosition.z);
-                else transform.localPosition = new Vector3(transform.localPosition.x, 60, transform.localPosition.z);
+                if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) transform.localPosition = new Vector3(transform.localPosition.x, yLeaderboard, transform.localPosition.z);
+                else transform.localPosition = new Vector3(transform.localPosition.x, yNormal, transform.localPosition.z);
             }
             CheckSkull();
         }

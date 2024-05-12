@@ -75,6 +75,26 @@ namespace ArchipelagoULTRAKILL.Components
             }
         }
 
+        public int LimboSwitchesPressed()
+        {
+            int total = 0;
+            for (int i = 6; i <= 9; i++)
+            {
+                if (Core.data.@checked.Contains($"{i}_sw")) total++;
+            }
+            return total;
+        }
+
+        public int ShotgunSwitchesPressed()
+        {
+            int total = 0;
+            for (int i = 1; i <= 3; i++)
+            {
+                if (Core.data.@checked.Contains($"27_sw{i}")) total++;
+            }
+            return total;
+        }
+
         public int FishCaught()
         {
             int total = 0;
@@ -92,6 +112,14 @@ namespace ArchipelagoULTRAKILL.Components
             {
                 if (Core.data.@checked.Contains($"clean{i}")) total++;
             }
+            return total;
+        }
+
+        public int HankAssembled()
+        {
+            int total = 0;
+            if (ActIncludes(9) && Core.data.@checked.Contains("9_ha")) total++;
+            else if (ActIncludes(22) && Core.data.@checked.Contains("22_ha")) total++;
             return total;
         }
 
@@ -163,6 +191,10 @@ namespace ArchipelagoULTRAKILL.Components
             if (Core.data.challengeRewards) result += BuildString("\nChallenges", challenges, total);
             if (Core.data.pRankRewards) result += BuildString("\nPerfect Ranks", perfects, total);
             if (Core.data.bossRewards > BossOptions.Disabled) result += BuildString("\nBosses", bossesDefeated, bossesTotal);
+            if (ActIncludes(9) && Core.data.l1switch) result += BuildString("\nSwitches pressed", LimboSwitchesPressed(), 4);
+            if (ActIncludes(27) && Core.data.l7switch) result += BuildString("\nSwitches pressed", ShotgunSwitchesPressed(), 3);
+            if (ActIncludes(9) && Core.data.hankRewards) result += BuildString("\nAssembled Hank", HankAssembled(), 1);
+            if (ActIncludes(22) && Core.data.hankRewards) result += BuildString("\nAssembled Hank Jr.", HankAssembled(), 1);
             if (ActIncludes(20) && Core.data.fishRewards) result += BuildString("\nFish", FishCaught(), 12);
             if (ActIncludes(28) && Core.data.cleanRewards) result += BuildString("\nRooms cleaned", RoomsCleaned(), 5);
 

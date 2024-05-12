@@ -109,7 +109,7 @@ namespace ArchipelagoULTRAKILL
                     }
                     else if (LocationManager.shopScouts["shop_" + variation.weaponName] is APItem apitem)
                     {
-                        description = "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.GetAPMessageColor(apitem.type)) + "FF>" + apitem.itemName + "</color>";
+                        description += "<color=#" + ColorUtility.ToHtmlStringRGB(LocationManager.GetAPMessageColor(apitem.type)) + "FF>" + apitem.itemName + "</color>";
                         description += " for <color=#" + ColorUtility.ToHtmlStringRGB(Colors.PlayerOther) + "FF>" + apitem.playerName + "</color>";
                         description += "]\n\n";
 

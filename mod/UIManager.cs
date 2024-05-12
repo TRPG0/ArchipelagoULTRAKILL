@@ -8,6 +8,8 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 using TMPro;
+using System.Security.Policy;
+using System.Diagnostics;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -33,6 +35,7 @@ namespace ArchipelagoULTRAKILL
         public static TextMeshProUGUI goalCount;
 
         public static bool createdSkullIcons = false;
+        public static bool createdSwitchIcons = false;
 
         public static GameObject hud;
         public static GameObject popupCanvas;
@@ -411,12 +414,14 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
-        public static void CreateSkullIcons()
+        public static void CreateMenuSkullIcons()
         {
             Sprite sprite = bundle.LoadAsset<Sprite>("assets/skull.png");
 
             foreach (LevelInfo info in Core.levelInfos)
             {
+                int xPos = 74;
+                int xOffset = 33;
                 if (info.Skulls == SkullsType.Normal)
                 {
                     if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}.");
@@ -426,12 +431,11 @@ namespace ArchipelagoULTRAKILL
                         GameObject go = new GameObject();
                         go.name = skull;
                         go.transform.SetParent(levels[info.Name].transform);
-                        go.transform.localScale = new Vector3(0.4f, 0.4f, 1);
+                        go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(70 - (38 * info.SkullsList.FindIndex(a => a == skull)), 135, 0);
-                        else go.transform.localPosition = new Vector3(70 - (38 * info.SkullsList.FindIndex(a => a == skull)), 60, 0);
+                        go.transform.localPosition = new Vector3(xPos - (xOffset * info.SkullsList.FindIndex(a => a == skull)), 65, 0);
                         go.AddComponent<SkullIcon>().SetId(skull);
                     }
                 }
@@ -443,12 +447,11 @@ namespace ArchipelagoULTRAKILL
                         GameObject go = new GameObject();
                         go.name = skull;
                         go.transform.SetParent(levels[info.Name].transform);
-                        go.transform.localScale = new Vector3(0.4f, 0.4f, 1);
+                        go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(70 - (38 * i), 135, 0);
-                        else go.transform.localPosition = new Vector3(70 - (38 * i), 60, 0);
+                        go.transform.localPosition = new Vector3(xPos - (xOffset * i), 65, 0);
                         go.AddComponent<SkullIcon>().SetId(skull);
                     }
                 }
@@ -460,12 +463,11 @@ namespace ArchipelagoULTRAKILL
                         GameObject go = new GameObject();
                         go.name = skull;
                         go.transform.SetParent(levels[info.Name].transform);
-                        go.transform.localScale = new Vector3(0.4f, 0.4f, 1);
+                        go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(70 - (38 * i), 135, 0);
-                        else go.transform.localPosition = new Vector3(70 - (38 * i), 60, 0);
+                        go.transform.localPosition = new Vector3(xPos - (xOffset * i), 65, 0);
                         go.AddComponent<SkullIcon>().SetId(skull);
                     }
                 }
@@ -479,6 +481,8 @@ namespace ArchipelagoULTRAKILL
 
                     int xPos = 275;
                     if (info.Name == "0-S") xPos = 290;
+                    int xOffset = 38;
+                    int yPos = 10;
 
                     GameObject rankPanel = secrets[info.Name].transform.parent.Find("RankPanel").gameObject;
                     Vector3 rankPos = rankPanel.transform.localPosition;
@@ -494,12 +498,152 @@ namespace ArchipelagoULTRAKILL
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        go.transform.localPosition = new Vector3(xPos - (38 * info.SkullsList.FindIndex(a => a == skull)), 10, 0);
-                        go.AddComponent<SkullIcon>().SetId(skull, true);
+                        go.transform.localPosition = new Vector3(xPos - (xOffset * info.SkullsList.FindIndex(a => a == skull)), yPos, 0);
+                        go.AddComponent<SkullIcon>().SetId(skull, false);
                     }
                 }
             }
             createdSkullIcons = true;
+        }
+
+        public static void CreateMenuSwitchIcons()
+        {
+            int xPos = 70;
+            int xOffset = 40;
+            if (Core.data.l1switch)
+            {
+                for (int i = 4; i > 0; i--)
+                {
+                    Sprite sprite = bundle.LoadAsset<Sprite>($"assets/switch{i}.png");
+                    GameObject go = new GameObject();
+                    go.name = i.ToString();
+                    go.transform.SetParent(levels["1-4"].transform);
+                    go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
+                    go.layer = 5;
+                    go.AddComponent<Image>().sprite = sprite;
+                    go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
+                    go.transform.localPosition = new Vector3(xPos - (xOffset * (4 - i)), -32, 0);
+                    go.AddComponent<SwitchIcon>().SetId(i - 1, true, true);
+                }
+            }
+            if (Core.data.l7switch)
+            {
+                for (int i = 3; i > 0; i--)
+                {
+                    Sprite sprite = bundle.LoadAsset<Sprite>($"assets/switch{i}.png");
+                    GameObject go = new GameObject();
+                    go.name = i.ToString();
+                    go.transform.SetParent(levels["7-2"].transform);
+                    go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
+                    go.layer = 5;
+                    go.AddComponent<Image>().sprite = sprite;
+                    go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
+                    go.transform.localPosition = new Vector3(xPos - (xOffset * (3 - i)), -32, 0);
+                    go.AddComponent<SwitchIcon>().SetId(i - 1, false, true);
+                }
+            }
+            createdSwitchIcons = true;
+        }
+
+        public static void CreatePauseSkullIcons(GameObject pauseMenu, bool createdSwitches)
+        {
+
+            if (Core.CurrentLevelHasInfo)
+            {
+                Sprite sprite = bundle.LoadAsset<Sprite>("assets/skull.png");
+                LevelInfo info = Core.CurrentLevelInfo;
+
+                int xPos = 275;
+                int xOffset = 33;
+                int yPos = -175;
+                if (createdSwitches) yPos = -135;
+                if (info.Skulls == SkullsType.Normal)
+                {
+                    if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}");
+                    foreach (string skull in info.SkullsList)
+                    {
+                        if (pauseMenu.transform.Find(skull)) continue;
+                        GameObject go = new GameObject();
+                        go.name = skull;
+                        go.transform.SetParent(pauseMenu.transform);
+                        go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
+                        go.layer = 5;
+                        go.AddComponent<Image>().sprite = sprite;
+                        go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
+                        go.transform.localPosition = new Vector3(xPos - (xOffset * info.SkullsList.FindIndex(a => a == skull)), yPos, 0);
+                        go.AddComponent<SkullIcon>().SetId(skull, false);
+                    }
+                }
+                else if (info.Name == "1-4")
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        string skull = "9_b" + (i + 1);
+                        if (pauseMenu.transform.Find(skull)) continue;
+                        GameObject go = new GameObject();
+                        go.name = skull;
+                        go.transform.SetParent(pauseMenu.transform);
+                        go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
+                        go.layer = 5;
+                        go.AddComponent<Image>().sprite = sprite;
+                        go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
+                        go.transform.localPosition = new Vector3(xPos - (xOffset * i), yPos, 0);
+                        go.AddComponent<SkullIcon>().SetId(skull, false);
+                    }
+                }
+                else if (info.Name == "5-1")
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        string skull = "20_b" + (i + 1);
+                        if (pauseMenu.transform.Find(skull)) continue;
+                        GameObject go = new GameObject();
+                        go.name = skull;
+                        go.transform.SetParent(pauseMenu.transform);
+                        go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
+                        go.layer = 5;
+                        go.AddComponent<Image>().sprite = sprite;
+                        go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
+                        go.transform.localPosition = new Vector3(xPos - (xOffset * i), yPos, 0);
+                        go.AddComponent<SkullIcon>().SetId(skull, false);
+                    }
+                }
+            }
+        }
+
+        public static void CreatePauseSwitchIcons(GameObject pauseMenu, ref bool created)
+        {
+            if (Core.CurrentLevelHasInfo)
+            {
+                if (!(Core.CurrentLevelInfo.Id == 9 || Core.CurrentLevelInfo.Id == 27)) return;
+
+                int xPos = 275;
+                int xOffset = 40;
+                int yPos = -175;
+
+                int switches = 0;
+                if (Core.CurrentLevelInfo.Id == 9) switches = 4;
+                if (Core.CurrentLevelInfo.Id == 27) switches = 3;
+
+                bool limbo = true;
+                if (Core.CurrentLevelInfo.Id == 27) limbo = false;
+
+                for (int i = switches; i > 0; i--)
+                {
+                    Sprite sprite = bundle.LoadAsset<Sprite>($"assets/switch{i}.png");
+                    if (pauseMenu.transform.Find(i.ToString())) continue;
+                    GameObject go = new GameObject();
+                    go.name = i.ToString();
+                    go.transform.SetParent(pauseMenu.transform);
+                    go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
+                    go.layer = 5;
+                    go.AddComponent<Image>().sprite = sprite;
+                    go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
+                    go.transform.localPosition = new Vector3(xPos - (xOffset * (switches - i)), yPos, 0);
+                    go.AddComponent<SwitchIcon>().SetId(i-1, limbo);
+                }
+                created = true;
+            }
         }
 
         public static void CreateMessageUI()
@@ -511,9 +655,8 @@ namespace ArchipelagoULTRAKILL
                 hud = component.gameObject;
             }
 
-            popupCanvas = Instantiate(hud.transform.GetChild(0).gameObject);
+            popupCanvas = Instantiate(hud.transform.GetChild(0).gameObject, hud.transform);
             popupCanvas.name = "APCanvas";
-            popupCanvas.transform.SetParent(hud.transform);
             Traverse hudT = Traverse.Create(popupCanvas.GetComponent<HUDPos>());
             hudT.Field<Vector3>("defaultPos").Value = new Vector3(1.125f, -0.53f, 1);
             hudT.Field<Vector3>("defaultRot").Value = new Vector3(0, 30, 0);
@@ -521,28 +664,31 @@ namespace ArchipelagoULTRAKILL
             popupCanvas.GetComponent<HUDPos>().reverseRot = new Vector3(0, 330, 0);
             popupCanvas.GetComponent<HUDPos>().active = false;
             popupCanvas.GetComponent<HUDPos>().active = true;
-            Destroy(popupCanvas.transform.GetChild(1).gameObject);
-            Destroy(popupCanvas.transform.GetChild(0).GetChild(1).gameObject);
-
-            for (int i = popupCanvas.transform.GetChild(0).GetChild(0).childCount - 1; i > -1; i--)
+            Destroy(popupCanvas.transform.Find("SpeedometerPanel").gameObject);
+            Destroy(popupCanvas.transform.Find("GunPanel").gameObject);
+            Destroy(popupCanvas.transform.Find("StatsPanel").Find("RailcannonChargePanel").gameObject);
+            Destroy(popupCanvas.transform.Find("StatsPanel").Find("Filler").Find("Panel (2)").gameObject);
+            Destroy(popupCanvas.transform.Find("StatsPanel").Find("Filler").Find("Panel (3)").gameObject);
+            Destroy(popupCanvas.transform.Find("StatsPanel").Find("Filler").Find("Panel").gameObject);
+            Destroy(popupCanvas.transform.Find("StatsPanel").Find("Filler").Find("AltRailcannonPanel").gameObject);
+            try
             {
-                if (popupCanvas.transform.GetChild(0).GetChild(0).GetChild(i).gameObject.name == "FistPanel" && popupCanvas.transform.GetChild(0).GetChild(0).GetChild(i).childCount == 1)
+                popupImage = popupCanvas.transform.Find("StatsPanel").Find("Filler").Find("FistPanel").Find("Panel").gameObject;
+            }
+            catch (NullReferenceException)
+            {
+                foreach (Image image in popupCanvas.transform.Find("StatsPanel").Find("Filler").GetComponentsInChildren<Image>())
                 {
-                    popupImage = popupCanvas.transform.GetChild(0).GetChild(0).GetChild(i).GetChild(0).gameObject;
-                }
-                else
-                {
-                    Destroy(popupCanvas.transform.GetChild(0).GetChild(0).GetChild(i).gameObject);
+                    if (image.name == "Panel" && image.transform.parent.name == "FistPanel") popupImage = image.gameObject;
                 }
             }
-
-            popupCanvas.transform.GetChild(0).gameObject.SetActive(true);
+            popupCanvas.transform.Find("StatsPanel").gameObject.SetActive(true);
             popupCanvas.SetActive(false);
             popupImage.GetComponent<Image>().sprite = bundle.LoadAsset<Sprite>("assets/layer4.png");
             popupImage.GetComponent<Image>().color = Colors.Layer4;
             GameObject go = new GameObject();
             go.name = "APText";
-            go.transform.SetParent(popupCanvas.transform.GetChild(0));
+            go.transform.SetParent(popupCanvas.transform.Find("StatsPanel"));
             go.layer = 13;
             popupText = go.AddComponent<TextMeshProUGUI>();
             popupText.font = font;
@@ -597,123 +743,6 @@ namespace ArchipelagoULTRAKILL
             go2.AddComponent<Text>();
             deathLinkMessage = go2.AddComponent<DeathLinkMessage>();
             deathLinkMessage.Initialize();
-        }
-
-        public static Sprite GetLevelThumbnail(string name)
-        {
-            string file;
-
-            switch (name)
-            {
-                case "0-1":
-                    file = "0-1 Into the Fire";
-                    break;
-                case "0-2":
-                    file = "0-2 The Meatgrinder";
-                    break;
-                case "0-3":
-                    file = "0-3 Double Down";
-                    break;
-                case "0-4":
-                    file = "0-4 A One-Machine Army";
-                    break;
-                case "0-5":
-                    file = "0-5 Cerberus";
-                    break;
-                case "1-1":
-                    file = "1-1 Heart of the Sunrise";
-                    break;
-                case "1-2":
-                    file = "1-2 The Burning World";
-                    break;
-                case "1-3":
-                    file = "1-3 Halls of Sacred Remains";
-                    break;
-                case "1-4":
-                    file = "1-4 Clair de Lune";
-                    break;
-                case "2-1":
-                    file = "2-1 In the Air Tonight";
-                    break;
-                case "2-2":
-                    file = "2-2 Death at 20,000 Volts";
-                    break;
-                case "2-3":
-                    file = "2-3 Sheer Heart Attack";
-                    break;
-                case "2-4":
-                    file = "2-4 Court of the Corpse King";
-                    break;
-                case "3-1":
-                    file = "3-1 Belly of the Beast";
-                    break;
-                case "3-2":
-                    file = "3-2 In the Flesh";
-                    break;
-                case "4-1":
-                    file = "4-1 Slaves to Power";
-                    break;
-                case "4-2":
-                    file = "4-2 God Damn the Sun";
-                    break;
-                case "4-3":
-                    file = "4-3 A Shot in the Dark";
-                    break;
-                case "4-4":
-                    file = "4-4 Clair de Soleil";
-                    break;
-                case "5-1":
-                    file = "5-1 In the Wake of Poseidon";
-                    break;
-                case "5-2":
-                    file = "5-2 Waves of the Starless Sea";
-                    break;
-                case "5-3":
-                    file = "5-3 Ship of Fools";
-                    break;
-                case "5-4":
-                    file = "5-4 Leviathan";
-                    break;
-                case "6-1":
-                    file = "6-1 Cry for the Weeper";
-                    break;
-                case "6-2":
-                    file = "6-2 Aesthetics of Hate";
-                    break;
-                case "7-1":
-                    file = "7-1 Garden of Forking Paths";
-                    break;
-                case "7-2":
-                    file = "7-2 Light Up the Night";
-                    break;
-                case "7-3":
-                    file = "7-3 No Sound No Memory";
-                    break;
-                case "7-4":
-                    file = "7-4 Like Antennas to Heaven";
-                    break;
-                case "P-1":
-                    file = "P-1 Soul Survivor";
-                    break;
-                case "P-2":
-                    file = "P-2 Wait of the World";
-                    break;
-                default:
-                    file = "Locked";
-                    break;
-            }
-
-            return Addressables.LoadAssetAsync<Sprite>($"Assets/Textures/UI/Level Thumbnails/{file}.png").WaitForCompletion();
-        }
-
-        public static Sprite GetLevelThumbnail(int id)
-        {
-            return GetLevelThumbnail(Core.GetLevelNameFromId(id));
-        }
-
-        public static Sprite GetLevelThumbnail(LevelInfo info)
-        {
-            return GetLevelThumbnail(info.Name);
         }
     }
 }

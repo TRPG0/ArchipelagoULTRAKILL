@@ -31,6 +31,7 @@ namespace ArchipelagoULTRAKILL.Structures
         public static Color Arm2 => ConfigManager.arm2Color.value;
         public static Color BlueSkull => ConfigManager.blueSkullColor.value;
         public static Color RedSkull => ConfigManager.redSkullColor.value;
+        public static Color Switch => ConfigManager.switchColor.value;
         public static Color Points => ConfigManager.pointsColor.value;
         public static Color DualWield => ConfigManager.dualwieldColor.value;
         public static Color DoubleJump => ConfigManager.doublejumpColor.value;

@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "2.1.1";
+        public const string PluginVersion = "2.2.0";
 
         public static string workingPath;
         public static string workingDir;
@@ -235,7 +235,8 @@ namespace ArchipelagoULTRAKILL
                 }
                 else if (!DataExists()) ConfigManager.ResetStatsDefaults();
 
-                if (DataExists() && data.randomizeSkulls) UIManager.CreateSkullIcons();
+                if (DataExists() && data.randomizeSkulls) UIManager.CreateMenuSkullIcons();
+                if (DataExists() && (data.l1switch || data.l7switch)) UIManager.CreateMenuSwitchIcons();
 
                 if (data.completedLevels.Count >= data.goalRequirement)
                 {

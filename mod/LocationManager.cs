@@ -676,10 +676,6 @@ namespace ArchipelagoULTRAKILL
                 case "1-3":
                 case "1-4":
                 case "LAYER 1: LIMBO":
-                case "Limbo Switch I":
-                case "Limbo Switch II":
-                case "Limbo Switch III":
-                case "Limbo Switch IV":
                     return Colors.Layer1;
                 case "Knuckleblaster":
                     return Colors.Arm1;
@@ -698,9 +694,6 @@ namespace ArchipelagoULTRAKILL
                 case "7-3":
                 case "7-4":
                 case "LAYER 7: VIOLENCE":
-                case "Violence Switch I":
-                case "Violence Switch II":
-                case "Violence Switch III":
                     return Colors.Layer7;
                 case "P-1: SOUL SURVIVOR":
                 case "P-2: WAIT OF THE WORLD":
@@ -772,6 +765,14 @@ namespace ArchipelagoULTRAKILL
                 case "Empty Ammunition":
                 case "Radiant Aura":
                     return Colors.Trap;
+                case "Violence Switch I":
+                case "Violence Switch II":
+                case "Violence Switch III":
+                case "Limbo Switch I":
+                case "Limbo Switch II":
+                case "Limbo Switch III":
+                case "Limbo Switch IV":
+                    return Colors.Switch;
                 default:
                     return Colors.White;
             }

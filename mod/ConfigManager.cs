@@ -92,6 +92,7 @@ namespace ArchipelagoULTRAKILL
         public static ColorField arm2Color;
         public static ColorField blueSkullColor;
         public static ColorField redSkullColor;
+        public static ColorField switchColor;
         public static ColorField pointsColor;
         public static ColorField dualwieldColor;
         public static ColorField doublejumpColor;
@@ -329,6 +330,7 @@ namespace ArchipelagoULTRAKILL
             arm2Color = new ColorField(colorPanel, "WHIPLASH", "arm2Color", new Color(0.2667f, 1, 0.2706f), true);
             blueSkullColor = new ColorField(colorPanel, "BLUE SKULL", "blueSkullColor", new Color(0.251f, 0.9059f, 1), true);
             redSkullColor = new ColorField(colorPanel, "RED SKULL", "redSkullColor", new Color(1, 0.2353f, 0.2353f), true);
+            switchColor = new ColorField(colorPanel, "SWITCH", "switchColor", new Color(0.25f, 0.3f, 1), true);
             pointsColor = new ColorField(colorPanel, "POINTS", "pointsColor", new Color(1, 0.65f, 0), true);
             dualwieldColor = new ColorField(colorPanel, "DUAL WIELD", "dualwieldColor", new Color(1, 1, 0.25f), true);
             doublejumpColor = new ColorField(colorPanel, "AIR JUMP", "doublejumpColor", new Color(1, 1, 0.6f), true);

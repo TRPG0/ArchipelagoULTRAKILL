@@ -74,7 +74,7 @@ class UltrakillWorld(World):
                     "Knuckleblaster"
                 ]
 
-            if self.options.starting_weapon != StartingWeapon.option_revolver and not self.options.start_with_arm:
+            if not self.options.start_with_arm:
                 if "Railcannon - Electric" in weapons:
                     weapons.remove("Railcannon - Electric")
                 if "Railcannon - Screwdriver" in weapons:
@@ -83,8 +83,7 @@ class UltrakillWorld(World):
                     weapons.remove("Railcannon - Malicious")
                 if "Rocket Launcher - Freezeframe" in weapons:
                     weapons.remove("Rocket Launcher - Freezeframe")
-                if "Rocket Launcher - Firestarter" in weapons:
-                    weapons.remove("Rocket Launcher - Firestarter")
+                
 
             if self.options.start_with_arm:
                 if "Feedbacker" in weapons:
@@ -101,6 +100,8 @@ class UltrakillWorld(World):
             if self.options.randomize_secondary_fire:
                 if "Rocket Launcher - S.R.S. Cannon" in weapons:
                     weapons.remove("Rocket Launcher - S.R.S. Cannon")
+                if "Rocket Launcher - Firestarter" in weapons:
+                    weapons.remove("Rocket Launcher - Firestarter")
 
                 if self.options.nailgun_form and "Nailgun - Overheat" in weapons:
                     weapons.remove("Nailgun - Overheat")

@@ -1,3 +1,16 @@
+## 2.2.0
+
+- Fixed item notifications not working on patch 15c.
+- Fixed item notifications for other players not having colored text.
+- Fixed shop item descriptions for other players accidentally being partially cut off at the beginning.
+- Fixed skulls for 1-4 and 5-1 being duplicated when reconnecting to a server.
+- Added "Switches pressed" and "Assembled Hank" to act stats.
+- Skull icons on level select are slightly smaller.
+- Added skull icons to pause menu.
+- Added switch icons to level select and pause menu.
+- Switches now use their own unique color.
+- Firestarter can now be selected as a starting weapon in certain specific cases.
+
 ## 2.1.1
 
 - Fixed "7-2: Secret Weapon" not being checked properly.

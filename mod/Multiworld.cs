@@ -116,6 +116,9 @@ namespace ArchipelagoULTRAKILL
                 return true;
             }
 
+            Core.data.unlockedSkulls1_4 = 0;
+            Core.data.unlockedSkulls5_1 = 0;
+
             Session = ArchipelagoSessionFactory.CreateSession(Core.data.host_name);
             Session.Socket.SocketClosed += SocketClosed;
             Session.Socket.ErrorReceived += ErrorReceived;
@@ -164,7 +167,8 @@ namespace ArchipelagoULTRAKILL
                 TryGetSlotDataValue(ref Core.data.l1switch, success.SlotData, "randomize_limbo_switches", false);
                 TryGetSlotDataValue(ref Core.data.l7switch, success.SlotData, "randomize_violence_switches", false);
 
-                if (Core.data.randomizeSkulls && !UIManager.createdSkullIcons) UIManager.CreateSkullIcons();
+                if (Core.data.randomizeSkulls && !UIManager.createdSkullIcons) UIManager.CreateMenuSkullIcons();
+                if ((Core.data.l1switch || Core.data.l7switch) && !UIManager.createdSwitchIcons) UIManager.CreateMenuSwitchIcons();
 
                 if (!Core.DataExists())
                 {
@@ -412,6 +416,7 @@ namespace ArchipelagoULTRAKILL
                             UKType? type = LocationManager.GetTypeFromName(itemName);
                             if (type.HasValue)
                             {
+                                messageColor = LocationManager.GetUKMessageColor(itemName);
                                 LocationManager.messages.Add(new Message()
                                 {
                                     image = LocationManager.GetUKMessageImage(itemName),
@@ -421,6 +426,7 @@ namespace ArchipelagoULTRAKILL
                             }
                             else
                             {
+                                messageColor = LocationManager.GetAPMessageColor(p.Data[2].Flags.Value);
                                 LocationManager.messages.Add(new Message()
                                 {
                                     image = "archipelago",

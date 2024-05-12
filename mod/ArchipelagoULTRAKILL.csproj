@@ -330,6 +330,7 @@
     <Compile Include="Components\ReverseDoorCloser.cs" />
     <Compile Include="Components\RocketRaceCheck.cs" />
     <Compile Include="Components\SkullIcon.cs" />
+    <Compile Include="Components\SwitchIcon.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="LevelManager.cs" />
     <Compile Include="Multiworld.cs" />
@@ -357,6 +358,7 @@
     <Compile Include="Patches\LimboSwitch.cs" />
     <Compile Include="Patches\Nailgun.cs" />
     <Compile Include="Patches\NewMovement.cs" />
+    <Compile Include="Patches\OptionsMenuToManager.cs" />
     <Compile Include="Patches\PlayerActivatorRelay.cs" />
     <Compile Include="Patches\RaceRingTracker.cs" />
     <Compile Include="Patches\RocketLauncher.cs" />
