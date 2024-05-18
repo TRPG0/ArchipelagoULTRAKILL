@@ -21,7 +21,7 @@ class GoalRequirement(Range):
     """Choose the number of levels that must be completed to unlock the goal."""
     display_name = "Goal Requirement"
     range_start = 5
-    range_end = 33
+    range_end = 34
     default = 15
 
 
