@@ -1,4 +1,5 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using ArchipelagoULTRAKILL.Components;
 using ArchipelagoULTRAKILL.Structures;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Color = UnityEngine.Color;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -364,27 +366,27 @@ namespace ArchipelagoULTRAKILL
                 var locationId = available[Random.Range(0, available.Length)];
 
                 Multiworld.Session.Locations.ScoutLocationsAsync(true, locationId);
-                LocationInfoPacket info = Multiworld.Session.Locations.ScoutLocationsAsync(false, locationId).Result;
+                ScoutedItemInfo info = Multiworld.Session.Locations.ScoutLocationsAsync(false, locationId).Result[locationId];
 
-                string itemColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(Multiworld.Session.Items.GetItemName(info.Locations[0].Item)));
-                Color color = GetUKMessageColor(Multiworld.Session.Items.GetItemName(info.Locations[0].Item));
+                string itemColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(info.ItemName));
+                Color color = GetUKMessageColor(info.ItemName);
                 if (itemColor == "FFFFFF")
                 {
-                    itemColor = ColorUtility.ToHtmlStringRGB(GetAPMessageColor(info.Locations[0].Flags));
-                    color = GetAPMessageColor(info.Locations[0].Flags);
+                    itemColor = ColorUtility.ToHtmlStringRGB(GetAPMessageColor(info.Flags));
+                    color = GetAPMessageColor(info.Flags);
                 }
                 string playerColor = ColorUtility.ToHtmlStringRGB(Colors.PlayerOther);
-                string locationColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(Multiworld.Session.Locations.GetLocationNameFromId(info.Locations[0].Location).Substring(0, 3)));
+                string locationColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(info.LocationName.Substring(0, 3)));
 
                 string hint = "HINT: <color=#" + itemColor + "FF>";
-                hint += Multiworld.Session.Items.GetItemName(info.Locations[0].Item).ToUpper() + "</color> ";
-                if (Multiworld.Session.Players.GetPlayerName(info.Locations[0].Player) != Core.data.slot_name) 
-                    hint += "(<color=#" + playerColor + "FF>" + Multiworld.Session.Players.GetPlayerAlias(info.Locations[0].Player) + "</color>) ";
-                hint += "at <color=#" + locationColor + "FF>" + Multiworld.Session.Locations.GetLocationNameFromId(info.Locations[0].Location) + "</color>";
+                hint += info.ItemName.ToUpper() + "</color> ";
+                if (Multiworld.Session.Players.GetPlayerName(info.Player) != Core.data.slot_name) 
+                    hint += "(<color=#" + playerColor + "FF>" + Multiworld.Session.Players.GetPlayerAlias(info.Player) + "</color>) ";
+                hint += "at <color=#" + locationColor + "FF>" + info.LocationName + "</color>";
 
                 messages.Add(new Message
                 {
-                    image = GetUKMessageImage(Multiworld.Session.Items.GetItemName(info.Locations[0].Item)),
+                    image = GetUKMessageImage(info.ItemName),
                     color = color,
                     message = hint
                 });
@@ -645,6 +647,7 @@ namespace ArchipelagoULTRAKILL
                 case "5-2":
                 case "5-3":
                 case "5-4":
+                case "5-S":
                 case "LAYER 5: WRATH":
                     return Colors.Layer5;
                 case "Blue Skull (0-2)":
@@ -693,6 +696,7 @@ namespace ArchipelagoULTRAKILL
                 case "7-2":
                 case "7-3":
                 case "7-4":
+                case "7-S":
                 case "LAYER 7: VIOLENCE":
                     return Colors.Layer7;
                 case "P-1: SOUL SURVIVOR":
@@ -748,6 +752,7 @@ namespace ArchipelagoULTRAKILL
                 case "4-2":
                 case "4-3":
                 case "4-4":
+                case "4-S":
                 case "Clash Mode":
                     return Colors.Layer4;
                 case "Dual Wield":

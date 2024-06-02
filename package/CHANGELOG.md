@@ -1,3 +1,9 @@
+## 2.2.1
+
+- Updated Archipelago.MultiClient.Net to `6.0.0-rc5`.
+- Fixed a logic error for 7-2: Secret Weapon.
+- Fixed secret mission locations not being colored correctly in hint popups.
+
 ## 2.2.0
 
 - Fixed item notifications not working on patch 15c.

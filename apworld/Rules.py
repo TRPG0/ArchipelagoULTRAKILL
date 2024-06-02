@@ -2483,7 +2483,10 @@ def rules(ultrakillworld):
             add_rule(multiworld.get_location("7-2: Switch #3", player),
                 lambda state: state.has("Red Skull (7-2)", player))
         set_rule(multiworld.get_location("7-2: Secret Weapon", player),
-            lambda state: state.has_all({"Violence Switch I", "Violence Switch II", "Violence Switch III"}, player))
+            lambda state: (
+                arm2(state, player)
+                and state.has_all({"Violence Switch I", "Violence Switch II", "Violence Switch III"}, player)
+            ))
 
     set_rule(multiworld.get_location("Cleared 7-2", player),
         lambda state: arm2(state, player))

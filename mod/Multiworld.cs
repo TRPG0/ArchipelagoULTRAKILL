@@ -17,7 +17,7 @@ namespace ArchipelagoULTRAKILL
 {
     public static class Multiworld
     {
-        public static int[] AP_VERSION = new int[] { 0, 4, 6 };
+        public static int[] AP_VERSION = new int[] { 0, 5, 0 };
         public static DeathLinkService DeathLinkService = null;
         public static bool DeathLinkKilling = false;
 
@@ -260,10 +260,10 @@ namespace ArchipelagoULTRAKILL
 
                 foreach (string weapon in Core.shopPrices.Keys)
                 {
-                    LocationInfoPacket info = Session.Locations.ScoutLocationsAsync(false, LocationManager.locations[$"shop_{weapon}"]).Result;
-                    long itemId = info.Locations[0].Item;
-                    string itemName = Session.Items.GetItemName(itemId);
-                    string playerName = Session.Players.GetPlayerName(info.Locations[0].Player);
+                    long locationId = LocationManager.locations[$"shop_{weapon}"];
+                    ScoutedItemInfo info = Session.Locations.ScoutLocationsAsync(false, LocationManager.locations[$"shop_{weapon}"]).Result[locationId];
+                    string itemName = info.ItemName;
+                    string playerName = Session.Players.GetPlayerName(info.Player);
                     UKType? type = LocationManager.GetTypeFromName(itemName);
                     if (type.HasValue)
                     {
@@ -280,7 +280,7 @@ namespace ArchipelagoULTRAKILL
                         {
                             itemName = itemName,
                             playerName = playerName,
-                            type = info.Locations[0].Flags
+                            type = info.Flags
                         });
                     }
                 }
@@ -409,7 +409,7 @@ namespace ArchipelagoULTRAKILL
                             && Session.Players.GetPlayerName(int.Parse(p.Data[0].Text)) == Core.data.slot_name
                             && p.Data[1].Text == " sent ")
                         {
-                            string itemName = Session.Items.GetItemName(long.Parse(p.Data[2].Text));
+                            string itemName = Session.Items.GetItemName(long.Parse(p.Data[2].Text), Session.Players.GetPlayerInfo(p.Data[2].Player.Value).Game);
                             string forPlayer = Session.Players.GetPlayerAlias(int.Parse(p.Data[4].Text));
                             Color messageColor = Color.white;
 
@@ -473,7 +473,7 @@ namespace ArchipelagoULTRAKILL
                                     }
                                     if (long.TryParse(messagePart.Text, out long itemId))
                                     {
-                                        string itemName = Session.Items.GetItemName(itemId) ?? $"Item: {itemId}";
+                                        string itemName = Session.Items.GetItemName(itemId, Session.Players.GetPlayerInfo(messagePart.Player.Value).Game) ?? $"Item: {itemId}";
                                         richText += color + itemName + "</color>";
                                         plainText += itemName;
                                     }
@@ -487,7 +487,7 @@ namespace ArchipelagoULTRAKILL
                                     color = "<color=#" + ColorUtility.ToHtmlStringRGB(Colors.Location) + "FF>";
                                     if (long.TryParse(messagePart.Text, out long locationId))
                                     {
-                                        string locationName = Session.Locations.GetLocationNameFromId(locationId) ?? $"Location: {locationId}";
+                                        string locationName = Session.Locations.GetLocationNameFromId(locationId, Session.Players.GetPlayerInfo(messagePart.Player.Value).Game) ?? $"Location: {locationId}";
                                         richText += color + locationName + "</color>";
                                         plainText += locationName;
                                     }
@@ -513,24 +513,25 @@ namespace ArchipelagoULTRAKILL
 
         public static void ItemReceived(ReceivedItemsHelper helper)
         {
-            bool shouldGetItemAgain = LocationManager.ShouldGetItemAgain(LocationManager.GetTypeFromName(helper.PeekItemName()).Value);
+            bool shouldGetItemAgain = LocationManager.ShouldGetItemAgain(LocationManager.GetTypeFromName(helper.PeekItem().ItemName).Value);
             bool silent = !(helper.Index > Core.data.index) && shouldGetItemAgain;
             if (helper.Index > Core.data.index || shouldGetItemAgain)
             {
-                string name = helper.PeekItemName();
-                string player = Session.Players.GetPlayerName(helper.PeekItem().Player);
+                ItemInfo item = helper.PeekItem();
+                string name = item.ItemName;
+                string player = Session.Players.GetPlayerName(item.Player);
                 if (player == Core.data.slot_name) player = null;
-                else player = (Session.Players.GetPlayerAlias(helper.PeekItem().Player) == "") ? "?" : Session.Players.GetPlayerAlias(helper.PeekItem().Player);
+                else player = (Session.Players.GetPlayerAlias(item.Player) == "") ? "?" : Session.Players.GetPlayerAlias(item.Player);
                 if (helper.Index > Core.data.index) Core.Logger.LogInfo("Name: \"" + name + "\" | Type: " + LocationManager.GetTypeFromName(name) + " | Player: \"" + player + "\"");
 
-                UKItem item = new UKItem()
+                UKItem ukitem = new UKItem()
                 {
                     itemName = name,
                     type = LocationManager.GetTypeFromName(name).Value,
                     playerName = Core.data.slot_name
                 };
 
-                LocationManager.itemQueue.Add(new QueuedItem(item, player, silent));
+                LocationManager.itemQueue.Add(new QueuedItem(ukitem, player, silent));
                 if (helper.Index > Core.data.index) Core.data.index++;
             }
             helper.DequeueItem();
@@ -570,8 +571,7 @@ namespace ArchipelagoULTRAKILL
 
         public static void SendCompletion()
         {
-            var packet = new StatusUpdatePacket() { Status = ArchipelagoClientState.ClientGoal };
-            Session.Socket.SendPacket(packet);
+            Session.SetGoalAchieved();
         }
     }
 }

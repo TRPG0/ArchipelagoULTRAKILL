@@ -20,7 +20,7 @@ namespace ArchipelagoULTRAKILL.Commands
             else
             {
                 string message = string.Join(" ", args);
-                Multiworld.Session.Socket.SendPacket(new SayPacket() { Text = message });
+                Multiworld.Session.Say(message);
                 return;
             }
         }

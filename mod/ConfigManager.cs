@@ -13,6 +13,7 @@ using UnityEngine.UI;
 using Color = UnityEngine.Color;
 using Archipelago.MultiClient.Net.Packets;
 using ArchipelagoULTRAKILL.Structures;
+using TMPro;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -133,9 +134,9 @@ namespace ArchipelagoULTRAKILL
             serverAddress = new StringField(playerPanel, "ADDRESS", "serverAddress", "archipelago.gg", false, true);
             serverPassword = new StringField(playerPanel, "PASSWORD", "serverPassword", "", true, true);
             hintMode = new BoolField(playerPanel, "HINT MODE", "hintMode", false, false);
-            new ConfigHeader(playerPanel, "Hint mode disables all randomization, and allows connecting to other games' slots to unlock hints while playing The Cyber Grind.", 12, TextAnchor.UpperLeft);
+            new ConfigHeader(playerPanel, "Hint mode disables all randomization, and allows connecting to other games' slots to unlock hints while playing The Cyber Grind.", 12, TextAlignmentOptions.TopLeft);
 
-            connectionInfo = new ConfigHeader(playerPanel, "", 16, TextAnchor.UpperCenter);
+            connectionInfo = new ConfigHeader(playerPanel, "", 16, TextAlignmentOptions.Top);
 
             connectButton = new ButtonField(playerPanel, "CONNECT", "connectButton");
             connectButton.onClick += () =>
@@ -205,7 +206,7 @@ namespace ArchipelagoULTRAKILL
             {
                 if (Multiworld.Authenticated)
                 {
-                    if (value != "") Multiworld.Session.Socket.SendPacket(new SayPacket() { Text = value });
+                    if (value != "") Multiworld.Session.Say(value);
                     chat.value = "";
                 }
             };
