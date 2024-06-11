@@ -1,3 +1,8 @@
+## 2.2.2
+
+- Fixed a logic error for 5-2: Secret #1.
+- Fixed The Cyber Grind soft locking when using Hint Mode to unlock hints for other game slots.
+
 ## 2.2.1
 
 - Updated Archipelago.MultiClient.Net to `6.0.0-rc5`.

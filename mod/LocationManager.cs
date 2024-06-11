@@ -367,6 +367,7 @@ namespace ArchipelagoULTRAKILL
 
                 Multiworld.Session.Locations.ScoutLocationsAsync(true, locationId);
                 ScoutedItemInfo info = Multiworld.Session.Locations.ScoutLocationsAsync(false, locationId).Result[locationId];
+                string locationName = Multiworld.Session.Locations.GetLocationNameFromId(info.LocationId, Multiworld.Session.Players.GetPlayerInfo(Multiworld.Session.ConnectionInfo.Slot).Game);
 
                 string itemColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(info.ItemName));
                 Color color = GetUKMessageColor(info.ItemName);
@@ -376,7 +377,7 @@ namespace ArchipelagoULTRAKILL
                     color = GetAPMessageColor(info.Flags);
                 }
                 string playerColor = ColorUtility.ToHtmlStringRGB(Colors.PlayerOther);
-                string locationColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(info.LocationName.Substring(0, 3)));
+                string locationColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(locationName.Substring(0, 3)));
 
                 string hint = "HINT: <color=#" + itemColor + "FF>";
                 hint += info.ItemName.ToUpper() + "</color> ";
@@ -390,7 +391,7 @@ namespace ArchipelagoULTRAKILL
                     color = color,
                     message = hint
                 });
-                if (!UIManager.displayingMessage && Core.IsPlaying) Core.uim.StartCoroutine("DisplayMessage");
+                if (!UIManager.displayingMessage && (Core.IsPlaying || SceneHelper.CurrentScene == "Endless")) Core.uim.StartCoroutine("DisplayMessage");
             }
             else
             {

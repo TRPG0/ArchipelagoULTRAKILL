@@ -2086,7 +2086,6 @@ def rules(ultrakillworld):
     add_rule(multiworld.get_location("5-2: Secret #1", player),
         lambda state: (
             can_slide(state, player, slide)
-            or slam_storage(state, player, slam, walljump)
             or rock0_fire2(state, player, fire2)
         ))
 
