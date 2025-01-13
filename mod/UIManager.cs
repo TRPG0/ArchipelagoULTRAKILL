@@ -8,8 +8,6 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 using TMPro;
-using System.Security.Policy;
-using System.Diagnostics;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -19,7 +17,6 @@ namespace ArchipelagoULTRAKILL
 
         public static TMP_FontAsset font;
         public static TextMeshProUGUI log;
-        public static TextMeshProUGUI logBlack;
         public static int lines = 5;
 
         public static GameObject canvas;
@@ -72,23 +69,16 @@ namespace ArchipelagoULTRAKILL
             Core.obj.GetComponent<Canvas>().sortingOrder = 256;
 
             log = go.AddComponent<TextMeshProUGUI>();
-            log.font = font;
+            log.font = bundle.LoadAsset<TMP_FontAsset>("assets/vcr_osd_mono_1.asset");
+            log.fontMaterial = bundle.LoadAsset<Material>("assets/vcr_osd_mono_underlay.mat");
             log.fontSize = ConfigManager.logFontSize.value;
             log.alignment = TextAlignmentOptions.BottomGeoAligned;
             log.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, Screen.height - 10);
-
-            logBlack = GameObject.Instantiate(log.gameObject, log.transform.parent).GetComponent<TextMeshProUGUI>();
-            logBlack.gameObject.name = "Shadow";
-            logBlack.color = new Color(0, 0, 0, 0.7f);
-            logBlack.overrideColorTags = true;
-            logBlack.transform.localPosition = new Vector3(0, -1.5f, 0);
-            logBlack.transform.SetAsFirstSibling();
         }
 
         public static void SetLogText(string text)
         {
             if (log != null) log.text = text;
-            if (logBlack != null) logBlack.text = text;
         }
 
         public static void AdjustLogBounds()
@@ -96,12 +86,10 @@ namespace ArchipelagoULTRAKILL
             if (PrefsManager.Instance.GetInt("hudType") >= 2 && Core.IsInLevel)
             {
                 log.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, (float)Math.Round(Screen.height * 0.77f));
-                logBlack.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, (float)Math.Round(Screen.height * 0.77f));
             }
             else
             {
                 log.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, Screen.height - 10);
-                logBlack.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, Screen.height - 10);
             }
         }
 
@@ -338,8 +326,6 @@ namespace ArchipelagoULTRAKILL
                         break;
                 }
             }
-
-            CreateMenuUI();
         }
         
         public static void CreateMenuUI()
@@ -373,21 +359,34 @@ namespace ArchipelagoULTRAKILL
 
         public static void CreateGoalCounter()
         {
-            GameObject go = new GameObject();
-            go.transform.SetParent(levels[Core.data.goal].transform);
-            if (Core.data.goal.Contains("P")) go.transform.localPosition = new Vector3(0, 20, 0);
-            else if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(0, 90, 0);
-            else go.transform.localPosition = new Vector3(0, 22.5f, 0);
-            go.layer = 5;
-            goalCount = go.AddComponent<TextMeshProUGUI>();
-            goalCount.text = (Core.data.goalRequirement - Core.data.completedLevels.Count).ToString();
-            goalCount.font = font;
-            goalCount.fontSize = 100;
-            goalCount.alignment = TextAlignmentOptions.Center;
-            goalCount.overflowMode = TextOverflowModes.Overflow;
+            if (goalCount != null) return;
+            if (Core.data.goal.Contains("-S"))
+            {
+                Transform rankText = secrets[Core.data.goal].transform.parent.Find("RankPanel").Find("RankText");
+                goalCount = GameObject.Instantiate(rankText, rankText.parent).GetComponent<TextMeshProUGUI>();
+                goalCount.transform.localPosition = new Vector3(-30, -30, 0);
+                goalCount.text = (Core.data.goalRequirement - Core.data.completedLevels.Count).ToString();
+                if (goalCount.text.Length > 1) goalCount.fontSize = 40;
+            }
+            else
+            {
+                GameObject go = new GameObject();
+                go.transform.SetParent(levels[Core.data.goal].transform);
+                if (Core.data.goal.Contains("P")) go.transform.localPosition = new Vector3(0, 20, 0);
+                else if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) go.transform.localPosition = new Vector3(0, 90, 0);
+                else go.transform.localPosition = new Vector3(0, 22.5f, 0);
+                go.layer = 5;
+                goalCount = go.AddComponent<TextMeshProUGUI>();
+                goalCount.text = (Core.data.goalRequirement - Core.data.completedLevels.Count).ToString();
+                goalCount.font = font;
+                goalCount.fontSize = 100;
+                goalCount.alignment = TextAlignmentOptions.Center;
+                goalCount.overflowMode = TextOverflowModes.Overflow;
 
-            levels[Core.data.goal].transform.GetChild(2).gameObject.GetComponent<Image>().color = new Color(0.3f, 0.3f, 0.3f);
-            if (!Multiworld.Authenticated) goalCount.gameObject.SetActive(false);
+                levels[Core.data.goal].transform.GetChild(2).gameObject.GetComponent<Image>().color = new Color(0.3f, 0.3f, 0.3f);
+            }
+            
+            if (!Core.DataExists()) goalCount.gameObject.SetActive(false);
         }
 
         public static void UpdateLevels()
@@ -422,9 +421,16 @@ namespace ArchipelagoULTRAKILL
             {
                 int xPos = 74;
                 int xOffset = 33;
+                int yPos = 65;
                 if (info.Skulls == SkullsType.Normal)
                 {
                     if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}.");
+                    bool isPrime = info.Name.Contains("P-");
+                    if (isPrime)
+                    {
+                        xPos = 140;
+                        yPos = 112;
+                    }
 
                     foreach (string skull in info.SkullsList)
                     {
@@ -435,8 +441,8 @@ namespace ArchipelagoULTRAKILL
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        go.transform.localPosition = new Vector3(xPos - (xOffset * info.SkullsList.FindIndex(a => a == skull)), 65, 0);
-                        go.AddComponent<SkullIcon>().SetId(skull);
+                        go.transform.localPosition = new Vector3(xPos - (xOffset * info.SkullsList.FindIndex(a => a == skull)), yPos, 0);
+                        go.AddComponent<SkullIcon>().SetId(skull, !isPrime);
                     }
                 }
                 else if (info.Name == "1-4")
@@ -451,7 +457,7 @@ namespace ArchipelagoULTRAKILL
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        go.transform.localPosition = new Vector3(xPos - (xOffset * i), 65, 0);
+                        go.transform.localPosition = new Vector3(xPos - (xOffset * i), yPos, 0);
                         go.AddComponent<SkullIcon>().SetId(skull);
                     }
                 }
@@ -467,7 +473,7 @@ namespace ArchipelagoULTRAKILL
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        go.transform.localPosition = new Vector3(xPos - (xOffset * i), 65, 0);
+                        go.transform.localPosition = new Vector3(xPos - (xOffset * i), yPos, 0);
                         go.AddComponent<SkullIcon>().SetId(skull);
                     }
                 }

@@ -35,6 +35,7 @@ namespace ArchipelagoULTRAKILL.Structures
         public static Color Points => ConfigManager.pointsColor.value;
         public static Color DualWield => ConfigManager.dualwieldColor.value;
         public static Color DoubleJump => ConfigManager.doublejumpColor.value;
+        public static Color Confusion => ConfigManager.confusionColor.value;
         public static Color Trap => ConfigManager.trapColor.value;
     }
 }

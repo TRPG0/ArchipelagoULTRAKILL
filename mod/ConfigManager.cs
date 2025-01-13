@@ -34,6 +34,7 @@ namespace ArchipelagoULTRAKILL
         public static ButtonField deathLinkOffButton;
         public static StringField chat;
 
+        public static StringField start;
         public static StringField goal;
         public static StringField goalProgress;
         public static StringField locationsChecked;
@@ -97,6 +98,7 @@ namespace ArchipelagoULTRAKILL
         public static ColorField pointsColor;
         public static ColorField dualwieldColor;
         public static ColorField doublejumpColor;
+        public static ColorField confusionColor;
         public static ColorField trapColor;
 
         public static ConfigPanel hintsPanel;
@@ -212,7 +214,8 @@ namespace ArchipelagoULTRAKILL
             };
 
             new ConfigHeader(playerPanel, "-----");
-            goal = new StringField(playerPanel, "GOAL", "goal", "?", false, false) { interactable = false };
+            start = new StringField(playerPanel, "START LEVEL", "start", "?", false, false) { interactable = false };
+            goal = new StringField(playerPanel, "GOAL LEVEL", "goal", "?", false, false) { interactable = false };
             goalProgress = new StringField(playerPanel, "LEVELS COMPLETED", "goalProgress", "?", false, false) { interactable = false };
             locationsChecked = new StringField(playerPanel, "LOCATIONS CHECKED", "locationsChecked", "?", false, false) { interactable = false };
             bossRewards = new EnumField<BossOptions>(playerPanel, "BOSS REWARDS", "bossRewards", BossOptions.Disabled, false) { interactable = false };
@@ -335,6 +338,7 @@ namespace ArchipelagoULTRAKILL
             pointsColor = new ColorField(colorPanel, "POINTS", "pointsColor", new Color(1, 0.65f, 0), true);
             dualwieldColor = new ColorField(colorPanel, "DUAL WIELD", "dualwieldColor", new Color(1, 1, 0.25f), true);
             doublejumpColor = new ColorField(colorPanel, "AIR JUMP", "doublejumpColor", new Color(1, 1, 0.6f), true);
+            confusionColor = new ColorField(colorPanel, "CONFUSING AURA", "confusionColor", new Color(0.8242f, 1, 0.1289f), true);
             trapColor = new ColorField(colorPanel, "TRAP", "trapColor", new Color(0.7f, 0.7f, 0.7f), true);
 
             // hint settings
@@ -385,6 +389,7 @@ namespace ArchipelagoULTRAKILL
 
         public static void LoadStats()
         {
+            start.value = Core.data.start;
             goal.value = Core.data.goal;
             goalProgress.value = $"{Core.data.completedLevels.Count} / {Core.data.goalRequirement}";
 
@@ -414,6 +419,7 @@ namespace ArchipelagoULTRAKILL
 
         public static void ResetStatsDefaults()
         {
+            start.value = "?";
             goal.value = "?";
             goalProgress.value = "?";
             locationsChecked.value = "?";

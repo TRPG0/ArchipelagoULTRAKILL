@@ -140,7 +140,7 @@ namespace ArchipelagoULTRAKILL.Components
             for (int i = StartLevelId; i <= EndLevelId; i++)
             {
                 RankData rank = GameProgressSaver.GetRank(i);
-                bool isUnlocked = Core.data.unlockedLevels.Contains(Core.GetLevelNameFromId(i)) || i == 1;
+                bool isUnlocked = Core.data.unlockedLevels.Contains(Core.GetLevelNameFromId(i));
                 if (isUnlocked) unlocked++;
 
                 bool isCompleted = false;
@@ -241,21 +241,60 @@ namespace ArchipelagoULTRAKILL.Components
 
         public string BuildStringGoal(string goal, int value, int total)
         {
-            if (!ActIncludes(Core.GetLevelIdFromName(goal))) return "";
-
-            RankData rank = GameProgressSaver.GetRank(Core.GetLevelIdFromName(goal));
-            foreach (int grade in rank.ranks)
+            if (goal.Contains("-S"))
             {
-                if (grade >= 0)
+                int secretMissionLevel = 0;
+                switch (goal)
                 {
-                    return "Goal: <color=green>Completed</color>\n";
+                    case "0-S":
+                        secretMissionLevel = 2;
+                        break;
+                    case "1-S":
+                        secretMissionLevel = 6;
+                        break;
+                    case "2-S":
+                        secretMissionLevel = 12;
+                        break;
+                    case "4-S":
+                        secretMissionLevel = 17;
+                        break;
+                    case "5-S":
+                        secretMissionLevel = 20;
+                        break;
+                    case "7-S":
+                        secretMissionLevel = 28;
+                        break;
+                    default:
+                        break;
                 }
+
+                if (!ActIncludes(secretMissionLevel)) return "";
+
+                if (GameProgressSaver.GetSecretMission(int.Parse(Core.data.goal.Substring(0, 1))) >= 2) return "Goal: <color=green>Completed</color>\n";
+
+                string color = "red";
+                if (value >= total) color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.Perfect);
+
+                return $"Goal: <color={color}>{value}/{total}</color>\n";
             }
+            else
+            {
+                if (!ActIncludes(Core.GetLevelIdFromName(goal))) return "";
 
-            string color = "red";
-            if (value >= total) color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.Perfect);
+                RankData rank = GameProgressSaver.GetRank(Core.GetLevelIdFromName(goal));
+                foreach (int grade in rank.ranks)
+                {
+                    if (grade >= 0)
+                    {
+                        return "Goal: <color=green>Completed</color>\n";
+                    }
+                }
 
-            return $"Goal: <color={color}>{value}/{total}</color>\n";
+                string color = "red";
+                if (value >= total) color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.Perfect);
+
+                return $"Goal: <color={color}>{value}/{total}</color>\n";
+            }
         }
 
         public void ShowStats()

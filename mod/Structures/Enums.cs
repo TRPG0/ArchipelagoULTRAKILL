@@ -52,7 +52,11 @@
         WalljumpLimiter,
         EmptyAmmo,
         DoubleJump,
-        Radiance
+        Radiance,
+        Confusion,
+        QuickCharge,
+        NoArms,
+        Sandstorm
     }
 
     public enum BossOptions

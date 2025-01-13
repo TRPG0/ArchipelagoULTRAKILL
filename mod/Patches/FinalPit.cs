@@ -11,7 +11,7 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists())
             {
-                if (!__instance.targetLevelName.Contains("-S")) __instance.targetLevelName = "Main Menu";
+                if (!__instance.targetLevelName.Contains("-S") || __instance.targetLevelName.Contains(Core.data.goal)) __instance.targetLevelName = "Main Menu";
             }
         }
     }
@@ -38,8 +38,9 @@ namespace ArchipelagoULTRAKILL.Patches
                 {
                     if (Core.CurrentLevelInfo != null)
                     {
-                        if (Core.CurrentLevelInfo.Name == Core.data.goal && Multiworld.Authenticated)
+                        if (Core.CurrentLevelInfo.Name == Core.data.goal)
                         {
+                            Core.Logger.LogInfo("Goal completed!");
                             Multiworld.SendCompletion();
                         }
                         else

@@ -17,7 +17,7 @@ namespace ArchipelagoULTRAKILL
 {
     public static class Multiworld
     {
-        public static int[] AP_VERSION = new int[] { 0, 5, 0 };
+        public static int[] AP_VERSION = new int[] { 0, 5, 1 };
         public static DeathLinkService DeathLinkService = null;
         public static bool DeathLinkKilling = false;
 
@@ -26,11 +26,27 @@ namespace ArchipelagoULTRAKILL
         public static ArchipelagoSession Session;
         public static List<string> messages = new List<string>();
 
+        public static void TryGetStart(ref HashSet<string> unlockedLevels, Dictionary<string, object> slotData, string defaultValue)
+        {
+            try 
+            { 
+                unlockedLevels.Add(slotData["start"].ToString());
+                Core.data.start = slotData["start"].ToString();
+            }
+            catch (KeyNotFoundException)
+            {
+                Core.Logger.LogWarning($"No key found for start level. Using default value ({defaultValue})");
+                unlockedLevels.Add(defaultValue);
+                Core.data.start = defaultValue;
+            }
+        }
+
         public static void TryGetGoal(ref string goal, Dictionary<string, object> slotData, string defaultValue)
         {
-            try
+            if (int.TryParse(slotData["goal"].ToString(), out int goalNum))
             {
-                switch (int.Parse(slotData["goal"].ToString()))
+                Core.Logger.LogWarning("Using legacy goal option.");
+                switch (goalNum)
                 {
                     case 0:
                         goal = "1-4";
@@ -62,10 +78,19 @@ namespace ArchipelagoULTRAKILL
                         break;
                 }
             }
-            catch (Exception)
+            else
             {
-                Core.Logger.LogError($"Couldn't parse goal. Something has gone very wrong. Using default value ({defaultValue})");
-                goal = defaultValue;
+                goal = slotData["goal"].ToString();
+            }
+        }
+
+        public static void TryGetSlotDataValue(ref string option, Dictionary<string, object> slotData, string key, string defaultValue)
+        {
+            try { option = slotData[key].ToString(); }
+            catch (KeyNotFoundException)
+            {
+                Core.Logger.LogWarning($"No key found for option \"{key}\". Using default value ({defaultValue})");
+                option = defaultValue;
             }
         }
 
@@ -147,6 +172,8 @@ namespace ArchipelagoULTRAKILL
                 ConfigManager.hintMode.interactable = false;
                 ConfigManager.chat.interactable = true;
 
+                TryGetSlotDataValue(ref Core.data.version, success.SlotData, "version", string.Empty);
+                TryGetStart(ref Core.data.unlockedLevels, success.SlotData, "0-1");
                 TryGetGoal(ref Core.data.goal, success.SlotData, "6-2");
 
                 TryGetSlotDataValue(ref Core.data.goalRequirement, success.SlotData, "goal_requirement", 15);
@@ -255,6 +282,7 @@ namespace ArchipelagoULTRAKILL
                 Core.Logger.LogInfo("Successfully connected to server as player \"" + Core.data.slot_name + "\".");
                 ConfigManager.connectionInfo.text = "Successfully connected to server as player \"" + Core.data.slot_name + "\".";
                 UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
+                if (Core.data.completedLevels.Count < Core.data.goalRequirement) UIManager.CreateGoalCounter();
                 string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
                 UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
 
@@ -571,7 +599,7 @@ namespace ArchipelagoULTRAKILL
 
         public static void SendCompletion()
         {
-            Session.SetGoalAchieved();
+            Session?.SetGoalAchieved();
         }
     }
 }

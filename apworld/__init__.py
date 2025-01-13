@@ -1,11 +1,12 @@
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Union
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
+from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
-from .Items import base_id, item_table, group_table
-from .Locations import location_table, event_table, ext_bosses, limbo_switches, violence_switches
-from .Regions import region_table, secret_levels
-from .Rules import rules
-from .Options import UltrakillOptions, Goal, UnlockType, StartingWeapon
+from .Items import ItemType, base_id, item_list, group_dict
+from .Locations import LocationType, location_list, start_weapon_locations
+from .Regions import Regions, SecretRegion
+from .Rules import UltrakillRules
+from .Options import UltrakillOptions
 from .Music import multilayer_music, singlelayer_music, ordered_list
 
 
@@ -27,28 +28,60 @@ class UltrakillWorld(World):
     game = "ULTRAKILL"
     web = UltrakillWeb()
 
-    item_name_to_id = {item["name"]: (base_id + index) for index, item in enumerate(item_table)}
-    location_name_to_id = {loc["name"]: (base_id + index) for index, loc in enumerate(location_table)}
-    location_name_to_game_id = {loc["name"]: loc["game_id"] for loc in location_table}
+    item_name_to_id = {item.name: (base_id + index) for index, item in enumerate(item_list)}
+    location_name_to_id = {loc.name: (base_id + index) for index, loc in enumerate(location_list)}
 
-    item_name_groups = group_table
+    item_name_groups = group_dict
     options_dataclass = UltrakillOptions
     options: UltrakillOptions
 
-    goal_name = "6-2"
-    start_weapon = "Revolver - Piercer"
-    music: Dict[str, str] = {}
 
-    def set_rules(self):    
-        rules(self)
+    def __init__(self, multiworld, player):
+        super(UltrakillWorld, self).__init__(multiworld, player)
+        self.start_weapon: str = "Revolver - Piercer"
+        self.start_location: str = "0-1: Weapon"
+        self.skipped_location_types: List[LocationType] = []
+
+        self.item_classifications: Dict[ItemType, Union[ItemClassification, None]] = {}
+        self.item_classifications[ItemType.Weapon] = ItemClassification.progression
+        self.item_classifications[ItemType.Fire2] = ItemClassification.progression
+        self.item_classifications[ItemType.Stamina] = ItemClassification.progression
+        self.item_classifications[ItemType.WallJump] = ItemClassification.progression
+        self.item_classifications[ItemType.Slide] = ItemClassification.progression
+        self.item_classifications[ItemType.Slam] = ItemClassification.progression
+        self.item_classifications[ItemType.Skull] = ItemClassification.progression
+        self.item_classifications[ItemType.Level] = ItemClassification.progression
+        self.item_classifications[ItemType.Layer] = ItemClassification.progression
+        self.item_classifications[ItemType.Filler] = ItemClassification.filler
+        self.item_classifications[ItemType.Trap] = ItemClassification.trap
+        self.item_classifications[ItemType.LimboSwitch] = ItemClassification.progression
+        self.item_classifications[ItemType.ViolenceSwitch] = ItemClassification.progression
+        self.item_classifications[ItemType.ClashMode] = ItemClassification.filler
+        self.item_classifications[ItemType.RevStd] = ItemClassification.progression
+        self.item_classifications[ItemType.RevAlt] = ItemClassification.progression
+        self.item_classifications[ItemType.ShoStd] = ItemClassification.progression
+        self.item_classifications[ItemType.ShoAlt] = ItemClassification.progression
+        self.item_classifications[ItemType.NaiStd] = ItemClassification.progression
+        self.item_classifications[ItemType.NaiAlt] = ItemClassification.progression
+
+        self.event_names: List[str] = []
+        self.game_id_to_long: Dict[str, int] = {}
+        self.music: Dict[str, str] = {}
+
+
+    def set_rules(self):
+        UltrakillRules(self).set_rules()
 
 
     def create_item(self, name: str) -> "UltrakillItem":
         item_id: int = self.item_name_to_id[name]
         id = item_id - base_id
-        classification = item_table[id]["classification"]
-        if name == "Blue Skull (1-4)" and self.options.hank_rewards:
-            classification = ItemClassification.progression
+        classification = ItemClassification.filler
+        if item_list[id].type != None:
+            classification = self.item_classifications[item_list[id].type]
+
+        if name == "Blue Skull (1-4)" and not self.options.hank_rewards:
+            classification = ItemClassification.filler
 
         return UltrakillItem(name, classification, item_id, self.player)
     
@@ -58,58 +91,189 @@ class UltrakillWorld(World):
     
 
     def generate_early(self):
-        if not self.options.include_secret_mission_completion and self.options.goal_requirement.value > 28:
-            print(f"[ULTRAKILL - '{self.multiworld.get_player_name(self.player)}'] "
-                  "Secret mission completion is disabled. Goal requirement lowered to 28.")
-            self.options.goal_requirement.value = 28
+        # level options
+        self.start_level = Regions.get_from_id(self.options.start_level.value)
+        self.goal_level = Regions.get_from_id(self.options.goal_level.value)
 
-        if self.options.starting_weapon != StartingWeapon.option_revolver:
-            weapons: List[str] = []
-            
-            if self.options.starting_weapon != StartingWeapon.option_any_arm:
-                weapons = list(group_table["start_weapons"])
-            else:
-                weapons = [
-                    "Feedbacker",
-                    "Knuckleblaster"
-                ]
+        valid_levels = []
+        for level in self.options.goal_level.options.values():
+            if Regions.get_from_id(level).short_name not in self.options.skipped_levels.value:
+                valid_levels.append(level)
+        valid_starts = []
+        for level in valid_levels:
+            if level in self.options.start_level.options.values():
+                valid_starts.append(level)
 
-            if not self.options.start_with_arm:
-                if "Railcannon - Electric" in weapons:
-                    weapons.remove("Railcannon - Electric")
-                if "Railcannon - Screwdriver" in weapons:
-                    weapons.remove("Railcannon - Screwdriver")
-                if "Railcannon - Malicious" in weapons:
-                    weapons.remove("Railcannon - Malicious")
-                if "Rocket Launcher - Freezeframe" in weapons:
-                    weapons.remove("Rocket Launcher - Freezeframe")
-                
+        #print(self.start_level.short_name, self.goal_level.short_name)
+        #print(valid_starts)
+        #print(valid_levels)
 
-            if self.options.start_with_arm:
-                if "Feedbacker" in weapons:
-                    weapons.remove("Feedbacker")
+        def adjust_start_level() -> None:
+            if self.options.start_level.value in valid_starts:
+                valid_starts.remove(self.options.start_level.value)
+            if self.options.start_level.value in valid_levels:
+                valid_levels.remove(self.options.start_level.value)
+            new_level: int = self.random.choice(valid_starts)
+            #print(f"Start level {self.options.start_level.value} -> {new_level}")
+            self.options.start_level.value = new_level
+            self.start_level = Regions.get_from_id(new_level)
 
-            if not self.options.start_with_arm and self.options.starting_weapon == StartingWeapon.option_any_weapon:
-                if "Feedbacker" in weapons:
-                    weapons.remove("Feedbacker")
+        def adjust_goal_level() -> None:
+            if self.options.goal_level.value in valid_levels:
+                valid_levels.remove(self.options.goal_level.value)
+            new_level: int = self.random.choice(valid_levels)
+            #print(f"Goal level {self.options.goal_level.value} -> {new_level}")
+            self.options.goal_level.value = new_level
+            self.goal_level = Regions.get_from_id(new_level)
 
-            if self.options.starting_weapon == StartingWeapon.option_any_weapon:
-                if "Knuckleblaster" in weapons:
-                    weapons.remove("Knuckleblaster")
+        if self.start_level.short_name in self.options.skipped_levels.value and not self.options.start_level.randomized:
+            raise OptionError(f"[ULTRAKILL - '{self.player_name}'] "
+                            f"Start level ({self.start_level.short_name}) cannot be skipped.")
+        while self.start_level.short_name in self.options.skipped_levels.value:
+            adjust_start_level()
 
-            if self.options.randomize_secondary_fire:
-                if "Rocket Launcher - S.R.S. Cannon" in weapons:
-                    weapons.remove("Rocket Launcher - S.R.S. Cannon")
-                if "Rocket Launcher - Firestarter" in weapons:
-                    weapons.remove("Rocket Launcher - Firestarter")
+        if self.start_level.short_name == self.goal_level.short_name and not self.options.goal_level.randomized:
+            raise OptionError(f"[ULTRAKILL - '{self.player_name}'] "
+                            f"Start level and goal level cannot be the same. ({self.start_level.short_name})")
+        while self.start_level.short_name == self.goal_level.short_name:
+            adjust_goal_level()
 
-                if self.options.nailgun_form and "Nailgun - Overheat" in weapons:
-                    weapons.remove("Nailgun - Overheat")
-            
-            self.start_weapon = self.random.choice(weapons)
+        if self.goal_level.short_name in self.options.skipped_levels.value and not self.options.goal_level.randomized:
+            raise OptionError(f"[ULTRAKILL - '{self.player_name}'] "
+                            f"Goal level ({self.goal_level.short_name}) cannot be skipped.")
+        while self.goal_level.short_name in self.options.skipped_levels.value:
+            adjust_goal_level()
 
+        self.start_location = self.random.choice(start_weapon_locations[self.start_level.short_name])
+
+        level_leads_to_secret: List[int] = [ 2, 6, 12, 17, 20, 28 ]
+        if self.options.goal_requirement.value == self.options.goal_requirement.range_end \
+            and self.options.goal_level.value in level_leads_to_secret:
+                print(f"[ULTRAKILL - '{self.player_name}'] "
+                      f"Goal requirement cannot be {self.options.goal_requirement.range_end} because goal level "
+                      f"{self.goal_level.short_name} leads to an inaccessible secret mission. Lowering goal "
+                      f"requirement to {self.options.goal_requirement.range_end-1}.")
+                self.options.goal_requirement.value = self.options.goal_requirement.range_end-1
+
+        included_levels: int = self.options.goal_requirement.range_end - len(self.options.skipped_levels.value)
+        if self.options.goal_requirement.value > included_levels:
+            raise OptionError(f"[ULTRAKILL - '{self.player_name}'] "
+                            f"Goal requirement ({self.options.goal_requirement.value}) "
+                            f"is higher than the number of included levels. ({included_levels})")
+
+
+        # starting weapon
+        def remove_from_dict(dict: Dict[str, int], key: str) -> None:
+            if key in dict:
+                del dict[key]
+        
+        start_weapons: Dict[str, int] = {k: v for k, v in self.options.starting_weapon_pool.value.items() if v > 0}
+
+        if self.start_level.short_name == "2-3":
+            remove_from_dict(start_weapons, "Feedbacker")
+            remove_from_dict(start_weapons, "Knuckleblaster")
+            remove_from_dict(start_weapons, "Whiplash")
+
+        if self.options.start_with_arm:
+            remove_from_dict(start_weapons, "Feedbacker")
+        else:
+            remove_from_dict(start_weapons, "Whiplash")
+            remove_from_dict(start_weapons, "Railcannon - Electric")
+            remove_from_dict(start_weapons, "Railcannon - Screwdriver")
+            remove_from_dict(start_weapons, "Railcannon - Malicious")
+            remove_from_dict(start_weapons, "Rocket Launcher - Freezeframe")
+
+        if not self.options.start_with_arm and self.options.randomize_secondary_fire:
+            remove_from_dict(start_weapons, "Rocket Launcher - S.R.S. Cannon")
+            remove_from_dict(start_weapons, "Rocket Launcher - Firestarter")
+
+        if not self.options.start_with_arm and self.options.randomize_secondary_fire and self.options.nailgun_form:
+            remove_from_dict(start_weapons, "Nailgun - Overheat")
+
+        if len(start_weapons) < 1 or all(weight == 0 for weight in start_weapons.values()):
+            raise OptionError(f"[ULTRAKILL - '{self.player_name}'] "
+                            "No valid starting weapons available. Add more in your options.")
+
+        self.start_weapon = self.random.choices(list(start_weapons.keys()), list(start_weapons.values()))[0]
+        #print(self.start_weapon)
+
+        # excluding items/locations
+        if self.options.start_with_slide:
+            self.item_classifications[ItemType.Slide] = None
+
+        if self.options.start_with_slam:
+            self.item_classifications[ItemType.Slam] = None
+
+        if self.options.unlock_type == "levels":
+            self.item_classifications[ItemType.Layer] = None
+        elif self.options.unlock_type == "layers":
+            self.item_classifications[ItemType.Level] = None
+
+        if self.options.boss_rewards == "standard":
+            self.skipped_location_types.append(LocationType.BossExt)
+        elif self.options.boss_rewards == "disabled":
+            self.skipped_location_types.append(LocationType.Boss)
+            self.skipped_location_types.append(LocationType.BossExt)
+
+        if not self.options.challenge_rewards:
+            self.skipped_location_types.append(LocationType.Challenge)
+
+        if not self.options.p_rank_rewards:
+            self.skipped_location_types.append(LocationType.PerfectRank)
+
+        if not self.options.hank_rewards:
+            self.skipped_location_types.append(LocationType.Hank)
+
+        if not self.options.randomize_clash_mode:
+            self.skipped_location_types.append(LocationType.ClashMode)
+
+        if not self.options.fish_rewards:
+            self.skipped_location_types.append(LocationType.Fish)
+
+        if not self.options.cleaning_rewards:
+            self.skipped_location_types.append(LocationType.Clean)
+
+        if not self.options.chess_reward:
+            self.skipped_location_types.append(LocationType.Chess)
+
+        if not self.options.rocket_race_reward:
+            self.skipped_location_types.append(LocationType.Rocket)
+
+        if not self.options.randomize_clash_mode:
+            self.item_classifications[ItemType.ClashMode] = None
+
+        if not self.options.randomize_secondary_fire:
+            self.item_classifications[ItemType.Fire2] = None
+
+        if self.options.revolver_form == "standard":
+            self.item_classifications[ItemType.RevStd] = None
+        elif self.options.revolver_form == "alternate":
+            self.item_classifications[ItemType.RevAlt] = None
+
+        if self.options.shotgun_form == "standard":
+            self.item_classifications[ItemType.ShoStd] = None
+        elif self.options.shotgun_form == "alternate":
+            self.item_classifications[ItemType.ShoAlt] = None
+
+        if self.options.nailgun_form == "standard":
+            self.item_classifications[ItemType.NaiStd] = None
+        elif self.options.nailgun_form == "alternate":
+            self.item_classifications[ItemType.NaiAlt] = None
+
+        if not self.options.randomize_skulls:
+            self.item_classifications[ItemType.Skull] = None
+
+        if not self.options.randomize_limbo_switches:
+            self.skipped_location_types.append(LocationType.LimboSwitch)
+            self.item_classifications[ItemType.LimboSwitch] = None
+
+        if not self.options.randomize_violence_switches:
+            self.skipped_location_types.append(LocationType.ViolenceSwitch)
+            self.item_classifications[ItemType.ViolenceSwitch] = None
+
+        # music
         if self.options.music_randomizer:
-            tempDict: Dict[str, str] = {}
+            temp_dict: Dict[str, str] = {}
             multi1 = []
             multi1.extend(multilayer_music.keys())
             multi2 = [] 
@@ -119,7 +283,7 @@ class UltrakillWorld(World):
                 id1 = self.random.choice(multi1)
                 id2 = self.random.choice(multi2)
 
-                tempDict[id1] = id2
+                temp_dict[id1] = id2
                 multi1.remove(id1)
                 multi2.remove(id2)
 
@@ -132,11 +296,11 @@ class UltrakillWorld(World):
                 id1 = self.random.choice(single1)
                 id2 = self.random.choice(single2)
 
-                tempDict[id1] = id2
+                temp_dict[id1] = id2
                 single1.remove(id1)
                 single2.remove(id2)
 
-            self.music = {i: tempDict[i] for i in ordered_list}
+            self.music = {i: temp_dict[i] for i in ordered_list}
             #print(self.music)
 
     
@@ -160,77 +324,38 @@ class UltrakillWorld(World):
     def create_items(self):
         pool = []
 
-        for item in item_table:
-            count = 1
-
-            if item["name"] == self.start_weapon:
+        for item in item_list:
+            if self.item_classifications[item.type] == None:
                 continue
-            if self.options.unlock_type == UnlockType.option_levels and \
-                item["name"] in group_table["layers"] or \
-                    (self.goal_name in item["name"] and not "Skull" in item["name"]):
-                        continue
-            elif self.options.unlock_type == UnlockType.option_layers and item["name"] in group_table["levels"]:
+            elif item.type == ItemType.Level and item.name in {self.start_level.full_name, self.goal_level.full_name}:
                 continue
-            if not self.options.randomize_skulls and "Skull" in item["name"]:
+            elif item.type == ItemType.Filler or item.type == ItemType.Trap:
                 continue
-            if not self.options.randomize_secondary_fire and "Secondary Fire" in item["name"]:
-                continue
-            if self.options.start_with_arm and item["name"] == "Feedbacker":
-                continue
-            if self.options.start_with_slide and item["name"] == "Slide":
-                continue
-            if self.options.start_with_slam and item["name"] == "Slam":
-                continue
-            if self.options.revolver_form == 0 and item["name"] == "Revolver - Standard":
-                continue
-            if self.options.revolver_form == 1 and item["name"] == "Revolver - Alternate":
-                continue
-            if self.options.shotgun_form == 0 and item["name"] == "Shotgun - Standard":
-                continue
-            if self.options.shotgun_form == 1 and item["name"] == "Shotgun - Alternate":
-                continue
-            if self.options.nailgun_form == 0 and item["name"] == "Nailgun - Standard":
-                continue
-            if self.options.nailgun_form == 1 and item["name"] == "Nailgun - Alternate":
-                continue
-            if not self.options.randomize_limbo_switches and "Limbo Switch" in item["name"]:
-                continue
-            if not self.options.randomize_violence_switches and "Violence Switch" in item["name"]:
-                continue
-            if not self.options.randomize_clash_mode and item["name"] == "Clash Mode":
-                continue
-            if item["name"] in group_table["junk"]:
-                continue
-
-            if item["name"] == "Stamina Bar":
+            
+            count: int = item.count
+            if item.type == ItemType.Stamina:
                 count = 3 - self.options.starting_stamina.value
-            if item["name"] == "Wall Jump":
+            elif item.type == ItemType.WallJump:
                 count = 3 - self.options.starting_walljumps.value
-            if self.options.randomize_skulls and item["name"] == "Blue Skull (1-4)":
-                count = 4
-            if self.options.randomize_skulls and item["name"] == "Blue Skull (5-1)":
-                count = 3
+            elif item.name == "Feedbacker":
+                count = count - self.options.start_with_arm
 
             if count <= 0:
                 continue
             else:
                 for _ in range(count):
-                    pool.append(self.create_item(item["name"]))
+                    pool.append(self.create_item(item.name))
         
         junk: int = len(self.multiworld.get_unfilled_locations(self.player)) - (len(pool) + 1)
-        #print("unfilled = " + str(len(self.multiworld.get_unfilled_locations(self.player))))
-        #print("junk = " + str(junk))
 
         trap: int = round(junk * (self.options.trap_percent / 100))
         filler: int = junk - trap
-        #print("trap = " + str(trap))
-        #print("filler = " + str(filler))
 
         for _ in range(trap):
-            pool.append(self.create_item(self.random.choice(list(group_table["trap"]))))
+            pool.append(self.create_item(self.random.choices(list(self.options.trap_weights.value.keys()), list(self.options.trap_weights.value.values()))[0]))
 
         for _ in range(filler):
-            pool.append(self.create_item(self.random.choice(list(group_table["filler"]))))
+            pool.append(self.create_item(self.random.choices(list(self.options.filler_weights.value.keys()), list(self.options.filler_weights.value.values()))[0]))
             
         self.multiworld.itempool += pool
 
@@ -239,15 +364,16 @@ class UltrakillWorld(World):
         world = self.multiworld
         player = self.player
 
-        first_loc = world.get_location("0-1: Weapon", player)
+        first_loc = world.get_location(self.start_location, player)
 
         if first_loc.item != None:
-            if not first_loc.item.name in group_table["start_weapons"]:
+            if not first_loc.item.name in group_dict["start_weapons"]:
                 raise Exception(f"[ULTRAKILL - {world.get_player_name(player)}] "
                                 f"'{first_loc.item.name}' is not a valid starting weapon.")
             
+            # plando check
             if first_loc.item.name != self.start_weapon:
-                print(f"[ULTRAKILL - '{world.get_player_name(player)}'] An item already exists at \"0-1: Weapon\". "
+                print(f"[ULTRAKILL - '{world.get_player_name(player)}'] An item already exists at \"{self.start_location}\". "
                     "Selected starting weapon is being returned to the item pool.")
                 
                 world.itempool.append(self.create_item(self.start_weapon))
@@ -256,104 +382,59 @@ class UltrakillWorld(World):
 
 
     def create_regions(self):
-        
         player = self.player
         multiworld = self.multiworld
 
         menu = Region("Menu", player, multiworld)
 
-        for number, name in region_table.items():
-            multiworld.regions += [Region(name, player, multiworld)]
-            if "S" in number:
-                multiworld.get_region(region_table[secret_levels[number]], player).add_exits({name})
+        for r in Regions.all_regions:
+            multiworld.regions += [Region(r.full_name, player, multiworld)]
+            if isinstance(r, SecretRegion):
+                multiworld.get_region(r.parent_level.full_name, player).add_exits({r.full_name})
             else:
-                menu.add_exits({name})
+                menu.add_exits({r.full_name})
 
         multiworld.regions.append(menu)
 
-        if self.options.goal == Goal.option_1_4:
-            self.goal_name = "1-4"
-        elif self.options.goal == Goal.option_2_4:
-            self.goal_name = "2-4"
-        elif self.options.goal == Goal.option_3_2:
-            self.goal_name = "3-2"
-        elif self.options.goal == Goal.option_4_4:
-            self.goal_name = "4-4"
-        elif self.options.goal == Goal.option_5_4:
-            self.goal_name = "5-4"
-        elif self.options.goal == Goal.option_6_2:
-            self.goal_name = "6-2"
-        elif self.options.goal == Goal.option_7_4:
-            self.goal_name = "7-4"
-        elif self.options.goal == Goal.option_P_1:
-            self.goal_name = "P-1"
-        elif self.options.goal == Goal.option_P_2:
-            self.goal_name = "P-2"
+        for index, loc in enumerate(location_list):
+            if loc.type in self.skipped_location_types:
+                continue
+            self.game_id_to_long[loc.game_id] = (base_id + index)
+            
+            region: Region = self.get_region(loc.region.full_name)
+            location: UltrakillLocation = UltrakillLocation(player, loc.name, (base_id + index), region)
+            region.locations.append(location)
 
-        for loc in location_table:
-            if self.goal_name in loc["name"] and not "_w" in loc["game_id"]:
-                continue
-            elif "_b" in loc["game_id"] and self.options.boss_rewards.value == 0:
-                continue
-            elif loc["name"] in ext_bosses and self.options.boss_rewards.value < 2:
-                continue
-            elif "_c" in loc["game_id"] and not self.options.challenge_rewards:
-                continue
-            elif "_p" in loc["game_id"] and not self.options.p_rank_rewards:
-                continue
-            elif "fish" in loc["game_id"] and not self.options.fish_rewards:
-                continue
-            elif "clean" in loc["game_id"] and not self.options.cleaning_rewards:
-                continue
-            elif loc["name"] in limbo_switches and not self.options.randomize_limbo_switches:
-                continue
-            elif loc["name"] in violence_switches and not self.options.randomize_violence_switches:
-                continue
-            elif loc["game_id"] == "clash" and not self.options.randomize_clash_mode:
-                continue
-            elif loc["game_id"] == "chess" and not self.options.chess_reward:
-                continue
-            elif loc["game_id"] == "rr" and not self.options.rocket_race_reward:
-                continue
-            elif "_ha" in loc["game_id"] and not self.options.hank_rewards:
-                continue
-            else:
-                id = base_id + location_table.index(loc)
-                region: Region = multiworld.get_region(region_table[loc["region"]], player)
-                location: UltrakillLocation = UltrakillLocation(player, loc["name"], id, region)
-                #print(location.name + ", " + region.name)
-                region.locations.append(location)
+            if self.options.auto_exclude_skipped_locations and loc.region.short_name in self.options.skipped_levels.value:
+                self.options.exclude_locations.value.add(loc.name)
 
-        for loc in event_table:
-            if "P-" in loc["name"] and not self.goal_name in loc["name"]:
+        # create events for level completion
+        for r in [r for r in Regions.all_regions if not (r.short_name == "shop" or r.short_name == "museum")]:
+            name: str = f"Cleared {r.short_name}"
+            self.event_names.append(name)
+
+            if r.short_name in self.options.skipped_levels.value:
                 continue
 
-            if "-S" in loc["name"] and not self.options.include_secret_mission_completion:
-                continue
+            region: Region = self.get_region(r.full_name)
+            location: UltrakillLocation = UltrakillLocation(player, name, None, region)
 
-            region: Region = multiworld.get_region(region_table[loc["region"]], player)
-
-            location: UltrakillLocation = UltrakillLocation(player, loc["name"], None, region)
-            if not self.goal_name in loc["name"]:
+            if not self.goal_level.short_name in name:
                 location.place_locked_item(self.create_event("Level Completed"))
             region.locations.append(location)
 
-        victory: Location = multiworld.get_location("Cleared " + self.goal_name, player)
+        victory: Location = self.get_location("Cleared " + self.goal_level.short_name)
         victory.place_locked_item(self.create_event("Victory"))
 
         multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        locations = {}
-        for loc in self.multiworld.get_locations(self.player):
-            if loc.address != None:
-                locations[self.location_name_to_game_id[loc.name]] = self.location_name_to_id[loc.name]
-
-
         slot_data: Dict[str, Any] = {
-            "locations": locations,
-            "goal": self.options.goal.value,
+            "version": "3.0.0",
+            "locations": self.game_id_to_long,
+            "start": self.start_level.short_name,
+            "goal": self.goal_level.short_name,
             "goal_requirement": self.options.goal_requirement.value,
             "boss_rewards": self.options.boss_rewards.value,
             "challenge_rewards": bool(self.options.challenge_rewards),

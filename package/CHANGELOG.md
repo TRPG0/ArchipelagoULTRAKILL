@@ -1,3 +1,25 @@
+## 3.0.0
+
+- Multiple levels can be chosen to start in, rather than just 0-1.
+    - Full list: 0-1, 0-2, 1-1, 1-2, 1-3, 2-1, 2-3, 3-1, 4-2
+- Any level can be chosen to be the goal, including secret missions and prime sanctums.
+- Any level and its locations can now easily be excluded from randomizer progression.
+    - In addition, prime sanctums are no longer always excluded.
+- Weights can now be specified for how often each type of filler and trap item will appear.
+- The odds of each starting weapon being chosen can now be customized.
+    - Depending on other options, some weapons may never be chosen.
+- Added new powerup item: "Confusing Aura" - For 15 seconds, enemies will ignore the player and attack each other instead.
+- Added new powerup item: "Quick Charge" - For 15 seconds, weapon ammo regeneration and charge rate is tripled.
+- The "Empty Ammuntion" trap item has been renamed to "Weapon Malfunction", and now has the same effect of removing all ammo/charges for weapons, but for 15 seconds instead of just once.
+- Added new trap item: "Hands-Free Mode" - Prevents the use of any arms for 15 seconds.
+- Added new trap item: "Short-Term Sandstorm" - Covers all enemies in sand for 15 seconds.
+- Randomizing skulls will now also include the Blue Skull in P-2.
+- Fixed various logic issues. (I forgot most of them ¯\\_(ツ)_/¯)
+- Fixed the shop not updating correctly when viewed for the first time in a level.
+- Fixed soap sometimes not spawning properly.
+- The version a multiworld was generated with will now be displayed on the file select screen.
+- Updated Archipelago.MultiClient.Net to `6.5.0`.
+
 ## 2.2.2
 
 - Fixed a logic error for 5-2: Secret #1.

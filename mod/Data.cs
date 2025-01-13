@@ -5,6 +5,7 @@ namespace ArchipelagoULTRAKILL
 {
     public class Data
     {
+        public string version = string.Empty;
         public long index;
         public string host_name;
         public string slot_name;
@@ -16,6 +17,7 @@ namespace ArchipelagoULTRAKILL
         public HashSet<string> completedLevels = new HashSet<string>();
         public HashSet<string> purchasedItems = new HashSet<string>();
 
+        public string start = "0-1";
         public string goal = "6-2";
         public int goalRequirement = 20;
         public BossOptions bossRewards = BossOptions.Disabled;

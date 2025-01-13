@@ -1,295 +1,202 @@
-from BaseClasses import ItemClassification
-from typing import TypedDict, List, Dict, Set
-
-
-class ItemDict(TypedDict):
-    name: str
-    classification: ItemClassification
+from typing import List, Dict, Set
+from dataclasses import dataclass
+from enum import Enum
 
 
 base_id = 2009000
 
 
-item_table: List[ItemDict] = [
+class ItemType(Enum):
+    Weapon = 0
+    Fire2 = 1
+    Stamina = 2
+    WallJump = 3
+    Slide = 4
+    Slam = 5
+    Skull = 6
+    Level = 7
+    Layer = 8
+    Filler = 9
+    Trap = 10
+    LimboSwitch = 11
+    ViolenceSwitch = 12
+    ClashMode = 13
+    RevStd = 14
+    RevAlt = 15
+    ShoStd = 16
+    ShoAlt = 17
+    NaiStd = 18
+    NaiAlt = 19
+
+
+@dataclass
+class UKItem:
+    name: str
+    type: ItemType
+    count: int = 1
+
+
+item_list: List[UKItem] = [
     # Weapons
-    {'name': "Revolver - Piercer", #rev0 (blue)
-        'classification': ItemClassification.progression},
-    {'name': "Revolver - Marksman", #rev2 (green)
-        'classification': ItemClassification.progression},
-    {'name': "Revolver - Sharpshooter", #rev1 (red)
-        'classification': ItemClassification.progression},
-    {'name': "Revolver - Standard",
-        'classification': ItemClassification.progression},
-    {'name': "Revolver - Alternate", #revalt
-        'classification': ItemClassification.progression},
+    UKItem("Revolver - Piercer", ItemType.Weapon),
+    UKItem("Revolver - Marksman", ItemType.Weapon),
+    UKItem("Revolver - Sharpshooter", ItemType.Weapon),
+    UKItem("Revolver - Standard", ItemType.RevStd),
+    UKItem("Revolver - Alternate", ItemType.RevAlt),
 
-    {'name': "Shotgun - Core Eject", #sho0 (blue)
-        'classification': ItemClassification.progression},
-    {'name': "Shotgun - Pump Charge", #sho1 (green)
-        'classification': ItemClassification.progression},
-    {'name': "Shotgun - Sawed-On", #sho2 (red)
-        'classification': ItemClassification.progression},
-    {'name': "Shotgun - Standard",
-        'classification': ItemClassification.progression},
-    {'name': "Shotgun - Alternate", #shoalt
-        'classification': ItemClassification.progression},
+    UKItem("Shotgun - Core Eject", ItemType.Weapon),
+    UKItem("Shotgun - Pump Charge", ItemType.Weapon),
+    UKItem("Shotgun - Sawed-On", ItemType.Weapon),
+    UKItem("Shotgun - Standard", ItemType.ShoStd),
+    UKItem("Shotgun - Alternate", ItemType.ShoAlt),
 
-    {'name': "Nailgun - Attractor", #nai0 (blue)
-        'classification': ItemClassification.progression},
-    {'name': "Nailgun - Overheat", #nai1 (green)
-        'classification': ItemClassification.progression},
-    {'name': "Nailgun - JumpStart", #nai2 (red)
-        'classification': ItemClassification.progression},
-    {'name': "Nailgun - Standard",
-        'classification': ItemClassification.progression},
-    {'name': "Nailgun - Alternate", #naialt
-        'classification': ItemClassification.progression},
+    UKItem("Nailgun - Attractor", ItemType.Weapon),
+    UKItem("Nailgun - Overheat", ItemType.Weapon),
+    UKItem("Nailgun - JumpStart", ItemType.Weapon),
+    UKItem("Nailgun - Standard", ItemType.NaiStd),
+    UKItem("Nailgun - Alternate", ItemType.NaiAlt),
 
-    {'name': "Railcannon - Electric", #rai0 (blue)
-        'classification': ItemClassification.progression},
-    {'name': "Railcannon - Screwdriver", #rai1 (green)
-        'classification': ItemClassification.progression},
-    {'name': "Railcannon - Malicious", #rai2 (red)
-        'classification': ItemClassification.progression},
+    UKItem("Railcannon - Electric", ItemType.Weapon),
+    UKItem("Railcannon - Screwdriver", ItemType.Weapon),
+    UKItem("Railcannon - Malicious", ItemType.Weapon),
 
-    {'name': "Rocket Launcher - Freezeframe", #rock0 (blue)
-        'classification': ItemClassification.progression},
-    {'name': "Rocket Launcher - S.R.S. Cannon", #rock1 (green)
-        'classification': ItemClassification.progression},
-    {'name': "Rocket Launcher - Firestarter", #rock2 (red)
-        'classification': ItemClassification.progression},
+    UKItem("Rocket Launcher - Freezeframe", ItemType.Weapon),
+    UKItem("Rocket Launcher - S.R.S. Cannon", ItemType.Weapon),
+    UKItem("Rocket Launcher - Firestarter", ItemType.Weapon),
 
-    {'name': "Secondary Fire - Piercer",
-        'classification': ItemClassification.progression},
-    {'name': "Secondary Fire - Marksman",
-        'classification': ItemClassification.progression},
-    {'name': "Secondary Fire - Sharpshooter",
-        'classification': ItemClassification.progression},
-    {'name': "Secondary Fire - Core Eject",
-        'classification': ItemClassification.progression},
-    {'name': "Secondary Fire - Pump Charge",
-        'classification': ItemClassification.progression},
-    {'name': "Secondary Fire - Sawed-On",
-        'classification': ItemClassification.progression},
-    {'name': "Secondary Fire - Attractor",
-        'classification': ItemClassification.progression},
-    {'name': "Secondary Fire - Overheat",
-        'classification': ItemClassification.progression},
-    {'name': "Secondary Fire - JumpStart",
-        'classification': ItemClassification.progression},
-    {'name': "Secondary Fire - Freezeframe",
-        'classification': ItemClassification.progression},
-    {'name': "Secondary Fire - S.R.S. Cannon",
-        'classification': ItemClassification.progression},
-    {'name': "Secondary Fire - Firestarter",
-        'classification': ItemClassification.progression},
+    # Secondary Fire
+    UKItem("Secondary Fire - Piercer", ItemType.Fire2),
+    UKItem("Secondary Fire - Marksman", ItemType.Fire2),
+    UKItem("Secondary Fire - Sharpshooter", ItemType.Fire2),
+    UKItem("Secondary Fire - Core Eject", ItemType.Fire2),
+    UKItem("Secondary Fire - Pump Charge", ItemType.Fire2),
+    UKItem("Secondary Fire - Sawed-On", ItemType.Fire2),
+    UKItem("Secondary Fire - Attractor", ItemType.Fire2),
+    UKItem("Secondary Fire - Overheat", ItemType.Fire2),
+    UKItem("Secondary Fire - JumpStart", ItemType.Fire2),
+    UKItem("Secondary Fire - Freezeframe", ItemType.Fire2),
+    UKItem("Secondary Fire - S.R.S. Cannon", ItemType.Fire2),
+    UKItem("Secondary Fire - Firestarter", ItemType.Fire2),
 
-    {'name': "Feedbacker", #arm0
-        'classification': ItemClassification.progression},
-    {'name': "Knuckleblaster", #arm1
-        'classification': ItemClassification.progression},
-    {'name': "Whiplash", #arm2
-        'classification': ItemClassification.progression},
+    # Arms
+    UKItem("Feedbacker", ItemType.Weapon),
+    UKItem("Knuckleblaster", ItemType.Weapon),
+    UKItem("Whiplash", ItemType.Weapon),
 
     # Abilities
-    {'name': "Stamina Bar",
-        'classification': ItemClassification.progression},
-    {'name': "Wall Jump",
-        'classification': ItemClassification.progression},
-    {'name': "Slide",
-        'classification': ItemClassification.progression},
-    {'name': "Slam",
-        'classification': ItemClassification.progression},
+    UKItem("Stamina Bar", ItemType.Stamina),
+    UKItem("Wall Jump", ItemType.WallJump),
+    UKItem("Slide", ItemType.Slide),
+    UKItem("Slam", ItemType.Slam),
 
     # Skulls
-    {'name': "Blue Skull (0-2)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (0-S)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (0-S)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (1-1)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (1-1)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (1-2)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (1-2)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (1-3)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (1-3)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (1-4)", # 4 of them
-        'classification': ItemClassification.filler},
-    {'name': "Blue Skull (2-3)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (2-3)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (2-4)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (2-4)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (4-2)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (4-2)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (4-3)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (4-4)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (5-1)", # 3 of them
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (5-2)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (5-2)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (5-3)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (5-3)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (6-1)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (7-1)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (7-1)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (7-2)",
-        'classification': ItemClassification.progression},
-    {'name': "Red Skull (7-S)",
-        'classification': ItemClassification.progression},
-    {'name': "Blue Skull (7-S)",
-        'classification': ItemClassification.progression},
+    UKItem("Blue Skull (0-2)", ItemType.Skull),
+    UKItem("Blue Skull (0-S)", ItemType.Skull),
+    UKItem("Red Skull (0-S)", ItemType.Skull),
+    UKItem("Red Skull (1-1)", ItemType.Skull),
+    UKItem("Blue Skull (1-1)", ItemType.Skull),
+    UKItem("Blue Skull (1-2)", ItemType.Skull),
+    UKItem("Red Skull (1-2)", ItemType.Skull),
+    UKItem("Blue Skull (1-3)", ItemType.Skull),
+    UKItem("Red Skull (1-3)", ItemType.Skull),
+    UKItem("Blue Skull (1-4)", ItemType.Skull, 4),
+    UKItem("Blue Skull (2-3)", ItemType.Skull),
+    UKItem("Red Skull (2-3)", ItemType.Skull),
+    UKItem("Blue Skull (2-4)", ItemType.Skull),
+    UKItem("Red Skull (2-4)", ItemType.Skull),
+    UKItem("Blue Skull (4-2)", ItemType.Skull),
+    UKItem("Red Skull (4-2)", ItemType.Skull),
+    UKItem("Blue Skull (4-3)", ItemType.Skull),
+    UKItem("Blue Skull (4-4)", ItemType.Skull),
+    UKItem("Blue Skull (5-1)", ItemType.Skull, 3),
+    UKItem("Blue Skull (5-2)", ItemType.Skull),
+    UKItem("Red Skull (5-2)", ItemType.Skull),
+    UKItem("Blue Skull (5-3)", ItemType.Skull),
+    UKItem("Red Skull (5-3)", ItemType.Skull),
+    UKItem("Red Skull (6-1)", ItemType.Skull),
+    UKItem("Red Skull (7-1)", ItemType.Skull),
+    UKItem("Blue Skull (7-1)", ItemType.Skull),
+    UKItem("Red Skull (7-2)", ItemType.Skull),
+    UKItem("Red Skull (7-S)", ItemType.Skull),
+    UKItem("Blue Skull (7-S)", ItemType.Skull),
+    UKItem("Blue Skull (P-2)", ItemType.Skull),
 
     # Levels
-    {'name': "0-2: THE MEATGRINDER",
-        'classification': ItemClassification.progression},
-    {'name': "0-3: DOUBLE DOWN",
-        'classification': ItemClassification.progression},
-    {'name': "0-4: A ONE-MACHINE ARMY",
-        'classification': ItemClassification.progression},
-    {'name': "0-5: CERBERUS",
-        'classification': ItemClassification.progression},
-    {'name': "1-1: HEART OF THE SUNRISE",
-        'classification': ItemClassification.progression},
-    {'name': "1-2: THE BURNING WORLD",
-        'classification': ItemClassification.progression},
-    {'name': "1-3: HALLS OF SACRED REMAINS",
-        'classification': ItemClassification.progression},
-    {'name': "1-4: CLAIR DE LUNE",
-        'classification': ItemClassification.progression},
-    {'name': "2-1: BRIDGEBURNER",
-        'classification': ItemClassification.progression},
-    {'name': "2-2: DEATH AT 20,000 VOLTS",
-        'classification': ItemClassification.progression},
-    {'name': "2-3: SHEER HEART ATTACK",
-        'classification': ItemClassification.progression},
-    {'name': "2-4: COURT OF THE CORPSE KING",
-        'classification': ItemClassification.progression},
-    {'name': "3-1: BELLY OF THE BEAST",
-        'classification': ItemClassification.progression},
-    {'name': "3-2: IN THE FLESH",
-        'classification': ItemClassification.progression},
-    {'name': "4-1: SLAVES TO POWER",
-        'classification': ItemClassification.progression},
-    {'name': "4-2: GOD DAMN THE SUN",
-        'classification': ItemClassification.progression},
-    {'name': "4-3: A SHOT IN THE DARK",
-        'classification': ItemClassification.progression},
-    {'name': "4-4: CLAIR DE SOLEIL",
-        'classification': ItemClassification.progression},
-    {'name': "5-1: IN THE WAKE OF POSEIDON",
-        'classification': ItemClassification.progression},
-    {'name': "5-2: WAVES OF THE STARLESS SEA",
-        'classification': ItemClassification.progression},
-    {'name': "5-3: SHIP OF FOOLS",
-        'classification': ItemClassification.progression},
-    {'name': "5-4: LEVIATHAN",
-        'classification': ItemClassification.progression},
-    {'name': "6-1: CRY FOR THE WEEPER",
-        'classification': ItemClassification.progression},
-    {'name': "6-2: AESTHETICS OF HATE",
-        'classification': ItemClassification.progression},
-    {'name': "7-1: GARDEN OF FORKING PATHS",
-        'classification': ItemClassification.progression},
-    {'name': "7-2: LIGHT UP THE NIGHT",
-        'classification': ItemClassification.progression},
-    {'name': "7-3: NO SOUND, NO MEMORY",
-        'classification': ItemClassification.progression},
-    {'name': "7-4: ...LIKE ANTENNAS TO HEAVEN",
-        'classification': ItemClassification.progression},
-    {'name': "P-1: SOUL SURVIVOR",
-        'classification': ItemClassification.filler},
-    {'name': "P-2: WAIT OF THE WORLD",
-        'classification': ItemClassification.filler},
+    UKItem("0-1: INTO THE FIRE", ItemType.Level),
+    UKItem("0-2: THE MEATGRINDER", ItemType.Level),
+    UKItem("0-3: DOUBLE DOWN", ItemType.Level),
+    UKItem("0-4: A ONE-MACHINE ARMY", ItemType.Level),
+    UKItem("0-5: CERBERUS", ItemType.Level),
+    UKItem("1-1: HEART OF THE SUNRISE", ItemType.Level),
+    UKItem("1-2: THE BURNING WORLD", ItemType.Level),
+    UKItem("1-3: HALLS OF SACRED REMAINS", ItemType.Level),
+    UKItem("1-4: CLAIR DE LUNE", ItemType.Level),
+    UKItem("2-1: BRIDGEBURNER", ItemType.Level),
+    UKItem("2-2: DEATH AT 20,000 VOLTS", ItemType.Level),
+    UKItem("2-3: SHEER HEART ATTACK", ItemType.Level),
+    UKItem("2-4: COURT OF THE CORPSE KING", ItemType.Level),
+    UKItem("3-1: BELLY OF THE BEAST", ItemType.Level),
+    UKItem("3-2: IN THE FLESH", ItemType.Level),
+    UKItem("4-1: SLAVES TO POWER", ItemType.Level),
+    UKItem("4-2: GOD DAMN THE SUN", ItemType.Level),
+    UKItem("4-3: A SHOT IN THE DARK", ItemType.Level),
+    UKItem("4-4: CLAIR DE SOLEIL", ItemType.Level),
+    UKItem("5-1: IN THE WAKE OF POSEIDON", ItemType.Level),
+    UKItem("5-2: WAVES OF THE STARLESS SEA", ItemType.Level),
+    UKItem("5-3: SHIP OF FOOLS", ItemType.Level),
+    UKItem("5-4: LEVIATHAN", ItemType.Level),
+    UKItem("6-1: CRY FOR THE WEEPER", ItemType.Level),
+    UKItem("6-2: AESTHETICS OF HATE", ItemType.Level),
+    UKItem("7-1: GARDEN OF FORKING PATHS", ItemType.Level),
+    UKItem("7-2: LIGHT UP THE NIGHT", ItemType.Level),
+    UKItem("7-3: NO SOUND, NO MEMORY", ItemType.Level),
+    UKItem("7-4: ...LIKE ANTENNAS TO HEAVEN", ItemType.Level),
+    UKItem("P-1: SOUL SURVIVOR", ItemType.Level),
+    UKItem("P-2: WAIT OF THE WORLD", ItemType.Level),
 
     # Layers
-    {'name': "OVERTURE: THE MOUTH OF HELL",
-        'classification': ItemClassification.progression},
-    {'name': "LAYER 1: LIMBO",
-        'classification': ItemClassification.progression},
-    {'name': "LAYER 2: LUST",
-        'classification': ItemClassification.progression},
-    {'name': "LAYER 3: GLUTTONY",
-        'classification': ItemClassification.progression},
-    {'name': "LAYER 4: GREED",
-        'classification': ItemClassification.progression},
-    {'name': "LAYER 5: WRATH",
-        'classification': ItemClassification.progression},
-    {'name': "LAYER 6: HERESY",
-        'classification': ItemClassification.progression},
-    {'name': "LAYER 7: VIOLENCE",
-        'classification': ItemClassification.progression},
+    UKItem("OVERTURE: THE MOUTH OF HELL", ItemType.Layer),
+    UKItem("LAYER 1: LIMBO", ItemType.Layer),
+    UKItem("LAYER 2: LUST", ItemType.Layer),
+    UKItem("LAYER 3: GLUTTONY", ItemType.Layer),
+    UKItem("LAYER 4: GREED", ItemType.Layer),
+    UKItem("LAYER 5: WRATH", ItemType.Layer),
+    UKItem("LAYER 6: HERESY", ItemType.Layer),
+    UKItem("LAYER 7: VIOLENCE", ItemType.Layer),
 
-    # Points
-    {'name': "+10,000P",
-        'classification': ItemClassification.filler},
-
-    # Powerups
-    {'name': "Overheal",
-        'classification': ItemClassification.filler},
-    {'name': "Dual Wield",
-        'classification': ItemClassification.filler},
-    {'name': "Infinite Stamina",
-        'classification': ItemClassification.filler},
-    {'name': "Air Jump",
-        'classification': ItemClassification.filler},
-    {'name': "Soap",
-        'classification': ItemClassification.filler},
+    # Filler
+    UKItem("+10,000P", ItemType.Filler),
+    UKItem("Overheal", ItemType.Filler),
+    UKItem("Dual Wield", ItemType.Filler),
+    UKItem("Infinite Stamina", ItemType.Filler),
+    UKItem("Air Jump", ItemType.Filler),
+    UKItem("Soap", ItemType.Filler),
+    UKItem("Confusing Aura", ItemType.Filler),
+    UKItem("Quick Charge", ItemType.Filler),
 
     # Traps
-    {'name': "Hard Damage",
-        'classification': ItemClassification.trap},
-    {'name': "Stamina Limiter",
-        'classification': ItemClassification.trap},
-    {'name': "Wall Jump Limiter",
-        'classification': ItemClassification.trap},
-    {'name': "Empty Ammunition",
-        'classification': ItemClassification.trap},
-    {'name': "Radiant Aura",
-        'classification': ItemClassification.trap},
+    UKItem("Hard Damage", ItemType.Trap),
+    UKItem("Stamina Limiter", ItemType.Trap),
+    UKItem("Wall Jump Limiter", ItemType.Trap),
+    UKItem("Weapon Malfunction", ItemType.Trap),
+    UKItem("Radiant Aura", ItemType.Trap),
+    UKItem("Hands-Free Mode", ItemType.Trap),
+    UKItem("Short-Term Sandstorm", ItemType.Trap),
 
     # Switches
-    {'name': "Limbo Switch I",
-        'classification': ItemClassification.progression},
-    {'name': "Limbo Switch II",
-        'classification': ItemClassification.progression},
-    {'name': "Limbo Switch III",
-        'classification': ItemClassification.progression},
-    {'name': "Limbo Switch IV",
-        'classification': ItemClassification.progression},
-    {'name': "Violence Switch I",
-        'classification': ItemClassification.progression},
-    {'name': "Violence Switch II",
-        'classification': ItemClassification.progression},
-    {'name': "Violence Switch III",
-        'classification': ItemClassification.progression},
+    UKItem("Limbo Switch I", ItemType.LimboSwitch),
+    UKItem("Limbo Switch II", ItemType.LimboSwitch),
+    UKItem("Limbo Switch III", ItemType.LimboSwitch),
+    UKItem("Limbo Switch IV", ItemType.LimboSwitch),
+    UKItem("Violence Switch I", ItemType.ViolenceSwitch),
+    UKItem("Violence Switch II", ItemType.ViolenceSwitch),
+    UKItem("Violence Switch III", ItemType.ViolenceSwitch),
 
-    {'name': "Clash Mode",
-        'classification': ItemClassification.filler}
+    UKItem("Clash Mode", ItemType.ClashMode)
 ]
 
-group_table: Dict[str, Set[str]] = {
+
+group_dict: Dict[str, Set[str]] = {
     "rev0": {"Revolver - Piercer"},
     "rev1": {"Revolver - Sharpshooter"},
     "rev2": {"Revolver - Marksman"},
@@ -398,22 +305,31 @@ group_table: Dict[str, Set[str]] = {
              "Hard Damage",
              "Stamina Limiter",
              "Wall Jump Limiter",
-             "Empty Ammunition",
-             "Radiant Aura"},
+             "Weapon Malfunction",
+             "Radiant Aura",
+             "Confusing Aura",
+             "Quick Charge",
+             "Hands-Free Mode",
+             "Short-Term Sandstorm"},
     "filler": {"+10,000P",
                "Overheal",
                "Dual Wield",
                "Infinite Stamina",
                "Air Jump",
-               "Soap"},
+               "Soap", 
+               "Confusing Aura",
+               "Quick Charge"},
     "trap": {"Hard Damage",
              "Stamina Limiter",
              "Wall Jump Limiter",
-             "Empty Ammunition",
-             "Radiant Aura"},
+             "Weapon Malfunction",
+             "Radiant Aura",
+             "Hands-Free Mode",
+             "Short-Term Sandstorm"},
     "dash": {"Stamina Bar"},
     "walljump": {"Wall Jump"},
-    "levels": {"0-2: THE MEATGRINDER",
+    "levels": {"0-1: INTO THE FIRE",
+               "0-2: THE MEATGRINDER",
                "0-3: DOUBLE DOWN",
                "0-4: A ONE-MACHINE ARMY",
                "0-5: CERBERUS",
@@ -465,7 +381,9 @@ group_table: Dict[str, Set[str]] = {
                       "Rocket Launcher - S.R.S. Cannon",
                       "Rocket Launcher - Firestarter",
                       "Feedbacker",
-                      "Knuckleblaster"},
+                      "Knuckleblaster",
+                      "Whiplash"},
+    "0-1": {"0-1: INTO THE FIRE"},
     "0-2": {"0-2: THE MEATGRINDER"},
     "0-3": {"0-3: DOUBLE DOWN"},
     "0-4": {"0-4: A ONE-MACHINE ARMY"},

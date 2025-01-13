@@ -52,4 +52,4 @@ Maybe later. I would like to make a standalone version of the randomizer eventua
 
 # Something's not working!
 
-If you have trouble setting up ULTRAKILL randomizer or have found any bugs that need fixing, feel free to ask about it on the [GitHub discussions](https://github.com/TRPG0/ArchipelagoULTRAKILL/discussions) page, join the [AP After Dark](https://discord.gg/Sbhy4ykUKn) Discord server, or you can DM me on Discord at `TRPG#8501` / `@trpg`.
+If you have trouble setting up ULTRAKILL randomizer or have found any bugs that need fixing, feel free to ask about it on the [GitHub discussions](https://github.com/TRPG0/ArchipelagoULTRAKILL/discussions) page, or join the [AP After Dark](https://discord.gg/Sbhy4ykUKn) Discord server and ask about it in the #ultrakill channel.

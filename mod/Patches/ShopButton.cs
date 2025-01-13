@@ -1,4 +1,5 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
+using ArchipelagoULTRAKILL.Components;
 using ArchipelagoULTRAKILL.Structures;
 using HarmonyLib;
 using System.Reflection;
@@ -47,7 +48,7 @@ namespace ArchipelagoULTRAKILL.Patches
                 VariationInfo[] variations = __instance.toActivate[0].transform.GetComponentsInChildren<VariationInfo>(true);
                 foreach (VariationInfo variation in variations)
                 {
-                    LevelManager.UpdateShopVariation(variation);
+                    variation.GetOrAddComponent<VariationOnEnable>();
                 }
             }
         }

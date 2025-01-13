@@ -2,6 +2,7 @@
 using UnityEngine;
 using ArchipelagoULTRAKILL.Structures;
 using ArchipelagoULTRAKILL.Powerups;
+using ULTRAKILL.Cheats;
 
 namespace ArchipelagoULTRAKILL.Components
 {
@@ -94,27 +95,35 @@ namespace ArchipelagoULTRAKILL.Components
                         break;
                     case Powerup.StaminaLimiter:
                         gameObject.transform.SetParent(Core.obj.transform);
-                        gameObject.AddComponent<DashTrap>();
+                        gameObject.AddComponent<GenericTrap>();
                         break;
                     case Powerup.WalljumpLimiter:
                         gameObject.transform.SetParent(Core.obj.transform);
-                        gameObject.AddComponent<WallJumpTrap>();
+                        gameObject.AddComponent<GenericTrap>();
                         break;
                     case Powerup.Radiance:
                         gameObject.transform.SetParent(Core.obj.transform);
                         gameObject.AddComponent<RadianceTrap>();
                         break;
                     case Powerup.EmptyAmmo:
-                        WeaponCharges.Instance.rev0charge = 0;
-                        WeaponCharges.Instance.rev1charge = 0;
-                        WeaponCharges.Instance.naiMagnetCharge = 0;
-                        WeaponCharges.Instance.naiHeatsinks = 0;
-                        WeaponCharges.Instance.naiSawHeatsinks = 0;
-                        WeaponCharges.Instance.raicharge = 0;
-                        WeaponCharges.Instance.rocketFreezeTime = 0;
-                        WeaponCharges.Instance.rocketCannonballCharge = 0;
-                        CurrentPowerup = Powerup.None;
-                        if (LocationManager.powerupQueue.Count > 0) GetQueuedPowerups();
+                        gameObject.transform.SetParent(Core.obj.transform);
+                        gameObject.AddComponent<GenericTrap>();
+                        break;
+                    case Powerup.NoArms:
+                        gameObject.transform.SetParent(Core.obj.transform);
+                        gameObject.AddComponent<GenericTrap>();
+                        break;
+                    case Powerup.Confusion:
+                        gameObject.transform.SetParent(Core.obj.transform);
+                        gameObject.AddComponent<ConfusionPowerup>();
+                        break;
+                    case Powerup.QuickCharge:
+                        gameObject.transform.SetParent(Core.obj.transform);
+                        gameObject.AddComponent<QuickChargePowerup>();
+                        break;
+                    case Powerup.Sandstorm:
+                        gameObject.transform.SetParent(Core.obj.transform);
+                        gameObject.AddComponent<SandstormTrap>();
                         break;
                     default: break;
                 }
@@ -153,21 +162,16 @@ namespace ArchipelagoULTRAKILL.Components
 
         public void UpdateWeapons()
         {
-            // feedbacker
-            if (!Core.data.hasArm && FistControl.Instance.currentPunch && FistControl.Instance.currentPunch.type == FistType.Standard && SceneHelper.CurrentScene != "Level 5-S")
-            {
-                FistControl.Instance.currentPunch.ready = false;
-            }
-
             // piercer
-            if (!CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown") && Core.data.randomizeFire2)
+            if (!NoWeaponCooldown.NoCooldown && Core.data.randomizeFire2)
             {
-                if (!Core.data.unlockedFire2.Contains("rev0") && GetHeldWeapon() == "rev0")
+                if ((!Core.data.unlockedFire2.Contains("rev0") || CurrentPowerup == Powerup.EmptyAmmo) && GetHeldWeapon() == "rev0")
                 {
                     if (GameProgressSaver.GetGeneralProgress().rev0 == 1)
                     {
                         Traverse.Create(GunControl.Instance.currentWeapon.GetComponent<Revolver>()).Field<bool>("pierceReady").Value = false;
                         GunControl.Instance.currentWeapon.GetComponent<Revolver>().pierceCharge = 0;
+                        GunControl.Instance.currentWeapon.GetComponent<Revolver>().pierceShotCharge = 0;
 
                         if (CurrentPowerup == Powerup.DualWield)
                         {
@@ -175,6 +179,7 @@ namespace ArchipelagoULTRAKILL.Components
                             {
                                 Traverse.Create(dw.gameObject.transform.GetChild(0).GetComponent<Revolver>()).Field<bool>("pierceReady").Value = false;
                                 dw.gameObject.transform.GetChild(0).GetComponent<Revolver>().pierceCharge = 0;
+                                dw.gameObject.transform.GetChild(0).GetComponent<Revolver>().pierceShotCharge = 0;
                             }
                         }
                     }
@@ -182,37 +187,38 @@ namespace ArchipelagoULTRAKILL.Components
                 }
 
                 // marksman
-                if (!Core.data.unlockedFire2.Contains("rev2"))
+                if (!Core.data.unlockedFire2.Contains("rev2") || CurrentPowerup == Powerup.EmptyAmmo)
                 {
                     WeaponCharges.Instance.rev1charge = 0;
                 }
 
                 // sharpshooter
-                if (!Core.data.unlockedFire2.Contains("rev1"))
+                if (!Core.data.unlockedFire2.Contains("rev1") || CurrentPowerup == Powerup.EmptyAmmo)
                 {
                     WeaponCharges.Instance.rev2charge = 0;
                 }
 
                 // core eject || pump charge
-                if ((!Core.data.unlockedFire2.Contains("sho0") && GetHeldWeapon() == "sho0") || (!Core.data.unlockedFire2.Contains("sho1") && GetHeldWeapon() == "sho1"))
+                if (((!Core.data.unlockedFire2.Contains("sho0") || CurrentPowerup == Powerup.EmptyAmmo) && GetHeldWeapon() == "sho0") 
+                    || ((!Core.data.unlockedFire2.Contains("sho1") || CurrentPowerup == Powerup.EmptyAmmo) && GetHeldWeapon() == "sho1"))
                 {
                     Traverse.Create(InputManager.Instance.InputSource.Fire2).Property("IsPressed").SetValue(false);
                 }
 
                 // sawed-on
-                if (!Core.data.unlockedFire2.Contains("sho2"))
+                if (!Core.data.unlockedFire2.Contains("sho2") || CurrentPowerup == Powerup.EmptyAmmo)
                 {
                     WeaponCharges.Instance.shoSawCharge = 0;
                 }
 
                 // attractor
-                if (!Core.data.unlockedFire2.Contains("nai0"))
+                if (!Core.data.unlockedFire2.Contains("nai0") || CurrentPowerup == Powerup.EmptyAmmo)
                 {
                     WeaponCharges.Instance.naiMagnetCharge = 0;
                 }
 
                 // overheat
-                if (!Core.data.unlockedFire2.Contains("nai1") && GetHeldWeapon() == "nai1")
+                if ((!Core.data.unlockedFire2.Contains("nai1") || CurrentPowerup == Powerup.EmptyAmmo) && GetHeldWeapon() == "nai1")
                 {
                     Traverse.Create(GunControl.Instance.currentWeapon.GetComponent<Nailgun>()).Field<float>("heatSinks").Value = 0;
                     WeaponCharges.Instance.naiHeatsinks = 0;
@@ -220,17 +226,18 @@ namespace ArchipelagoULTRAKILL.Components
                 }
 
                 // s.r.s. cannon
-                if (!Core.data.unlockedFire2.Contains("rock1"))
+                if (!Core.data.unlockedFire2.Contains("rock1") || CurrentPowerup == Powerup.EmptyAmmo)
                 {
                     WeaponCharges.Instance.rocketCannonballCharge = 0;
                 }
 
                 // firestarter
-                if (!Core.data.unlockedFire2.Contains("rock2"))
+                if (!Core.data.unlockedFire2.Contains("rock2") || CurrentPowerup == Powerup.EmptyAmmo)
                 {
                     WeaponCharges.Instance.rocketNapalmFuel = 0;
                 }
             }
+            if (CurrentPowerup == Powerup.EmptyAmmo) WeaponCharges.Instance.raicharge = 0;
         }
 
         public string GetHeldWeapon()

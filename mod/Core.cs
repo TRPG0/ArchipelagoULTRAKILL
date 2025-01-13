@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "2.2.2";
+        public const string PluginVersion = "3.0.0";
 
         public static string workingPath;
         public static string workingDir;
@@ -75,12 +75,16 @@ namespace ArchipelagoULTRAKILL
             new LevelInfo("7-3", 28, 7, true, MusicType.Special, SkullsType.None),
             new LevelInfo("7-4", 29, 7, false, MusicType.Skip, SkullsType.None),
             new LevelInfo("P-1", 666, 666, false, MusicType.Special, SkullsType.None),
-            new LevelInfo("P-2", 667, 667, false, MusicType.Special, SkullsType.None)
+            new LevelInfo("P-2", 667, 667, false, MusicType.Special, SkullsType.Normal, new List<string> { "667_b" })
         };
 
         public static readonly List<LevelInfo> secretMissionInfos = new List<LevelInfo>()
         {
             new LevelInfo("0-S", 0, 0, false, MusicType.Skip, SkullsType.Normal, new List<string> { "0S_r", "0S_b" }),
+            new LevelInfo("1-S", 0, 1, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("2-S", 0, 2, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("4-S", 0, 4, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("5-S", 0, 5, false, MusicType.Skip, SkullsType.None),
             new LevelInfo("7-S", 0, 7, false, MusicType.Skip, SkullsType.Normal, new List<string> { "7S_b", "7S_r" })
         };
 
@@ -91,7 +95,6 @@ namespace ArchipelagoULTRAKILL
                 List<string> list = new List<string>();
                 foreach (LevelInfo info in levelInfos)
                 {
-                    if (info.Name == "0-1") continue;
                     list.Add(info.Name);
                 }
                 return list;
@@ -102,7 +105,7 @@ namespace ArchipelagoULTRAKILL
         {
             get
             {
-                if (SceneHelper.CurrentScene == "Level 0-S" || SceneHelper.CurrentScene == "Level 7-S") return true;
+                if (SceneHelper.CurrentScene.Contains("-S")) return true;
                 else return SceneHelper.CurrentScene.Contains("Level ") && !SceneHelper.IsSceneRankless;
             }
         }
@@ -112,7 +115,11 @@ namespace ArchipelagoULTRAKILL
             get
             {
                 if (SceneHelper.CurrentScene == "Level 0-S") return secretMissionInfos[0];
-                else if (SceneHelper.CurrentScene == "Level 7-S") return secretMissionInfos[1];
+                else if (SceneHelper.CurrentScene == "Level 1-S") return secretMissionInfos[1];
+                else if (SceneHelper.CurrentScene == "Level 2-S") return secretMissionInfos[2];
+                else if (SceneHelper.CurrentScene == "Level 4-S") return secretMissionInfos[3];
+                else if (SceneHelper.CurrentScene == "Level 5-S") return secretMissionInfos[4];
+                else if (SceneHelper.CurrentScene == "Level 7-S") return secretMissionInfos[5];
                 else if (CurrentLevelHasInfo) return GetLevelInfo(SceneHelper.CurrentLevelNumber);
                 else return null;
             }
@@ -221,11 +228,6 @@ namespace ArchipelagoULTRAKILL
             {
                 UIManager.FindMenuObjects();
 
-                if (DataExists() && Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
-                else if (DataExists() && !Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
-
-                if (UIManager.log == null) uim.CreateLogObject();
-
                 if (DataExists() && GameProgressSaver.GetTutorial() && !firstTimeLoad)
                 {
                     LoadData();
@@ -235,12 +237,18 @@ namespace ArchipelagoULTRAKILL
                 }
                 else if (!DataExists()) ConfigManager.ResetStatsDefaults();
 
+                UIManager.CreateMenuUI();
+                if (DataExists() && Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
+                else if (DataExists() && !Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
+                if (UIManager.log == null) uim.CreateLogObject();
+
                 if (DataExists() && data.randomizeSkulls) UIManager.CreateMenuSkullIcons();
                 if (DataExists() && (data.l1switch || data.l7switch)) UIManager.CreateMenuSwitchIcons();
 
                 if (data.completedLevels.Count >= data.goalRequirement)
                 {
-                    if (!data.unlockedLevels.Contains(data.goal)) data.unlockedLevels.Add(data.goal);
+                    if (data.goal.Contains("-S")) GameProgressSaver.FoundSecretMission(int.Parse(data.goal.Substring(0, 1)));
+                    else if (!data.unlockedLevels.Contains(data.goal)) data.unlockedLevels.Add(data.goal);
                 }
             }
             else if (IsInLevel && DataExists())

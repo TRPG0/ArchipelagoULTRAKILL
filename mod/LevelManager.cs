@@ -113,9 +113,9 @@ namespace ArchipelagoULTRAKILL
                         description += " for <color=#" + ColorUtility.ToHtmlStringRGB(Colors.PlayerOther) + "FF>" + apitem.playerName + "</color>";
                         description += "]\n\n";
 
-                        if (apitem.type == ItemFlags.Advancement) description += "You don't know what this is, but it seems <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemAdvancement) + "FF>important.</color>";
-                        else if (apitem.type == ItemFlags.NeverExclude) description += "You don't know what this is, but it seems like it could be <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemNeverExclude) + "FF>useful.</color>";
-                        else if (apitem.type == ItemFlags.Trap) description += "You don't know what this is, but it seems like they're probably <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemTrap) + "FF>better off without it.</color>";
+                        if (apitem.type.HasFlag(ItemFlags.Advancement)) description += "You don't know what this is, but it seems <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemAdvancement) + "FF>important.</color>";
+                        else if (apitem.type.HasFlag(ItemFlags.NeverExclude)) description += "You don't know what this is, but it seems like it could be <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemNeverExclude) + "FF>useful.</color>";
+                        else if (apitem.type.HasFlag(ItemFlags.Trap)) description += "You don't know what this is, but it seems like they're probably <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemTrap) + "FF>better off without it.</color>";
                         else description += "You don't know what this is, but it seems like you could probably <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemFiller) + "FF>skip this</color> if you wanted to.";
                     }
                 }

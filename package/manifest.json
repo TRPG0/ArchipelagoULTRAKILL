@@ -1,6 +1,6 @@
 {
     "name": "Archipelago",
-    "version_number": "2.2.2",
+    "version_number": "3.0.0",
     "website_url": "https://github.com/TRPG0/ArchipelagoULTRAKILL",
     "description": "Connect to an Archipelago server to play ULTRAKILL randomizer.",
     "dependencies": [

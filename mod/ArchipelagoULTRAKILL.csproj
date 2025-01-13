@@ -34,8 +34,8 @@
     <Reference Include="0Harmony">
       <HintPath>D:\steam games\steamapps\common\ULTRAKILL\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Archipelago.MultiClient.Net, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Archipelago.MultiClient.Net.6.0.0-rc5\lib\net45\Archipelago.MultiClient.Net.dll</HintPath>
+    <Reference Include="Archipelago.MultiClient.Net, Version=6.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Archipelago.MultiClient.Net.6.5.0\lib\net45\Archipelago.MultiClient.Net.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>D:\steam games\steamapps\common\ULTRAKILL\ULTRAKILL_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -74,7 +74,7 @@
       <HintPath>D:\steam games\steamapps\common\ULTRAKILL\BepInEx\core\MonoMod.Utils.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Archipelago.MultiClient.Net.6.0.0-rc5\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Archipelago.MultiClient.Net.6.5.0\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="plog, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -331,6 +331,7 @@
     <Compile Include="Components\RocketRaceCheck.cs" />
     <Compile Include="Components\SkullIcon.cs" />
     <Compile Include="Components\SwitchIcon.cs" />
+    <Compile Include="Components\VariationOnEnable.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="LevelManager.cs" />
     <Compile Include="Multiworld.cs" />
@@ -342,14 +343,17 @@
     <Compile Include="Patches\BloodCheckerManager.cs" />
     <Compile Include="Patches\ChallengeManager.cs" />
     <Compile Include="Patches\ChessManager.cs" />
+    <Compile Include="Patches\DifficultyTitle.cs" />
     <Compile Include="Patches\DualWield.cs" />
     <Compile Include="Patches\EndlessGrid.cs" />
+    <Compile Include="Patches\EnemyIdentifier.cs" />
     <Compile Include="Patches\FinalDoorOpener.cs" />
     <Compile Include="Patches\FinalPit.cs" />
     <Compile Include="Patches\FinalRank.cs" />
     <Compile Include="Patches\FishingHUD.cs" />
     <Compile Include="Patches\GameProgressSaver.cs" />
     <Compile Include="Patches\GearCheckEnabler.cs" />
+    <Compile Include="Patches\HookArm.cs" />
     <Compile Include="Patches\HudController.cs" />
     <Compile Include="Patches\HudMessage.cs" />
     <Compile Include="Patches\LeaderboardController.cs" />
@@ -360,6 +364,7 @@
     <Compile Include="Patches\NewMovement.cs" />
     <Compile Include="Patches\OptionsMenuToManager.cs" />
     <Compile Include="Patches\PlayerActivatorRelay.cs" />
+    <Compile Include="Patches\Punch.cs" />
     <Compile Include="Patches\RaceRingTracker.cs" />
     <Compile Include="Patches\RocketLauncher.cs" />
     <Compile Include="Patches\SaveSlotMenu.cs" />
@@ -370,13 +375,16 @@
     <Compile Include="Patches\StatsManager.cs" />
     <Compile Include="Patches\VariationInfo.cs" />
     <Compile Include="Patches\WallCheck.cs" />
+    <Compile Include="Patches\WeaponCharges.cs" />
     <Compile Include="Patches\WeaponHUD.cs" />
     <Compile Include="Patches\WeaponPickUp.cs" />
+    <Compile Include="Powerups\QuickChargePowerup.cs" />
+    <Compile Include="Powerups\SandstormTrap.cs" />
+    <Compile Include="Powerups\ConfusionPowerup.cs" />
     <Compile Include="Powerups\DoubleJumpPowerup.cs" />
+    <Compile Include="Powerups\GenericTrap.cs" />
     <Compile Include="Powerups\RadianceTrap.cs" />
     <Compile Include="Powerups\StaminaPowerup.cs" />
-    <Compile Include="Powerups\WallJumpTrap.cs" />
-    <Compile Include="Powerups\DashTrap.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -116,8 +116,8 @@ namespace ArchipelagoULTRAKILL.Components
                 Color color2 = color1;
                 color2.a = mainGlow.color.a;
                 sec.color = color1;
-                alt1.color = color1;
-                alt2.color = color2;
+                if (alt1 != null) alt1.color = color1;
+                if (alt2 != null) alt2.color = color2;
                 secGlow.color = color2;
                 timer -= Time.deltaTime * 2;
             }

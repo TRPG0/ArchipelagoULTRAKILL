@@ -11,7 +11,7 @@ namespace ArchipelagoULTRAKILL.Components
                 Core.Logger.LogInfo("Chapter Select inactive. Updating levels.");
                 UIManager.UpdateLevels();
             }
-            if (UIManager.actStats != null) UIManager.actStats.gameObject.SetActive(false);
+            UIManager.actStats?.gameObject.SetActive(false);
         }
     }
 }

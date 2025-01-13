@@ -17,7 +17,8 @@ namespace ArchipelagoULTRAKILL.Patches
                 {
                     fileData = JsonConvert.DeserializeObject<Data>(reader.ReadToEnd());
                 }
-                targetPanel.stateLabel.text = $"ARCHIPELAGO ({fileData.slot_name} | {fileData.@checked.Count})";
+                if (fileData.version == string.Empty) targetPanel.stateLabel.text = $"AP ({fileData.slot_name} | {fileData.@checked.Count} | UNKNOWN VERSION)"; 
+                else targetPanel.stateLabel.text = $"AP ({fileData.slot_name} | {fileData.@checked.Count} | {fileData.version})";
             }
         }
     }

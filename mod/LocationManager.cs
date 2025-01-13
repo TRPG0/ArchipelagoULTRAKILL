@@ -1,6 +1,5 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
-using Archipelago.MultiClient.Net.Packets;
 using ArchipelagoULTRAKILL.Components;
 using ArchipelagoULTRAKILL.Structures;
 using HarmonyLib;
@@ -256,26 +255,69 @@ namespace ArchipelagoULTRAKILL
                         break;
 
                     case UKType.Powerup:
-                        if (item.itemName == "Overheal") powerupQueue.Add(Powerup.Overheal);
-                        else if (item.itemName == "Dual Wield") powerupQueue.Add(Powerup.DualWield);
-                        else if (item.itemName == "Infinite Stamina") powerupQueue.Add(Powerup.InfiniteStamina);
-                        else if (item.itemName == "Air Jump") powerupQueue.Add(Powerup.DoubleJump);
+                        switch (item.itemName)
+                        {
+                            case "Overheal":
+                                powerupQueue.Add(Powerup.Overheal);
+                                break;
+                            case "Dual Wield":
+                                powerupQueue.Add(Powerup.DualWield);
+                                break;
+                            case "Infinite Stamina":
+                                powerupQueue.Add(Powerup.InfiniteStamina);
+                                break;
+                            case "Air Jump":
+                                powerupQueue.Add(Powerup.DoubleJump);
+                                break;
+                            case "Confusing Aura":
+                                powerupQueue.Add(Powerup.Confusion);
+                                break;
+                            case "Quick Charge":
+                                powerupQueue.Add(Powerup.QuickCharge);
+                                break;
+                            default:
+                                Core.Logger.LogWarning($"Couldn't identify powerup: \"{item.itemName}\"");
+                                break;
+                        }
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";
                         break;
 
                     case UKType.Trap:
-                        if (item.itemName == "Hard Damage") powerupQueue.Add(Powerup.HardDamage);
-                        else if (item.itemName == "Stamina Limiter") powerupQueue.Add(Powerup.StaminaLimiter);
-                        else if (item.itemName == "Wall Jump Limiter") powerupQueue.Add(Powerup.WalljumpLimiter);
-                        else if (item.itemName == "Empty Ammunition") powerupQueue.Add(Powerup.EmptyAmmo);
-                        else if (item.itemName == "Radiant Aura") powerupQueue.Add(Powerup.Radiance);
+                        switch (item.itemName)
+                        {
+                            case "Hard Damage":
+                                powerupQueue.Add(Powerup.HardDamage);
+                                break;
+                            case "Stamina Limiter":
+                                powerupQueue.Add(Powerup.StaminaLimiter);
+                                break;
+                            case "Wall Jump Limiter":
+                                powerupQueue.Add(Powerup.WalljumpLimiter);
+                                break;
+                            case "Empty Ammunition":
+                            case "Weapon Malfunction":
+                                powerupQueue.Add(Powerup.EmptyAmmo);
+                                break;
+                            case "Radiant Aura":
+                                powerupQueue.Add(Powerup.Radiance);
+                                break;
+                            case "Hands-Free Mode":
+                                powerupQueue.Add(Powerup.NoArms);
+                                break;
+                            case "Short-Term Sandstorm":
+                                powerupQueue.Add(Powerup.Sandstorm);
+                                break;
+                            default:
+                                Core.Logger.LogWarning($"Couldn't identify trap: \"{item.itemName}\"");
+                                break;
+                        }
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";
                         break;
 
                     case UKType.Soap:
-                        if (Core.IsPlaying) Core.SpawnSoap();
+                        if (Core.IsInLevel) Core.SpawnSoap();
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";
                         break;
@@ -365,8 +407,7 @@ namespace ArchipelagoULTRAKILL
             {
                 var locationId = available[Random.Range(0, available.Length)];
 
-                Multiworld.Session.Locations.ScoutLocationsAsync(true, locationId);
-                ScoutedItemInfo info = Multiworld.Session.Locations.ScoutLocationsAsync(false, locationId).Result[locationId];
+                ScoutedItemInfo info = Multiworld.Session.Locations.ScoutLocationsAsync(true, locationId).Result[locationId];
                 string locationName = Multiworld.Session.Locations.GetLocationNameFromId(info.LocationId, Multiworld.Session.Players.GetPlayerInfo(Multiworld.Session.ConnectionInfo.Slot).Game);
 
                 string itemColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(info.ItemName));
@@ -505,7 +546,9 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (7-2)":
                 case "Red Skull (7-S)":
                 case "Blue Skull (7-S)":
+                case "Blue Skull (P-2)":
                     return "skull";
+                case "0-1: INTO THE FIRE":
                 case "0-2: THE MEATGRINDER":
                 case "0-3: DOUBLE DOWN":
                 case "0-4: A ONE-MACHINE ARMY":
@@ -560,7 +603,6 @@ namespace ArchipelagoULTRAKILL
                 case "Hard Damage":
                     return "overheal";
                 case "Dual Wield":
-                case "Empty Ammunition":
                     return "dualwield";
                 case "Infinite Stamina":
                 case "Stamina Limiter":
@@ -586,6 +628,17 @@ namespace ArchipelagoULTRAKILL
                     return "switch4";
                 case "Clash Mode":
                     return "clash";
+                case "Empty Ammunition":
+                case "Weapon Malfunction":
+                    return "malfunction";
+                case "Hands-Free Mode":
+                    return "noarms";
+                case "Quick Charge":
+                    return "quickcharge";
+                case "Confusing Aura":
+                    return "confusion";
+                case "Short-Term Sandstorm":
+                    return "sandstorm";
                 default:
                     return "archipelago";
             }
@@ -637,6 +690,7 @@ namespace ArchipelagoULTRAKILL
                 case "Slide":
                 case "Slam":
                 case "Infinite Stamina":
+                case "Quick Charge":
                     return ColorBlindSettings.Instance.staminaColor;
                 case "Feedbacker":
                     return Colors.Arm0;
@@ -668,6 +722,7 @@ namespace ArchipelagoULTRAKILL
                 case "Blue Skull (5-4)":
                 case "Blue Skull (7-1)":
                 case "Blue Skull (7-S)":
+                case "Blue Skull (P-2)":
                     return Colors.BlueSkull;
                 case "Whiplash":
                     return Colors.Arm2;
@@ -679,6 +734,7 @@ namespace ArchipelagoULTRAKILL
                 case "1-2":
                 case "1-3":
                 case "1-4":
+                case "1-S":
                 case "LAYER 1: LIMBO":
                     return Colors.Layer1;
                 case "Knuckleblaster":
@@ -702,6 +758,8 @@ namespace ArchipelagoULTRAKILL
                     return Colors.Layer7;
                 case "P-1: SOUL SURVIVOR":
                 case "P-2: WAIT OF THE WORLD":
+                case "P-1":
+                case "P-2":
                     return Colors.Prime;
                 case "Red Skull (0-S)":
                 case "Red Skull (1-1)":
@@ -717,6 +775,7 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (7-2)":
                 case "Red Skull (7-S)":
                     return Colors.RedSkull;
+                case "0-1: INTO THE FIRE":
                 case "0-2: THE MEATGRINDER":
                 case "0-3: DOUBLE DOWN":
                 case "0-4: A ONE-MACHINE ARMY":
@@ -727,6 +786,7 @@ namespace ArchipelagoULTRAKILL
                 case "0-3":
                 case "0-4":
                 case "0-5":
+                case "0-S":
                     return Colors.Layer0;
                 case "2-1: BRIDGEBURNER":
                 case "2-2: DEATH AT 20,000 VOLTS":
@@ -737,6 +797,7 @@ namespace ArchipelagoULTRAKILL
                 case "2-2":
                 case "2-3":
                 case "2-4":
+                case "2-S":
                     return Colors.Layer2;
                 case "3-1: BELLY OF THE BEAST":
                 case "3-2: IN THE FLESH":
@@ -769,7 +830,10 @@ namespace ArchipelagoULTRAKILL
                 case "Stamina Limiter":
                 case "Wall Jump Limiter":
                 case "Empty Ammunition":
+                case "Weapon Malfunction":
                 case "Radiant Aura":
+                case "Hands-Free Mode":
+                case "Short-Term Sandstorm":
                     return Colors.Trap;
                 case "Violence Switch I":
                 case "Violence Switch II":
@@ -779,6 +843,8 @@ namespace ArchipelagoULTRAKILL
                 case "Limbo Switch III":
                 case "Limbo Switch IV":
                     return Colors.Switch;
+                case "Confusing Aura":
+                    return Colors.Confusion;
                 default:
                     return Colors.White;
             }
@@ -786,17 +852,10 @@ namespace ArchipelagoULTRAKILL
 
         public static Color GetAPMessageColor(ItemFlags flag)
         {
-            switch (flag)
-            {
-                case ItemFlags.Advancement:
-                    return Colors.ItemAdvancement;
-                case ItemFlags.NeverExclude:
-                    return Colors.ItemNeverExclude;
-                case ItemFlags.Trap:
-                    return Colors.ItemTrap;
-                default:
-                    return Colors.ItemFiller;
-            }
+            if (flag.HasFlag(ItemFlags.Advancement)) return Colors.ItemAdvancement;
+            else if (flag.HasFlag(ItemFlags.NeverExclude)) return Colors.ItemNeverExclude;
+            else if (flag.HasFlag(ItemFlags.Trap)) return Colors.ItemTrap;
+            else return Colors.ItemFiller;
         }
 
         public static UKType? GetTypeFromName(string name)
@@ -865,7 +924,9 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (7-2)":
                 case "Red Skull (7-S)":
                 case "Blue Skull (7-S)":
+                case "Blue Skull (P-2)":
                     return UKType.Skull;
+                case "0-1: INTO THE FIRE":
                 case "0-2: THE MEATGRINDER":
                 case "0-3: DOUBLE DOWN":
                 case "0-4: A ONE-MACHINE ARMY":
@@ -912,12 +973,17 @@ namespace ArchipelagoULTRAKILL
                 case "Dual Wield":
                 case "Infinite Stamina":
                 case "Air Jump":
+                case "Confusing Aura":
+                case "Quick Charge":
                     return UKType.Powerup;
                 case "Hard Damage":
                 case "Stamina Limiter":
                 case "Wall Jump Limiter":
                 case "Empty Ammunition":
+                case "Weapon Malfunction":
                 case "Radiant Aura":
+                case "Hands-Free Mode":
+                case "Short-Term Sandstorm":
                     return UKType.Trap;
                 case "Soap":
                     return UKType.Soap;

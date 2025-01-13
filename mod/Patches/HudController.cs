@@ -5,13 +5,15 @@ using UnityEngine.UI;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
-    [HarmonyPatch(typeof(HudController), "Start")]
-    public class HudController_Start_Patch
+    [HarmonyPatch(typeof(HudController), "CheckSituation")]
+    public class HudController_CheckSituation_Patch
     {
         public static void Postfix(HudController __instance)
         {
             if (Core.DataExists() && Core.data.randomizeFire2 && Fire2HUD.Instance != null)
             {
+                if (Fire2HUD.Instance.alt1shadow != null || Fire2HUD.Instance.alt2shadow != null) return;
+
                 if (__instance.altHud && !__instance.colorless)
                 {
                     Fire2HUD.Instance.alt1 = GameObject.Instantiate(__instance.weaponIcon.transform.Find("Image").gameObject, __instance.weaponIcon.transform).GetComponent<Image>();
