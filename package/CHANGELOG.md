@@ -1,3 +1,9 @@
+## 3.0.1
+
+- Re-added a missing location. (2-2: Weapon)
+- Fixed prime sanctums being inaccessible if unlock type is set to layers.
+- Fixed incorrect logic in 5-3.
+
 ## 3.0.0
 
 - Multiple levels can be chosen to start in, rather than just 0-1.
@@ -18,7 +24,7 @@
 - Fixed the shop not updating correctly when viewed for the first time in a level.
 - Fixed soap sometimes not spawning properly.
 - The version a multiworld was generated with will now be displayed on the file select screen.
-- Updated Archipelago.MultiClient.Net to `6.5.0`.
+- Updated `Archipelago.MultiClient.Net` to `6.5.0`.
 
 ## 2.2.2
 
@@ -27,7 +33,7 @@
 
 ## 2.2.1
 
-- Updated Archipelago.MultiClient.Net to `6.0.0-rc5`.
+- Updated `Archipelago.MultiClient.Net` to `6.0.0-rc5`.
 - Fixed a logic error for 7-2: Secret Weapon.
 - Fixed secret mission locations not being colored correctly in hint popups.
 

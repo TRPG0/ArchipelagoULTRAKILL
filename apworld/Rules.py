@@ -1034,10 +1034,16 @@ class UltrakillRules:
                 ),
 
             "P-1":
-                lambda state: state.has("P-1: SOUL SURVIVOR", player),
+                lambda state: (
+                    state.has("P-1: SOUL SURVIVOR", player)
+                    or state.has("LAYER 3: GLUTTONY")
+                ),
 
             "P-2":
-                lambda state: state.has("P-2: WAIT OF THE WORLD", player),
+                lambda state: (
+                    state.has("P-2: WAIT OF THE WORLD", player)
+                    or state.has("LAYER 6: HERESY")
+                ),
 
             "0-S":
                 lambda state: (
@@ -1928,24 +1934,30 @@ class UltrakillRules:
             "5-3: Weapon":
                 lambda state: (
                     grab_item(state)
-                    and skull(state, "5-3", "Blue")
-                    and skull(state, "5-3", "Red")
+                    and (
+                        skull(state, "5-3", "Blue")
+                        or skull(state, "5-3", "Red")
+                    )
                     and can_break_idol(state)
                 ),
 
             "5-3: Secret #4":
                 lambda state: (
                     grab_item(state)
-                    and skull(state, "5-3", "Blue")
-                    and skull(state, "5-3", "Red")
+                    and (
+                        skull(state, "5-3", "Blue")
+                        or skull(state, "5-3", "Red")
+                    )
                     and can_break_idol(state)
                 ),
 
             "5-3: Secret #5":
                 lambda state: (
                     grab_item(state)
-                    and skull(state, "5-3", "Blue")
-                    and skull(state, "5-3", "Red")
+                    and (
+                        skull(state, "5-3", "Blue")
+                        or skull(state, "5-3", "Red")
+                    )
                     and can_break_idol(state)
                 ),
 
@@ -1960,8 +1972,10 @@ class UltrakillRules:
             "Cleared 5-3":
                 lambda state: (
                     grab_item(state)
-                    and skull(state, "5-3", "Blue")
-                    and skull(state, "5-3", "Red")
+                    and (
+                        skull(state, "5-3", "Blue")
+                        or skull(state, "5-3", "Red")
+                    )
                     and can_break_idol(state)
                 ),
 
@@ -1979,8 +1993,10 @@ class UltrakillRules:
             "5-3: Perfect Rank":
                 lambda state: (
                     grab_item(state)
-                    and skull(state, "5-3", "Blue")
-                    and skull(state, "5-3", "Red")
+                    and (
+                        skull(state, "5-3", "Blue")
+                        or skull(state, "5-3", "Red")
+                    )
                     and can_break_idol(state)
                     and good_weapon(state)
                 ),

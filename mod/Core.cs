@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.0.0";
+        public const string PluginVersion = "3.0.1";
 
         public static string workingPath;
         public static string workingDir;
@@ -74,8 +74,8 @@ namespace ArchipelagoULTRAKILL
             new LevelInfo("7-2", 27, 7, true, MusicType.Special, SkullsType.Normal, new List<string>() { "27_r" }),
             new LevelInfo("7-3", 28, 7, true, MusicType.Special, SkullsType.None),
             new LevelInfo("7-4", 29, 7, false, MusicType.Skip, SkullsType.None),
-            new LevelInfo("P-1", 666, 666, false, MusicType.Special, SkullsType.None),
-            new LevelInfo("P-2", 667, 667, false, MusicType.Special, SkullsType.Normal, new List<string> { "667_b" })
+            new LevelInfo("P-1", 666, 3, false, MusicType.Special, SkullsType.None),
+            new LevelInfo("P-2", 667, 6, false, MusicType.Special, SkullsType.Normal, new List<string> { "667_b" })
         };
 
         public static readonly List<LevelInfo> secretMissionInfos = new List<LevelInfo>()

@@ -119,6 +119,7 @@ location_list: List[UKLocation] = [
     UKLocation("2-1: Perfect Rank", Regions.l10, "10_p", LocationType.PerfectRank),
 
     # 2-2: DEATH AT 20,000 VOLTS
+    UKLocation("2-2: Weapon", Regions.l11, "11_w1", LocationType.Normal),
     UKLocation("2-2: Secret #1", Regions.l11, "11_s1", LocationType.Normal),
     UKLocation("2-2: Secret #2", Regions.l11, "11_s2", LocationType.Normal),
     UKLocation("2-2: Secret #3", Regions.l11, "11_s3", LocationType.Normal),
