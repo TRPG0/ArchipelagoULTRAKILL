@@ -1036,13 +1036,13 @@ class UltrakillRules:
             "P-1":
                 lambda state: (
                     state.has("P-1: SOUL SURVIVOR", player)
-                    or state.has("LAYER 3: GLUTTONY")
+                    or state.has("LAYER 3: GLUTTONY", player)
                 ),
 
             "P-2":
                 lambda state: (
                     state.has("P-2: WAIT OF THE WORLD", player)
-                    or state.has("LAYER 6: HERESY")
+                    or state.has("LAYER 6: HERESY", player)
                 ),
 
             "0-S":
