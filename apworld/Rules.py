@@ -1271,6 +1271,8 @@ class UltrakillRules:
                 lambda state: (
                     good_weapon(state)
                     and grab_item(state)
+                    and skull(state, "1-1", "Red")
+                    and skull(state, "1-1", "Blue")
                 ),
 
             "Cleared 1-1":
