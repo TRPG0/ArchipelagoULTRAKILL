@@ -514,7 +514,6 @@ class UltrakillRules:
                 or rai2(state)
                 or rock_any(state)
                 or arm1(state)
-                or revstd1_fire2(state)
                 or revalt_any(state)
                 or shostd0_fire2(state)
                 or shostd1_fire2(state)
@@ -795,7 +794,10 @@ class UltrakillRules:
             """4-1: Challenge (Don't activate any enemies)"""
             return (
                 rock0_fire2(state)
-                or slam_storage(state)
+                or (
+                    slam_storage(state)
+                    and can_break_walls(state)
+                )
                 or (
                     (
                         rai2(state)
