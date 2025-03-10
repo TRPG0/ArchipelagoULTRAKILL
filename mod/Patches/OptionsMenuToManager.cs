@@ -7,11 +7,10 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix(OptionsMenuToManager __instance)
         {
-            if (Core.DataExists() && Core.data.randomizeSkulls && Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.Skulls > Structures.SkullsType.None)
+            if (Core.DataExists())
             {
-                bool createdSwitches = false;
-                UIManager.CreatePauseSwitchIcons(__instance.pauseMenu, ref createdSwitches);
-                UIManager.CreatePauseSkullIcons(__instance.pauseMenu, createdSwitches);
+                if (Core.CurrentLevelHasSkulls) UIManager.CreatePauseSkullIcons(__instance.pauseMenu);
+                if (Core.CurrentLevelHasSwitches) UIManager.CreatePauseSwitchIcons(__instance.pauseMenu);
             }
         }
     }

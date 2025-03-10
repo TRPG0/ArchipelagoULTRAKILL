@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
             ["12"] = "Assets/Music/2-3.wav",
             ["14A"] = "Assets/Music/3-1 Guts.wav",
             ["14B"] = "Assets/Music/3-1 Glory.wav",
-            ["16"] = "Assets/Music/4-1.wav",
+            ["16"] = "Assets/Music/4-1.wav", // other_assets_all.bundle
             ["17"] = "Assets/Music/4-2.wav",
             ["18A"] = "Assets/Music/4-3 Phase 1.wav",
             ["18B"] = "Assets/Music/4-3 Phase 2.wav",
@@ -31,10 +31,10 @@ namespace ArchipelagoULTRAKILL
             ["22A"] = "Assets/Music/5-3.wav",
             ["22B"] = "Assets/Music/5-3 Aftermath.wav",
             ["24A"] = "Assets/Music/6-1.wav",
-            ["26B"] = "Assets/Music/7-1.wav",
-            ["27A"] = "Assets/Music/7-2 Intro Battle.wav",
-            ["27B"] = "Assets/Music/7-2.wav",
-            ["28B"] = "Assets/Music/7-3.wav",
+            ["26B"] = "Assets/Music/7-1.wav", // other_assets_all.bundle
+            ["27A"] = "Assets/Music/7-2 Intro Battle.wav", // other_assets_all.bundle
+            ["27B"] = "Assets/Music/7-2.wav", // other_assets_all.bundle
+            ["28B"] = "Assets/Music/7-3.wav", // other_assets_all.bundle
             ["667A"] = "Assets/Music/P-2.wav",
         };
 
@@ -57,42 +57,44 @@ namespace ArchipelagoULTRAKILL
             ["18A"] = "Assets/Music/4-3 Phase 1 Clean.wav",
             ["18B"] = "Assets/Music/4-3 Phase 2 Clean.wav",
             ["18C"] = "Assets/Music/4-3 Phase 3.wav",
-            ["20"] = "Assets/Music/5-1 Clean.wav",
+            ["20"] = "Assets/Music/5-1 Clean.wav", // doesn't work
             ["22A"] = "Assets/Music/5-3 Clean.wav",
             ["22B"] = "Assets/Music/5-3 Aftermath Clean.wav",
             ["24A"] = "Assets/Music/6-1 Clean.wav",
-            ["26B"] = "Assets/Music/7-1 Clean.wav",
-            ["27A"] = "Assets/Music/7-2 Intro Clean.wav",
-            ["27B"] = "Assets/Music/7-2 Clean.wav",
-            ["28B"] = "Assets/Music/7-3 Clean.wav",
+            ["26B"] = "Assets/Music/7-1 Clean.wav", // doesn't work
+            ["27A"] = "Assets/Music/7-2 Intro Clean.wav", // other_assets_all.bundle
+            ["27B"] = "Assets/Music/7-2 Clean.wav", // doesn't work
+            ["28B"] = "Assets/Music/7-3 Clean.wav", // doesn't work
             ["667A"] = "Assets/Music/P-2 Clean.wav",
         };
 
         private static readonly Dictionary<string, string> singleMusic = new Dictionary<string, string>()
         {
-            ["5"] = "Assets/Music/Bosses/Cerberus A.mp3",
-            ["6A"] = "Assets/Music/Misc/A Thousand Greetings.wav",
-            ["7A"] = "Assets/Music/Misc/A Thousand Greetings.wav",
-            ["9A"] = "Assets/Music/Misc/Clair_de_lune_(Claude_Debussy)_Suite_bergamasque (CREATIVE COMMONS).ogg",
-            ["9B"] = "Assets/Music/Bosses/V2 1-4.wav",
-            ["13"] = "Assets/Music/Bosses/Minos Corpse B.wav",
-            ["15A"] = "Assets/Music/Bosses/Gabriel 3-2 Intro.wav",
-            ["15B"] = "Assets/Music/Bosses/Gabriel 3-2.wav",
-            ["18D"] = "Assets/Music/Misc/themeofcancer.wav",
-            ["19"] = "Assets/Music/Bosses/V2 4-4.wav",
-            ["24B"] = "Assets/Music/6-1 Hall of Sacreligious Remains.wav",
-            ["25A"] = "Assets/Music/Bosses/Gabriel 6-2 Intro B.wav",
-            ["25B"] = "Assets/Music/Bosses/Gabriel 6-2.wav",
-            ["26A"] = "Assets/Music/7-1 Intro.wav",
-            ["26C"] = "Assets/Music/Misc/themeofcancer.wav",
-            ["26D"] = "Assets/Music/Bosses/Minotaur A.wav",
-            ["26E"] = "Assets/Music/Bosses/Minotaur B.wav",
-            ["28A"] = "Assets/Music/7-3 Intro Clean.wav",
-            ["666A"] = "Assets/Music/Bosses/Flesh Prison.wav",
-            ["666B"] = "Assets/Music/Bosses/Minos Prime.wav",
-            ["667B"] = "Assets/Music/Bosses/Flesh panopticon.wav",
-            ["667C"] = "Assets/Music/Bosses/Sisyphus Prime.wav",
+            ["5"] = "Assets/Music/Bosses/Cerberus A.mp3", // other_assets_all.bundle
+            ["6A"] = "Assets/Music/Misc/A Thousand Greetings.wav", // other_assets_all.bundle
+            ["7A"] = "Assets/Music/Misc/A Thousand Greetings.wav", // other_assets_all.bundle
+            ["9A"] = "Assets/Music/Misc/Clair_de_lune_(Claude_Debussy)_Suite_bergamasque (CREATIVE COMMONS).ogg", // other_assets_all.bundle
+            ["9B"] = "Assets/Music/Bosses/V2 1-4.wav", // other_assets_all.bundle
+            ["13"] = "Assets/Music/Bosses/Minos Corpse B.wav", // other_assets_all.bundle
+            ["15A"] = "Assets/Music/Bosses/Gabriel 3-2 Intro.wav", // other_assets_all.bundle
+            ["15B"] = "Assets/Music/Bosses/Gabriel 3-2.wav", // other_assets_all.bundle
+            ["18D"] = "Assets/Music/Misc/themeofcancer.wav", // doesn't work
+            ["19"] = "Assets/Music/Bosses/V2 4-4.wav", // other_assets_all.bundle
+            ["24B"] = "Assets/Music/6-1 Hall of Sacreligious Remains.wav", // other_assets_all.bundle
+            ["25A"] = "Assets/Music/Bosses/Gabriel 6-2 Intro B.wav", // other_assets_all.bundle
+            ["25B"] = "Assets/Music/Bosses/Gabriel 6-2.wav", // other_assets_all.bundle
+            ["26A"] = "Assets/Music/7-1 Intro.wav", // other_assets_all.bundle
+            ["26C"] = "Assets/Music/Misc/themeofcancer.wav", // doesn't work
+            ["26D"] = "Assets/Music/Bosses/Minotaur A.wav", // other_assets_all.bundle
+            ["26E"] = "Assets/Music/Bosses/Minotaur B.wav", // other_assets_all.bundle
+            ["28A"] = "Assets/Music/7-3 Intro Clean.wav", // other_assets_all.bundle
+            ["666A"] = "Assets/Music/Bosses/Flesh Prison.wav", // other_assets_all.bundle
+            ["666B"] = "Assets/Music/Bosses/Minos Prime.wav", // other_assets_all.bundle
+            ["667B"] = "Assets/Music/Bosses/Flesh panopticon.wav", // other_assets_all.bundle
+            ["667C"] = "Assets/Music/Bosses/Sisyphus Prime.wav", // other_assets_all.bundle
         };
+
+        public static AudioClip TestLoadAudioClip(string address) => Addressables.LoadAssetAsync<AudioClip>(address).WaitForCompletion();
 
         public static AudioClip LoadNewSingleTrack(AudioClip source, string id)
         {

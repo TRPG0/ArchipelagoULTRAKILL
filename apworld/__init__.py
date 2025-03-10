@@ -304,21 +304,21 @@ class UltrakillWorld(World):
             #print(self.music)
 
     
-    def write_spoiler_header(self, spoiler_handle):
-        if self.options.music_randomizer:
-            spoiler_handle.write("\nMusic:\n")
-            for i, j in self.music.items():
-                original: str
-                changed: str
-                if i in multilayer_music.keys():
-                    original = multilayer_music[i]
-                elif i in singlelayer_music.keys():
-                    original = singlelayer_music[i]
-                if j in multilayer_music.keys():
-                    changed = multilayer_music[j]
-                elif j in singlelayer_music.keys():
-                    changed = singlelayer_music[j]
-                spoiler_handle.write(f"({i}) {original} -> {changed}\n")
+    #def write_spoiler_header(self, spoiler_handle):
+    #    if self.options.music_randomizer:
+    #        spoiler_handle.write("\nMusic:\n")
+    #        for i, j in self.music.items():
+    #            original: str
+    #            changed: str
+    #            if i in multilayer_music.keys():
+    #                original = multilayer_music[i]
+    #            elif i in singlelayer_music.keys():
+    #                original = singlelayer_music[i]
+    #            if j in multilayer_music.keys():
+    #                changed = multilayer_music[j]
+    #            elif j in singlelayer_music.keys():
+    #                changed = singlelayer_music[j]
+    #            spoiler_handle.write(f"({i}) {original} -> {changed}\n")
 
 
     def create_items(self):
@@ -330,6 +330,8 @@ class UltrakillWorld(World):
             elif item.type == ItemType.Level and item.name in {self.start_level.full_name, self.goal_level.full_name}:
                 continue
             elif item.type == ItemType.Filler or item.type == ItemType.Trap:
+                continue
+            elif item.name == self.start_weapon:
                 continue
             
             count: int = item.count
@@ -431,7 +433,7 @@ class UltrakillWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
-            "version": "3.0.1",
+            "version": "3.1.0",
             "locations": self.game_id_to_long,
             "start": self.start_level.short_name,
             "goal": self.goal_level.short_name,

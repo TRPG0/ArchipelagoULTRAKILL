@@ -15,6 +15,9 @@ namespace ArchipelagoULTRAKILL
     {
         public static AssetBundle bundle = AssetBundle.LoadFromMemory(Properties.Resources.trpg_archipelago);
 
+        public static Sprite menuSprite1 = Addressables.LoadAssetAsync<Sprite>("Assets/Textures/UI/Controls/Round_VertHandle_Invert 1.png").WaitForCompletion();
+        public static Sprite menuSprite2 = Addressables.LoadAssetAsync<Sprite>("Assets/Textures/UI/Controls/Round_BorderLarge.png").WaitForCompletion();
+
         public static TMP_FontAsset font;
         public static TextMeshProUGUI log;
         public static int lines = 5;
@@ -27,10 +30,11 @@ namespace ArchipelagoULTRAKILL
         public static Dictionary<string, GameObject> levels = new Dictionary<string, GameObject>();
         public static Dictionary<string, GameObject> secrets = new Dictionary<string, GameObject>();
 
-        public static TextMeshProUGUI menuText;
+        public static GameObject menuText;
         public static GameObject menuIcon;
         public static TextMeshProUGUI goalCount;
 
+        public static GameObject pauseContainer;
         public static bool createdSkullIcons = false;
         public static bool createdSwitchIcons = false;
 
@@ -125,7 +129,7 @@ namespace ArchipelagoULTRAKILL
             chapterSelect = chapters["prelude"].gameObject.transform.parent.gameObject;
             chapterSelect.AddComponent<ChapterSelectState>();
 
-            actStats = GameObject.Instantiate(chapterSelect.transform.Find("Prelude").Find("Name"), chapterSelect.transform).GetComponent<TextMeshProUGUI>();
+            actStats = GameObject.Instantiate(chapterSelect.transform.Find("Prelude").Find("Name"), chapterSelect.transform.parent).GetComponent<TextMeshProUGUI>();
             Vector3 rankPos = chapterSelect.transform.Find("Prelude").Find("RankPanel").transform.position;
             actStats.transform.position = new Vector3(rankPos.x + 77, rankPos.y, rankPos.z);
             actStats.overflowMode = TextOverflowModes.Overflow;
@@ -137,6 +141,7 @@ namespace ArchipelagoULTRAKILL
             chapterSelect.transform.Find("Act I").gameObject.AddComponent<ActStats>().Init(6, 15);
             chapterSelect.transform.Find("Act II").gameObject.AddComponent<ActStats>().Init(16, 25);
             chapterSelect.transform.Find("Act III").gameObject.AddComponent<ActStats>().Init(26, 29);
+            chapterSelect.transform.Find("Encore").gameObject.AddComponent<ActStats>().Init(100, 101, true);
             chapterSelect.transform.Find("Prime").gameObject.AddComponent<ActStats>().Init(666, 667, true);
 
             foreach (LayerSelect component in canvas.GetComponentsInChildren<LayerSelect>(true))
@@ -294,6 +299,12 @@ namespace ArchipelagoULTRAKILL
                     case "P-3 Panel":
                         levels["P-3"] = component.gameObject;
                         break;
+                    case "0-E":
+                        levels["0-E"] = component.gameObject;
+                        break;
+                    case "1-E":
+                        levels["1-E"] = component.gameObject;
+                        break;
                     default:
                         break;
                 }
@@ -330,29 +341,25 @@ namespace ArchipelagoULTRAKILL
         
         public static void CreateMenuUI()
         {
-            foreach (TextMeshProUGUI tmp in canvas.GetComponentsInChildren<TextMeshProUGUI>())
-            {
-                if (tmp.text == "-- EARLY ACCESS --")
-                {
-                    menuText = Instantiate(tmp.gameObject, tmp.gameObject.transform.parent).GetComponent<TextMeshProUGUI>();
-                    break;
-                }
-            }
-            menuText.gameObject.name = "Archipelago Text";
-            menuText.transform.localPosition = new Vector3(-6, -148, 0);
-            menuText.alignment = TextAlignmentOptions.TopRight;
-            menuText.fontSize = 24;
             string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
-            if (Core.DataExists()) menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
-            else if (Multiworld.HintMode) menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n<color=yellow>Hint Mode</color>";
-            else menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\nNo data.";
-            font = menuText.font;
+
+            canvas.transform.Find("Main Menu (1)/Border").gameObject.AddComponent<MenuBorderCheck>();
+            menuText = canvas.transform.Find("Main Menu (1)/LeftSide/Text (3)").gameObject;
+            font = menuText.GetComponent<TextMeshProUGUI>().font;
+            string line2 = "NO DATA.";
+            if (Core.DataExists()) line2 = $"{Core.data.slot_name.ToUpper()} - {Core.data.@checked.Count} / {totalLocations}";
+            else if (Multiworld.HintMode) line2 = $"{Core.data.slot_name.ToUpper()} - HINT MODE ({Multiworld.Session.ConnectionInfo.Game.ToUpper()})";
+            string full = $" - ARCHIPELAGO {Core.PluginVersion} - SLOT {GameProgressSaver.currentSlot + 1}\n{line2}";
+            menuText.GetComponent<TextMeshProUGUI>().text = menuText.GetComponent<TextMeshProUGUI>().text + full;
+            menuText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = menuText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text + full;
+
             menuIcon = new GameObject();
             menuIcon.gameObject.name = "Archipelago Logo";
             menuIcon.transform.SetParent(menuText.transform.parent.gameObject.transform);
-            menuIcon.AddComponent<Image>().sprite = bundle.LoadAsset<Sprite>("assets/archipelago.png");
-            menuIcon.transform.localPosition = new Vector3(600, 40, 0);
-            menuIcon.transform.localScale = new Vector3(0.7f, 0.7f, 1);
+            menuIcon.AddComponent<Image>().sprite = bundle.LoadAsset<Sprite>("assets/newlogo1.png");
+            menuIcon.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 1);
+            menuIcon.transform.localPosition = new Vector3(637.5f, -48, 0);
+            menuIcon.transform.localScale = new Vector3(0.96f, 0.96f, 0.96f);
 
             if (Core.DataExists() && Core.data.completedLevels.Count < Core.data.goalRequirement) CreateGoalCounter();
         }
@@ -425,11 +432,17 @@ namespace ArchipelagoULTRAKILL
                 if (info.Skulls == SkullsType.Normal)
                 {
                     if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}.");
-                    bool isPrime = info.Name.Contains("P-");
-                    if (isPrime)
+                    bool reposition = true;
+                    if (info.Name.Contains("P-"))
                     {
+                        reposition = false;
                         xPos = 140;
                         yPos = 112;
+                    }
+                    if (info.Name.Contains("-E"))
+                    {
+                        reposition = false;
+                        yPos = 140;
                     }
 
                     foreach (string skull in info.SkullsList)
@@ -442,7 +455,7 @@ namespace ArchipelagoULTRAKILL
                         go.AddComponent<Image>().sprite = sprite;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
                         go.transform.localPosition = new Vector3(xPos - (xOffset * info.SkullsList.FindIndex(a => a == skull)), yPos, 0);
-                        go.AddComponent<SkullIcon>().SetId(skull, !isPrime);
+                        go.AddComponent<SkullIcon>().SetId(skull, reposition);
                     }
                 }
                 else if (info.Name == "1-4")
@@ -485,8 +498,8 @@ namespace ArchipelagoULTRAKILL
                 {
                     if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}.");
 
-                    int xPos = 275;
-                    if (info.Name == "0-S") xPos = 290;
+                    int xPos = 260;
+                    if (info.Name == "0-S") xPos = 275;
                     int xOffset = 38;
                     int yPos = 10;
 
@@ -551,85 +564,125 @@ namespace ArchipelagoULTRAKILL
             createdSwitchIcons = true;
         }
 
-        public static void CreatePauseSkullIcons(GameObject pauseMenu, bool createdSwitches)
+        public static void CreatePauseIconContainer(GameObject pauseMenu)
         {
+            if (pauseContainer != null) return;
 
-            if (Core.CurrentLevelHasInfo)
+            float yPos = -240;
+            float ySize = 50;
+            if (Core.CurrentLevelHasSkulls && Core.CurrentLevelHasSwitches)
             {
+                yPos = -260;
+                ySize = 90;
+            }
+            pauseContainer = new GameObject() { name = "Icons BG" };
+            pauseContainer.transform.SetParent(pauseMenu.transform);
+            pauseContainer.transform.localPosition = new Vector3(0, yPos, 0);
+            pauseContainer.transform.localScale = Vector3.one;
+            pauseContainer.AddComponent<RectTransform>().sizeDelta = new Vector2(50, ySize);
+            Image bgImage = pauseContainer.AddComponent<Image>();
+            bgImage.sprite = menuSprite1;
+            bgImage.pixelsPerUnitMultiplier = 5;
+            bgImage.type = Image.Type.Sliced;
+            bgImage.color = new Color(0, 0, 0, 0.7843f);
+        }
+
+        public static void CreatePauseSkullIcons(GameObject pauseMenu)
+        {
+            if (Core.CurrentLevelHasInfo && !createdSkullIcons)
+            {
+                if (pauseContainer == null) CreatePauseIconContainer(pauseMenu);
+
                 Sprite sprite = bundle.LoadAsset<Sprite>("assets/skull.png");
                 LevelInfo info = Core.CurrentLevelInfo;
 
-                int xPos = 275;
-                int xOffset = 33;
-                int yPos = -175;
-                if (createdSwitches) yPos = -135;
+                float xOffset = 36;
+                float xPos = 0;
+                float yPos = 1;
+                if (Core.CurrentLevelHasSkulls && Core.CurrentLevelHasSwitches) yPos = 21;
                 if (info.Skulls == SkullsType.Normal)
                 {
                     if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}");
+                    if (info.SkullsList.Count > 1)
+                    {
+                        xPos = xOffset * (((float)info.SkullsList.Count - 1) / 2);
+                        float xSize = 15 + (35 * info.SkullsList.Count);
+                        float ySize = (Core.CurrentLevelHasSkulls && Core.CurrentLevelHasSwitches) ? 90 : 50;
+                        pauseContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(xSize, ySize);
+                    }
                     foreach (string skull in info.SkullsList)
                     {
                         if (pauseMenu.transform.Find(skull)) continue;
                         GameObject go = new GameObject();
                         go.name = skull;
-                        go.transform.SetParent(pauseMenu.transform);
+                        go.transform.SetParent(pauseContainer.transform);
                         go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
-                        go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
                         go.transform.localPosition = new Vector3(xPos - (xOffset * info.SkullsList.FindIndex(a => a == skull)), yPos, 0);
                         go.AddComponent<SkullIcon>().SetId(skull, false);
                     }
                 }
                 else if (info.Name == "1-4")
                 {
+                    xPos = xOffset * 1.5f;
+                    pauseContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(15 + (35 * 4), 50);
                     for (int i = 0; i < 4; i++)
                     {
                         string skull = "9_b" + (i + 1);
                         if (pauseMenu.transform.Find(skull)) continue;
                         GameObject go = new GameObject();
                         go.name = skull;
-                        go.transform.SetParent(pauseMenu.transform);
+                        go.transform.SetParent(pauseContainer.transform);
                         go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
-                        go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        go.transform.localPosition = new Vector3(xPos - (xOffset * i), yPos, 0);
+                        go.transform.localPosition = new Vector3(-xPos + (xOffset * i), yPos, 0);
                         go.AddComponent<SkullIcon>().SetId(skull, false);
                     }
                 }
                 else if (info.Name == "5-1")
                 {
+                    xPos = xOffset;
+                    pauseContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(15 + (35 * 3), 50);
                     for (int i = 0; i < 3; i++)
                     {
                         string skull = "20_b" + (i + 1);
                         if (pauseMenu.transform.Find(skull)) continue;
                         GameObject go = new GameObject();
                         go.name = skull;
-                        go.transform.SetParent(pauseMenu.transform);
+                        go.transform.SetParent(pauseContainer.transform);
                         go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = sprite;
-                        go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        go.transform.localPosition = new Vector3(xPos - (xOffset * i), yPos, 0);
+                        go.transform.localPosition = new Vector3(-xPos + (xOffset * i), yPos, 0);
                         go.AddComponent<SkullIcon>().SetId(skull, false);
                     }
                 }
+                createdSkullIcons = true;
             }
         }
 
-        public static void CreatePauseSwitchIcons(GameObject pauseMenu, ref bool created)
+        public static void CreatePauseSwitchIcons(GameObject pauseMenu)
         {
-            if (Core.CurrentLevelHasInfo)
+            if (Core.CurrentLevelHasInfo && !createdSwitchIcons)
             {
                 if (!(Core.CurrentLevelInfo.Id == 9 || Core.CurrentLevelInfo.Id == 27)) return;
+                if (pauseContainer == null) CreatePauseIconContainer(pauseMenu);
 
-                int xPos = 275;
-                int xOffset = 40;
-                int yPos = -175;
+                float xPos = 0;
+                float xOffset = 40;
+                float yPos = 0;
+                if (Core.CurrentLevelHasSkulls && Core.CurrentLevelHasSwitches) yPos = -20;
 
                 int switches = 0;
                 if (Core.CurrentLevelInfo.Id == 9) switches = 4;
                 if (Core.CurrentLevelInfo.Id == 27) switches = 3;
+
+                xPos = xOffset * (((float)switches - 1) / 2);
+                float xSize = 10 + (40 * switches);
+                float ySize = (Core.CurrentLevelHasSkulls && Core.CurrentLevelHasSwitches) ? 90 : 50;
+                if (pauseContainer.GetComponent<RectTransform>().sizeDelta.x < xSize) pauseContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(xSize, ySize);
 
                 bool limbo = true;
                 if (Core.CurrentLevelInfo.Id == 27) limbo = false;
@@ -640,15 +693,14 @@ namespace ArchipelagoULTRAKILL
                     if (pauseMenu.transform.Find(i.ToString())) continue;
                     GameObject go = new GameObject();
                     go.name = i.ToString();
-                    go.transform.SetParent(pauseMenu.transform);
+                    go.transform.SetParent(pauseContainer.transform);
                     go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
                     go.layer = 5;
                     go.AddComponent<Image>().sprite = sprite;
-                    go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
                     go.transform.localPosition = new Vector3(xPos - (xOffset * (switches - i)), yPos, 0);
                     go.AddComponent<SwitchIcon>().SetId(i-1, limbo);
                 }
-                created = true;
+                createdSwitchIcons = true;
             }
         }
 
@@ -677,6 +729,7 @@ namespace ArchipelagoULTRAKILL
             Destroy(popupCanvas.transform.Find("StatsPanel").Find("Filler").Find("Panel (3)").gameObject);
             Destroy(popupCanvas.transform.Find("StatsPanel").Find("Filler").Find("Panel").gameObject);
             Destroy(popupCanvas.transform.Find("StatsPanel").Find("Filler").Find("AltRailcannonPanel").gameObject);
+
             try
             {
                 popupImage = popupCanvas.transform.Find("StatsPanel").Find("Filler").Find("FistPanel").Find("Panel").gameObject;
@@ -688,6 +741,10 @@ namespace ArchipelagoULTRAKILL
                     if (image.name == "Panel" && image.transform.parent.name == "FistPanel") popupImage = image.gameObject;
                 }
             }
+            popupImage.transform.parent.gameObject.SetActive(true);
+            Destroy(popupImage.transform.parent.Find("Background").gameObject);
+
+
             popupCanvas.transform.Find("StatsPanel").gameObject.SetActive(true);
             popupCanvas.SetActive(false);
             popupImage.GetComponent<Image>().sprite = bundle.LoadAsset<Sprite>("assets/layer4.png");
@@ -702,7 +759,6 @@ namespace ArchipelagoULTRAKILL
             popupText.enableAutoSizing = true;
             popupText.fontSizeMax = 120;
             popupText.lineSpacing = 1.1f;
-            popupText.material = HUDOptions.Instance.hudMaterial;
             popupText.text = "UNLOCKED: <color=#ffe800ff>4-2 GOD DAMN THE SUN</color> (<color=#fafad2ff>Trev</color>)";
             popupText.GetComponent<RectTransform>().sizeDelta = new Vector2(750, 150);
             popupText.transform.localPosition = new Vector3(100.6437f, 23.9347f, 0);
@@ -743,7 +799,7 @@ namespace ArchipelagoULTRAKILL
                 name = "Text",
                 layer = 5
             };
-            go.transform.parent = NewMovement.Instance.blackScreen.gameObject.transform;
+            go.transform.parent = Traverse.Create(NewMovement.Instance.deathSequence).Field<GameObject>("deathScreen").Value.transform;
             go.AddComponent<Canvas>();
             go2.transform.parent = go.transform;
             go2.AddComponent<Text>();

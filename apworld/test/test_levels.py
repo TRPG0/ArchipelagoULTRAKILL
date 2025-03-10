@@ -1,5 +1,7 @@
 from . import UltrakillTestBase
 
+goal_max: int = 38
+
 
 class TestLevelItems(UltrakillTestBase):
     def test_level_items(self) -> None:
@@ -17,7 +19,7 @@ class TestS1G2(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -27,7 +29,7 @@ class TestS1G3(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 3,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -37,7 +39,7 @@ class TestS1G4(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -47,7 +49,7 @@ class TestS1G5(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -57,7 +59,7 @@ class TestS1G0(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 0,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -67,7 +69,7 @@ class TestS1G6(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 6,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -77,7 +79,7 @@ class TestS1G7(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -87,7 +89,7 @@ class TestS1G8(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 8,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -97,7 +99,7 @@ class TestS1G9(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 9,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -107,7 +109,7 @@ class TestS1GN1(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": -1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -117,7 +119,7 @@ class TestS1G10(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 10,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -127,7 +129,7 @@ class TestS1G11(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 11,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -137,7 +139,7 @@ class TestS1G12(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 12,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -147,7 +149,7 @@ class TestS1G13(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 13,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -157,7 +159,7 @@ class TestS1GN2(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": -2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -167,7 +169,7 @@ class TestS1G14(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 14,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -177,7 +179,7 @@ class TestS1G15(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 15,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -187,7 +189,7 @@ class TestS1G16(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 16,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -197,7 +199,7 @@ class TestS1G17(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 17,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -207,7 +209,7 @@ class TestS1G18(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 18,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -217,7 +219,7 @@ class TestS1G19(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 19,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -227,7 +229,7 @@ class TestS1GN4(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": -4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -237,7 +239,7 @@ class TestS1G20(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 20,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -247,7 +249,7 @@ class TestS1G21(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 21,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -257,7 +259,7 @@ class TestS1G22(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 22,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -267,7 +269,7 @@ class TestS1G23(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 23,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -277,7 +279,7 @@ class TestS1GN5(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": -5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -287,7 +289,7 @@ class TestS1G24(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 24,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -297,7 +299,7 @@ class TestS1G25(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 25,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -307,7 +309,7 @@ class TestS1G26(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 26,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -317,7 +319,7 @@ class TestS1G27(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 27,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -327,7 +329,7 @@ class TestS1G28(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 28,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -337,7 +339,7 @@ class TestS1G29(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 29,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -347,7 +349,27 @@ class TestS1GN7(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": -7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 0-1: INTO THE FIRE -> 0-E: THIS HEAT, AN EVIL HEAT
+class TestS1G100(TestLevelItems):
+    options = {
+        "start_level": 1,
+        "goal_level": 100,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 0-1: INTO THE FIRE -> 1-E: ...THEN FELL THE ASHES
+class TestS1G101(TestLevelItems):
+    options = {
+        "start_level": 1,
+        "goal_level": 101,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -357,7 +379,7 @@ class TestS1G666(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 666,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -367,7 +389,7 @@ class TestS1G667(TestLevelItems):
     options = {
         "start_level": 1,
         "goal_level": 667,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -377,7 +399,7 @@ class TestS2G1(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -387,7 +409,7 @@ class TestS2G3(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 3,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -397,7 +419,7 @@ class TestS2G4(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -407,7 +429,7 @@ class TestS2G5(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -417,7 +439,7 @@ class TestS2G0(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 0,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -427,7 +449,7 @@ class TestS2G6(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 6,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -437,7 +459,7 @@ class TestS2G7(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -447,7 +469,7 @@ class TestS2G8(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 8,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -457,7 +479,7 @@ class TestS2G9(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 9,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -467,7 +489,7 @@ class TestS2GN1(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": -1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -477,7 +499,7 @@ class TestS2G10(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 10,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -487,7 +509,7 @@ class TestS2G11(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 11,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -497,7 +519,7 @@ class TestS2G12(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 12,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -507,7 +529,7 @@ class TestS2G13(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 13,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -517,7 +539,7 @@ class TestS2GN2(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": -2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -527,7 +549,7 @@ class TestS2G14(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 14,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -537,7 +559,7 @@ class TestS2G15(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 15,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -547,7 +569,7 @@ class TestS2G16(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 16,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -557,7 +579,7 @@ class TestS2G17(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 17,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -567,7 +589,7 @@ class TestS2G18(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 18,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -577,7 +599,7 @@ class TestS2G19(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 19,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -587,7 +609,7 @@ class TestS2GN4(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": -4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -597,7 +619,7 @@ class TestS2G20(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 20,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -607,7 +629,7 @@ class TestS2G21(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 21,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -617,7 +639,7 @@ class TestS2G22(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 22,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -627,7 +649,7 @@ class TestS2G23(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 23,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -637,7 +659,7 @@ class TestS2GN5(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": -5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -647,7 +669,7 @@ class TestS2G24(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 24,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -657,7 +679,7 @@ class TestS2G25(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 25,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -667,7 +689,7 @@ class TestS2G26(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 26,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -677,7 +699,7 @@ class TestS2G27(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 27,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -687,7 +709,7 @@ class TestS2G28(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 28,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -697,7 +719,7 @@ class TestS2G29(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 29,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -707,7 +729,27 @@ class TestS2GN7(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": -7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 0-2: THE MEATGRINDER -> 0-E: THIS HEAT, AN EVIL HEAT
+class TestS2G100(TestLevelItems):
+    options = {
+        "start_level": 2,
+        "goal_level": 100,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 0-2: THE MEATGRINDER -> 1-E: ...THEN FELL THE ASHES
+class TestS2G101(TestLevelItems):
+    options = {
+        "start_level": 2,
+        "goal_level": 101,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -717,7 +759,7 @@ class TestS2G666(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 666,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -727,7 +769,7 @@ class TestS2G667(TestLevelItems):
     options = {
         "start_level": 2,
         "goal_level": 667,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -737,7 +779,7 @@ class TestS6G1(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -747,7 +789,7 @@ class TestS6G2(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -757,7 +799,7 @@ class TestS6G3(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 3,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -767,7 +809,7 @@ class TestS6G4(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -777,7 +819,7 @@ class TestS6G5(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -787,7 +829,7 @@ class TestS6G0(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 0,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -797,7 +839,7 @@ class TestS6G7(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -807,7 +849,7 @@ class TestS6G8(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 8,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -817,7 +859,7 @@ class TestS6G9(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 9,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -827,7 +869,7 @@ class TestS6GN1(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": -1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -837,7 +879,7 @@ class TestS6G10(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 10,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -847,7 +889,7 @@ class TestS6G11(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 11,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -857,7 +899,7 @@ class TestS6G12(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 12,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -867,7 +909,7 @@ class TestS6G13(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 13,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -877,7 +919,7 @@ class TestS6GN2(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": -2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -887,7 +929,7 @@ class TestS6G14(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 14,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -897,7 +939,7 @@ class TestS6G15(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 15,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -907,7 +949,7 @@ class TestS6G16(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 16,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -917,7 +959,7 @@ class TestS6G17(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 17,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -927,7 +969,7 @@ class TestS6G18(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 18,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -937,7 +979,7 @@ class TestS6G19(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 19,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -947,7 +989,7 @@ class TestS6GN4(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": -4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -957,7 +999,7 @@ class TestS6G20(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 20,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -967,7 +1009,7 @@ class TestS6G21(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 21,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -977,7 +1019,7 @@ class TestS6G22(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 22,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -987,7 +1029,7 @@ class TestS6G23(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 23,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -997,7 +1039,7 @@ class TestS6GN5(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": -5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1007,7 +1049,7 @@ class TestS6G24(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 24,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1017,7 +1059,7 @@ class TestS6G25(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 25,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1027,7 +1069,7 @@ class TestS6G26(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 26,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1037,7 +1079,7 @@ class TestS6G27(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 27,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1047,7 +1089,7 @@ class TestS6G28(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 28,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1057,7 +1099,7 @@ class TestS6G29(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 29,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1067,7 +1109,27 @@ class TestS6GN7(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": -7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 1-1: HEART OF THE SUNRISE -> 0-E: THIS HEAT, AN EVIL HEAT
+class TestS6G100(TestLevelItems):
+    options = {
+        "start_level": 6,
+        "goal_level": 100,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 1-1: HEART OF THE SUNRISE -> 1-E: ...THEN FELL THE ASHES
+class TestS6G101(TestLevelItems):
+    options = {
+        "start_level": 6,
+        "goal_level": 101,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1077,7 +1139,7 @@ class TestS6G666(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 666,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1087,7 +1149,7 @@ class TestS6G667(TestLevelItems):
     options = {
         "start_level": 6,
         "goal_level": 667,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1097,7 +1159,7 @@ class TestS7G2(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1107,7 +1169,7 @@ class TestS7G2(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1117,7 +1179,7 @@ class TestS7G3(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 3,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1127,7 +1189,7 @@ class TestS7G4(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1137,7 +1199,7 @@ class TestS7G5(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1147,7 +1209,7 @@ class TestS7G0(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 0,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1157,7 +1219,7 @@ class TestS7G6(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 6,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1167,7 +1229,7 @@ class TestS7G8(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 8,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1177,7 +1239,7 @@ class TestS7G9(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 9,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1187,7 +1249,7 @@ class TestS7GN1(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": -1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1197,7 +1259,7 @@ class TestS7G10(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 10,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1207,7 +1269,7 @@ class TestS7G11(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 11,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1217,7 +1279,7 @@ class TestS7G12(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 12,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1227,7 +1289,7 @@ class TestS7G13(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 13,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1237,7 +1299,7 @@ class TestS7GN2(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": -2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1247,7 +1309,7 @@ class TestS7G14(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 14,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1257,7 +1319,7 @@ class TestS7G15(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 15,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1267,7 +1329,7 @@ class TestS7G16(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 16,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1277,7 +1339,7 @@ class TestS7G17(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 17,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1287,7 +1349,7 @@ class TestS7G18(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 18,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1297,7 +1359,7 @@ class TestS7G19(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 19,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1307,7 +1369,7 @@ class TestS7GN4(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": -4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1317,7 +1379,7 @@ class TestS7G20(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 20,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1327,7 +1389,7 @@ class TestS7G21(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 21,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1337,7 +1399,7 @@ class TestS7G22(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 22,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1347,7 +1409,7 @@ class TestS7G23(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 23,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1357,7 +1419,7 @@ class TestS7GN5(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": -5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1367,7 +1429,7 @@ class TestS7G24(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 24,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1377,7 +1439,7 @@ class TestS7G25(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 25,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1387,7 +1449,7 @@ class TestS7G26(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 26,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1397,7 +1459,7 @@ class TestS7G27(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 27,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1407,7 +1469,7 @@ class TestS7G28(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 28,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1417,7 +1479,7 @@ class TestS7G29(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 29,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1427,7 +1489,27 @@ class TestS7GN7(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": -7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 1-2: THE BURNING WORLD -> 0-E: THIS HEAT, AN EVIL HEAT
+class TestS7G100(TestLevelItems):
+    options = {
+        "start_level": 7,
+        "goal_level": 100,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 1-2: THE BURNING WORLD -> 1-E: ...THEN FELL THE ASHES
+class TestS7G101(TestLevelItems):
+    options = {
+        "start_level": 7,
+        "goal_level": 101,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1437,7 +1519,7 @@ class TestS7G666(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 666,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1447,7 +1529,7 @@ class TestS7G667(TestLevelItems):
     options = {
         "start_level": 7,
         "goal_level": 667,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1457,7 +1539,7 @@ class TestS8G1(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1467,7 +1549,7 @@ class TestS8G2(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1477,7 +1559,7 @@ class TestS8G3(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 3,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1487,7 +1569,7 @@ class TestS8G4(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1497,7 +1579,7 @@ class TestS8G5(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1507,7 +1589,7 @@ class TestS8G0(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 0,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1517,7 +1599,7 @@ class TestS8G7(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 6,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1527,7 +1609,7 @@ class TestS8G8(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1537,7 +1619,7 @@ class TestS8G9(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 9,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1547,7 +1629,7 @@ class TestS8GN1(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": -1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1557,7 +1639,7 @@ class TestS8G10(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 10,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1567,7 +1649,7 @@ class TestS8G11(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 11,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1577,7 +1659,7 @@ class TestS8G12(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 12,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1587,7 +1669,7 @@ class TestS8G13(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 13,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1597,7 +1679,7 @@ class TestS8GN2(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": -2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1607,7 +1689,7 @@ class TestS8G14(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 14,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1617,7 +1699,7 @@ class TestS8G15(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 15,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1627,7 +1709,7 @@ class TestS8G16(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 16,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1637,7 +1719,7 @@ class TestS8G17(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 17,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1647,7 +1729,7 @@ class TestS8G18(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 18,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1657,7 +1739,7 @@ class TestS8G19(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 19,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1667,7 +1749,7 @@ class TestS8GN4(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": -4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1677,7 +1759,7 @@ class TestS8G20(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 20,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1687,7 +1769,7 @@ class TestS8G21(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 21,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1697,7 +1779,7 @@ class TestS8G22(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 22,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1707,7 +1789,7 @@ class TestS8G23(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 23,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1717,7 +1799,7 @@ class TestS8GN5(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": -5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1727,7 +1809,7 @@ class TestS8G24(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 24,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1737,7 +1819,7 @@ class TestS8G25(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 25,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1747,7 +1829,7 @@ class TestS8G26(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 26,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1757,7 +1839,7 @@ class TestS8G27(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 27,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1767,7 +1849,7 @@ class TestS8G28(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 28,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1777,7 +1859,7 @@ class TestS8G29(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 29,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1787,7 +1869,27 @@ class TestS8GN7(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": -7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 1-3: HALLS OF SACRED REMAINS -> 0-E: THIS HEAT, AN EVIL HEAT
+class TestS8G100(TestLevelItems):
+    options = {
+        "start_level": 8,
+        "goal_level": 100,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 1-3: HALLS OF SACRED REMAINS -> 1-E: ...THEN FELL THE ASHES
+class TestS8G101(TestLevelItems):
+    options = {
+        "start_level": 8,
+        "goal_level": 101,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1797,7 +1899,7 @@ class TestS8G666(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 666,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -1807,367 +1909,7 @@ class TestS8G667(TestLevelItems):
     options = {
         "start_level": 8,
         "goal_level": 667,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 0-1: INTO THE FIRE
-class TestS10G2(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 1,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 0-2: THE MEATGRINDER
-class TestS10G2(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 2,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 0-3: DOUBLE DOWN
-class TestS10G3(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 3,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 0-4: A ONE-MACHINE ARMY
-class TestS10G4(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 4,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 0-5: CERBERUS
-class TestS10G5(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 5,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 0-S: SOMETHING WICKED
-class TestS10G0(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 0,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 1-1: HEART OF THE SUNRISE
-class TestS10G7(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 6,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 1-2: THE BURNING WORLD
-class TestS10G8(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 7,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 1-3: HALLS OF SACRED REMAINS
-class TestS10G8(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 8,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 1-4: CLAIR DE LUNE
-class TestS10G9(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 9,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 1-S: THE WITLESS
-class TestS10GN1(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": -1,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 2-2: DEATH AT 20,000 VOLTS
-class TestS10G11(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 11,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 2-3: SHEER HEART ATTACK
-class TestS10G12(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 12,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 2-4: COURT OF THE CORPSE KING
-class TestS10G13(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 13,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 2-S: ALL IMPERFECT LOVE SONG
-class TestS10GN2(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": -2,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 3-1: BELLY OF THE BEAST
-class TestS10G14(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 14,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 3-2: IN THE FLESH
-class TestS10G15(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 15,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 4-1: SLAVES TO POWER
-class TestS10G16(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 16,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 4-2: GOD DAMN THE SUN
-class TestS10G17(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 17,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 4-3: A SHOT IN THE DARK
-class TestS10G18(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 18,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 4-4: CLAIR DE SOLEIL
-class TestS10G19(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 19,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 4-S: CLASH OF THE BRANDICOOT
-class TestS10GN4(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": -4,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 5-1: IN THE WAKE OF POSEIDON
-class TestS10G20(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 20,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 5-2: WAVES OF THE STARLESS SEA
-class TestS10G21(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 21,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 5-3: SHIP OF FOOLS
-class TestS10G22(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 22,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 5-4: LEVIATHAN
-class TestS10G23(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 23,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 5-S: I ONLY SAY MORNING
-class TestS10GN5(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": -5,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 6-1: CRY FOR THE WEEPER
-class TestS10G24(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 24,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 6-2: AESTHETICS OF HATE
-class TestS10G25(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 25,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 7-1: GARDEN OF FORKING PATHS
-class TestS10G26(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 26,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 7-2: LIGHT UP THE NIGHT
-class TestS10G27(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 27,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 7-3: NO SOUND, NO MEMORY
-class TestS10G28(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 28,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 7-4: ...LIKE ANTENNAS TO HEAVEN
-class TestS10G29(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 29,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> 7-S: HELL BATH NO FURY
-class TestS10GN7(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": -7,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> P-1: SOUL SURVIVOR
-class TestS10G666(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 666,
-        "goal_requirement": 36,
-        "skipped_levels": {}
-    }
-
-
-# 2-1: BRIDGEBURNER -> P-2: WAIT OF THE WORLD
-class TestS10G667(TestLevelItems):
-    options = {
-        "start_level": 10,
-        "goal_level": 667,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2177,7 +1919,7 @@ class TestS12G1(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2187,7 +1929,7 @@ class TestS12G2(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2197,7 +1939,7 @@ class TestS12G3(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 3,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2207,7 +1949,7 @@ class TestS12G4(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2217,7 +1959,7 @@ class TestS12G5(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2227,7 +1969,7 @@ class TestS12G0(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 0,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2237,7 +1979,7 @@ class TestS12G7(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 6,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2247,7 +1989,7 @@ class TestS12G8(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2257,7 +1999,7 @@ class TestS12G8(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 8,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2267,7 +2009,7 @@ class TestS12G9(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 9,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2277,7 +2019,7 @@ class TestS12GN1(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": -1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2287,7 +2029,7 @@ class TestS12G10(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 10,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2297,7 +2039,7 @@ class TestS12G11(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 11,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2307,7 +2049,7 @@ class TestS12G13(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 13,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2317,7 +2059,7 @@ class TestS12GN2(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": -2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2327,7 +2069,7 @@ class TestS12G14(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 14,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2337,7 +2079,7 @@ class TestS12G15(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 15,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2347,7 +2089,7 @@ class TestS12G16(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 16,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2357,7 +2099,7 @@ class TestS12G17(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 17,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2367,7 +2109,7 @@ class TestS12G18(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 18,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2377,7 +2119,7 @@ class TestS12G19(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 19,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2387,7 +2129,7 @@ class TestS12GN4(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": -4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2397,7 +2139,7 @@ class TestS12G20(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 20,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2407,7 +2149,7 @@ class TestS12G21(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 21,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2417,7 +2159,7 @@ class TestS12G22(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 22,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2427,7 +2169,7 @@ class TestS12G23(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 23,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2437,7 +2179,7 @@ class TestS12GN5(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": -5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2447,7 +2189,7 @@ class TestS12G24(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 24,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2457,7 +2199,7 @@ class TestS12G25(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 25,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2467,7 +2209,7 @@ class TestS12G26(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 26,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2477,7 +2219,7 @@ class TestS12G27(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 27,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2487,7 +2229,7 @@ class TestS12G28(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 28,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2497,7 +2239,7 @@ class TestS12G29(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 29,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2507,7 +2249,27 @@ class TestS12GN7(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": -7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 2-3: SHEER HEART ATTACK -> 0-E: THIS HEAT, AN EVIL HEAT
+class TestS12G100(TestLevelItems):
+    options = {
+        "start_level": 12,
+        "goal_level": 100,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 2-3: SHEER HEART ATTACK -> 1-E: ...THEN FELL THE ASHES
+class TestS12G101(TestLevelItems):
+    options = {
+        "start_level": 12,
+        "goal_level": 101,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2517,7 +2279,7 @@ class TestS12G666(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 666,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2527,7 +2289,7 @@ class TestS12G667(TestLevelItems):
     options = {
         "start_level": 12,
         "goal_level": 667,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2537,7 +2299,7 @@ class TestS14G1(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2547,7 +2309,7 @@ class TestS14G2(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2557,7 +2319,7 @@ class TestS14G3(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 3,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2567,7 +2329,7 @@ class TestS14G4(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2577,7 +2339,7 @@ class TestS14G5(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2587,7 +2349,7 @@ class TestS14G0(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 0,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2597,7 +2359,7 @@ class TestS14G7(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 6,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2607,7 +2369,7 @@ class TestS14G8(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2617,7 +2379,7 @@ class TestS14G8(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 8,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2627,7 +2389,7 @@ class TestS14G9(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 9,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2637,7 +2399,7 @@ class TestS14GN1(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": -1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2647,7 +2409,7 @@ class TestS14G10(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 10,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2657,7 +2419,7 @@ class TestS14G11(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 11,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2667,7 +2429,7 @@ class TestS14G12(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 12,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2677,7 +2439,7 @@ class TestS14G13(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 13,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2687,7 +2449,7 @@ class TestS14GN2(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": -2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2697,7 +2459,7 @@ class TestS14G15(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 15,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2707,7 +2469,7 @@ class TestS14G16(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 16,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2717,7 +2479,7 @@ class TestS14G17(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 17,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2727,7 +2489,7 @@ class TestS14G18(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 18,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2737,7 +2499,7 @@ class TestS14G19(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 19,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2747,7 +2509,7 @@ class TestS14GN4(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": -4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2757,7 +2519,7 @@ class TestS14G20(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 20,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2767,7 +2529,7 @@ class TestS14G21(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 21,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2777,7 +2539,7 @@ class TestS14G22(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 22,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2787,7 +2549,7 @@ class TestS14G23(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 23,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2797,7 +2559,7 @@ class TestS14GN5(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": -5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2807,7 +2569,7 @@ class TestS14G24(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 24,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2817,7 +2579,7 @@ class TestS14G25(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 25,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2827,7 +2589,7 @@ class TestS14G26(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 26,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2837,7 +2599,7 @@ class TestS14G27(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 27,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2847,7 +2609,7 @@ class TestS14G28(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 28,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2857,7 +2619,7 @@ class TestS14G29(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 29,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2867,7 +2629,27 @@ class TestS14GN7(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": -7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 3-1: BELLY OF THE BEAST -> 0-E: THIS HEAT, AN EVIL HEAT
+class TestS14G100(TestLevelItems):
+    options = {
+        "start_level": 14,
+        "goal_level": 100,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 3-1: BELLY OF THE BEAST -> 1-E: ...THEN FELL THE ASHES
+class TestS14G101(TestLevelItems):
+    options = {
+        "start_level": 14,
+        "goal_level": 101,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2877,7 +2659,7 @@ class TestS14G666(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 666,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2887,7 +2669,7 @@ class TestS14G667(TestLevelItems):
     options = {
         "start_level": 14,
         "goal_level": 667,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2897,7 +2679,7 @@ class TestS17G1(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2907,7 +2689,7 @@ class TestS17G2(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2917,7 +2699,7 @@ class TestS17G3(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 3,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2927,7 +2709,7 @@ class TestS17G4(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2937,7 +2719,7 @@ class TestS17G5(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2947,7 +2729,7 @@ class TestS17G0(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 0,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2957,7 +2739,7 @@ class TestS17G7(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 6,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2967,7 +2749,7 @@ class TestS17G8(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2977,7 +2759,7 @@ class TestS17G8(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 8,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2987,7 +2769,7 @@ class TestS17G9(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 9,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -2997,7 +2779,7 @@ class TestS17GN1(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": -1,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3007,7 +2789,7 @@ class TestS17G10(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 10,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3017,7 +2799,7 @@ class TestS17G11(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 11,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3027,7 +2809,7 @@ class TestS17G12(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 12,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3037,7 +2819,7 @@ class TestS17G13(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 13,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3047,7 +2829,7 @@ class TestS17GN2(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": -2,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3057,7 +2839,7 @@ class TestS17G14(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 14,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3067,7 +2849,7 @@ class TestS17G15(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 15,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3077,7 +2859,7 @@ class TestS17G16(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 16,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3087,7 +2869,7 @@ class TestS17G18(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 18,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3097,7 +2879,7 @@ class TestS17G19(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 19,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3107,7 +2889,7 @@ class TestS17GN4(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": -4,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3117,7 +2899,7 @@ class TestS17G20(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 20,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3127,7 +2909,7 @@ class TestS17G21(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 21,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3137,7 +2919,7 @@ class TestS17G22(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 22,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3147,7 +2929,7 @@ class TestS17G23(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 23,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3157,7 +2939,7 @@ class TestS17GN5(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": -5,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3167,7 +2949,7 @@ class TestS17G24(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 24,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3177,7 +2959,7 @@ class TestS17G25(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 25,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3187,7 +2969,7 @@ class TestS17G26(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 26,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3197,7 +2979,7 @@ class TestS17G27(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 27,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3207,7 +2989,7 @@ class TestS17G28(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 28,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3217,7 +2999,7 @@ class TestS17G29(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 29,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3227,7 +3009,27 @@ class TestS17GN7(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": -7,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 4-2: GOD DAMN THE SUN -> 0-E: THIS HEAT, AN EVIL HEAT
+class TestS17G100(TestLevelItems):
+    options = {
+        "start_level": 17,
+        "goal_level": 100,
+        "goal_requirement": goal_max,
+        "skipped_levels": {}
+    }
+
+
+# 4-2: GOD DAMN THE SUN -> 1-E: ...THEN FELL THE ASHES
+class TestS17G100(TestLevelItems):
+    options = {
+        "start_level": 17,
+        "goal_level": 101,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3237,7 +3039,7 @@ class TestS17G666(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 666,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }
 
@@ -3247,6 +3049,6 @@ class TestS17G667(TestLevelItems):
     options = {
         "start_level": 17,
         "goal_level": 667,
-        "goal_requirement": 36,
+        "goal_requirement": goal_max,
         "skipped_levels": {}
     }

@@ -34,8 +34,8 @@
     <Reference Include="0Harmony">
       <HintPath>D:\steam games\steamapps\common\ULTRAKILL\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Archipelago.MultiClient.Net, Version=6.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Archipelago.MultiClient.Net.6.5.0\lib\net45\Archipelago.MultiClient.Net.dll</HintPath>
+    <Reference Include="Archipelago.MultiClient.Net, Version=6.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Archipelago.MultiClient.Net.6.6.0\lib\net45\Archipelago.MultiClient.Net.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>D:\steam games\steamapps\common\ULTRAKILL\ULTRAKILL_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -74,7 +74,7 @@
       <HintPath>D:\steam games\steamapps\common\ULTRAKILL\BepInEx\core\MonoMod.Utils.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Archipelago.MultiClient.Net.6.5.0\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Archipelago.MultiClient.Net.6.6.0\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="plog, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -323,9 +323,11 @@
     <Compile Include="Commands\Connect.cs" />
     <Compile Include="Components\DeathLinkMessage.cs" />
     <Compile Include="Components\Fire2HUD.cs" />
+    <Compile Include="Components\FirstLevelSetup.cs" />
     <Compile Include="Components\GlassDisabler.cs" />
     <Compile Include="Components\Hank.cs" />
     <Compile Include="Components\LinkedDisabler.cs" />
+    <Compile Include="Components\MenuBorderCheck.cs" />
     <Compile Include="Components\PlayerHelper.cs" />
     <Compile Include="Components\ReverseDoorCloser.cs" />
     <Compile Include="Components\RocketRaceCheck.cs" />
@@ -343,6 +345,7 @@
     <Compile Include="Patches\BloodCheckerManager.cs" />
     <Compile Include="Patches\ChallengeManager.cs" />
     <Compile Include="Patches\ChessManager.cs" />
+    <Compile Include="Patches\DeathSequence.cs" />
     <Compile Include="Patches\DifficultyTitle.cs" />
     <Compile Include="Patches\DualWield.cs" />
     <Compile Include="Patches\EndlessGrid.cs" />

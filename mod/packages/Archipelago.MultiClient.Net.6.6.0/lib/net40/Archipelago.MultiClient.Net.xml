@@ -282,6 +282,127 @@
             <see cref="E:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLinkService.OnDeathLinkReceived"/> events
             </summary>
         </member>
+        <member name="T:Archipelago.MultiClient.Net.Colors.BuiltInPalettes">
+            <summary>
+            Contains built-in palettes for color handling
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Colors.BuiltInPalettes.Dark">
+            <summary>
+            Default dark palette based on terminal colors
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Colors.ColorUtils">
+            <summary>
+            Static utilities for getting the appropriate palette color from various protocol-provided information
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Colors.ColorUtils.ActivePlayerColor">
+            <summary>
+            The color to be used to represent the currently connected player
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Colors.ColorUtils.NonActivePlayerColor">
+            <summary>
+            The color to be used to represent any player other the currently connected player
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.ColorUtils.GetColor(Archipelago.MultiClient.Net.Enums.JsonMessagePartColor)">
+            <summary>
+            Gets the palette color corresponding to a JsonMessagePartColor.
+            </summary>
+            <returns>The corresponding palette color, or null if not specified</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.ColorUtils.GetColor(Archipelago.MultiClient.Net.Enums.HintStatus)">
+            <summary>
+            Gets the palette color corresponding to a HintStatus.
+            </summary>
+            <returns>The corresponding palette color, or null if not specified</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.ColorUtils.GetColor(Archipelago.MultiClient.Net.Models.Hint)">
+            <summary>
+            Gets the palette color corresponding to a Hint's status.
+            </summary>
+            <returns>The corresponding palette color, or null if not specified</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.ColorUtils.GetColor(Archipelago.MultiClient.Net.Enums.ItemFlags)">
+            <summary>
+            Gets the palette color corresponding to an ItemFlags.
+            </summary>
+            <returns>The corresponding palette color, or null if not specified</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.ColorUtils.GetColor(Archipelago.MultiClient.Net.Models.ItemInfo)">
+            <summary>
+            Gets the palette color corresponding to an ItemInfo's flags.
+            </summary>
+            <returns>The corresponding palette color, or null if not specified</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.ColorUtils.GetColor(Archipelago.MultiClient.Net.Helpers.PlayerInfo,Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider)">
+            <summary>
+            Gets the palette color corresponding to a PlayerInfo.
+            </summary>
+            <returns>The corresponding palette color, or null if not specified</returns>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Colors.Palette`1">
+            <summary>
+            Palette/theme support for client colors
+            </summary>
+            <typeparam name="T">
+            The type of actual color in the palette, typically an engine- or framework-specific Color struct
+            </typeparam>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Colors.Palette`1.DefaultColor">
+            <summary>
+            The default color to use in the palette when color is not specified, or the requested color is not
+            in the palette
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Colors.Palette`1.Item(System.Nullable{Archipelago.MultiClient.Net.Colors.PaletteColor})">
+            <summary>
+            Retrieves a color from the palette
+            </summary>
+            <param name="color">The palette color to look up</param>
+            <returns>
+            The requested color. Returns the default color if the requested color was null or
+            not defined in this palette.
+            </returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.Palette`1.#ctor(`0,System.Collections.Generic.Dictionary{Archipelago.MultiClient.Net.Colors.PaletteColor,`0})">
+            <summary>
+            Creates a custom palette
+            </summary>
+            <param name="defaultColor">The default color for the palette</param>
+            <param name="palette">
+            The colors in the palette. Note that this does not need to define a mapping for every
+            PaletteColor if it is not desired.
+            </param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.Palette`1.Transform``1(System.Func{`0,``0})">
+            <summary>
+            Creates a copy of this palette with all values transformed to another type
+            </summary>
+            <typeparam name="U">The desired color type for the new palette</typeparam>
+            <param name="transform">A transformation function to convert to the new type</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.Palette`1.Edit(`0,System.Collections.Generic.Dictionary{Archipelago.MultiClient.Net.Colors.PaletteColor,`0})">
+            <summary>
+            Creates a copy of this palette with the specified colors replaced
+            </summary>
+            <param name="newDefault">The new default color</param>
+            <param name="paletteEdits">A mapping specifying colors to replace</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.Palette`1.Edit(System.Collections.Generic.Dictionary{Archipelago.MultiClient.Net.Colors.PaletteColor,`0})">
+            <summary>
+            Creates a copy of this palette with the specified colors replaced. The default color
+            is preserved.
+            </summary>
+            <param name="paletteEdits">A mapping specifying colors to replace</param>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Colors.PaletteColor">
+            <summary>
+            Colors used in client palettes; some by protocol and some by convention.
+            </summary>
+        </member>
         <member name="T:Archipelago.MultiClient.Net.Converters.ArchipelagoPacketConverter">
             <summary>
             Json Converter for archipelago packets
@@ -2153,13 +2274,24 @@
         </member>
         <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.Color">
             <summary>
-            The specified or default color for this message part
+            The color corresponding to <see cref="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.PaletteColor"/> in the built-in dark palette.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.PaletteColor">
+            <summary>
+            The specified color for this message part, or null if not specified.
             </summary>
         </member>
         <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.IsBackgroundColor">
             <summary>
-            The specified background color for this message part
+            Whether this message part's color is intended to represent a background color
             </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.GetColor``1(Archipelago.MultiClient.Net.Colors.Palette{``0})">
+            <summary>
+            Gets the color corresponding to <see cref="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.PaletteColor"/> in the specified palette.
+            </summary>
+            <param name="palette">The palette to retrieve the color from</param>
         </member>
         <member name="M:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.ToString">
             <summary>

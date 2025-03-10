@@ -23,7 +23,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix()
         {
-            Multiworld.DeathLinkKilling = false;
+            Multiworld.lastDeathLink = null;
             if (Core.uim.deathLinkMessage != null) Core.uim.deathLinkMessage.text.text = "";
         }
     }

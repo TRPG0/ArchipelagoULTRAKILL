@@ -56,6 +56,35 @@
             Provides simplified handlers to receive messages about events that happen in the multiworld
             </summary>
         </member>
+        <member name="M:Archipelago.MultiClient.Net.IArchipelagoSession.ConnectAsync">
+            <summary>
+            Connect the websocket to the server
+            Will wait a few seconds to retrieve the RoomInfoPacket, if the request timesout the task will be canceled
+            </summary>
+            <returns>The roominfo send from the server</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.IArchipelagoSession.LoginAsync(System.String,System.String,Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags,System.Version,System.String[],System.String,System.String,System.Boolean)">
+            <summary>
+                Attempt to log in to the Archipelago server by opening a websocket connection and sending a Connect packet.
+                Determining success for this attempt is done by attaching a listener to Socket.PacketReceived and listening for a Connected packet.
+            </summary>
+            <param name="game">The game this client is playing.</param>
+            <param name="name">The slot name of this client.</param>
+            <param name="version">The minimum AP protocol version this client supports.</param>
+            <param name="itemsHandlingFlags">Informs the AP server how you want ReceivedItem packets to be sent to you.</param>
+            <param name="tags">The tags this client supports.</param>
+            <param name="uuid">The uuid of this client.</param>
+            <param name="password">The password to connect to this AP room.</param>
+            <param name="requestSlotData">Decides if the <see cref="T:Archipelago.MultiClient.Net.LoginSuccessful"/> result will contain any slot data</param>
+            <returns>
+                <see cref="T:Archipelago.MultiClient.Net.LoginSuccessful"/> if the connection is succeeded and the server accepted the login attempt.
+                <see cref="T:Archipelago.MultiClient.Net.LoginFailure"/> if the connection to the server failed in some way.
+            </returns>
+            <remarks>
+                The connect attempt is synchronous and will lock for up to 5 seconds as it attempts to connect to the server. 
+                Most connections are instantaneous however the timeout is 5 seconds before it returns <see cref="T:Archipelago.MultiClient.Net.LoginFailure"/>.
+            </remarks>
+        </member>
         <member name="M:Archipelago.MultiClient.Net.IArchipelagoSession.TryConnectAndLogin(System.String,System.String,Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags,System.Version,System.String[],System.String,System.String,System.Boolean)">
             <summary>
                 Attempt to log in to the Archipelago server by opening a websocket connection and sending a Connect packet.
@@ -105,6 +134,12 @@
             <inheritdoc/>
         </member>
         <member name="P:Archipelago.MultiClient.Net.ArchipelagoSession.MessageLog">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.ArchipelagoSession.ConnectAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.ArchipelagoSession.LoginAsync(System.String,System.String,Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags,System.Version,System.String[],System.String,System.String,System.Boolean)">
             <inheritdoc/>
         </member>
         <member name="M:Archipelago.MultiClient.Net.ArchipelagoSession.TryConnectAndLogin(System.String,System.String,Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags,System.Version,System.String[],System.String,System.String,System.Boolean)">
@@ -245,6 +280,127 @@
             <summary>
             Removes the "DeathLink" tag from your <see cref="T:Archipelago.MultiClient.Net.ArchipelagoSession"/> and opts out of further
             <see cref="E:Archipelago.MultiClient.Net.BounceFeatures.DeathLink.DeathLinkService.OnDeathLinkReceived"/> events
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Colors.BuiltInPalettes">
+            <summary>
+            Contains built-in palettes for color handling
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Colors.BuiltInPalettes.Dark">
+            <summary>
+            Default dark palette based on terminal colors
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Colors.ColorUtils">
+            <summary>
+            Static utilities for getting the appropriate palette color from various protocol-provided information
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Colors.ColorUtils.ActivePlayerColor">
+            <summary>
+            The color to be used to represent the currently connected player
+            </summary>
+        </member>
+        <member name="F:Archipelago.MultiClient.Net.Colors.ColorUtils.NonActivePlayerColor">
+            <summary>
+            The color to be used to represent any player other the currently connected player
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.ColorUtils.GetColor(Archipelago.MultiClient.Net.Enums.JsonMessagePartColor)">
+            <summary>
+            Gets the palette color corresponding to a JsonMessagePartColor.
+            </summary>
+            <returns>The corresponding palette color, or null if not specified</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.ColorUtils.GetColor(Archipelago.MultiClient.Net.Enums.HintStatus)">
+            <summary>
+            Gets the palette color corresponding to a HintStatus.
+            </summary>
+            <returns>The corresponding palette color, or null if not specified</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.ColorUtils.GetColor(Archipelago.MultiClient.Net.Models.Hint)">
+            <summary>
+            Gets the palette color corresponding to a Hint's status.
+            </summary>
+            <returns>The corresponding palette color, or null if not specified</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.ColorUtils.GetColor(Archipelago.MultiClient.Net.Enums.ItemFlags)">
+            <summary>
+            Gets the palette color corresponding to an ItemFlags.
+            </summary>
+            <returns>The corresponding palette color, or null if not specified</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.ColorUtils.GetColor(Archipelago.MultiClient.Net.Models.ItemInfo)">
+            <summary>
+            Gets the palette color corresponding to an ItemInfo's flags.
+            </summary>
+            <returns>The corresponding palette color, or null if not specified</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.ColorUtils.GetColor(Archipelago.MultiClient.Net.Helpers.PlayerInfo,Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider)">
+            <summary>
+            Gets the palette color corresponding to a PlayerInfo.
+            </summary>
+            <returns>The corresponding palette color, or null if not specified</returns>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Colors.Palette`1">
+            <summary>
+            Palette/theme support for client colors
+            </summary>
+            <typeparam name="T">
+            The type of actual color in the palette, typically an engine- or framework-specific Color struct
+            </typeparam>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Colors.Palette`1.DefaultColor">
+            <summary>
+            The default color to use in the palette when color is not specified, or the requested color is not
+            in the palette
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Colors.Palette`1.Item(System.Nullable{Archipelago.MultiClient.Net.Colors.PaletteColor})">
+            <summary>
+            Retrieves a color from the palette
+            </summary>
+            <param name="color">The palette color to look up</param>
+            <returns>
+            The requested color. Returns the default color if the requested color was null or
+            not defined in this palette.
+            </returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.Palette`1.#ctor(`0,System.Collections.Generic.Dictionary{Archipelago.MultiClient.Net.Colors.PaletteColor,`0})">
+            <summary>
+            Creates a custom palette
+            </summary>
+            <param name="defaultColor">The default color for the palette</param>
+            <param name="palette">
+            The colors in the palette. Note that this does not need to define a mapping for every
+            PaletteColor if it is not desired.
+            </param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.Palette`1.Transform``1(System.Func{`0,``0})">
+            <summary>
+            Creates a copy of this palette with all values transformed to another type
+            </summary>
+            <typeparam name="U">The desired color type for the new palette</typeparam>
+            <param name="transform">A transformation function to convert to the new type</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.Palette`1.Edit(`0,System.Collections.Generic.Dictionary{Archipelago.MultiClient.Net.Colors.PaletteColor,`0})">
+            <summary>
+            Creates a copy of this palette with the specified colors replaced
+            </summary>
+            <param name="newDefault">The new default color</param>
+            <param name="paletteEdits">A mapping specifying colors to replace</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Colors.Palette`1.Edit(System.Collections.Generic.Dictionary{Archipelago.MultiClient.Net.Colors.PaletteColor,`0})">
+            <summary>
+            Creates a copy of this palette with the specified colors replaced. The default color
+            is preserved.
+            </summary>
+            <param name="paletteEdits">A mapping specifying colors to replace</param>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Colors.PaletteColor">
+            <summary>
+            Colors used in client palettes; some by protocol and some by convention.
             </summary>
         </member>
         <member name="T:Archipelago.MultiClient.Net.Converters.ArchipelagoPacketConverter">
@@ -773,29 +929,56 @@
                 The URL of the host that the socket is connected to.
             </summary>
         </member>
-        <member name="P:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.Connected">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.ConnectAsync">
+            <summary>
+                Initiates a connection to the host asynchronously.
+                Handle the <see cref="!:SocketOpened"/> event to add a callback.
+            </summary>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1">
+            <summary>
+            Websocket agnostic version of the Socket helper, allows a different socket class to be used for testing
+            </summary>
+            <typeparam name="T">The type of WebSocket to use</typeparam>
+        </member>
+        <member name="E:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.PacketReceived">
+            <summary>
+            Handler for recieved and sucsesfully parsed packages
+            </summary>
+        </member>
+        <member name="E:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.PacketsSent">
+            <summary>
+            Handler for packets published to the websocket, called before the packet is handled by the server
+            </summary>
+        </member>
+        <member name="E:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.ErrorReceived">
+            <summary>
+            Handler for error on the socket or during parsing of the packets
+            </summary>
+        </member>
+        <member name="E:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.SocketClosed">
+            <summary>
+            Handler for when the underlaying socket connection is closed
+            </summary>
+        </member>
+        <member name="E:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.SocketOpened">
+            <summary>
+            Handler for when the underlaying socket connection is opened to the archipelago server
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.Connected">
             <summary>
                 Returns true if the socket believes it is connected to the host.
                 Does not emit a ping to determine if the connection is stable.
             </summary>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.Connect">
-            <summary>
-                Initiates a connection to the host.
-            </summary>
-        </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.Disconnect">
-            <summary>
-                Disconnect from the host.
-            </summary>
-        </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.DisconnectAsync">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.DisconnectAsync">
             <summary>
                 Disconnect from the host asynchronously.
-                Handle the <see cref="E:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SocketClosed"/> event to add a callback.
+                Handle the <see cref="E:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.SocketClosed"/> event to add a callback.
             </summary>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SendPacket(Archipelago.MultiClient.Net.ArchipelagoPacketBase)">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.SendPacket(Archipelago.MultiClient.Net.ArchipelagoPacketBase)">
             <summary>
                 Send a single <see cref="T:Archipelago.MultiClient.Net.ArchipelagoPacketBase"/> derived packet.
             </summary>
@@ -806,7 +989,7 @@
                 The websocket connection is not alive.
             </exception>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SendMultiplePackets(System.Collections.Generic.List{Archipelago.MultiClient.Net.ArchipelagoPacketBase})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.SendMultiplePackets(System.Collections.Generic.List{Archipelago.MultiClient.Net.ArchipelagoPacketBase})">
             <summary>
                 Send multiple <see cref="T:Archipelago.MultiClient.Net.ArchipelagoPacketBase"/> derived packets.
             </summary>
@@ -820,7 +1003,7 @@
                 The websocket connection is not alive.
             </exception>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SendMultiplePackets(Archipelago.MultiClient.Net.ArchipelagoPacketBase[])">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.SendMultiplePackets(Archipelago.MultiClient.Net.ArchipelagoPacketBase[])">
             <summary>
                 Send multiple <see cref="T:Archipelago.MultiClient.Net.ArchipelagoPacketBase"/> derived packets.
             </summary>
@@ -834,14 +1017,10 @@
                 The websocket connection is not alive.
             </exception>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SendPacketAsync(Archipelago.MultiClient.Net.ArchipelagoPacketBase,System.Action{System.Boolean})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.SendPacketAsync(Archipelago.MultiClient.Net.ArchipelagoPacketBase)">
             <summary>
                 Send a single <see cref="T:Archipelago.MultiClient.Net.ArchipelagoPacketBase"/> derived packet asynchronously.
             </summary>
-            <param name="onComplete">
-                A callback function to run after the send is complete.
-                The <see cref="T:System.Boolean"/> argument for the callback indicates whether the send was successful.
-            </param>
             <param name="packet">
                 The packet to send to the server.
             </param>
@@ -849,14 +1028,10 @@
                 The websocket connection is not alive.
             </exception>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SendMultiplePacketsAsync(System.Collections.Generic.List{Archipelago.MultiClient.Net.ArchipelagoPacketBase},System.Action{System.Boolean})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.SendMultiplePacketsAsync(System.Collections.Generic.List{Archipelago.MultiClient.Net.ArchipelagoPacketBase})">
             <summary>
                 Send a single <see cref="T:Archipelago.MultiClient.Net.ArchipelagoPacketBase"/> derived packet asynchronously.
             </summary>
-            <param name="onComplete">
-                A callback function to run after the send is complete.
-                The <see cref="T:System.Boolean"/> argument for the callback indicates whether the send was successful.
-            </param>
             <param name="packets">
                 The packets to send to the server.
             </param>
@@ -867,14 +1042,10 @@
                 The websocket connection is not alive.
             </exception>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper.SendMultiplePacketsAsync(System.Action{System.Boolean},Archipelago.MultiClient.Net.ArchipelagoPacketBase[])">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.SendMultiplePacketsAsync(Archipelago.MultiClient.Net.ArchipelagoPacketBase[])">
             <summary>
                 Send a single <see cref="T:Archipelago.MultiClient.Net.ArchipelagoPacketBase"/> derived packet asynchronously.
             </summary>
-            <param name="onComplete">
-                A callback function to run after the send is complete.
-                The <see cref="T:System.Boolean"/> argument for the callback indicates whether the send was successful.
-            </param>
             <param name="packets">
                 The packets to send to the server.
             </param>
@@ -884,6 +1055,12 @@
             <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
                 The websocket connection is not alive.
             </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.BaseArchipelagoSocketHelper`1.OnError(System.Exception)">
+            <summary>
+            Error handler to call when an exception occurs, it will trigger the socket's ErrorRecieved handler
+            </summary>
+            <param name="e">the exception that occured</param>
         </member>
         <member name="T:Archipelago.MultiClient.Net.Helpers.IConnectionInfoProvider">
             <summary>
@@ -1015,7 +1192,7 @@
         <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetHints(System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <inheritdoc />
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetHintsAsync(System.Action{Archipelago.MultiClient.Net.Models.Hint[]},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetHintsAsync(System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <inheritdoc />
         </member>
         <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.TrackHints(System.Action{Archipelago.MultiClient.Net.Models.Hint[]},System.Boolean,System.Nullable{System.Int32},System.Nullable{System.Int32})">
@@ -1027,28 +1204,28 @@
         <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetSlotData``1(System.Nullable{System.Int32})">
             <inheritdoc/>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetSlotDataAsync(System.Action{System.Collections.Generic.Dictionary{System.String,System.Object}},System.Nullable{System.Int32})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetSlotDataAsync(System.Nullable{System.Int32})">
             <inheritdoc />
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetSlotDataAsync``1(System.Action{``0},System.Nullable{System.Int32})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetSlotDataAsync``1(System.Nullable{System.Int32})">
             <inheritdoc/>
         </member>
         <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetItemNameGroups(System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetItemNameGroupsAsync(System.Action{System.Collections.Generic.Dictionary{System.String,System.String[]}},System.String)">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetItemNameGroupsAsync(System.String)">
             <inheritdoc />
         </member>
         <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetLocationNameGroups(System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetLocationNameGroupsAsync(System.Action{System.Collections.Generic.Dictionary{System.String,System.String[]}},System.String)">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetLocationNameGroupsAsync(System.String)">
             <inheritdoc />
         </member>
         <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetClientStatus(System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <inheritdoc />
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetClientStatusAsync(System.Action{Archipelago.MultiClient.Net.Enums.ArchipelagoClientState},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetClientStatusAsync(System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <inheritdoc />
         </member>
         <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.TrackClientStatus(System.Action{Archipelago.MultiClient.Net.Enums.ArchipelagoClientState},System.Boolean,System.Nullable{System.Int32},System.Nullable{System.Int32})">
@@ -1057,7 +1234,7 @@
         <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetRaceMode">
             <inheritdoc />
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetRaceModeAsync(System.Action{System.Boolean})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.DataStorageHelper.GetRaceModeAsync">
             <inheritdoc />
         </member>
         <member name="T:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper">
@@ -1073,11 +1250,10 @@
             <param name="team">the team id of the player to request hints for, defaults to the current player's team if left empty</param>
             <returns>An array of unlocked hints or null if the slot or team does not exist</returns>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetHintsAsync(System.Action{Archipelago.MultiClient.Net.Models.Hint[]},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetHintsAsync(System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             Retrieves all unlocked hints for the specified player slot and team
             </summary>
-            <param name="onHintsRetrieved">the method to call with the retrieved hints</param>
             <param name="slot">the slot id of the player to request hints for, defaults to the current player's slot if left empty</param>
             <param name="team">the team id of the player to request hints for, defaults to the current player's team if left empty</param>
             <returns>An array of unlocked hints or null if the slot or team does not exist</returns>
@@ -1106,20 +1282,18 @@
             <param name="slot">The slot ID of the player ot request slot data for, defaults to the current player's slot if left empty</param>
             <returns>The slot data, converted to a modeled object of the specified type</returns>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetSlotDataAsync(System.Action{System.Collections.Generic.Dictionary{System.String,System.Object}},System.Nullable{System.Int32})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetSlotDataAsync(System.Nullable{System.Int32})">
             <summary>
             Retrieves the custom slot data for the specified slot
             </summary>
-            <param name="onSlotDataRetrieved">the method to call with the retrieved slot data</param>
             <param name="slot">the slot id of the player to request slot data for, defaults to the current player's slot if left empty</param>
             <returns>An Dictionary with string keys, and custom defined values, the keys and values differ per game</returns>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetSlotDataAsync``1(System.Action{``0},System.Nullable{System.Int32})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetSlotDataAsync``1(System.Nullable{System.Int32})">
             <summary>
             Retrieves the custom slot data for the specified slot
             </summary>
             <typeparam name="T">The type to convert the slot data to</typeparam>
-            <param name="onSlotDataRetrieved">the method to call with the retrieved slot data</param>
             <param name="slot">the slot id of the player to request slot data for, defaults to the current player's slot if left empty</param>
             <returns>The slot data, converted to a modeled object of the specified type</returns>
         </member>
@@ -1130,11 +1304,10 @@
             <param name="game">the game name to request item name groups for, defaults to the current player's game if left empty</param>
             <returns>An Dictionary with item group names for keys and an array of item names as value</returns>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetItemNameGroupsAsync(System.Action{System.Collections.Generic.Dictionary{System.String,System.String[]}},System.String)">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetItemNameGroupsAsync(System.String)">
             <summary>
             Retrieves the defined item name groups for the specified game
             </summary>
-            <param name="onItemNameGroupsRetrieved">the method to call with the retrieved item name groups</param>
             <param name="game">the game name to request item name groups for, defaults to the current player's game if left empty</param>
             <returns>An Dictionary with item group names for keys and an array of item names as value</returns>
         </member>
@@ -1145,11 +1318,10 @@
             <param name="game">the game name to request location name groups for, defaults to the current player's game if left empty</param>
             <returns>An Dictionary with location group names for keys and an array of location names as value</returns>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetLocationNameGroupsAsync(System.Action{System.Collections.Generic.Dictionary{System.String,System.String[]}},System.String)">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetLocationNameGroupsAsync(System.String)">
             <summary>
             Retrieves the defined location name groups for the specified game
             </summary>
-            <param name="onLocationNameGroupsRetrieved">the method to call with the retrieved location name groups</param>
             <param name="game">the game name to request location name groups for, defaults to the current player's game if left empty</param>
             <returns>An Dictionary with location group names for keys and an array of location names as value</returns>
         </member>
@@ -1161,11 +1333,10 @@
             <param name="team">the team id of the player to request the status for, defaults to the current player's team if left empty</param>
             <returns>The status of the client or null if the slot or team does not exist</returns>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetClientStatusAsync(System.Action{Archipelago.MultiClient.Net.Enums.ArchipelagoClientState},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetClientStatusAsync(System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             Retrieves the client status for the specified player slot and team
             </summary>
-            <param name="onStatusRetrieved">the method to call with the retrieved client status</param>
             <param name="slot">the slot id of the player to request the status for, defaults to the current player's slot if left empty</param>
             <param name="team">the team id of the player to request the status for, defaults to the current player's team if left empty</param>
             <returns>The status of the client or null if the slot or team does not exist</returns>
@@ -1185,11 +1356,11 @@
             </summary>
             <returns>The race mode setting. false for disabled or unavailable, true for enabled</returns>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetRaceModeAsync(System.Action{System.Boolean})">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IDataStorageWrapper.GetRaceModeAsync">
             <summary>
             Retrieves the server's race mode setting. false for disabled or unavailable, true for enabled
             </summary>
-            <param name="onRaceModeRetrieved"> the method to call with the retrieved race mode setting</param>
+            <returns>The race mode setting. false for disabled or unavailable, true for enabled</returns>
         </member>
         <member name="T:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelperDelagates">
             <summary>
@@ -1292,13 +1463,10 @@
                 The websocket connection is not alive.
             </exception>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ILocationCheckHelper.CompleteLocationChecksAsync(System.Action{System.Boolean},System.Int64[])">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ILocationCheckHelper.CompleteLocationChecksAsync(System.Int64[])">
             <summary>
                 Submit the provided location ids as checked locations.
             </summary>
-            <param name="onComplete">
-                Action to be called when the async send is completed.
-            </param>
             <param name="ids">
                 Location ids which have been checked.
             </param>
@@ -1306,14 +1474,10 @@
                 The websocket connection is not alive.
             </exception>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ILocationCheckHelper.ScoutLocationsAsync(System.Action{System.Collections.Generic.Dictionary{System.Int64,Archipelago.MultiClient.Net.Models.ScoutedItemInfo}},Archipelago.MultiClient.Net.Enums.HintCreationPolicy,System.Int64[])">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ILocationCheckHelper.ScoutLocationsAsync(Archipelago.MultiClient.Net.Enums.HintCreationPolicy,System.Int64[])">
             <summary>
                 Ask the server for the items which are present in the provided location ids.
             </summary>
-            <param name="callback">
-                An action to run once the server responds to the scout packet.
-                If the argument to the action is null then the server responded with an InvalidPacket response.
-            </param>
             <param name="hintCreationPolicy">
                 Specified if and how an official hint should be created on the server.
             </param>
@@ -1329,14 +1493,10 @@
                 The websocket connection is not alive.
             </exception>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ILocationCheckHelper.ScoutLocationsAsync(System.Action{System.Collections.Generic.Dictionary{System.Int64,Archipelago.MultiClient.Net.Models.ScoutedItemInfo}},System.Boolean,System.Int64[])">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ILocationCheckHelper.ScoutLocationsAsync(System.Boolean,System.Int64[])">
             <summary>
                 Ask the server for the items which are present in the provided location ids.
             </summary>
-            <param name="callback">
-                An action to run once the server responds to the scout packet.
-                If the argument to the action is null then the server responded with an InvalidPacket response.
-            </param>
             <param name="createAsHint">
                 If true, creates a free hint for these locations.
             </param>
@@ -1352,14 +1512,10 @@
                 The websocket connection is not alive.
             </exception>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.ILocationCheckHelper.ScoutLocationsAsync(System.Action{System.Collections.Generic.Dictionary{System.Int64,Archipelago.MultiClient.Net.Models.ScoutedItemInfo}},System.Int64[])">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.ILocationCheckHelper.ScoutLocationsAsync(System.Int64[])">
             <summary>
                 Ask the server for the items which are present in the provided location ids.
             </summary>
-            <param name="callback">
-                An action to run once the server responds to the scout packet.
-                If the argument to the action is null then the server responded with an InvalidPacket response.
-            </param>
             <param name="ids">
                 The locations ids which are to be scouted.
             </param>
@@ -1425,16 +1581,16 @@
         <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.CompleteLocationChecks(System.Int64[])">
             <inheritdoc/>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.CompleteLocationChecksAsync(System.Action{System.Boolean},System.Int64[])">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.CompleteLocationChecksAsync(System.Int64[])">
             <inheritdoc/>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.ScoutLocationsAsync(System.Action{System.Collections.Generic.Dictionary{System.Int64,Archipelago.MultiClient.Net.Models.ScoutedItemInfo}},Archipelago.MultiClient.Net.Enums.HintCreationPolicy,System.Int64[])">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.ScoutLocationsAsync(Archipelago.MultiClient.Net.Enums.HintCreationPolicy,System.Int64[])">
             <inheritdoc/>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.ScoutLocationsAsync(System.Action{System.Collections.Generic.Dictionary{System.Int64,Archipelago.MultiClient.Net.Models.ScoutedItemInfo}},System.Boolean,System.Int64[])">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.ScoutLocationsAsync(System.Boolean,System.Int64[])">
             <inheritdoc/>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.ScoutLocationsAsync(System.Action{System.Collections.Generic.Dictionary{System.Int64,Archipelago.MultiClient.Net.Models.ScoutedItemInfo}},System.Int64[])">
+        <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.ScoutLocationsAsync(System.Int64[])">
             <inheritdoc/>
         </member>
         <member name="M:Archipelago.MultiClient.Net.Helpers.LocationCheckHelper.GetLocationIdFromName(System.String,System.String)">
@@ -2147,13 +2303,24 @@
         </member>
         <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.Color">
             <summary>
-            The specified or default color for this message part
+            The color corresponding to <see cref="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.PaletteColor"/> in the built-in dark palette.
+            </summary>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.PaletteColor">
+            <summary>
+            The specified color for this message part, or null if not specified.
             </summary>
         </member>
         <member name="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.IsBackgroundColor">
             <summary>
-            The specified background color for this message part
+            Whether this message part's color is intended to represent a background color
             </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.GetColor``1(Archipelago.MultiClient.Net.Colors.Palette{``0})">
+            <summary>
+            Gets the color corresponding to <see cref="P:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.PaletteColor"/> in the specified palette.
+            </summary>
+            <param name="palette">The palette to retrieve the color from</param>
         </member>
         <member name="M:Archipelago.MultiClient.Net.MessageLog.Parts.MessagePart.ToString">
             <summary>
@@ -2323,17 +2490,15 @@
             </summary>
             <param name="value">The default value for the key</param>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Models.DataStorageElement.GetAsync``1(System.Action{``0})">
+        <member name="M:Archipelago.MultiClient.Net.Models.DataStorageElement.GetAsync``1">
             <summary>
             Retrieves the value of a certain key from server side data storage.
             </summary>
-            <param name="callback">The callback that will be called when the value is retrieved</param>
         </member>
-        <member name="M:Archipelago.MultiClient.Net.Models.DataStorageElement.GetAsync(System.Action{Newtonsoft.Json.Linq.JToken})">
+        <member name="M:Archipelago.MultiClient.Net.Models.DataStorageElement.GetAsync">
             <summary>
             Retrieves the value of a certain key from server side data storage.
             </summary>
-            <param name="callback">The callback that will be called when the value is retrieved</param>
         </member>
         <member name="M:Archipelago.MultiClient.Net.Models.DataStorageElement.To``1">
             <summary>
@@ -2506,6 +2671,9 @@
         <member name="M:Archipelago.MultiClient.Net.Models.Operation.Min(Newtonsoft.Json.Linq.JToken)">
             <inheritdoc cref="M:Archipelago.MultiClient.Net.Models.Operation.Min(System.Int32)"/>
         </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Operation.Min(System.Numerics.BigInteger)">
+            <inheritdoc cref="M:Archipelago.MultiClient.Net.Models.Operation.Min(System.Int32)"/>
+        </member>
         <member name="M:Archipelago.MultiClient.Net.Models.Operation.Max(System.Int32)">
             <summary>
             Performs a Math.Max() on the store its current value vs the provided value
@@ -2525,6 +2693,9 @@
             <inheritdoc cref="M:Archipelago.MultiClient.Net.Models.Operation.Max(System.Int32)"/>
         </member>
         <member name="M:Archipelago.MultiClient.Net.Models.Operation.Max(Newtonsoft.Json.Linq.JToken)">
+            <inheritdoc cref="M:Archipelago.MultiClient.Net.Models.Operation.Max(System.Int32)"/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Operation.Max(System.Numerics.BigInteger)">
             <inheritdoc cref="M:Archipelago.MultiClient.Net.Models.Operation.Max(System.Int32)"/>
         </member>
         <member name="M:Archipelago.MultiClient.Net.Models.Operation.Remove(Newtonsoft.Json.Linq.JToken)">
@@ -2569,17 +2740,26 @@
             </summary>
             <param name="i">The value to XOR with</param>
         </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Bitwise.Xor(System.Numerics.BigInteger)">
+            <inheritdoc cref="M:Archipelago.MultiClient.Net.Models.Bitwise.Xor(System.Int64)"/>
+        </member>
         <member name="M:Archipelago.MultiClient.Net.Models.Bitwise.Or(System.Int64)">
             <summary>
             Performs a bitwise OR on the store its current value vs the provided value
             </summary>
             <param name="i">The value to OR with</param>
         </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Bitwise.Or(System.Numerics.BigInteger)">
+            <inheritdoc cref="M:Archipelago.MultiClient.Net.Models.Bitwise.Or(System.Int64)"/>
+        </member>
         <member name="M:Archipelago.MultiClient.Net.Models.Bitwise.And(System.Int64)">
             <summary>
             Performs a bitwise AND on the store its current value vs the provided value
             </summary>
             <param name="i">The value to AND with</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Models.Bitwise.And(System.Numerics.BigInteger)">
+            <inheritdoc cref="M:Archipelago.MultiClient.Net.Models.Bitwise.And(System.Int64)"/>
         </member>
         <member name="M:Archipelago.MultiClient.Net.Models.Bitwise.LeftShift(System.Int64)">
             <summary>

@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System.Reflection;
+using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.UI;
 
@@ -27,9 +28,9 @@ namespace ArchipelagoULTRAKILL.Patches
                     GameProgressMoneyAndGear generalProgress = GameProgressSaver.GetGeneralProgress();
                     FieldInfo field = typeof(GameProgressMoneyAndGear).GetField(__instance.weaponName, BindingFlags.Instance | BindingFlags.Public);
                     bool unlocked = int.Parse(field.GetValue(generalProgress).ToString()) == 1;
-                    if ((unlocked && !__instance.weaponName.Contains("0") && !Core.data.purchasedItems.Contains(__instance.weaponName))
-                        || (!unlocked && !__instance.weaponName.Contains("0") && Core.data.purchasedItems.Contains(__instance.weaponName))
-                        || (!unlocked && __instance.weaponName.Contains("0")))
+                    if ((unlocked && !__instance.weaponName.Contains("0") && !Core.data.purchasedItems.Contains(__instance.weaponName)) // unlocked, not blue variation, not purchased
+                        || (!unlocked && !__instance.weaponName.Contains("0") && Core.data.purchasedItems.Contains(__instance.weaponName)) // unlocked, not blue variation, purchased
+                        || (!unlocked && __instance.weaponName.Contains("0"))) // not unlocked, blue variation
                     {
                         return false;
                     }
@@ -96,15 +97,26 @@ namespace ArchipelagoULTRAKILL.Patches
                 else if (equipStatus > 2) state = 0;
 
                 traverse.Field<int>("equipStatus").Value = state;
-                traverse.Field<Image>("equipImage").Value.sprite = __instance.equipSprites[state];
+                Core.Logger.LogInfo($"{__instance.weaponName} {state}");
+                traverse.Method("SetEquipStatusText", new object[] { state }).GetValue();
                 PrefsManager.Instance.SetInt("weapon." + __instance.weaponName, state);
                 if (__instance.orderButtons)
                 {
-                    if (state == 0) __instance.orderButtons.SetActive(false);
-                    else __instance.orderButtons.SetActive(true);
+                    if (state != 0)
+                    {
+                        __instance.orderButtons.SetActive(true);
+                        __instance.icon.rectTransform.anchoredPosition = new Vector2(25, 0);
+                        __instance.icon.rectTransform.sizeDelta = new Vector2(75, 75);
+                    }
+                    else
+                    {
+                        __instance.orderButtons.SetActive(false);
+                        __instance.icon.rectTransform.anchoredPosition = new Vector2(0, 0);
+                        __instance.icon.rectTransform.sizeDelta = new Vector2(100, 100);
+                    }
                 }
-                if (GunSetter.Instance != null) GunSetter.Instance.ResetWeapons(false);
-                if (FistControl.Instance != null) FistControl.Instance.ResetFists();
+                GunSetter.Instance?.ResetWeapons(false);
+                FistControl.Instance?.ResetFists();
                 return false;
             }
             else return true;

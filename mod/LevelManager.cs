@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,6 +16,7 @@ namespace ArchipelagoULTRAKILL
     public static class LevelManager
     {
         public static Dictionary<string, GameObject> skulls = new Dictionary<string, GameObject>();
+        public static Door redDoor;
 
         public static void FindSkulls()
         {
@@ -28,6 +30,16 @@ namespace ArchipelagoULTRAKILL
                     {
                         if (item.itemType == ItemType.SkullBlue && !item.transform.parent.parent.parent) continue;
                         else if (item.itemType == ItemType.SkullRed && item.transform.parent.parent.parent.name != "Interactives") continue;
+                    }
+                    else if (SceneHelper.CurrentScene == "Level 0-E")
+                    {
+                        if (item.itemType == ItemType.SkullBlue && item.transform.parent.parent.parent) continue;
+                        else if (item.itemType == ItemType.SkullRed && item.transform.parent.parent.parent) continue;
+                    }
+                    else if (SceneHelper.CurrentScene == "Level 1-E")
+                    {
+                        if (item.itemType == ItemType.SkullBlue && item.transform.parent.parent.name != "Altar (Blue) (1)") continue;
+                        if (item.itemType == ItemType.SkullRed) continue;
                     }
 
                     if (skulls.ContainsKey(item.itemType.ToString()))
@@ -48,47 +60,72 @@ namespace ArchipelagoULTRAKILL
                 switch (SceneHelper.CurrentScene)
                 {
                     case "Level 1-4":
-                        if (j + 1 > Core.data.unlockedSkulls1_4) pair.Value.SetActive(false);
+                        if (j + 1 > Core.data.unlockedSkulls1_4) DeactivateSkull(pair.Value);
                         break;
                     case "Level 5-1":
-                        if (j + 1 > Core.data.unlockedSkulls5_1) pair.Value.SetActive(false);
+                        if (j + 1 > Core.data.unlockedSkulls5_1) DeactivateSkull(pair.Value);
                         break;
                     default:
                         if (pair.Value.name.Contains("Blue"))
                         {
-                            if (!Core.data.unlockedSkulls.Contains(id + "_b")) pair.Value.SetActive(false);
+                            if (!Core.data.unlockedSkulls.Contains(id + "_b")) DeactivateSkull(pair.Value);
                         }
                         else if (pair.Value.name.Contains("Red"))
                         {
-                            if (!Core.data.unlockedSkulls.Contains(id + "_r")) pair.Value.SetActive(false);
+                            if (!Core.data.unlockedSkulls.Contains(id + "_r")) DeactivateSkull(pair.Value);
                         }
                         break;
                 }
             }
         }
 
+        public static void ActivateSkull(GameObject skull)
+        {
+            ItemPlaceZone ipz = skull.GetComponentInParent<ItemPlaceZone>(true);
+            ipz.elementChangeEffect.Play();
+            foreach (InstantiateObject io in ipz.altarElements)
+            {
+                io.gameObject.SetActive(true);
+                if (io.gameObject.activeInHierarchy) io.Instantiate();
+            }
+            skull.SetActive(true);
+        }
+
+        public static void DeactivateSkull(GameObject skull)
+        {
+            ItemPlaceZone ipz = skull.GetComponentInParent<ItemPlaceZone>(true);
+            foreach (InstantiateObject io in ipz.altarElements)
+            {
+                io.gameObject.SetActive(false);
+            }
+            skull.SetActive(false);
+        }
+
         public static void UpdateShopVariation(VariationInfo variation)
         {
+            string red = "#FF4343";
+
             // Set Feedbacker text to unavailable if not owned
             if (variation.weaponName == "arm0" && !Core.data.hasArm)
             {
-                variation.costText.text = "<color=red>UNAVAILABLE</color>";
-                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "UNAVAILABLE";
-                variation.equipButton.gameObject.SetActive(false);
+                variation.costText.text = "<color=red>Unavailable</color>";
+                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Unavailable";
+                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<Button>().interactable = false;
+                variation.equipButtons.SetActive(false);
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is not unlocked");
                 return;
             }
             // Set Feedbacker text back to default if owned
             else if (variation.weaponName == "arm0" && Core.data.hasArm)
             {
-                variation.costText.text = "ALREADY OWNED";
-                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "ALREADY OWNED";
-                variation.equipButton.gameObject.SetActive(true);
+                variation.costText.text = "Already Owned";
+                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Already Owned";
+                variation.equipButtons.SetActive(true);
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is unlocked");
                 return;
             }
             // Do nothing for other arms
-            if (variation.weaponName == "arm1" || variation.weaponName == "arm2")
+            if (variation.weaponName == "arm1" || variation.weaponName == "arm2" || variation.weaponName == "arm3")
             {
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Skipping");
                 return;
@@ -120,7 +157,7 @@ namespace ArchipelagoULTRAKILL
                     }
                 }
                 else description = "???";
-                variation.varPage.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = description;
+                variation.varPage.transform.Find("Panel").Find("Description").GetComponent<TextMeshProUGUI>().text = description;
             }
 
             GameProgressMoneyAndGear generalProgress = GameProgressSaver.GetGeneralProgress();
@@ -130,49 +167,61 @@ namespace ArchipelagoULTRAKILL
             // Weapon is unlocked, weapon is not blue variation, weapon has not been purchased
             if (unlocked && !variation.weaponName.Contains("0") && !Core.data.purchasedItems.Contains(variation.weaponName))
             {
-                bool canAfford = false;
-                string cost;
-                if (GameProgressSaver.GetMoney() >= Core.shopPrices[variation.weaponName]) canAfford = true;
-                if (canAfford) cost = MoneyText.DivideMoney(Core.shopPrices[variation.weaponName]) + "<color=orange>P</color>";
-                else cost = "<color=red>" + MoneyText.DivideMoney(Core.shopPrices[variation.weaponName]) + "P</color>";
-
+                bool canAfford = GameProgressSaver.GetMoney() >= Core.shopPrices[variation.weaponName];
+                string cost = "<color=red>" + MoneyText.DivideMoney(Core.shopPrices[variation.weaponName]) + " P</color>";
+                if (canAfford) cost = MoneyText.DivideMoney(Core.shopPrices[variation.weaponName]) + " <color=" + red + ">P</color>";
                 variation.costText.text = cost;
 
-                variation.equipButton.transform.GetChild(0).GetComponent<Image>().sprite = variation.equipSprites[PrefsManager.Instance.GetInt("weapon." + variation.weaponName, 1)];
-                variation.orderButtons.SetActive(true);
+                //variation.equipButton.transform.GetChild(0).GetComponent<Image>().sprite = variation.equipSprites[PrefsManager.Instance.GetInt("weapon." + variation.weaponName, 1)];
                 Traverse variationT = Traverse.Create(variation);
-                variationT.Field<int>("equipStatus").Value = PrefsManager.Instance.GetInt("weapon." + variation.weaponName, 1);
+                int equipStatus = PrefsManager.Instance.GetInt("weapon." + variation.weaponName, 1);
+                variationT.Field<int>("equipStatus").Value = equipStatus;
+                if (equipStatus != 0)
+                {
+                    variation.orderButtons.SetActive(true);
+                    variation.icon.rectTransform.anchoredPosition = new Vector2(25, 0);
+                    variation.icon.rectTransform.sizeDelta = new Vector2(75, 75);
+                }
+                else
+                {
+                    variation.orderButtons.SetActive(false);
+                    variation.icon.rectTransform.anchoredPosition = new Vector2(0, 0);
+                    variation.icon.rectTransform.sizeDelta = new Vector2(100, 100);
+                }
+                variationT.Method("SetEquipStatusText", new object[] { equipStatus }).GetValue();
                 variationT.Field<int>("money").Value = GameProgressSaver.GetMoney();
-                variation.varPage.GetComponentInChildren<MoneyText>().UpdateMoney();
 
-                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = cost;
+                variation.buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>(true).text = cost;
                 if (canAfford)
                 {
-                    variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(1, 1, 1);
+                    variation.buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>(true).color = new Color(1, 1, 1);
                     variation.buyButton.gameObject.GetComponent<Image>().color = new Color(1, 1, 1);
+                    variation.buyButton.gameObject.GetComponent<Button>().interactable = true;
                 }
                 else
                 {
                     variation.buyButton.gameObject.GetComponent<Image>().color = new Color(1, 0, 0);
+                    variation.buyButton.gameObject.GetComponent<Button>().interactable = false;
                 }
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is unlocked, is not purchased");
             }
             // Weapon is not unlocked, weapon is not blue variation, weapon has been purchased
             else if (!unlocked && !variation.weaponName.Contains("0") && Core.data.purchasedItems.Contains(variation.weaponName))
             {
-                variation.costText.text = "ALREADY OWNED";
+                variation.costText.text = "Already Owned";
                 variation.buyButton.deactivated = true;
-                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "ALREADY OWNED";
-                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(0.5882f, 0.5882f, 0.5882f);
-                variation.equipButton.gameObject.SetActive(false);
+                variation.buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Already Owned";
+                variation.buyButton.gameObject.GetComponent<Image>().sprite = Addressables.LoadAssetAsync<Sprite>("Assets/Textures/UI/smileOS 2 wide button disabled.png").WaitForCompletion();
+                //variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(0.5882f, 0.5882f, 0.5882f);
+                variation.equipButtons.SetActive(false);
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is unlocked, is purchased");
             }
             // Weapon is not unlocked, weapon is blue variation
             else if (!unlocked && variation.weaponName.Contains("0"))
             {
-                variation.costText.text = "<color=red>UNAVAILABLE</color>";
-                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "UNAVAILABLE";
-                variation.equipButton.gameObject.SetActive(false);
+                variation.costText.text = "<color=" + red + ">Unavailable</color>";
+                variation.buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Unavailable";
+                variation.equipButtons.SetActive(false);
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is not unlocked");
             }
         }
@@ -185,49 +234,56 @@ namespace ArchipelagoULTRAKILL
                 {
                     if (ipz.transform.parent.parent != null && ipz.transform.parent.parent.name == "11 Nonstuff")
                     {
-                        if (!ipz.transform.parent.parent.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.parent.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                        ipz.transform.parent.parent.parent.gameObject.GetOrAddComponent<ReverseDoorCloser>();
                     }
                 }
                 else if (SceneHelper.CurrentScene == "Level 1-2")
                 {
                     if (ipz.transform.parent.parent != null && ipz.transform.parent.parent.name == "3 Nonstuff")
                     {
-                        if (!ipz.transform.parent.parent.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.parent.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                        ipz.transform.parent.parent.parent.gameObject.GetOrAddComponent<ReverseDoorCloser>();
                     }
                 }
                 else if (SceneHelper.CurrentScene == "Level 2-3")
                 {
                     if (ipz.transform.parent != null && (ipz.transform.parent.name == "Altar" || ipz.transform.parent.name == "Altar (1)"))
                     {
-                        if (!ipz.transform.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                        ipz.transform.parent.gameObject.GetOrAddComponent<ReverseDoorCloser>();
                     }
                 }
                 else if (SceneHelper.CurrentScene == "Level 4-4")
                 {
                     if (ipz.transform.parent.parent != null && ipz.transform.parent.parent.name == "Secret Hall")
                     {
-                        if (!ipz.transform.parent.parent.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.parent.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                        ipz.transform.parent.parent.parent.gameObject.GetOrAddComponent<ReverseDoorCloser>();
                     }
                 }
                 else if (SceneHelper.CurrentScene == "Level 5-2")
                 {
                     if (ipz.transform.parent.parent != null && (ipz.transform.parent.parent.name == "6" || ipz.transform.parent.parent.name == "7B"))
                     {
-                        if (!ipz.transform.parent.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                        ipz.transform.parent.parent.gameObject.GetOrAddComponent<ReverseDoorCloser>();
                     }
                 }
                 else if (SceneHelper.CurrentScene == "Level 5-3")
                 {
                     if (ipz.transform.parent.parent != null && ipz.transform.parent.parent.name == "2A4 - Skullway")
                     {
-                        if (!ipz.transform.parent.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                        ipz.transform.parent.parent.gameObject.GetOrAddComponent<ReverseDoorCloser>();
                     }
                 }
                 else if (SceneHelper.CurrentScene == "Level 6-1")
                 {
                     if (ipz.transform.parent.parent != null && ipz.transform.parent.parent.name == "3 - Crossroads")
                     {
-                        if (!ipz.transform.parent.parent.gameObject.GetComponent<ReverseDoorCloser>()) ipz.transform.parent.parent.gameObject.AddComponent<ReverseDoorCloser>();
+                        ipz.transform.parent.parent.gameObject.GetOrAddComponent<ReverseDoorCloser>();
+                    }
+                }
+                else if (SceneHelper.CurrentScene == "Level 1-E")
+                {
+                    if (ipz.transform.parent.parent != null && ipz.transform.parent.parent.name == "13-3 Connector")
+                    {
+                        ipz.transform.parent.parent.gameObject.GetOrAddComponent<ReverseDoorCloser>();
                     }
                 }
             }

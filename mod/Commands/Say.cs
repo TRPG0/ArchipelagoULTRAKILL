@@ -14,7 +14,7 @@ namespace ArchipelagoULTRAKILL.Commands
         {
             if (!Multiworld.Authenticated)
             {
-                Core.PLogger.Log("You aren't connected to an Archipelago server.", Level.Info);
+                Core.PLogger.Info("You aren't connected to an Archipelago server.");
                 return;
             }
             else

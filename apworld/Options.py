@@ -48,7 +48,6 @@ class StartLevel(UKLevelChoice):
     option_1_1 = 6
     option_1_2 = 7
     option_1_3 = 8
-    option_2_1 = 10
     option_2_3 = 12
     option_3_1 = 14
     option_4_2 = 17
@@ -95,6 +94,8 @@ class GoalLevel(UKLevelChoice):
     option_7_3 = 28
     option_7_4 = 29
     option_7_S = -7
+    option_0_E = 100
+    option_1_E = 101
     option_P_1 = 666
     option_P_2 = 667
     default = 29
@@ -106,7 +107,7 @@ class GoalRequirement(Range):
     """
     display_name = "Goal Requirement"
     range_start = 5
-    range_end = 36
+    range_end = 38
     default = 15
 
 
@@ -116,7 +117,7 @@ class SkipLevels(OptionSet):
     """
     display_name = "Skipped Levels"
     valid_keys = {r.short_name for r in Regions.all_regions if not (r.short_name == "shop" or r.short_name == "museum")}
-    default = {"P-1", "P-2"}
+    default = {"0-E", "1-E", "P-1", "P-2"}
 
 
 class AutoExcludeSkip(DefaultOnToggle):
@@ -395,7 +396,7 @@ class MusicRando(Toggle):
     """
     Randomizes the music that plays during the game.
 
-    Some music is never randomized.
+    Music randomizer is temporarily disabled.
     """
     display_name = "Music Randomizer"
 

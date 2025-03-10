@@ -15,7 +15,7 @@ namespace ArchipelagoULTRAKILL.Commands
             {
                 if (args.Length != 0)
                 {
-                    Core.PLogger.Log("Usage: connect <address:port> <name> <password> | connect", Level.Info);
+                    Core.PLogger.Info("Usage: connect <address:port> <name> <password> | connect");
                     return;
 
                 }
@@ -23,7 +23,7 @@ namespace ArchipelagoULTRAKILL.Commands
                 {
                     if (Core.data.host_name == "" || Core.data.slot_name == "" || !Core.DataExists())
                     {
-                        Core.PLogger.Log("No saved connection info found. Usage: connect <address:port> <name> <password>", Level.Info);
+                        Core.PLogger.Info("No saved connection info found. Usage: connect <address:port> <name> <password>");
                         return;
                     }
                     else
@@ -37,12 +37,12 @@ namespace ArchipelagoULTRAKILL.Commands
             {
                 if (SceneHelper.CurrentScene != "Main Menu")
                 {
-                    Core.PLogger.Log("Can't do that right now. Can only connect to an Archipelago server on the main menu.", Level.Info);
+                    Core.PLogger.Info("Can't do that right now. Can only connect to an Archipelago server on the main menu.");
                     return;
                 }
                 else if ((GameProgressSaver.GetTutorial() || GameProgressSaver.GetIntro()) && !Core.DataExists())
                 {
-                    Core.PLogger.Log("No Archipelago data found. Please start a new save file before connecting.", Level.Info);
+                    Core.PLogger.Info("No Archipelago data found. Please start a new save file before connecting.");
                     return;
                 }
                 else

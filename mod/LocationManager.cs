@@ -170,13 +170,13 @@ namespace ArchipelagoULTRAKILL
                         {
                             if (Core.data.unlockedSkulls1_4 == 4) return;
                             Core.data.unlockedSkulls1_4++;
-                            if (SceneHelper.CurrentScene == "Level 1-4") LevelManager.skulls.ElementAt(Core.data.unlockedSkulls1_4 - 1).Value.SetActive(true);
+                            if (SceneHelper.CurrentScene == "Level 1-4") LevelManager.ActivateSkull(LevelManager.skulls.ElementAt(Core.data.unlockedSkulls1_4 - 1).Value);
                         }
                         else if (item.itemName.Contains("5-1"))
                         {
                             if (Core.data.unlockedSkulls5_1 == 3) return;
                             Core.data.unlockedSkulls5_1++;
-                            if (SceneHelper.CurrentScene == "Level 5-1") LevelManager.skulls.ElementAt(Core.data.unlockedSkulls5_1 - 1).Value.SetActive(true);
+                            if (SceneHelper.CurrentScene == "Level 5-1") LevelManager.ActivateSkull(LevelManager.skulls.ElementAt(Core.data.unlockedSkulls5_1 - 1).Value);
                         }
                         else if (item.itemName.Contains("0-S"))
                         {
@@ -200,20 +200,24 @@ namespace ArchipelagoULTRAKILL
 
                         if (SceneHelper.CurrentScene == "Level 0-S")
                         {
-                            if (item.itemName == "Blue Skull (0-S)") LevelManager.skulls["SkullBlue"].SetActive(true);
-                            else if (item.itemName == "Red Skull (0-S)") LevelManager.skulls["SkullRed"].SetActive(true);
+                            if (item.itemName == "Blue Skull (0-S)") LevelManager.ActivateSkull(LevelManager.skulls["SkullBlue"]);
+                            else if (item.itemName == "Red Skull (0-S)") LevelManager.ActivateSkull(LevelManager.skulls["SkullRed"]);
                         }
                         else if (SceneHelper.CurrentScene == "Level 7-S")
                         {
-                            if (item.itemName == "Blue Skull (7-S)") LevelManager.skulls["SkullBlue"].SetActive(true);
-                            else if (item.itemName == "Red Skull (7-S)") LevelManager.skulls["SkullRed"].SetActive(true);
+                            if (item.itemName == "Blue Skull (7-S)") LevelManager.ActivateSkull(LevelManager.skulls["SkullBlue"]);
+                            else if (item.itemName == "Red Skull (7-S)") LevelManager.ActivateSkull(LevelManager.skulls["SkullRed"]);
                         }
                         else if (StatsManager.Instance.levelNumber != 0)
                         {
                             if (Core.IsInLevel && item.itemName.Contains(Core.GetLevelNameFromId(StatsManager.Instance.levelNumber)))
                             {
-                                if (item.itemName.Contains("Blue")) LevelManager.skulls["SkullBlue"].SetActive(true);
-                                else if (item.itemName.Contains("Red")) LevelManager.skulls["SkullRed"].SetActive(true);
+                                if (item.itemName.Contains("Blue")) LevelManager.ActivateSkull(LevelManager.skulls["SkullBlue"]);
+                                else if (item.itemName.Contains("Red"))
+                                {
+                                    if (Core.CurrentLevelInfo.Id == 101) LevelManager.redDoor.Open();
+                                    else LevelManager.ActivateSkull(LevelManager.skulls["SkullRed"]);
+                                }
                             }
                         }
 
@@ -546,6 +550,10 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (7-2)":
                 case "Red Skull (7-S)":
                 case "Blue Skull (7-S)":
+                case "Blue Skull (0-E)":
+                case "Red Skull (0-E)":
+                case "Blue Skull (1-E)":
+                case "Red Skull (1-E)":
                 case "Blue Skull (P-2)":
                     return "skull";
                 case "0-1: INTO THE FIRE":
@@ -553,12 +561,14 @@ namespace ArchipelagoULTRAKILL
                 case "0-3: DOUBLE DOWN":
                 case "0-4: A ONE-MACHINE ARMY":
                 case "0-5: CERBERUS":
+                case "0-E: THIS HEAT, AN EVIL HEAT":
                 case "OVERTURE: THE MOUTH OF HELL":
                     return "layer0";
                 case "1-1: HEART OF THE SUNRISE":
                 case "1-2: THE BURNING WORLD":
                 case "1-3: HALLS OF SACRED REMAINS":
                 case "1-4: CLAIR DE LUNE":
+                case "1-E: ...THEN FELL THE ASHES":
                 case "LAYER 1: LIMBO":
                     return "layer1";
                 case "2-1: BRIDGEBURNER":
@@ -722,6 +732,8 @@ namespace ArchipelagoULTRAKILL
                 case "Blue Skull (5-4)":
                 case "Blue Skull (7-1)":
                 case "Blue Skull (7-S)":
+                case "Blue Skull (0-E)":
+                case "Blue Skull (1-E)":
                 case "Blue Skull (P-2)":
                     return Colors.BlueSkull;
                 case "Whiplash":
@@ -730,11 +742,13 @@ namespace ArchipelagoULTRAKILL
                 case "1-2: THE BURNING WORLD":
                 case "1-3: HALLS OF SACRED REMAINS":
                 case "1-4: CLAIR DE LUNE":
+                case "1-E: ...THEN FELL THE ASHES":
                 case "1-1":
                 case "1-2":
                 case "1-3":
                 case "1-4":
                 case "1-S":
+                case "1-E":
                 case "LAYER 1: LIMBO":
                     return Colors.Layer1;
                 case "Knuckleblaster":
@@ -774,12 +788,15 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (7-1)":
                 case "Red Skull (7-2)":
                 case "Red Skull (7-S)":
+                case "Red Skull (0-E)":
+                case "Red Skull (1-E)":
                     return Colors.RedSkull;
                 case "0-1: INTO THE FIRE":
                 case "0-2: THE MEATGRINDER":
                 case "0-3: DOUBLE DOWN":
                 case "0-4: A ONE-MACHINE ARMY":
                 case "0-5: CERBERUS":
+                case "0-E: THIS HEAT, AN EVIL HEAT":
                 case "OVERTURE: THE MOUTH OF HELL":
                 case "0-1":
                 case "0-2":
@@ -787,6 +804,7 @@ namespace ArchipelagoULTRAKILL
                 case "0-4":
                 case "0-5":
                 case "0-S":
+                case "0-E":
                     return Colors.Layer0;
                 case "2-1: BRIDGEBURNER":
                 case "2-2: DEATH AT 20,000 VOLTS":
@@ -924,6 +942,10 @@ namespace ArchipelagoULTRAKILL
                 case "Red Skull (7-2)":
                 case "Red Skull (7-S)":
                 case "Blue Skull (7-S)":
+                case "Blue Skull (0-E)":
+                case "Red Skull (0-E)":
+                case "Red Skull (1-E)":
+                case "Blue Skull (1-E)":
                 case "Blue Skull (P-2)":
                     return UKType.Skull;
                 case "0-1: INTO THE FIRE":
@@ -955,6 +977,8 @@ namespace ArchipelagoULTRAKILL
                 case "7-2: LIGHT UP THE NIGHT":
                 case "7-3: NO SOUND, NO MEMORY":
                 case "7-4: ...LIKE ANTENNAS TO HEAVEN":
+                case "0-E: THIS HEAT, AN EVIL HEAT":
+                case "1-E: ...THEN FELL THE ASHES":
                 case "P-1: SOUL SURVIVOR":
                 case "P-2: WAIT OF THE WORLD":
                     return UKType.Level;

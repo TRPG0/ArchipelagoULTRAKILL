@@ -9,13 +9,13 @@ namespace ArchipelagoULTRAKILL.Components
         public int StartLevelId { get; private set; }
         public int EndLevelId { get; private set; }
 
-        public bool Prime { get; private set; }
+        public bool Special { get; private set; }
 
-        public void Init(int start, int end, bool prime = false)
+        public void Init(int start, int end, bool special = false)
         {
             StartLevelId = start;
             EndLevelId = end;
-            Prime = prime;
+            Special = special;
         }
 
         public bool ActIncludes(int id)
@@ -201,11 +201,12 @@ namespace ArchipelagoULTRAKILL.Components
             return result;
         }
 
-        public string GetPrimeStats()
+        public string GetSpecialStats()
         {
             int total = EndLevelId - (StartLevelId - 1);
             int unlocked = 0;
             int completed = 0;
+            int perfects = 0;
 
             for (int i = StartLevelId; i <= EndLevelId; i++)
             {
@@ -214,6 +215,7 @@ namespace ArchipelagoULTRAKILL.Components
                 if (isUnlocked) unlocked++;
 
                 bool isCompleted = false;
+                bool isPerfect = false;
                 foreach (int grade in rank.ranks)
                 {
                     if (grade >= 0)
@@ -221,12 +223,18 @@ namespace ArchipelagoULTRAKILL.Components
                         if (!isCompleted) completed++;
                         isCompleted = true;
                     }
+                    if (grade >= 12)
+                    {
+                        if (!isPerfect) perfects++;
+                        isPerfect = true;
+                    }
                 }
             }
 
             string result = BuildStringGoal(Core.data.goal, Core.data.completedLevels.Count, Core.data.goalRequirement);
             result += BuildString("Levels unlocked", unlocked, total);
             result += BuildString("\nLevels completed", completed, total);
+            if (Core.data.pRankRewards) result += BuildString("\nPerfect Ranks", perfects, total);
 
             return result;
         }
@@ -305,10 +313,10 @@ namespace ArchipelagoULTRAKILL.Components
                 return;
             }
 
-            Vector3 actPos = transform.localPosition;
-            UIManager.actStats.transform.localPosition = new Vector3(UIManager.actStats.transform.localPosition.x, actPos.y - UIManager.actStats.fontSize * 0.75f, UIManager.actStats.transform.localPosition.z);
+            Vector3 actPos = transform.position;
+            UIManager.actStats.transform.position = new Vector3(UIManager.actStats.transform.position.x, actPos.y - UIManager.actStats.fontSize, UIManager.actStats.transform.position.z);
 
-            if (Prime) UIManager.actStats.text = GetPrimeStats();
+            if (Special) UIManager.actStats.text = GetSpecialStats();
             else UIManager.actStats.text = GetActStats();
 
             UIManager.actStats.gameObject.SetActive(true);

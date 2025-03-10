@@ -18,6 +18,7 @@ namespace ArchipelagoULTRAKILL.Patches
         }
     }
 
+    /*
     [HarmonyPatch(typeof(ShopZone), "TurnOff")]
     public class ShopZone_TurnOff_Patch
     {
@@ -26,4 +27,5 @@ namespace ArchipelagoULTRAKILL.Patches
             if (Core.DataExists()) Core.ValidateArms();
         }
     }
+    */
 }

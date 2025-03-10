@@ -53,6 +53,8 @@ location_list: List[UKLocation] = [
     UKLocation("0-3: Secret #1", Regions.l3, "3_s1", LocationType.Normal),
     UKLocation("0-3: Secret #2", Regions.l3, "3_s2", LocationType.Normal),
     UKLocation("0-3: Secret #3", Regions.l3, "3_s3", LocationType.Normal),
+    UKLocation("0-3: Secret #4", Regions.l3, "3_s4", LocationType.Normal),
+    UKLocation("0-3: Secret #5", Regions.l3, "3_s5", LocationType.Normal),
     UKLocation("0-3: Kill only 1 enemy", Regions.l3, "3_c", LocationType.Challenge),
     UKLocation("0-3: Perfect Rank", Regions.l3, "3_p", LocationType.PerfectRank),
 
@@ -60,6 +62,8 @@ location_list: List[UKLocation] = [
     UKLocation("0-4: Secret #1", Regions.l4, "4_s1", LocationType.Normal),
     UKLocation("0-4: Secret #2", Regions.l4, "4_s2", LocationType.Normal),
     UKLocation("0-4: Secret #3", Regions.l4, "4_s3", LocationType.Normal),
+    UKLocation("0-4: Secret #4", Regions.l4, "4_s4", LocationType.Normal),
+    UKLocation("0-4: Secret #5", Regions.l4, "4_s5", LocationType.Normal),
     UKLocation("0-4: Slide uninterrupted for 17 seconds", Regions.l4, "4_c", LocationType.Challenge),
     UKLocation("0-4: Perfect Rank", Regions.l4, "4_p", LocationType.PerfectRank),
 
@@ -299,6 +303,10 @@ location_list: List[UKLocation] = [
     UKLocation("7-4: Don't fight the security system", Regions.l29, "29_c", LocationType.Challenge),
     UKLocation("7-4: Perfect Rank", Regions.l29, "29_p", LocationType.PerfectRank),
 
+    # Encores
+    UKLocation("0-E: Perfect Rank", Regions.e0, "100_p", LocationType.PerfectRank),
+    UKLocation("1-E: Perfect Rank", Regions.e1, "101_p", LocationType.PerfectRank),
+
     # Primes
     UKLocation("P-1: Perfect Rank", Regions.p1, "666_p", LocationType.PerfectRank),
     UKLocation("P-2: Perfect Rank", Regions.p2, "667_p", LocationType.PerfectRank),
@@ -330,8 +338,6 @@ start_weapon_locations: Dict[str, List[str]] = {
     "1-2": ["1-2: Secret #1"],
     "1-3": ["1-3: Secret #2",
             "1-3: Secret #3"],
-    "2-1": ["2-1: Secret #2",
-            "2-1: Secret #4"],
     "2-3": ["2-3: Secret #1"],
     "3-1": ["3-1: Secret #1"],
     "4-2": ["4-2: Secret #1",

@@ -8,10 +8,9 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix()
         {
-            if (Multiworld.Authenticated)
-            {
-                Multiworld.Disconnect();
-            }
+            if (Multiworld.Authenticated) Multiworld.Disconnect();
+            LocationManager.messages.Clear();
+            LocationManager.powerupQueue.Clear();
             if (Core.DataExists()) Core.firstTimeLoad = false;
             else Core.data = new Data();
 
@@ -35,6 +34,8 @@ namespace ArchipelagoULTRAKILL.Patches
         public static void Postfix(int slot)
         {
             if (Multiworld.Authenticated) Multiworld.Disconnect();
+            LocationManager.messages.Clear();
+            LocationManager.powerupQueue.Clear();
             Core.DeleteData(slot);
             Core.data = new Data();
             Core.firstTimeLoad = false;

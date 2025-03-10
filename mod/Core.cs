@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.0.1";
+        public const string PluginVersion = "3.1.0";
 
         public static string workingPath;
         public static string workingDir;
@@ -32,6 +32,8 @@ namespace ArchipelagoULTRAKILL
 
         public static GameObject obj;
         public static UIManager uim;
+
+        public static bool SaveExists { get; internal set; } = false;
 
         public static bool IsInIntro => GameStateManager.Instance.IsStateActive("intro");
         public static bool IsPitFalling => GameStateManager.Instance.IsStateActive("pit-falling");
@@ -74,6 +76,8 @@ namespace ArchipelagoULTRAKILL
             new LevelInfo("7-2", 27, 7, true, MusicType.Special, SkullsType.Normal, new List<string>() { "27_r" }),
             new LevelInfo("7-3", 28, 7, true, MusicType.Special, SkullsType.None),
             new LevelInfo("7-4", 29, 7, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("0-E", 100, 0, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "100_r", "100_b"}),
+            new LevelInfo("1-E", 101, 0, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "101_b", "101_r"}),
             new LevelInfo("P-1", 666, 3, false, MusicType.Special, SkullsType.None),
             new LevelInfo("P-2", 667, 6, false, MusicType.Special, SkullsType.Normal, new List<string> { "667_b" })
         };
@@ -124,6 +128,9 @@ namespace ArchipelagoULTRAKILL
                 else return null;
             }
         }
+
+        public static bool CurrentLevelHasSkulls => CurrentLevelInfo?.Skulls > SkullsType.None && data.randomizeSkulls;
+        public static bool CurrentLevelHasSwitches => (CurrentLevelInfo?.Id == 9 && data.l1switch) || (CurrentLevelInfo?.Id == 27 && data.l7switch);
 
         public static LevelInfo GetLevelInfo(int id)
         {
@@ -216,6 +223,7 @@ namespace ArchipelagoULTRAKILL
             UIManager.levels.Clear();
             UIManager.secrets.Clear();
             UIManager.createdSkullIcons = false;
+            UIManager.createdSwitchIcons = false;
             uim.deathLinkMessage = null;
 
             LevelManager.skulls.Clear();
@@ -228,7 +236,7 @@ namespace ArchipelagoULTRAKILL
             {
                 UIManager.FindMenuObjects();
 
-                if (DataExists() && GameProgressSaver.GetTutorial() && !firstTimeLoad)
+                if (DataExists() && SaveExists && GameProgressSaver.GetTutorial() && !firstTimeLoad)
                 {
                     LoadData();
                     ConfigManager.LoadConnectionInfo();
@@ -254,7 +262,7 @@ namespace ArchipelagoULTRAKILL
             else if (IsInLevel && DataExists())
             {
                 UIManager.CreateMessageUI();
-                if (data.musicRandomizer && CurrentLevelHasInfo && CurrentLevelInfo.Music > MusicType.Skip && CurrentLevelInfo.Music < MusicType.Special2) AudioManager.ChangeMusic();
+                //if (data.musicRandomizer && CurrentLevelHasInfo && CurrentLevelInfo.Music > MusicType.Skip && CurrentLevelInfo.Music < MusicType.Special2) AudioManager.ChangeMusic();
             }
             else if (SceneHelper.CurrentScene == "Endless" && Multiworld.HintMode) UIManager.CreateMessageUI();
             if (!IsInIntro) OptionsManager.Instance.optionsMenu.gameObject.AddComponent<OptionsMenuState>();
@@ -269,6 +277,7 @@ namespace ArchipelagoULTRAKILL
 
         public static bool DataExists()
         {
+            if (!SaveExists) return false;
             string filePath = Path.Combine(GameProgressSaver.BaseSavePath, string.Format("Slot{0}", GameProgressSaver.currentSlot + 1)) + "\\archipelago.json";
             return File.Exists(filePath);
         }
@@ -295,6 +304,15 @@ namespace ArchipelagoULTRAKILL
                 {
                     data = JsonConvert.DeserializeObject<Data>(reader.ReadToEnd());
                 }
+
+                if (!SaveExists)
+                {
+                    Logger.LogInfo($"Archipelago data exists but slot is empty.");
+                    data = new Data();
+                    return;
+                }
+
+                Logger.LogInfo("Loaded Archipelago data for slot " + (GameProgressSaver.currentSlot + 1) + ".");
             }
             else
             {
@@ -415,6 +433,7 @@ namespace ArchipelagoULTRAKILL
             return list;
         }
 
+        /*
         public static void ValidateArms()
         {
             bool resetFists = false;
@@ -438,5 +457,6 @@ namespace ArchipelagoULTRAKILL
             }
             if (resetFists) FistControl.Instance.ResetFists();
         }
+        */
     }
 }

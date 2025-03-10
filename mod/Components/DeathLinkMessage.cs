@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
-using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
+using System.Collections;
 
 namespace ArchipelagoULTRAKILL.Components
 {
@@ -36,7 +35,7 @@ namespace ArchipelagoULTRAKILL.Components
             }
         }
 
-        List<string> deathMessages = new List<string>()
+        internal static List<string> deathMessages = new List<string>()
             {
                 "{0} wasn't skilled enough.",
                 "{0} ran out of blood.",
@@ -45,7 +44,7 @@ namespace ArchipelagoULTRAKILL.Components
                 "Things got too " + DifficultyName.ToLower() + " for {0}."
             };
 
-        Dictionary<string, List<string>> specialMessages = new Dictionary<string, List<string>>();
+        internal static Dictionary<string, List<string>> specialMessages = new Dictionary<string, List<string>>();
 
         private void Awake()
         {
@@ -122,30 +121,18 @@ namespace ArchipelagoULTRAKILL.Components
 
         private void OnEnable()
         {
+            StartCoroutine(DelayAdjustPosSize());
+        }
+
+        private IEnumerator DelayAdjustPosSize()
+        {
+            yield return new WaitForEndOfFrame();
             parentRT.sizeDelta = new Vector2(Screen.width, Screen.height);
             parentRT.transform.localPosition = new Vector3(0, 0, 0);
             parentRT.transform.localScale = new Vector3(1, 1, 1);
             transform.localPosition = new Vector3(0, (skullRT.rect.height / 2 + 35), 0);
             transform.localScale = new Vector3(1, 1, 1);
             selfRT.sizeDelta = new Vector2(Mathf.Round((float)(Screen.width * 0.9)), Mathf.Round((float)(Screen.height * 0.05)));
-
-            if (Multiworld.Authenticated && Multiworld.DeathLinkService != null && !Multiworld.DeathLinkKilling)
-            {
-                int index = 0;
-
-                if (specialMessages.ContainsKey(SceneHelper.CurrentScene))
-                {
-                    index = Random.Range(0, specialMessages[SceneHelper.CurrentScene].Count);
-                    Core.Logger.LogWarning($"Sending Death Link with message: {string.Format(specialMessages[SceneHelper.CurrentScene][index], Core.data.slot_name)}");
-                    Multiworld.DeathLinkService.SendDeathLink(new DeathLink(Core.data.slot_name, string.Format(specialMessages[SceneHelper.CurrentScene][index], Core.data.slot_name)));
-                }
-                else
-                {
-                    index = Random.Range(0, deathMessages.Count);
-                    Core.Logger.LogWarning($"Sending Death Link with message: {string.Format(deathMessages[index], Core.data.slot_name)}");
-                    Multiworld.DeathLinkService.SendDeathLink(new DeathLink(Core.data.slot_name, string.Format(deathMessages[index], Core.data.slot_name)));
-                }
-            }
         }
 
         private void Update()

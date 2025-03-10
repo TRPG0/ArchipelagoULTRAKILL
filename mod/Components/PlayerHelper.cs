@@ -3,6 +3,9 @@ using UnityEngine;
 using ArchipelagoULTRAKILL.Structures;
 using ArchipelagoULTRAKILL.Powerups;
 using ULTRAKILL.Cheats;
+using System.Collections;
+using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
+using BepInEx;
 
 namespace ArchipelagoULTRAKILL.Components
 {
@@ -39,6 +42,16 @@ namespace ArchipelagoULTRAKILL.Components
         {
             if (Core.IsPlaying)
             {
+                if (Multiworld.lastDeathLink != null && !nm.dead)
+                {
+                    string cause = "{0} has died.";
+                    if (!Multiworld.lastDeathLink.Cause.IsNullOrWhiteSpace()) cause = Multiworld.lastDeathLink.Cause;
+                    else cause = string.Format(cause, Multiworld.lastDeathLink.Source);
+
+                    if (Core.uim.deathLinkMessage != null) Core.uim.deathLinkMessage.SetDeathMessage(cause);
+                    NewMovement.Instance.GetHurt(200, false);
+                }
+
                 DisplayMessage();
                 UpdateStats();
                 UpdateWeapons();
@@ -139,7 +152,7 @@ namespace ArchipelagoULTRAKILL.Components
         {
             // wall jumps
             if (CurrentPowerup == Powerup.WalljumpLimiter) nm.currentWallJumps = 3;
-            else
+            else if (CurrentPowerup != Powerup.DoubleJump)
             {
                 if (Core.data.walljumps < 3 && nm.currentWallJumps < (3 - Core.data.walljumps)) nm.currentWallJumps = 3 - Core.data.walljumps;
             }

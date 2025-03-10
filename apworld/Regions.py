@@ -21,6 +21,11 @@ class SecretRegion(UKRegion):
 
 
 @dataclass
+class EncoreRegion(UKRegion):
+    level_id: int
+
+
+@dataclass
 class PrimeRegion(UKRegion):
     level_id: int
 
@@ -72,12 +77,15 @@ class Regions:
     l29 = LevelRegion("7-4", "7-4: ...LIKE ANTENNAS TO HEAVEN", 29, 7)
     s7 = SecretRegion("7-S", "7-S: HELL BATH NO FURY", 7, l28)
 
+    e0 = EncoreRegion("0-E", "0-E: THIS HEAT, AN EVIL HEAT", 100)
+    e1 = EncoreRegion("1-E", "1-E: ...THEN FELL THE ASHES", 101)
+
     p1 = PrimeRegion("P-1", "P-1: SOUL SURVIVOR", 666)
     p2 = PrimeRegion("P-2", "P-2: WAIT OF THE WORLD", 667)
 
     all_regions: List[UKRegion] = [
         shop, museum, l1, l2, l3, l4, l5, s0, l6, l7, l8, l9, s1, l10, l11, l12, l13, s2, l14, l15, l16, l17, l18, l19,
-        s4, l20, l21, l22, l23, s5, l24, l25, l26, l27, l28, l29, s7, p1, p2
+        s4, l20, l21, l22, l23, s5, l24, l25, l26, l27, l28, l29, s7, e0, e1, p1, p2
     ]
 
 
@@ -104,7 +112,7 @@ class Regions:
                 if region.level_layer * -1 == id:
                     return region
         else:
-            for region in [region for region in cls.all_regions if isinstance(region, LevelRegion) or isinstance(region, PrimeRegion)]:
+            for region in [region for region in cls.all_regions if isinstance(region, LevelRegion) or isinstance(region, PrimeRegion) or isinstance(region, EncoreRegion)]:
                 if region.level_id == id:
                     return region
         return None

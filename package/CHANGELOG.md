@@ -1,3 +1,21 @@
+## 3.1.0
+
+- Music randomizer is temporarily disabled.
+- Added support for new secrets in 0-3 and 0-4.
+- Added support for 0-E and 1-E, including perfect ranks, skulls, and making both levels selectable as a goal.
+	- Both encore levels are excluded by default.
+- Removed 2-1 from starting levels.
+- Adjusted logic to match new level geometry.
+- Air Jump will now give the player all 3 wall jumps for the duration of the powerup.
+- The player will no longer start with a "fake" Feedbacker.
+- Added a check to prevent loading data when a save slot is deleted but Archipelago data is left over. (Usually happens when deleting a save file without Archipelago loaded)
+- Fixed a logic error related to the challenge in 4-1 and breaking walls. [#24](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/24)
+- Fixed the starting weapon appearing twice in the item pool.
+- Fixed item messages and powerups not being cleared when switching save slots.
+- Fixed death link frequently causing a crash if the player has not died at least once in the current level.
+- Added a new logo to fit the style of the revamped title screen.
+- Updated `Archipelago.MultiClient.Net` to `6.6.0`.
+
 ## 3.0.1
 
 - Re-added a missing location. (2-2: Weapon)

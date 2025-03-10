@@ -267,6 +267,11 @@ class TestRocket(UltrakillTestBase):
             self.assertIn(location, location_names)
 
 
+class TestStartWeapon(UltrakillTestBase):
+    def test_start_weapon(self) -> None:
+        self.assertEqual(sum([i.name == self.world.start_weapon for i in self.multiworld.get_items()]), 1)
+
+
 class TestNotFire2(UltrakillTestBase):
     options = { "randomize_secondary_fire": "false" }
     

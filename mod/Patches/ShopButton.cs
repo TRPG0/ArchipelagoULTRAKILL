@@ -22,10 +22,11 @@ namespace ArchipelagoULTRAKILL.Patches
                 {
                     LocationManager.CheckLocation("shop_" + __instance.variationInfo.weaponName);
                     GameProgressSaver.AddMoney(Core.shopPrices[__instance.variationInfo.weaponName] * -1);
+                    foreach (MoneyText mt in Object.FindObjectsOfType<MoneyText>()) mt.UpdateMoney();
                     __instance.deactivated = true;
-                    __instance.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "ALREADY OWNED";
+                    __instance.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Already Owned";
                     __instance.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(0.5882f, 0.5882f, 0.5882f);
-                    __instance.variationInfo.costText.text = "ALREADY OWNED";
+                    __instance.variationInfo.costText.text = "Already Owned";
                     Core.data.purchasedItems.Add(__instance.variationInfo.weaponName);
                     Core.Logger.LogInfo("Bought " + __instance.variationInfo.weaponName + " from shop.");
                     if (__instance.variationInfo.buySound != null) Object.Instantiate(__instance.variationInfo.buySound);

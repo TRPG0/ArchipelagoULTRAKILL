@@ -15,14 +15,14 @@ namespace ArchipelagoULTRAKILL.Commands
         {
             if (args.Length != 0)
             {
-                Core.PLogger.Log("Usage: disconnect", Level.Info);
+                Core.PLogger.Info("Usage: disconnect");
                 return;
             }
             else
             {
                 if (!Multiworld.Authenticated)
                 {
-                    Core.PLogger.Log("You aren't connected to an Archipelago server.", Level.Info);
+                    Core.PLogger.Info("You aren't connected to an Archipelago server.");
                     return;
                 }
                 else

@@ -19,7 +19,7 @@ namespace ArchipelagoULTRAKILL
     {
         public static int[] AP_VERSION = new int[] { 0, 5, 1 };
         public static DeathLinkService DeathLinkService = null;
-        public static bool DeathLinkKilling = false;
+        public static DeathLink lastDeathLink = null;
 
         public static bool Authenticated;
         public static bool HintMode = false;
@@ -253,7 +253,6 @@ namespace ArchipelagoULTRAKILL
                     catch (KeyNotFoundException) { ConfigManager.gunColorRandomizer.value = ColorOptions.Off; }
 
                     PrefsManager.Instance.SetInt("difficulty", 4);
-                    PrefsManager.Instance.SetInt("weapon.arm0", 1);
                     GameProgressSaver.SetIntro(true);
                     GameProgressSaver.SetTutorial(true);
                     GameProgressSaver.UnlockWeaponCustomization(GameProgressSaver.WeaponCustomizationType.Revolver);
@@ -262,6 +261,7 @@ namespace ArchipelagoULTRAKILL
                     GameProgressSaver.UnlockWeaponCustomization(GameProgressSaver.WeaponCustomizationType.Railcannon);
                     GameProgressSaver.UnlockWeaponCustomization(GameProgressSaver.WeaponCustomizationType.RocketLauncher);
                     GameProgressSaver.SaveProgress(30);
+                    GameProgressSaver.SetEncoreProgress(101);
                     GameProgressSaver.SetPrime(1, 1);
                     GameProgressSaver.SetPrime(2, 1);
                     Core.SaveData();
@@ -274,7 +274,7 @@ namespace ArchipelagoULTRAKILL
 
                 if (Core.data.deathLink) EnableDeathLink();
 
-                PrefsManager.Instance.SetInt("weapon.arm0", 1);
+                if (!Core.data.hasArm) PrefsManager.Instance.SetInt("weapon.arm0", 0);
 
                 LocationManager.locations = ((JObject)success.SlotData["locations"]).ToObject<Dictionary<string, long>>();
 
@@ -284,7 +284,7 @@ namespace ArchipelagoULTRAKILL
                 UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
                 if (Core.data.completedLevels.Count < Core.data.goalRequirement) UIManager.CreateGoalCounter();
                 string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
-                UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
+                //UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
 
                 foreach (string weapon in Core.shopPrices.Keys)
                 {
@@ -369,7 +369,7 @@ namespace ArchipelagoULTRAKILL
                 Core.Logger.LogInfo("Successfully connected to server in hint mode as player \"" + Core.data.slot_name + "\".");
                 ConfigManager.connectionInfo.text = "Successfully connected to server in hint mode as player \"" + Core.data.slot_name + "\".";
                 UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
-                UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n<color=yellow>Hint Mode</color>";
+                //UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n<color=yellow>Hint Mode</color>";
             }
             else if (loginResult is LoginFailure failure)
             {
@@ -573,6 +573,7 @@ namespace ArchipelagoULTRAKILL
                 DeathLinkService.OnDeathLinkReceived += DeathLinkReceived;
             }
             DeathLinkService.EnableDeathLink();
+            if (Core.IsInLevel && Core.uim.deathLinkMessage == null) Core.uim.CreateDeathLinkMessage();
         }
 
         public static void DisableDeathLink()
@@ -583,17 +584,7 @@ namespace ArchipelagoULTRAKILL
 
         public static void DeathLinkReceived(DeathLink deathLink)
         {
-            if (Core.IsInLevel)
-            {
-                DeathLinkKilling = true;
-                string cause = "{0} has died.";
-                if (deathLink.Cause != "") cause = deathLink.Cause;
-                else cause = string.Format(cause, deathLink.Source);
-
-                messages.Add($"[DeathLink] {cause}");
-                if (Core.uim.deathLinkMessage != null) Core.uim.deathLinkMessage.SetDeathMessage(cause);
-                NewMovement.Instance.GetHurt(200, false, 0);
-            }
+            if (Core.IsInLevel) lastDeathLink = deathLink;
             else Core.Logger.LogWarning("Received DeathLink, but player cannot be killed right now.");
         }
 

@@ -11,7 +11,7 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists())
             {
-                if (Core.data.musicRandomizer && Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.Music == MusicType.Special2) AudioManager.ChangeMusic();
+                //if (Core.data.musicRandomizer && Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.Music == MusicType.Special2) AudioManager.ChangeMusic();
                 if (PlayerHelper.Instance && !SceneHelper.CurrentScene.Contains("-S") && !(SceneHelper.CurrentScene == "CreditsMuseum2" || SceneHelper.CurrentScene == "uk_construct")) PlayerHelper.Instance.CanGetPowerup = true;
             }
         }
