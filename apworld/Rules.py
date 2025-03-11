@@ -514,7 +514,6 @@ class UltrakillRules:
                 or rai2(state)
                 or rock_any(state)
                 or arm1(state)
-                or revstd1_fire2(state)
                 or revalt_any(state)
                 or shostd0_fire2(state)
                 or shostd1_fire2(state)
@@ -785,7 +784,7 @@ class UltrakillRules:
                         state.has_group("levels", player)
                         or state.has_group("layers", player)
                     )
-                    and state.has("Level Completed", player)
+                    or self.world.start_level.short_name != "0-1"
                 ),
             
             "0-1":
@@ -1264,7 +1263,8 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "1-2", "Blue")
                     and skull(state, "1-2", "Red")
-                    or can_zap(state)
+                    or can_break_walls(state)
+                    and can_zap(state)
                 ),
 
             "1-2: Secret #5":
@@ -1274,7 +1274,8 @@ class UltrakillRules:
                         grab_item(state)
                         and skull(state, "1-2", "Blue")
                         and skull(state, "1-2", "Red")
-                        or can_zap(state)
+                        or can_break_walls(state)
+                        and can_zap(state)
                     )
                 ),
 
@@ -1283,7 +1284,8 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "1-2", "Blue")
                     and skull(state, "1-2", "Red")
-                    or can_zap(state)
+                    or can_break_walls(state)
+                    and can_zap(state)
                 ),
 
             "1-2: Switch":
@@ -1292,7 +1294,8 @@ class UltrakillRules:
                         grab_item(state)
                         and skull(state, "1-2", "Blue")
                         and skull(state, "1-2", "Red")
-                        or can_zap(state)
+                        or can_break_walls(state)
+                        and can_zap(state)
                     )
                     and can_break_wall_cancerous_rodent(state)
                 ),
@@ -1303,7 +1306,8 @@ class UltrakillRules:
                         grab_item(state)
                         and skull(state, "1-2", "Blue")
                         and skull(state, "1-2", "Red")
-                        or can_zap(state)
+                        or can_break_walls(state)
+                        and can_zap(state)
                     )
                     and can_break_wall_cancerous_rodent(state)
                 ),
@@ -1422,6 +1426,9 @@ class UltrakillRules:
                         or rock0_fire2(state)
                     )
                 ),
+
+            "2-1: Secret #4":
+                l10_exit,
 
             "2-1: Secret #5":
                 l10_tower,
@@ -1563,24 +1570,36 @@ class UltrakillRules:
 
             # 3-2
             "Cleared 3-2":
-                slide,
+                lambda state: (
+                    slide(state)
+                    or naialt_any(state)
+                ),
 
             "3-2: Defeat Gabriel":
                 lambda state: (
-                    slide(state)
+                    (
+                        slide(state)
+                        or naialt_any(state)
+                    )
                     and good_weapon(state)
                 ),
 
             "3-2: Drop Gabriel in a pit":
                 lambda state: (
-                    slide(state)
+                    (
+                        slide(state)
+                        or naialt_any(state)
+                    )
                     and good_weapon(state)
                     and walljumps(state, 1)
                 ),
 
             "3-2: Perfect Rank":
                 lambda state: (
-                    slide(state)
+                    (
+                        slide(state)
+                        or naialt_any(state)
+                    )
                     and good_weapon(state)
                 ),
 

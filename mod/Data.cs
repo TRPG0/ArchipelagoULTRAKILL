@@ -1,4 +1,5 @@
 ﻿using ArchipelagoULTRAKILL.Structures;
+using BepInEx;
 using System.Collections.Generic;
 
 namespace ArchipelagoULTRAKILL
@@ -67,5 +68,11 @@ namespace ArchipelagoULTRAKILL
         public bool cybergrindHints = true;
 
         public bool deathLink = false;
+
+        public override string ToString()
+        {
+            if (!slot_name.IsNullOrWhiteSpace()) return $"Slot {GameProgressSaver.currentSlot + 1} | {slot_name} | {@checked.Count} locations checked.";
+            return "No data for current slot.";
+        }
     }
 }

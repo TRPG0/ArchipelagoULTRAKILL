@@ -22,6 +22,8 @@ namespace ArchipelagoULTRAKILL
         public static PluginConfigurator config = null;
 
         public static ConfigPanel playerPanel;
+        public static ConfigHeader dataInfo;
+
         public static BoolField isConnected;
         public static StringField playerName;
         public static StringField serverAddress;
@@ -110,6 +112,7 @@ namespace ArchipelagoULTRAKILL
         public static ButtonField thunderstoreButton;
         public static ButtonField githubButton;
         public static ButtonField discordButton;
+        public static ButtonField poptrackerButton;
 
         public static void Initialize()
         {
@@ -123,6 +126,8 @@ namespace ArchipelagoULTRAKILL
             // root
             new ConfigHeader(config.rootPanel, "ARCHIPELAGO");
             playerPanel = new ConfigPanel(config.rootPanel, "PLAYER SETTINGS", "playerPanel");
+            dataInfo = new ConfigHeader(config.rootPanel, "", 16);
+            new ConfigHeader(config.rootPanel, "---");
             logPanel = new ConfigPanel(config.rootPanel, "LOG SETTINGS", "logPanel");
             colorPanel = new ConfigPanel(config.rootPanel, "COLOR SETTINGS", "colorPanel");
             hintsPanel = new ConfigPanel(config.rootPanel, "HINTS", "hintsPanel");
@@ -378,6 +383,8 @@ namespace ArchipelagoULTRAKILL
             githubButton.onClick += () => { Application.OpenURL("https://github.com/TRPG0/ArchipelagoULTRAKILL"); };
             discordButton = new ButtonField(linksPanel, "AP AFTER DARK DISCORD", "discordButton");
             discordButton.onClick += () => { Application.OpenURL("https://discord.gg/Sbhy4ykUKn"); };
+            poptrackerButton = new ButtonField(linksPanel, "POPTRACKER PACK", "poptrackerButton");
+            poptrackerButton.onClick += () => { Application.OpenURL("https://github.com/BowserCrusher/UltrakillPoptracker/releases/"); };
         }
 
         public static void LoadConnectionInfo()
@@ -389,6 +396,8 @@ namespace ArchipelagoULTRAKILL
 
         public static void LoadStats()
         {
+            dataInfo.text = Core.data.ToString();
+
             start.value = Core.data.start;
             goal.value = Core.data.goal;
             goalProgress.value = $"{Core.data.completedLevels.Count} / {Core.data.goalRequirement}";
@@ -419,6 +428,9 @@ namespace ArchipelagoULTRAKILL
 
         public static void ResetStatsDefaults()
         {
+            if ((GameProgressSaver.GetTutorial() || GameProgressSaver.GetIntro()) && !Core.DataExists()) dataInfo.text = "Current slot is not randomized.";
+            else dataInfo.text = Core.data.ToString();
+
             start.value = "?";
             goal.value = "?";
             goalProgress.value = "?";

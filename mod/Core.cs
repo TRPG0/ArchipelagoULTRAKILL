@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.1.0";
+        public const string PluginVersion = "3.1.1";
 
         public static string workingPath;
         public static string workingDir;
@@ -32,8 +32,6 @@ namespace ArchipelagoULTRAKILL
 
         public static GameObject obj;
         public static UIManager uim;
-
-        public static bool SaveExists { get; internal set; } = false;
 
         public static bool IsInIntro => GameStateManager.Instance.IsStateActive("intro");
         public static bool IsPitFalling => GameStateManager.Instance.IsStateActive("pit-falling");
@@ -236,7 +234,7 @@ namespace ArchipelagoULTRAKILL
             {
                 UIManager.FindMenuObjects();
 
-                if (DataExists() && SaveExists && GameProgressSaver.GetTutorial() && !firstTimeLoad)
+                if (DataExists() && GameProgressSaver.GetTutorial() && !firstTimeLoad)
                 {
                     LoadData();
                     ConfigManager.LoadConnectionInfo();
@@ -277,7 +275,6 @@ namespace ArchipelagoULTRAKILL
 
         public static bool DataExists()
         {
-            if (!SaveExists) return false;
             string filePath = Path.Combine(GameProgressSaver.BaseSavePath, string.Format("Slot{0}", GameProgressSaver.currentSlot + 1)) + "\\archipelago.json";
             return File.Exists(filePath);
         }
@@ -304,14 +301,6 @@ namespace ArchipelagoULTRAKILL
                 {
                     data = JsonConvert.DeserializeObject<Data>(reader.ReadToEnd());
                 }
-
-                if (!SaveExists)
-                {
-                    Logger.LogInfo($"Archipelago data exists but slot is empty.");
-                    data = new Data();
-                    return;
-                }
-
                 Logger.LogInfo("Loaded Archipelago data for slot " + (GameProgressSaver.currentSlot + 1) + ".");
             }
             else

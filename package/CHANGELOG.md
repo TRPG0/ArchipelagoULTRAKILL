@@ -1,3 +1,10 @@
+## 3.1.1
+
+- Reverted the check to prevent loading data since it wasn't working properly.
+- Items that are specific to excluded levels will now be classed as filler instead of progression.
+- Fixed some logic mistakes in 1-2, 2-1, and 3-2.
+- Added an in-game link to the PopTracker pack.
+
 ## 3.1.0
 
 - Music randomizer is temporarily disabled.

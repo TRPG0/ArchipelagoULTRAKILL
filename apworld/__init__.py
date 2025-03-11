@@ -80,7 +80,9 @@ class UltrakillWorld(World):
         if item_list[id].type != None:
             classification = self.item_classifications[item_list[id].type]
 
-        if name == "Blue Skull (1-4)" and not self.options.hank_rewards:
+        if any(level in name for level in self.options.skipped_levels.value):
+            classification = ItemClassification.filler
+        elif name == "Blue Skull (1-4)" and not self.options.hank_rewards:
             classification = ItemClassification.filler
 
         return UltrakillItem(name, classification, item_id, self.player)
@@ -433,7 +435,7 @@ class UltrakillWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
-            "version": "3.1.0",
+            "version": "3.1.1",
             "locations": self.game_id_to_long,
             "start": self.start_level.short_name,
             "goal": self.goal_level.short_name,

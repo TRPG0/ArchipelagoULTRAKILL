@@ -9,9 +9,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix(SlotRowPanel targetPanel, SaveSlotMenu.SlotData data)
         {
-            if (targetPanel.slotIndex == GameProgressSaver.currentSlot) Core.SaveExists = data.exists;
-
-            if (Core.DataExists(targetPanel.slotIndex + 1) && data.exists)
+            if (Core.DataExists(targetPanel.slotIndex + 1))
             {
                 string filePath = Path.Combine(GameProgressSaver.BaseSavePath, string.Format("Slot{0}", targetPanel.slotIndex + 1)) + "\\archipelago.json";
                 Data fileData = new Data();
