@@ -479,6 +479,23 @@ class UltrakillRules:
                 )
             )
         
+        def has_weapon_types(state: CollectionState, count: int) -> bool:
+            total: int = 0
+
+            if revany0_fire2(state) or revany1_fire2(state) or revany2_fire2(state):
+                total += 1
+
+            if shoany0_fire2(state) or shoany1_fire2(state) or shoany2_fire2(state):
+                total += 1
+
+            if naiany0_fire2(state) or naiany1_fire2(state) or naiany2_fire2(state):
+                total += 1
+
+            if rock0_fire2(state) or rock1_fire2(state) or rock2_fire2(state):
+                total += 1
+
+            return total >= count
+        
         def can_break_glass(state: CollectionState) -> bool:
             return (
                 rai0(state)
@@ -2369,9 +2386,12 @@ class UltrakillRules:
             # Encores
             "Cleared 0-E":
                 lambda state: (
-                    grab_item(state)
-                    and good_weapon(state)
+                    arm0(state)
+                    and arm1(state)
+                    and arm2(state)
+                    and has_weapon_types(state, 3)
                     and can_break_glass(state)
+                    and slide(state)
                     and stamina(state, 2)
                     and skull(state, "0-E", "Blue")
                     and skull(state, "0-E", "Red")
@@ -2379,9 +2399,12 @@ class UltrakillRules:
 
             "0-E: Perfect Rank":
                 lambda state: (
-                    grab_item(state)
-                    and good_weapon(state)
+                    arm0(state)
+                    and arm1(state)
+                    and arm2(state)
+                    and has_weapon_types(state, 3)
                     and can_break_glass(state)
+                    and slide(state)
                     and stamina(state, 3)
                     and skull(state, "0-E", "Blue")
                     and skull(state, "0-E", "Red")
@@ -2389,10 +2412,12 @@ class UltrakillRules:
 
             "Cleared 1-E":
                 lambda state: (
-                    grab_item(state)
-                    and good_weapon(state)
+                    arm0(state)
+                    and arm1(state)
                     and arm2(state)
+                    and has_weapon_types(state, 3)
                     and can_break_walls(state)
+                    and slide(state)
                     and stamina(state, 2)
                     and skull(state, "1-E", "Blue")
                     and skull(state, "1-E", "Red")
@@ -2400,10 +2425,12 @@ class UltrakillRules:
 
             "1-E: Perfect Rank":
                 lambda state: (
-                    grab_item(state)
-                    and good_weapon(state)
+                    arm0(state)
+                    and arm1(state)
                     and arm2(state)
+                    and has_weapon_types(state, 3)
                     and can_break_walls(state)
+                    and slide(state)
                     and stamina(state, 3)
                     and skull(state, "1-E", "Blue")
                     and skull(state, "1-E", "Red")
@@ -2412,24 +2439,28 @@ class UltrakillRules:
             # Primes
             "Cleared P-1":
                 lambda state: (
-                    grab_item(state)
-                    and good_weapon(state)
+                    arm0(state)
+                    and arm1(state)
+                    and has_weapon_types(state, 2)
                     and slide(state)
                     and stamina(state, 2)
                 ),
 
             "P-1: Perfect Rank":
                 lambda state: (
-                    grab_item(state)
-                    and good_weapon(state)
+                    arm0(state)
+                    and arm1(state)
+                    and has_weapon_types(state, 2)
                     and slide(state)
                     and stamina(state, 3)
                 ),
 
             "Cleared P-2":
                 lambda state: (
-                    grab_item(state)
-                    and good_weapon(state)
+                    arm0(state)
+                    and arm1(state)
+                    and arm2(state)
+                    and has_weapon_types(state, 3)
                     and slide(state)
                     and stamina(state, 2)
                     and skull(state, "P-2", "Blue")
@@ -2437,8 +2468,10 @@ class UltrakillRules:
 
             "P-2: Perfect Rank":
                 lambda state: (
-                    grab_item(state)
-                    and good_weapon(state)
+                    arm0(state)
+                    and arm1(state)
+                    and arm2(state)
+                    and has_weapon_types(state, 3)
                     and slide(state)
                     and stamina(state, 3)
                     and skull(state, "P-2", "Blue")

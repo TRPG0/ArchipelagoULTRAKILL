@@ -21,12 +21,12 @@ namespace ArchipelagoULTRAKILL.Components
             if (!CanRocketRace)
             {
                 button.SetActive(false);
-                text.text = "\nCAN'T ROCKET RACE WITH NO ROCKET, DUMBASS";
+                text.text = "\n\n\nCAN'T ROCKET RACE WITH NO ROCKET, DUMBASS";
             }
             else
             {
                 button.SetActive(true);
-                text.text = "<color=orange>ROCKET RACE</color>";
+                text.text = "ROCKET RACE";
             }
         }
     }

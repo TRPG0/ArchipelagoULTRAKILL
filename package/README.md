@@ -30,9 +30,9 @@ Optionally, you can also download [NoTutorial](https://thunderstore.io/c/ultraki
 
 1. Download and install [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 
-2. Download `ultrakill.apworld` from the mod's [releases page](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases) and add it to your `worlds` folder. (Default path: `C:\ProgramData\Archipelago\lib\worlds`)
+2. Download `ultrakill.apworld` from the mod's [releases page](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases) and install it, either by double clicking the `.apworld` file, opening the Archipelago Launcher and selecting "Install APWorld", or by selecting "Browse Files" and adding it to the `custom_worlds` folder.
 
-3. Set up all `.yaml` files for each player in the multiworld, then add them to the `Players` folder. A template can be downloaded for ULTRAKILL from the mod's [releases page.](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases) A guide for advanced settings can be found [here.](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en)
+3. Set up all `.yaml` files for each player in the multiworld, then add them to the `Players` folder. A template can be downloaded for ULTRAKILL from the mod's [releases page,](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases) or you can click "Generate Template Options" in the Archipelago Launcher. A guide for advanced settings can be found [here.](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en)
 
 4. Run `ArchipelagoGenerate.exe` to generate a game, which will appear in the `output` folder.
 
@@ -52,4 +52,4 @@ Maybe later. I would like to make a standalone version of the randomizer eventua
 
 # Something's not working!
 
-If you have trouble setting up ULTRAKILL randomizer or have found any bugs that need fixing, feel free to ask about it on the [GitHub discussions](https://github.com/TRPG0/ArchipelagoULTRAKILL/discussions) page, or join the [AP After Dark](https://discord.gg/Sbhy4ykUKn) Discord server and ask about it in the #ultrakill channel.
+If you have trouble setting up ULTRAKILL randomizer or have found any bugs that need fixing, feel free to ask about it on the [GitHub discussions](https://github.com/TRPG0/ArchipelagoULTRAKILL/discussions) page, or join the [AP After Dark](https://discord.gg/Sbhy4ykUKn) Discord server and ask about it in the `#ultrakill` channel.

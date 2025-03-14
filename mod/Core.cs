@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.1.1";
+        public const string PluginVersion = "3.1.2";
 
         public static string workingPath;
         public static string workingDir;
@@ -223,6 +223,7 @@ namespace ArchipelagoULTRAKILL
             UIManager.createdSkullIcons = false;
             UIManager.createdSwitchIcons = false;
             uim.deathLinkMessage = null;
+            Multiworld.lastDeathLink = null;
 
             LevelManager.skulls.Clear();
 

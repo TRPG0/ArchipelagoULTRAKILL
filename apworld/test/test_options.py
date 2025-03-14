@@ -108,7 +108,10 @@ class TestNotPRanks(UltrakillTestBase):
 
 
 class TestPRanks(UltrakillTestBase):
-    options = { "p_rank_rewards": "true" }
+    options = { 
+        "p_rank_rewards": "true",
+        "skipped_levels": {}
+    }
     
     def test_p_ranks(self) -> None:
         challenge_locations = [l.name for l in location_list if l.type == LocationType.PerfectRank]

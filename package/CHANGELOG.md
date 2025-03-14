@@ -1,3 +1,9 @@
+## 3.1.2
+
+- Fixed a bug where death link could repeatedly kill the player if no checkpoints were reached before being killed.
+- Fixed the rocket race message in the museum not displaying correctly.
+- Adjusted logic for prime sanctums and encore levels.
+
 ## 3.1.1
 
 - Reverted the check to prevent loading data since it wasn't working properly.
