@@ -274,7 +274,7 @@ namespace ArchipelagoULTRAKILL
 
                 if (Core.data.deathLink) EnableDeathLink();
 
-                if (!Core.data.hasArm) PrefsManager.Instance.SetInt("weapon.arm0", 0);
+                PrefsManager.Instance.SetInt("weapon.arm0", 1);
 
                 LocationManager.locations = ((JObject)success.SlotData["locations"]).ToObject<Dictionary<string, long>>();
 

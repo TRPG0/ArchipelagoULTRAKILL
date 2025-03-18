@@ -1,3 +1,9 @@
+## 3.1.3
+
+- Re-added the "fake" Feedbacker arm because the shotgun parry bug wasn't actually fixed against Malicious Faces.
+- Fixed some logic mistakes in 0-1 and 1-2.
+- Added more item groups for easier hinting.
+
 ## 3.1.2
 
 - Fixed a bug where death link could repeatedly kill the player if no checkpoints were reached before being killed.

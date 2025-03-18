@@ -109,8 +109,8 @@ namespace ArchipelagoULTRAKILL
             if (variation.weaponName == "arm0" && !Core.data.hasArm)
             {
                 variation.costText.text = "<color=red>Unavailable</color>";
-                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Unavailable";
-                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<Button>().interactable = false;
+                variation.buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>(true).text = "Unavailable";
+                variation.buyButton.gameObject.GetComponent<Button>().interactable = false;
                 variation.equipButtons.SetActive(false);
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is not unlocked");
                 return;
@@ -119,7 +119,7 @@ namespace ArchipelagoULTRAKILL
             else if (variation.weaponName == "arm0" && Core.data.hasArm)
             {
                 variation.costText.text = "Already Owned";
-                variation.buyButton.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Already Owned";
+                variation.buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>(true).text = "Already Owned";
                 variation.equipButtons.SetActive(true);
                 Core.Logger.LogInfo($"Shop - Weapon: \"{variation.weaponName}\" - Is unlocked");
                 return;

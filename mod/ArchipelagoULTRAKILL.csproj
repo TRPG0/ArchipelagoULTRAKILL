@@ -354,6 +354,7 @@
     <Compile Include="Patches\FinalPit.cs" />
     <Compile Include="Patches\FinalRank.cs" />
     <Compile Include="Patches\FishingHUD.cs" />
+    <Compile Include="Patches\FistControl.cs" />
     <Compile Include="Patches\GameProgressSaver.cs" />
     <Compile Include="Patches\GearCheckEnabler.cs" />
     <Compile Include="Patches\HookArm.cs" />

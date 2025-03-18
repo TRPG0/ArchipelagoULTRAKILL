@@ -132,6 +132,7 @@ namespace ArchipelagoULTRAKILL
                         break;
 
                     case UKType.Arm:
+                        if (Core.IsInLevel) HudController.Instance.armIcon.SetActive(true);
                         if (item.itemName == "Feedbacker")
                         {
                             Core.data.hasArm = true;

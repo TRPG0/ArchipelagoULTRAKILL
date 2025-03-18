@@ -27,10 +27,8 @@ namespace ArchipelagoULTRAKILL.Patches
                     if (!Core.data.unlockedSkulls.Contains("101_r")) LevelManager.redDoor.Close(true);
                 }
 
-                /*
                 if ((SceneHelper.CurrentScene.Contains("Level ") || SceneHelper.CurrentScene == "Endless") && SceneHelper.CurrentScene != "Level 5-S")
                     Core.ValidateArms();
-                */
 
                 if (SceneHelper.CurrentScene == "Level 5-S") LevelManager.ForceBlueArm();
 

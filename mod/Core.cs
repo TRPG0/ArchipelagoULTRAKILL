@@ -22,7 +22,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.1.2";
+        public const string PluginVersion = "3.1.3";
 
         public static string workingPath;
         public static string workingDir;
@@ -39,6 +39,7 @@ namespace ArchipelagoULTRAKILL
         public static bool IsInLevel => !GameStateManager.Instance.IsStateActive("main-menu") && !GameStateManager.Instance.IsStateActive("intro");
         public static bool IsPlaying => IsInLevel && !IsPaused && PlayerHelper.Instance;
         public static bool CanGetWeapon => IsInLevel && PlayerHelper.Instance && GunSetter.Instance;
+        public static bool HasNoArms => !data.hasArm && GameProgressSaver.GetGeneralProgress().arm1 < 1;
 
         public static Data data = new Data();
         public static bool firstTimeLoad = false;
@@ -423,7 +424,6 @@ namespace ArchipelagoULTRAKILL
             return list;
         }
 
-        /*
         public static void ValidateArms()
         {
             bool resetFists = false;
@@ -447,6 +447,5 @@ namespace ArchipelagoULTRAKILL
             }
             if (resetFists) FistControl.Instance.ResetFists();
         }
-        */
     }
 }

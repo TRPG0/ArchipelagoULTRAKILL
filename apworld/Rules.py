@@ -450,7 +450,7 @@ class UltrakillRules:
             return can_punch(state) or shoalt_any(state)
         
         def grab_item(state: CollectionState) -> bool:
-            return arm0(state) or arm1(state)
+            return arm0(state) or arm1(state) or arm2(state)
         
         def skull(state: CollectionState, level: str, color: str, count: int = 1) -> bool:
             return state.has(f"{color.capitalize()} Skull ({level})", player, count) if options.randomize_skulls else True
@@ -1075,9 +1075,6 @@ class UltrakillRules:
             "0-1: Secret #3":
                 lambda state: jump_general(state, 1),
 
-            "0-1: Secret #4":
-                lambda state: jump_general(state, 1),
-
             "0-1: Get 5 kills with a single glass panel":
                 can_break_glass,
 
@@ -1277,11 +1274,14 @@ class UltrakillRules:
 
             "1-2: Secret #4":
                 lambda state: (
-                    grab_item(state)
-                    and skull(state, "1-2", "Blue")
-                    and skull(state, "1-2", "Red")
-                    or can_break_walls(state)
-                    and can_zap(state)
+                    slide(state)
+                    and (
+                        grab_item(state)
+                        and skull(state, "1-2", "Blue")
+                        and skull(state, "1-2", "Red")
+                        or can_break_walls(state)
+                        and can_zap(state)
+                    )
                 ),
 
             "1-2: Secret #5":
