@@ -24,6 +24,8 @@ namespace ArchipelagoULTRAKILL.Structures
         public static Color Layer5 => ConfigManager.layer5Color.value;
         public static Color Layer6 => ConfigManager.layer6Color.value;
         public static Color Layer7 => ConfigManager.layer7Color.value;
+        public static Color Encore0 => ConfigManager.encore0Color.value;
+        public static Color Encore1 => ConfigManager.encore1Color.value;
         public static Color Prime => ConfigManager.primeColor.value;
         public static Color WeaponAlt => ConfigManager.altColor.value;
         public static Color Arm0 => ConfigManager.arm0Color.value;

@@ -24,12 +24,6 @@ namespace ArchipelagoULTRAKILL.Components
             return false;
         }
 
-        public int TotalSecretsInLevel(int id)
-        {
-            if (id == 3 || id == 4) return 3;
-            return 5;
-        }
-
         public int? SecretMissionCompleted(int id)
         {
             switch (id)
@@ -165,7 +159,7 @@ namespace ArchipelagoULTRAKILL.Components
                     {
                         if (found) secretsFound++;
                     }
-                    secretsTotal += TotalSecretsInLevel(i);
+                    secretsTotal += 5;
                 }
 
                 if (SecretMissionCompleted(i).HasValue)

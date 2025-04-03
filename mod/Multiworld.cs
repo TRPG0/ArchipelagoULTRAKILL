@@ -17,7 +17,7 @@ namespace ArchipelagoULTRAKILL
 {
     public static class Multiworld
     {
-        public static int[] AP_VERSION = new int[] { 0, 5, 1 };
+        public static int[] AP_VERSION = new int[] { 0, 6, 0 };
         public static DeathLinkService DeathLinkService = null;
         public static DeathLink lastDeathLink = null;
 

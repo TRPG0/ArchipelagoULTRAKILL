@@ -409,6 +409,7 @@
     <Compile Include="Structures\UKItem.cs" />
     <Compile Include="UIManager.cs" />
     <Compile Include="VersionChecker.cs" />
+    <Compile Include="WeaponLoadout.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

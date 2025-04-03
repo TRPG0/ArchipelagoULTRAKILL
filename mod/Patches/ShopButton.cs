@@ -18,7 +18,14 @@ namespace ArchipelagoULTRAKILL.Patches
             if (__instance.variationInfo != null && Core.DataExists())
             {
                 if (__instance.variationInfo.weaponName.Contains("0")) return false;
-                if (GameProgressSaver.GetMoney() >= Core.shopPrices[__instance.variationInfo.weaponName] && !__instance.deactivated)
+                if (AssistController.Instance.cheatsEnabled && !__instance.deactivated)
+                {
+                    __instance.deactivated = true;
+                    __instance.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Cheats enabled!";
+                    __instance.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(0.5882f, 0.5882f, 0.5882f);
+                    if (__instance.failSound != null) Object.Instantiate(__instance.failSound);
+                }
+                else if (GameProgressSaver.GetMoney() >= Core.shopPrices[__instance.variationInfo.weaponName] && !__instance.deactivated)
                 {
                     LocationManager.CheckLocation("shop_" + __instance.variationInfo.weaponName);
                     GameProgressSaver.AddMoney(Core.shopPrices[__instance.variationInfo.weaponName] * -1);

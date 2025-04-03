@@ -191,8 +191,10 @@ namespace ArchipelagoULTRAKILL
                 variationT.Method("SetEquipStatusText", new object[] { equipStatus }).GetValue();
                 variationT.Field<int>("money").Value = GameProgressSaver.GetMoney();
 
-                variation.buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>(true).text = cost;
-                if (canAfford)
+                if (!AssistController.Instance.cheatsEnabled) variation.buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>(true).text = cost;
+                else variation.buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>(true).text = "Cheats enabled!";
+
+                if (canAfford && !AssistController.Instance.cheatsEnabled)
                 {
                     variation.buyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>(true).color = new Color(1, 1, 1);
                     variation.buyButton.gameObject.GetComponent<Image>().color = new Color(1, 1, 1);

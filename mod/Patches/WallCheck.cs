@@ -1,6 +1,7 @@
 ﻿using ArchipelagoULTRAKILL.Components;
 using ArchipelagoULTRAKILL.Structures;
 using HarmonyLib;
+using UnityEngine;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
@@ -25,7 +26,7 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (PlayerHelper.CurrentPowerup == Powerup.DoubleJump)
             {
-                if (__instance.cols.Count == 0) __instance.poc = __instance.transform.position;
+                if (__instance.cols.Count == 0) __instance.poc = __instance.transform.position - Traverse.Create(NewMovement.Instance).Field<Vector3>("movementDirection").Value;
                 __result = true;
             }
         }

@@ -1,3 +1,10 @@
+## 3.1.4
+
+- Fixed shop items becoming permanently inaccessible if purchased while cheats are enabled.
+- Fixed the wrong number of secrets being displayed in Layer 0.
+- Added unique item colors for 0-E and 1-E.
+- Midair jumps with the Air Jump powerup no longer cancel all momentum.
+
 ## 3.1.3
 
 - Re-added the "fake" Feedbacker arm because the shotgun parry bug wasn't actually fixed against Malicious Faces.

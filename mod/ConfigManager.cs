@@ -89,6 +89,8 @@ namespace ArchipelagoULTRAKILL
         public static ColorField layer5Color;
         public static ColorField layer6Color;
         public static ColorField layer7Color;
+        public static ColorField encore0Color;
+        public static ColorField encore1Color;
         public static ColorField primeColor;
         public static ColorField altColor;
         public static ColorField arm0Color;
@@ -332,6 +334,8 @@ namespace ArchipelagoULTRAKILL
             layer5Color = new ColorField(colorPanel, "LAYER 5", "layer5Color", new Color(0.251f, 0.9059f, 1), true);
             layer6Color = new ColorField(colorPanel, "LAYER 6", "layer6Color", new Color(1, 0.2353f, 0.2353f), true);
             layer7Color = new ColorField(colorPanel, "LAYER 7", "layer7Color", new Color(0.8f, 0.8f, 0.8f), true);
+            layer7Color = new ColorField(colorPanel, "ENCORE 0", "encore0Color", new Color(0.6431f, 0.8745f, 0.9882f), true);
+            layer7Color = new ColorField(colorPanel, "ENCORE 1", "encore1Color", new Color(0.5f, 0.5f, 0.5f), true);
             primeColor = new ColorField(colorPanel, "PRIME SANCTUMS", "primeColor", new Color(1, 0.2353f, 0.2353f), true);
             altColor = new ColorField(colorPanel, "ALTERNATE WEAPON", "altColor", new Color(1, 0.65f, 0), true);
             arm0Color = new ColorField(colorPanel, "FEEDBACKER", "arm0Color", new Color(0.251f, 0.9059f, 1), true);

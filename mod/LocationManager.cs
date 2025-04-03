@@ -743,7 +743,6 @@ namespace ArchipelagoULTRAKILL
                 case "1-2: THE BURNING WORLD":
                 case "1-3: HALLS OF SACRED REMAINS":
                 case "1-4: CLAIR DE LUNE":
-                case "1-E: ...THEN FELL THE ASHES":
                 case "1-1":
                 case "1-2":
                 case "1-3":
@@ -797,7 +796,6 @@ namespace ArchipelagoULTRAKILL
                 case "0-3: DOUBLE DOWN":
                 case "0-4: A ONE-MACHINE ARMY":
                 case "0-5: CERBERUS":
-                case "0-E: THIS HEAT, AN EVIL HEAT":
                 case "OVERTURE: THE MOUTH OF HELL":
                 case "0-1":
                 case "0-2":
@@ -864,6 +862,10 @@ namespace ArchipelagoULTRAKILL
                     return Colors.Switch;
                 case "Confusing Aura":
                     return Colors.Confusion;
+                case "0-E: THIS HEAT, AN EVIL HEAT":
+                    return Colors.Encore0;
+                case "1-E: ...THEN FELL THE ASHES":
+                    return Colors.Encore1;
                 default:
                     return Colors.White;
             }
