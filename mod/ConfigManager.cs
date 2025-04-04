@@ -105,11 +105,6 @@ namespace ArchipelagoULTRAKILL
         public static ColorField confusionColor;
         public static ColorField trapColor;
 
-        public static ConfigPanel hintsPanel;
-        public static BoolField hintAdvancementOnly;
-        public static ButtonField hintRefresh;
-        public static ConfigDivision hintList;
-
         public static ConfigPanel linksPanel;
         public static ButtonField thunderstoreButton;
         public static ButtonField githubButton;
@@ -132,7 +127,6 @@ namespace ArchipelagoULTRAKILL
             new ConfigHeader(config.rootPanel, "---");
             logPanel = new ConfigPanel(config.rootPanel, "LOG SETTINGS", "logPanel");
             colorPanel = new ConfigPanel(config.rootPanel, "COLOR SETTINGS", "colorPanel");
-            hintsPanel = new ConfigPanel(config.rootPanel, "HINTS", "hintsPanel");
             linksPanel = new ConfigPanel(config.rootPanel, "LINKS", "linksPanel");
 
             // player settings
@@ -334,8 +328,8 @@ namespace ArchipelagoULTRAKILL
             layer5Color = new ColorField(colorPanel, "LAYER 5", "layer5Color", new Color(0.251f, 0.9059f, 1), true);
             layer6Color = new ColorField(colorPanel, "LAYER 6", "layer6Color", new Color(1, 0.2353f, 0.2353f), true);
             layer7Color = new ColorField(colorPanel, "LAYER 7", "layer7Color", new Color(0.8f, 0.8f, 0.8f), true);
-            layer7Color = new ColorField(colorPanel, "ENCORE 0", "encore0Color", new Color(0.6431f, 0.8745f, 0.9882f), true);
-            layer7Color = new ColorField(colorPanel, "ENCORE 1", "encore1Color", new Color(0.5f, 0.5f, 0.5f), true);
+            encore0Color = new ColorField(colorPanel, "ENCORE 0", "encore0Color", new Color(0.6431f, 0.8745f, 0.9882f), true);
+            encore1Color = new ColorField(colorPanel, "ENCORE 1", "encore1Color", new Color(0.5f, 0.5f, 0.5f), true);
             primeColor = new ColorField(colorPanel, "PRIME SANCTUMS", "primeColor", new Color(1, 0.2353f, 0.2353f), true);
             altColor = new ColorField(colorPanel, "ALTERNATE WEAPON", "altColor", new Color(1, 0.65f, 0), true);
             arm0Color = new ColorField(colorPanel, "FEEDBACKER", "arm0Color", new Color(0.251f, 0.9059f, 1), true);
@@ -349,36 +343,6 @@ namespace ArchipelagoULTRAKILL
             doublejumpColor = new ColorField(colorPanel, "AIR JUMP", "doublejumpColor", new Color(1, 1, 0.6f), true);
             confusionColor = new ColorField(colorPanel, "CONFUSING AURA", "confusionColor", new Color(0.8242f, 1, 0.1289f), true);
             trapColor = new ColorField(colorPanel, "TRAP", "trapColor", new Color(0.7f, 0.7f, 0.7f), true);
-
-            // hint settings
-            hintAdvancementOnly = new BoolField(hintsPanel, "PROGRESSION ITEM HINTS ONLY", "hintAdvancementOnly", true, true);
-            hintRefresh = new ButtonField(hintsPanel, "REFRESH LIST", "hintRefresh");
-            hintList = new ConfigDivision(hintsPanel, "hintList");
-            hintRefresh.onClick += () => 
-            {
-                if (Multiworld.Authenticated)
-                {
-                    GameObject.Destroy(Traverse.Create(hintList).Field("panelObject").GetValue<GameObject>());
-                    Traverse.Create(hintsPanel).Field("fieldObjects").GetValue<List<List<Transform>>>().RemoveAt(2);
-                    Traverse.Create(hintsPanel).Field("fields").GetValue<List<ConfigField>>().RemoveAt(2);
-
-                    hintList = null;
-                    hintList = new ConfigDivision(hintsPanel, "hintList");
-
-                    Hint[] hints = Multiworld.Session.DataStorage.GetHints();
-                    foreach (Hint h in hints)
-                    {
-                        if (hintAdvancementOnly.value && h.ItemFlags != ItemFlags.Advancement) continue;
-
-                        if (Array.IndexOf(hints, h) != 0) new ConfigHeader(hintList, "-----");
-                        new StringField(hintList, "ITEM", $"hint{Array.IndexOf(hints, h)}_item", Multiworld.Session.Items.GetItemName(h.ItemId), true, false) { interactable = false };
-                        new StringField(hintList, "RECEIVING PLAYER", $"hint{Array.IndexOf(hints, h)}_receiving_player", Multiworld.Session.Players.GetPlayerAlias(h.ReceivingPlayer), true, false) { interactable = false };
-                        new StringField(hintList, "LOCATION", $"hint{Array.IndexOf(hints, h)}_location", Multiworld.Session.Locations.GetLocationNameFromId(h.LocationId), true, false) { interactable = false };
-                        new StringField(hintList, "SENDING PLAYER", $"hint{Array.IndexOf(hints, h)}_sending_player", Multiworld.Session.Players.GetPlayerAlias(h.FindingPlayer), true, false) { interactable = false };
-                        new BoolField(hintList, "FOUND", $"hint{Array.IndexOf(hints, h)}_found", h.Found, false) { interactable = false };
-                    }
-                }
-            };
 
             // links
             thunderstoreButton = new ButtonField(linksPanel, "THUNDERSTORE", "thunderstoreButton");

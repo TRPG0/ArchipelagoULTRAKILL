@@ -1,3 +1,8 @@
+## 3.1.5
+
+- Fixed encore item colors not being assigned correctly.
+- Removed in game hint menu.
+
 ## 3.1.4
 
 - Fixed shop items becoming permanently inaccessible if purchased while cheats are enabled.
