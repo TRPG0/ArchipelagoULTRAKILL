@@ -41,34 +41,6 @@ namespace ArchipelagoULTRAKILL.Components
             }
         }
 
-        public int? BossDefeated(int id)
-        {
-            if (Core.data.bossRewards == BossOptions.Disabled) return null;
-            else
-            {
-                switch (id)
-                {
-                    case 5:
-                    case 9:
-                    case 13:
-                    case 15:
-                    case 19:
-                    case 23:
-                    case 25:
-                    case 29:
-                        if (Core.data.@checked.Contains($"{id}_b")) return 1;
-                        return 0;
-                    case 7:
-                    case 18:
-                        if (Core.data.bossRewards < BossOptions.Extended) return null;
-                        if (Core.data.@checked.Contains($"{id}_b")) return 1;
-                        return 0;
-                    default: 
-                        return null;
-                }
-            }
-        }
-
         public int LimboSwitchesPressed()
         {
             int total = 0;
@@ -126,8 +98,6 @@ namespace ArchipelagoULTRAKILL.Components
             int missionsTotal = 0;
             int secretsFound = 0;
             int secretsTotal = 0;
-            int bossesDefeated = 0;
-            int bossesTotal = 0;
             int challenges = 0;
             int perfects = 0;
 
@@ -168,12 +138,6 @@ namespace ArchipelagoULTRAKILL.Components
                     missionsTotal++;
                 }
 
-                if (BossDefeated(i).HasValue)
-                {
-                    bossesDefeated += BossDefeated(i).Value;
-                    bossesTotal++;
-                }
-
                 if (rank.challenge) challenges++;
             }
 
@@ -184,7 +148,6 @@ namespace ArchipelagoULTRAKILL.Components
             result += BuildString("\nSecrets", secretsFound, secretsTotal);
             if (Core.data.challengeRewards) result += BuildString("\nChallenges", challenges, total);
             if (Core.data.pRankRewards) result += BuildString("\nPerfect Ranks", perfects, total);
-            if (Core.data.bossRewards > BossOptions.Disabled) result += BuildString("\nBosses", bossesDefeated, bossesTotal);
             if (ActIncludes(9) && Core.data.l1switch) result += BuildString("\nSwitches pressed", LimboSwitchesPressed(), 4);
             if (ActIncludes(27) && Core.data.l7switch) result += BuildString("\nSwitches pressed", ShotgunSwitchesPressed(), 3);
             if (ActIncludes(9) && Core.data.hankRewards) result += BuildString("\nAssembled Hank", HankAssembled(), 1);
@@ -286,9 +249,19 @@ namespace ArchipelagoULTRAKILL.Components
                 RankData rank = GameProgressSaver.GetRank(Core.GetLevelIdFromName(goal));
                 foreach (int grade in rank.ranks)
                 {
-                    if (grade >= 0)
+                    if (Core.data.perfectGoal)
                     {
-                        return "Goal: <color=green>Completed</color>\n";
+                        if (grade >= 12)
+                        {
+                            return "Goal: <color=green>Completed</color>\n";
+                        }
+                    }
+                    else
+                    {
+                        if (grade >= 0)
+                        {
+                            return "Goal: <color=green>Completed</color>\n";
+                        }
                     }
                 }
 

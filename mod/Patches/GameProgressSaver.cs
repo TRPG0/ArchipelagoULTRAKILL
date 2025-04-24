@@ -11,6 +11,7 @@ namespace ArchipelagoULTRAKILL.Patches
             if (Multiworld.Authenticated) Multiworld.Disconnect();
             LocationManager.messages.Clear();
             LocationManager.powerupQueue.Clear();
+            Multiworld.recentItems.Clear();
             if (Core.DataExists()) Core.firstTimeLoad = false;
             else Core.data = new Data();
 
@@ -36,6 +37,7 @@ namespace ArchipelagoULTRAKILL.Patches
             if (Multiworld.Authenticated) Multiworld.Disconnect();
             LocationManager.messages.Clear();
             LocationManager.powerupQueue.Clear();
+            Multiworld.recentItems.Clear();
             Core.DeleteData(slot);
             Core.data = new Data();
             Core.firstTimeLoad = false;

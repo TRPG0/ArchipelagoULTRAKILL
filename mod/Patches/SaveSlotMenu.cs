@@ -11,6 +11,8 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists(targetPanel.slotIndex + 1))
             {
+                targetPanel.deleteButton.interactable = true;
+
                 string filePath = Path.Combine(GameProgressSaver.BaseSavePath, string.Format("Slot{0}", targetPanel.slotIndex + 1)) + "\\archipelago.json";
                 Data fileData = new Data();
                 using (StreamReader reader = new StreamReader(filePath))

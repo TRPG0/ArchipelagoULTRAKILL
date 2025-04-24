@@ -1,7 +1,6 @@
 from . import UltrakillTestBase
-from ..Items import item_list, group_dict, ItemType
+from ..Items import item_list, fire2_weapons, group_dict, ItemType
 from ..Locations import location_list, LocationType
-from typing import List
 
 
 class TestUnlockLevels(UltrakillTestBase):
@@ -30,44 +29,81 @@ class TestUnlockLayers(UltrakillTestBase):
             self.assertNotIn(item, item_names)
 
 
-class TestBossDisabled(UltrakillTestBase):
-    options = { "boss_rewards": "disabled" }
-    
-    def test_boss_disabled(self) -> None:
-        boss_locations = [l.name for l in location_list if l.type == LocationType.Boss or l.type == LocationType.BossExt]
+class TestNotPerfectGoal(UltrakillTestBase):
+    options = { "perfect_goal": "false" }
+
+
+class TestPerfectGoal(UltrakillTestBase):
+    options = { "perfect_goal": "true" }
+
+
+class TestEnemyDisabled(UltrakillTestBase):
+    options = {
+        "enemy_rewards": "disabled",
+        "skipped_levels": {}
+    }
+
+    def test_enemy_disabled(self) -> None:
+        all_enemy_locations = [l.name for l in location_list if l.type == LocationType.Boss or l.type == LocationType.BossExt or l.type == LocationType.Enemy]
+
+        location_names = [l.name for l in self.multiworld.get_locations()]
+
+        for location in all_enemy_locations:
+            self.assertNotIn(location, location_names)
+
+
+class TestEnemyBosses(UltrakillTestBase):
+    options = {
+        "enemy_rewards": "bosses",
+        "skipped_levels": {}
+    }
+
+    def test_enemy_bosses(self) -> None:
+        boss_locations = [l.name for l in location_list if l.type == LocationType.Boss]
+
+        other_enemy_locations = [l.name for l in location_list if l.type == LocationType.BossExt or l.type == LocationType.Enemy]
 
         location_names = [l.name for l in self.multiworld.get_locations()]
 
         for location in boss_locations:
-            self.assertNotIn(location, location_names)
-
-
-class TestBossStandard(UltrakillTestBase):
-    options = { "boss_rewards": "standard" }
-    
-    def test_boss_standard(self) -> None:
-        standard_locations = [l.name for l in location_list if l.type == LocationType.Boss]
-
-        ext_locations = [l.name for l in location_list if l.type == LocationType.BossExt]
-
-        location_names = [l.name for l in self.multiworld.get_locations()]
-
-        for location in standard_locations:
             self.assertIn(location, location_names)
 
-        for location in ext_locations:
+        for location in other_enemy_locations:
             self.assertNotIn(location, location_names)
 
 
-class TestBossExtended(UltrakillTestBase):
-    options = { "boss_rewards": "extended" }
-    
-    def test_boss_extended(self) -> None:
-        boss_locations = [l.name for l in location_list if l.type == LocationType.Boss or l.type == LocationType.BossExt]
+class TestEnemyExtra(UltrakillTestBase):
+    options = {
+        "enemy_rewards": "extra",
+        "skipped_levels": {}
+    }
+
+    def test_enemy_extra(self) -> None:
+        extra_locations = [l.name for l in location_list if l.type == LocationType.Boss or l.type == LocationType.BossExt]
+
+        other_enemy_locations = [l.name for l in location_list if l.type == LocationType.Enemy]
 
         location_names = [l.name for l in self.multiworld.get_locations()]
 
-        for location in boss_locations:
+        for location in extra_locations:
+            self.assertIn(location, location_names)
+
+        for location in other_enemy_locations:
+            self.assertNotIn(location, location_names)
+
+
+class TestEnemyAll(UltrakillTestBase):
+    options = {
+        "enemy_rewards": "all",
+        "skipped_levels": {}
+    }
+
+    def test_enemy_all(self) -> None:
+        all_enemy_locations = [l.name for l in location_list if l.type == LocationType.Boss or l.type == LocationType.BossExt or l.type == LocationType.Enemy]
+
+        location_names = [l.name for l in self.multiworld.get_locations()]
+
+        for location in all_enemy_locations:
             self.assertIn(location, location_names)
 
 
@@ -276,7 +312,7 @@ class TestStartWeapon(UltrakillTestBase):
 
 
 class TestNotFire2(UltrakillTestBase):
-    options = { "randomize_secondary_fire": "false" }
+    options = { "randomize_secondary_fire": "disabled" }
     
     def test_not_fire2(self) -> None:
         fire2_items = [i.name for i in item_list if i.type == ItemType.Fire2]
@@ -287,8 +323,8 @@ class TestNotFire2(UltrakillTestBase):
             self.assertNotIn(item, item_names)
 
 
-class TestFire2(UltrakillTestBase):
-    options = { "randomize_secondary_fire": "true" }
+class TestFire2Split(UltrakillTestBase):
+    options = { "randomize_secondary_fire": "split" }
     
     def test_fire2(self) -> None:
         fire2_items = [i.name for i in item_list if i.type == ItemType.Fire2]
@@ -297,6 +333,25 @@ class TestFire2(UltrakillTestBase):
 
         for item in fire2_items:
             self.assertIn(item, item_names)
+
+
+class TestFire2Progressive(UltrakillTestBase):
+    options = { "randomize_secondary_fire": "progressive" }
+    
+    def test_fire2(self) -> None:
+        fire2_items = [i.name for i in item_list if i.type == ItemType.Fire2]
+
+        item_names = [i.name for i in self.multiworld.get_items()]
+
+        for item in fire2_items:
+            self.assertNotIn(item, item_names)
+
+        for item in fire2_weapons:
+            if item == self.world.start_weapon:
+                continue
+            self.assertEqual(len([i for i in item_names if i == item]), 2)
+
+        self.assertEqual(len([i for i in item_names if i == self.world.start_weapon]), 1)
 
 
 class TestNotStartArm(UltrakillTestBase):

@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ArchipelagoULTRAKILL.Structures;
+using HarmonyLib;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
@@ -7,7 +8,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Prefix()
         {
-            if (Core.DataExists() && Core.data.bossRewards > 0 && SceneHelper.CurrentLevelNumber == 5)
+            if (Core.DataExists() && !Multiworld.ServerVersionIsAtLeast("3.2.0") && Core.data.enemyRewards > EnemyOptions.Disabled && SceneHelper.CurrentLevelNumber == 5)
             {
                 LocationManager.CheckLocation("5_b");
             }

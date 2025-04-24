@@ -56,22 +56,29 @@ namespace ArchipelagoULTRAKILL.Components
                 UpdateStats();
                 UpdateWeapons();
                 if (CanGetPowerup && CurrentPowerup == Powerup.None && PowerUpMeter.Instance != null) GetQueuedPowerups();
-            }
-        }
-
-        public void GetQueuedItems()
-        {
-            if (LocationManager.itemQueue.Count > 0)
-            {
-                QueuedItem qItem = LocationManager.itemQueue[0];
-                LocationManager.GetUKItem(qItem.item, qItem.sendingPlayer, qItem.silent);
-                LocationManager.itemQueue.RemoveAt(0);
+                if (LocationManager.soapWaiting > 0) SpawnSoap();
             }
         }
 
         public void DisplayMessage()
         {
             if (LocationManager.messages.Count > 0 && !UIManager.displayingMessage) Core.uim.StartCoroutine("DisplayMessage");
+        }
+
+        public static void SpawnSoap()
+        {
+            LocationManager.soapWaiting--;
+            GameObject obj = Instantiate(AssetHelper.LoadPrefab("Assets/Prefabs/Items/Soap.prefab"), NewMovement.Instance.transform);
+            obj.transform.parent = null;
+
+            if (FistControl.Instance.currentPunch != null)
+            {
+                if (FistControl.Instance.currentPunch.type == FistType.Standard && !Core.data.hasArm) return;
+                if (!FistControl.Instance.currentPunch.holding)
+                {
+                    FistControl.Instance.currentPunch.ForceHold(obj.GetComponent<ItemIdentifier>());
+                }
+            }
         }
 
         public void GetQueuedPowerups()
@@ -176,7 +183,7 @@ namespace ArchipelagoULTRAKILL.Components
         public void UpdateWeapons()
         {
             // piercer
-            if (!NoWeaponCooldown.NoCooldown && Core.data.randomizeFire2)
+            if (!NoWeaponCooldown.NoCooldown && Core.data.randomizeFire2 > Fire2Options.Disabled)
             {
                 if ((!Core.data.unlockedFire2.Contains("rev0") || CurrentPowerup == Powerup.EmptyAmmo) && GetHeldWeapon() == "rev0")
                 {

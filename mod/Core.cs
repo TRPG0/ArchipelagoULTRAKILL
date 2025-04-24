@@ -13,6 +13,9 @@ using BepInEx.Logging;
 using System.Reflection;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AddressableAssets.ResourceLocators;
+using System.Collections;
+using TMPro;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -22,7 +25,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.1.5";
+        public const string PluginVersion = "3.2.0";
 
         public static string workingPath;
         public static string workingDir;
@@ -30,6 +33,7 @@ namespace ArchipelagoULTRAKILL
         public static new ManualLogSource Logger { get; } = BepInEx.Logging.Logger.CreateLogSource("Archipelago");
         public static plog.Logger PLogger { get; } = new plog.Logger("Archipelago");
 
+        public static Core Instance { get; private set; }
         public static GameObject obj;
         public static UIManager uim;
 
@@ -76,7 +80,7 @@ namespace ArchipelagoULTRAKILL
             new LevelInfo("7-3", 28, 7, true, MusicType.Special, SkullsType.None),
             new LevelInfo("7-4", 29, 7, false, MusicType.Skip, SkullsType.None),
             new LevelInfo("0-E", 100, 0, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "100_r", "100_b"}),
-            new LevelInfo("1-E", 101, 0, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "101_b", "101_r"}),
+            new LevelInfo("1-E", 101, 1, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "101_b", "101_r"}),
             new LevelInfo("P-1", 666, 3, false, MusicType.Special, SkullsType.None),
             new LevelInfo("P-2", 667, 6, false, MusicType.Special, SkullsType.Normal, new List<string> { "667_b" })
         };
@@ -189,6 +193,8 @@ namespace ArchipelagoULTRAKILL
 
         public void Awake()
         {
+            Instance = this;
+
             Harmony harmony = new Harmony("archipelago");
             harmony.PatchAll();
 
@@ -199,6 +205,18 @@ namespace ArchipelagoULTRAKILL
             ConfigManager.Initialize();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            AsyncOperationHandle<Sprite> asyncHandle1 = Addressables.LoadAssetAsync<Sprite>("Assets/Textures/UI/Controls/Round_VertHandle_Invert 1.png");
+            UIManager.menuSprite1 = asyncHandle1.WaitForCompletion();
+            Addressables.Release(asyncHandle1);
+
+            AsyncOperationHandle<Sprite> asyncHandle2 = Addressables.LoadAssetAsync<Sprite>("Assets/Textures/UI/Controls/Round_BorderLarge.png");
+            UIManager.menuSprite2 = asyncHandle2.WaitForCompletion();
+            Addressables.Release(asyncHandle2);
+
+            AsyncOperationHandle<TMP_FontAsset> asyncHandle3 = Addressables.LoadAssetAsync<TMP_FontAsset>("Assets/Fonts/Terminal/fs-tahoma-8px-v2 SDF.asset");
+            UIManager.fontSecondary = asyncHandle3.WaitForCompletion();
+            Addressables.Release(asyncHandle3);
         }
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -304,6 +322,7 @@ namespace ArchipelagoULTRAKILL
                     data = JsonConvert.DeserializeObject<Data>(reader.ReadToEnd());
                 }
                 Logger.LogInfo("Loaded Archipelago data for slot " + (GameProgressSaver.currentSlot + 1) + ".");
+                LocationManager.RegenerateItemDefinitions();
             }
             else
             {
@@ -317,9 +336,36 @@ namespace ArchipelagoULTRAKILL
             if (File.Exists(filePath)) File.Delete(filePath);
         }
 
+        public static void LockAllWeapons()
+        {
+            GameProgressMoneyAndGear progress = GameProgressSaver.GetGeneralProgress();
+            LocationManager.generalProgress = progress;
+
+            progress.rev0 = 0;
+            progress.rev1 = 0;
+            progress.rev2 = 0;
+            progress.sho0 = 0;
+            progress.sho1 = 0;
+            progress.sho2 = 0;
+            progress.nai0 = 0;
+            progress.nai1 = 0;
+            progress.nai2 = 0;
+            progress.rock0 = 0;
+            progress.rock1 = 0;
+            progress.rock2 = 0;
+
+            SaveGeneralProgress(progress);
+        }
+
+        public static void SaveGeneralProgress(GameProgressMoneyAndGear progress)
+        {
+            Traverse traverse = Traverse.Create(typeof(GameProgressSaver));
+            traverse.Method("WriteFile", new object[] { traverse.Property<string>("generalProgressPath").Value, progress }).GetValue();
+        }
+
         public static bool IsFire2Unlocked(string weapon)
         {
-            if (!data.randomizeFire2) return true;
+            if (data.randomizeFire2 == Fire2Options.Disabled) return true;
             return data.unlockedFire2.Contains(weapon);
         }
 
@@ -379,22 +425,6 @@ namespace ArchipelagoULTRAKILL
             return false;
         }
 
-        public static void SpawnSoap()
-        {
-            LocationManager.soapWaiting = false;
-            GameObject obj = Instantiate(AssetHelper.LoadPrefab("Assets/Prefabs/Items/Soap.prefab"), NewMovement.Instance.transform);
-            obj.transform.parent = null;
-
-            if (FistControl.Instance.currentPunch != null)
-            {
-                if (FistControl.Instance.currentPunch.type == FistType.Standard && !data.hasArm) return;
-                if (!FistControl.Instance.currentPunch.holding)
-                {
-                    FistControl.Instance.currentPunch.ForceHold(obj.GetComponent<ItemIdentifier>());
-                }
-            }
-        }
-
         public static List<string> SearchAssetKeys(string contains)
         {
             List<string> keys = new List<string>();
@@ -446,6 +476,15 @@ namespace ArchipelagoULTRAKILL
                 resetFists = true;
             }
             if (resetFists) FistControl.Instance.ResetFists();
+        }
+
+        public IEnumerator ApplyLoadout(WeaponLoadout loadout)
+        {
+            yield return new WaitUntil(() => 
+                Multiworld.Session.Items.Index == data.index &&
+                LocationManager.itemQueue.Count == 0);
+            loadout.Set();
+            Logger.LogInfo("Set loadout");
         }
     }
 }

@@ -111,6 +111,13 @@ class GoalRequirement(Range):
     default = 15
 
 
+class PerfectGoal(Toggle):
+    """
+    Choose if the goal must be cleared with a perfect rank. Has no effect if the goal level is a secret mission.
+    """
+    display_name = "Perfect Goal"
+
+
 class SkipLevels(OptionSet):
     """
     List as many levels as you would like to skip completing for the goal.
@@ -161,16 +168,21 @@ class TrapWeights(ItemWeights):
     default = {item: 50 for item in group_dict["trap"]}
 
 
-class BossRewards(Choice):
+class EnemyRewards(Choice):
     """
-    Adds rewards for defeating the bosses in the final level of each layer.
+    Adds rewards for defeating enemies and unlocking terminal entries.
 
-    \"Extended\" also adds rewards for some optional bosses.
+    Bosses: Only includes bosses at the end of each act and in Prime Sanctums.
+
+    Extra: Also includes some additional bosses that usually only appear once.
+
+    All: Includes all bosses and enemies.
     """
-    display_name = "Boss Rewards"
+    display_name = "Enemy Rewards"
     option_disabled = 0
-    option_standard = 1
-    option_extended = 2
+    option_bosses = 1
+    option_extra = 2
+    option_all = 3
     default = 0
 
 
@@ -249,11 +261,19 @@ class StartingWeaponPool(ItemWeights):
     default = {item: 50 for item in group_dict["start_weapons"]}
 
 
-class RandomizeFire2(Toggle):
+class RandomizeFire2(Choice):
     """
     Locks the ability to use a weapon's alternate fire behind items that must be found in the multiworld.
+
+    Split: Separate items will be created for each weapon and secondary fire.
+
+    Progressive: Two items will be created for each weapon, the first item found will unlock the weapon, and the second will unlock the secondary fire.
     """
     display_name = "Randomize Secondary Fire"
+    option_disabled = 0
+    option_split = 1
+    option_progressive = 2
+    default = 0
 
 
 class StartWithArm(DefaultOnToggle):
@@ -423,13 +443,14 @@ class UltrakillOptions(PerGameCommonOptions):
     start_level: StartLevel
     goal_level: GoalLevel
     goal_requirement: GoalRequirement
+    perfect_goal: PerfectGoal
     skipped_levels: SkipLevels
     auto_exclude_skipped_locations: AutoExcludeSkip
     unlock_type: UnlockType
     trap_percent: TrapPercent
     filler_weights: FillerWeights
     trap_weights: TrapWeights
-    boss_rewards: BossRewards
+    enemy_rewards: EnemyRewards
     challenge_rewards: Challenges
     p_rank_rewards: PRanks
     hank_rewards: HankRewards
@@ -460,4 +481,5 @@ class UltrakillOptions(PerGameCommonOptions):
 
     goal: Removed
     include_secret_mission_completion: Removed
+    boss_rewards: Removed
     starting_weapon: Removed

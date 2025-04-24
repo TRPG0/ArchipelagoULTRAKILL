@@ -59,11 +59,12 @@
         Sandstorm
     }
 
-    public enum BossOptions
+    public enum EnemyOptions
     {
         Disabled,
-        Standard,
-        Extended
+        Bosses,
+        Extra,
+        All
     }
 
     public enum ColorOptions
@@ -77,5 +78,19 @@
     {
         Standard,
         Alternate
+    }
+
+    public enum Fire2Options
+    {
+        Disabled,
+        Split,
+        Progressive
+    }
+
+    public enum LogFont
+    {
+        Pixel1,
+        Pixel2,
+        SansSerif
     }
 }

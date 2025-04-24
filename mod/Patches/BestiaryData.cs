@@ -28,8 +28,21 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists() && newState >= 2)
             {
-                if (standard.Contains(enemy) && Core.data.bossRewards > BossOptions.Disabled) LocationManager.CheckLocation(StatsManager.Instance.levelNumber.ToString() + "_b");
-                if (extended.Contains(enemy) && Core.data.bossRewards == BossOptions.Extended) LocationManager.CheckLocation(StatsManager.Instance.levelNumber.ToString() + "_b");
+                if (Multiworld.ServerVersionIsAtLeast("3.2.0") && Core.data.enemyRewards > EnemyOptions.Disabled)
+                {
+                    if ((enemy == EnemyType.V2 && StatsManager.Instance.levelNumber != 9)
+                        || (enemy == EnemyType.Gabriel && StatsManager.Instance.levelNumber != 15)
+                        || (enemy == EnemyType.Centaur && StatsManager.Instance.levelNumber != 29))
+                        return;
+
+                    string location = $"e_{enemy.ToString().ToLower()}";
+                    if (!Core.data.@checked.Contains(location)) LocationManager.CheckLocation(location);
+                }
+                else
+                {
+                    if (standard.Contains(enemy) && Core.data.enemyRewards > EnemyOptions.Disabled) LocationManager.CheckLocation(StatsManager.Instance.levelNumber.ToString() + "_b");
+                    if (extended.Contains(enemy) && Core.data.enemyRewards >= EnemyOptions.Extra) LocationManager.CheckLocation(StatsManager.Instance.levelNumber.ToString() + "_b");
+                }
             }
         }
     }

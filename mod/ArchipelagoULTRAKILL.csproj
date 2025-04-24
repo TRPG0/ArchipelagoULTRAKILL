@@ -321,6 +321,7 @@
     <Compile Include="Commands\Say.cs" />
     <Compile Include="Commands\Disconnect.cs" />
     <Compile Include="Commands\Connect.cs" />
+    <Compile Include="Components\RecentContainer.cs" />
     <Compile Include="Components\DeathLinkMessage.cs" />
     <Compile Include="Components\Fire2HUD.cs" />
     <Compile Include="Components\FirstLevelSetup.cs" />
@@ -331,6 +332,7 @@
     <Compile Include="Components\PlayerHelper.cs" />
     <Compile Include="Components\ReverseDoorCloser.cs" />
     <Compile Include="Components\RocketRaceCheck.cs" />
+    <Compile Include="Components\ShopAutoHint.cs" />
     <Compile Include="Components\SkullIcon.cs" />
     <Compile Include="Components\SwitchIcon.cs" />
     <Compile Include="Components\VariationOnEnable.cs" />
@@ -400,12 +402,15 @@
     <Compile Include="Structures\AItem.cs" />
     <Compile Include="Structures\APItem.cs" />
     <Compile Include="Structures\Colors.cs" />
+    <Compile Include="Structures\ItemDefinition.cs" />
     <Compile Include="Structures\LevelInfo.cs" />
     <Compile Include="Structures\Message.cs" />
     <Compile Include="Structures\QueuedItem.cs" />
     <Compile Include="Structures\RawLocationData.cs" />
     <Compile Include="Structures\Location.cs" />
     <Compile Include="Structures\Enums.cs" />
+    <Compile Include="Structures\RecentItem.cs" />
+    <Compile Include="Structures\RecentLocation.cs" />
     <Compile Include="Structures\UKItem.cs" />
     <Compile Include="UIManager.cs" />
     <Compile Include="VersionChecker.cs" />

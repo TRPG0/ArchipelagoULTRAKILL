@@ -11,7 +11,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix(WeaponHUD __instance)
         {
-            if (Core.DataExists() && Core.data.randomizeFire2) __instance.gameObject.AddComponent<Fire2HUD>(); 
+            if (Core.DataExists() && Core.data.randomizeFire2 > Fire2Options.Disabled) __instance.gameObject.AddComponent<Fire2HUD>(); 
         }
     }
 

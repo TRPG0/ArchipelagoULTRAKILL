@@ -1,4 +1,5 @@
 ﻿using ArchipelagoULTRAKILL.Components;
+using ArchipelagoULTRAKILL.Structures;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix(HudController __instance)
         {
-            if (Core.DataExists() && Core.data.randomizeFire2 && Fire2HUD.Instance != null)
+            if (Core.DataExists() && Core.data.randomizeFire2 > Fire2Options.Disabled && Fire2HUD.Instance != null)
             {
                 if (Fire2HUD.Instance.alt1shadow != null || Fire2HUD.Instance.alt2shadow != null) return;
 

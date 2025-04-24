@@ -18,6 +18,7 @@ class LocationType(Enum):
     Chess = 10
     Rocket = 11
     Hank = 12
+    Enemy = 13
 
 
 @dataclass
@@ -68,7 +69,6 @@ location_list: List[UKLocation] = [
     UKLocation("0-4: Perfect Rank", Regions.l4, "4_p", LocationType.PerfectRank),
 
     # 0-5: CERBERUS
-    UKLocation("0-5: Defeat the Cerberi", Regions.l5, "5_b", LocationType.Boss),
     UKLocation("0-5: Don't inflict fatal damage to any enemy", Regions.l5, "5_c", LocationType.Challenge),
     UKLocation("0-5: Perfect Rank", Regions.l5, "5_p", LocationType.PerfectRank),
 
@@ -90,7 +90,6 @@ location_list: List[UKLocation] = [
     UKLocation("1-2: Secret #4", Regions.l7, "7_s4", LocationType.Normal),
     UKLocation("1-2: Secret #5", Regions.l7, "7_s5", LocationType.Normal),
     UKLocation("1-2: Switch", Regions.l7, "7_sw", LocationType.LimboSwitch),
-    UKLocation("1-2: Defeat the Very Cancerous Rodent", Regions.l7, "7_b", LocationType.BossExt),
     UKLocation("1-2: Do not pick up any skulls", Regions.l7, "7_c", LocationType.Challenge),
     UKLocation("1-2: Perfect Rank", Regions.l7, "7_p", LocationType.PerfectRank),
 
@@ -109,7 +108,6 @@ location_list: List[UKLocation] = [
     UKLocation("1-4: Assemble Hank", Regions.l9, "9_ha", LocationType.Hank),
     UKLocation("1-4: V2's Arm", Regions.l9, "9_w1", LocationType.Normal),
     UKLocation("1-4: Secret Weapon", Regions.l9, "9_w2", LocationType.Normal),
-    UKLocation("1-4: Defeat V2", Regions.l9, "9_b", LocationType.Boss),
     UKLocation("1-4: Do not pick up any skulls", Regions.l9, "9_c", LocationType.Challenge),
     UKLocation("1-4: Perfect Rank", Regions.l9, "9_p", LocationType.PerfectRank),
 
@@ -142,7 +140,6 @@ location_list: List[UKLocation] = [
     UKLocation("2-3: Perfect Rank", Regions.l12, "12_p", LocationType.PerfectRank),
 
     # 2-4: COURT OF THE CORPSE KING
-    UKLocation("2-4: Defeat the Corpse of King Minos", Regions.l13, "13_b", LocationType.Boss),
     UKLocation("2-4: Parry a punch", Regions.l13, "13_c", LocationType.Challenge),
     UKLocation("2-4: Perfect Rank", Regions.l13, "13_p", LocationType.PerfectRank),
 
@@ -156,7 +153,6 @@ location_list: List[UKLocation] = [
     UKLocation("3-1: Perfect Rank", Regions.l14, "14_p", LocationType.PerfectRank),
 
     # 3-2: IN THE FLESH
-    UKLocation("3-2: Defeat Gabriel", Regions.l15, "15_b", LocationType.Boss),
     UKLocation("3-2: Drop Gabriel in a pit", Regions.l15, "15_c", LocationType.Challenge),
     UKLocation("3-2: Perfect Rank", Regions.l15, "15_p", LocationType.PerfectRank),
 
@@ -187,14 +183,12 @@ location_list: List[UKLocation] = [
     UKLocation("4-3: Secret #3", Regions.l18, "18_s3", LocationType.Normal),
     UKLocation("4-3: Secret #4", Regions.l18, "18_s4", LocationType.Normal),
     UKLocation("4-3: Secret #5", Regions.l18, "18_s5", LocationType.Normal),
-    UKLocation("4-3: Defeat the Mysterious Druid Knight (& Owl)", Regions.l18, "18_b", LocationType.BossExt),
     UKLocation("4-3: Don't pick up the torch", Regions.l18, "18_c", LocationType.Challenge),
     UKLocation("4-3: Perfect Rank", Regions.l18, "18_p", LocationType.PerfectRank),
 
     # 4-4: CLAIR DE SOLEIL
     UKLocation("4-4: V2's Other Arm", Regions.l19, "19_w1", LocationType.Normal),
     UKLocation("4-4: Secret Weapon", Regions.l19, "19_w2", LocationType.Normal),
-    UKLocation("4-4: Defeat V2", Regions.l19, "19_b", LocationType.Boss),
     UKLocation("4-4: Reach the boss room in 18 seconds", Regions.l19, "19_c", LocationType.Challenge),
     UKLocation("4-4: Perfect Rank", Regions.l19, "19_p", LocationType.PerfectRank),
 
@@ -242,7 +236,6 @@ location_list: List[UKLocation] = [
     UKLocation("5-3: Perfect Rank", Regions.l22, "22_p", LocationType.PerfectRank),
 
     # 5-4: LEVIATHAN
-    UKLocation("5-4: Defeat the Leviathan", Regions.l23, "23_b", LocationType.Boss),
     UKLocation("5-4: Reach the surface in under 10 seconds", Regions.l23, "23_c", LocationType.Challenge),
     UKLocation("5-4: Perfect Rank", Regions.l22, "23_p", LocationType.PerfectRank),
 
@@ -256,7 +249,6 @@ location_list: List[UKLocation] = [
     UKLocation("6-1: Perfect Rank", Regions.l24, "24_p", LocationType.PerfectRank),
 
     # 6-2: AESTHETICS OF HATE
-    UKLocation("6-2: Defeat Gabriel", Regions.l25, "25_b", LocationType.Boss),
     UKLocation("6-2: Hit Gabriel into the ceiling", Regions.l25, "25_c", LocationType.Challenge),
     UKLocation("6-2: Perfect Rank", Regions.l25, "25_p", LocationType.PerfectRank),
 
@@ -299,7 +291,6 @@ location_list: List[UKLocation] = [
     UKLocation("7-S: Cleaned Side Room", Regions.s7, "clean4", LocationType.Clean),
 
     # 7-4: ...LIKE ANTENNAS TO HEAVEN
-    UKLocation('7-4: Defeat 1000-THR "Earthmover"', Regions.l29, "29_b", LocationType.Boss),
     UKLocation("7-4: Don't fight the security system", Regions.l29, "29_c", LocationType.Challenge),
     UKLocation("7-4: Perfect Rank", Regions.l29, "29_p", LocationType.PerfectRank),
 
@@ -322,6 +313,42 @@ location_list: List[UKLocation] = [
     UKLocation("Shop: Buy Railcannon Variant 2", Regions.shop, "shop_rai2", LocationType.Normal),
     UKLocation("Shop: Buy Rocket Launcher Variant 1", Regions.shop, "shop_rock1", LocationType.Normal),
     UKLocation("Shop: Buy Rocket Launcher Variant 2", Regions.shop, "shop_rock2", LocationType.Normal),
+
+    # Enemies
+    UKLocation("Enemy: Filth", Regions.shop, "e_filth", LocationType.Enemy),
+    UKLocation("Enemy: Stray", Regions.shop, "e_stray", LocationType.Enemy),
+    UKLocation("Enemy: Schism", Regions.shop, "e_schism", LocationType.Enemy),
+    UKLocation("Enemy: Soldier", Regions.shop, "e_soldier", LocationType.Enemy),
+    UKLocation("Boss: The Corpse of King Minos", Regions.l13, "e_minos", LocationType.Boss),
+    UKLocation("Enemy: Stalker", Regions.shop, "e_stalker", LocationType.Enemy),
+    UKLocation("Enemy: Insurrectionist", Regions.shop, "e_sisyphus", LocationType.Enemy),
+    UKLocation("Boss: Ferryman", Regions.shop, "e_ferryman", LocationType.BossExt),
+    UKLocation("Enemy: Swordsmachine", Regions.shop, "e_swordsmachine", LocationType.Enemy),
+    UKLocation("Enemy: Drone", Regions.shop, "e_drone", LocationType.Enemy),
+    UKLocation("Enemy: Streetcleaner", Regions.shop, "e_streetcleaner", LocationType.Enemy),
+    UKLocation("Boss: V2", Regions.l9, "e_v2", LocationType.Boss),
+    UKLocation("Enemy: Mindflayer", Regions.shop, "e_mindflayer", LocationType.Enemy),
+    UKLocation("Boss: V2 (2nd)", Regions.l19, "e_v2second", LocationType.Boss),
+    UKLocation("Enemy: Sentry", Regions.shop, "e_turret", LocationType.Enemy),
+    UKLocation("Enemy: Gutterman", Regions.shop, "e_gutterman", LocationType.Enemy),
+    UKLocation("Enemy: Guttertank", Regions.shop, "e_guttertank", LocationType.Enemy),
+    UKLocation("Boss: Earthmover", Regions.l29, "e_centaur", LocationType.Boss),
+    UKLocation("Enemy: Malicious Face", Regions.shop, "e_maliciousface", LocationType.Enemy),
+    UKLocation("Enemy: Cerberus", Regions.shop, "e_cerberus", LocationType.Enemy),
+    UKLocation("Boss: Hideous Mass", Regions.shop, "e_hideousmass", LocationType.BossExt),
+    UKLocation("Enemy: Idol", Regions.shop, "e_idol", LocationType.Enemy),
+    UKLocation("Boss: Leviathan", Regions.l23, "e_leviathan", LocationType.Boss),
+    UKLocation("Enemy: Mannequin", Regions.shop, "e_mannequin", LocationType.Enemy),
+    UKLocation("Boss: Minotaur", Regions.l26, "e_minotaur", LocationType.BossExt),
+    UKLocation("Boss: Gabriel, Judge of Hell", Regions.l15, "e_gabriel", LocationType.Boss),
+    UKLocation("Enemy: Virtue", Regions.shop, "e_virtue", LocationType.Enemy),
+    UKLocation("Boss: Gabriel, Apostate of Hate", Regions.l25, "e_gabrielsecond", LocationType.Boss),
+    UKLocation("Boss: Flesh Prison", Regions.p1, "e_fleshprison", LocationType.Boss),
+    UKLocation("Boss: Flesh Panopticon", Regions.p2, "e_fleshpanopticon", LocationType.Boss),
+    UKLocation("Boss: Minos Prime", Regions.p1, "e_minosprime", LocationType.Boss),
+    UKLocation("Boss: Sisyphus Prime", Regions.p2, "e_sisyphusprime", LocationType.Boss),
+    UKLocation("Boss: Very Cancerous Rodent", Regions.l8, "e_verycancerousrodent", LocationType.BossExt),
+    UKLocation("Boss: Mysterious Druid Knight (& Owl)", Regions.l18, "e_mandalore", LocationType.BossExt),
 
     # Misc
     UKLocation("Museum: Win chess", Regions.museum, "chess", LocationType.Chess),

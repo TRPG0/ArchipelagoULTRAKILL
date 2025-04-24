@@ -12,6 +12,8 @@ namespace ArchipelagoULTRAKILL
         public string slot_name;
         public string password;
         public HashSet<string> @checked = new HashSet<string>();
+        public int playerCount = 1;
+        public List<RecentLocation> recentLocations = new List<RecentLocation>();
 
         public HashSet<string> unlockedLevels = new HashSet<string>();
         public HashSet<string> unlockedSecrets = new HashSet<string>();
@@ -21,7 +23,8 @@ namespace ArchipelagoULTRAKILL
         public string start = "0-1";
         public string goal = "6-2";
         public int goalRequirement = 20;
-        public BossOptions bossRewards = BossOptions.Disabled;
+        public bool perfectGoal = false;
+        public EnemyOptions enemyRewards = EnemyOptions.Disabled;
         public bool challengeRewards = false;
         public bool pRankRewards = false;
         public bool hankRewards = false;
@@ -49,7 +52,7 @@ namespace ArchipelagoULTRAKILL
         public bool naistd = true;
         public bool naialt = false;
 
-        public bool randomizeFire2 = false;
+        public Fire2Options randomizeFire2 = Fire2Options.Disabled;
         public HashSet<string> unlockedFire2 = new HashSet<string>();
 
         public bool randomizeSkulls = false;
@@ -71,7 +74,9 @@ namespace ArchipelagoULTRAKILL
 
         public override string ToString()
         {
-            if (!slot_name.IsNullOrWhiteSpace()) return $"Slot {GameProgressSaver.currentSlot + 1} | {slot_name} | {@checked.Count} locations checked.";
+            if (!slot_name.IsNullOrWhiteSpace()) return @checked.Count == 1
+                    ? $"Slot {GameProgressSaver.currentSlot + 1} | {slot_name} | {@checked.Count} location checked."
+                    : $"Slot {GameProgressSaver.currentSlot + 1} | {slot_name} | {@checked.Count} locations checked.";
             return "No data for current slot.";
         }
     }

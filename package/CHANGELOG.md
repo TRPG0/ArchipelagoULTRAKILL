@@ -1,3 +1,21 @@
+## 3.2.0
+
+Happy 2 years of ULTRAKILL randomizer! :)
+
+- Revamped many item icons.
+- Added an option to require the goal to be completed with a perfect rank.
+- Added an option for secondary fires to unlock progressively.
+- Added an option to unlock rewards when killing each enemy listed in the terminal for the first time.
+	- Removed the "boss rewards" option.
+- Added lists of recent locations and recent items to the pause menu. Both can be disabled in the options.
+- The opacity and font used for the log at the bottom of the screen can now be changed.
+- Shops now have icons of the item to be purchased.
+- Shop items will now be automatically hinted when viewed for the first time.
+- Weapons are no longer re-equipped every time when reconnecting.
+- Fixed soap sometimes not spawning properly.
+- Fixed main menu text not displaying during a holiday.
+- Save slots with randomizer data but no actual save data can now be properly deleted in game.
+
 ## 3.1.5
 
 - Fixed encore item colors not being assigned correctly.

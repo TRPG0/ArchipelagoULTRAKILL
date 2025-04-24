@@ -40,8 +40,9 @@ namespace ArchipelagoULTRAKILL.Patches
                     {
                         if (Core.CurrentLevelInfo.Name == Core.data.goal)
                         {
-                            Core.Logger.LogInfo("Goal completed!");
-                            Multiworld.SendCompletion();
+                            if (!Core.data.perfectGoal
+                                || Core.data.perfectGoal && Core.data.goal.Contains("S")) 
+                                Multiworld.SendCompletion();
                         }
                         else
                         {

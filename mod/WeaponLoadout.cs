@@ -85,7 +85,8 @@
             PrefsManager.Instance.SetInt("weapon.rock1", (int)rock1);
             PrefsManager.Instance.SetInt("weapon.rock2", (int)rock2);
 
-            PrefsManager.Instance.SetInt("weapon.arm0", (int)arm0);
+            if (Core.data.hasArm) PrefsManager.Instance.SetInt("weapon.arm0", (int)arm0);
+            else PrefsManager.Instance.SetInt("weapon.arm0", 1);
             PrefsManager.Instance.SetInt("weapon.arm1", (int)arm1);
             PrefsManager.Instance.SetInt("weapon.arm2", (int)arm2);
         }

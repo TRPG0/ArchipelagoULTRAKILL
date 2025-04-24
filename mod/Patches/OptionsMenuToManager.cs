@@ -9,6 +9,7 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists())
             {
+                if (Core.IsInLevel && SceneHelper.CurrentScene != "Main Menu") UIManager.CreatePauseRecents(__instance.pauseMenu);
                 if (Core.CurrentLevelHasSkulls) UIManager.CreatePauseSkullIcons(__instance.pauseMenu);
                 if (Core.CurrentLevelHasSwitches) UIManager.CreatePauseSwitchIcons(__instance.pauseMenu);
             }

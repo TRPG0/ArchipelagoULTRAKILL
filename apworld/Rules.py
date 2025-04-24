@@ -21,6 +21,10 @@ class UltrakillRules:
         player = self.world.player
         options = self.world.options
 
+        def can_reach_level(state: CollectionState, short_name: str) -> bool:
+            full_name: str = Regions.get_from_short_name(short_name).full_name
+            return state.can_reach_region(full_name, player) if short_name not in options.skipped_levels.value else False
+
         def stamina(state: CollectionState, needs: int) -> bool:
             bars: int = needs - options.starting_stamina.value
             return True if bars <= 0 else state.has("Stamina Bar", player, bars)
@@ -49,24 +53,45 @@ class UltrakillRules:
         
         def revstd0_fire2(state: CollectionState) -> bool:
             """Revolver - Piercer"""
-            return (
-                revstd0(state)
-                and state.has("Secondary Fire - Piercer", player)
-            ) if options.randomize_secondary_fire else revstd0(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    revstd0(state)
+                    and state.has("Secondary Fire - Piercer", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    revstd0(state)
+                    and state.has("Revolver - Piercer", player, 2)
+                )
+            return revstd0(state)
         
         def revalt0_fire2(state: CollectionState) -> bool:
             """Revolver - Piercer"""
-            return (
-                revalt0(state)
-                and state.has("Secondary Fire - Piercer", player)
-            ) if options.randomize_secondary_fire else revalt0(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    revalt0(state)
+                    and state.has("Secondary Fire - Piercer", player)
+                )
+            elif options.randomize_secondary_fire == "progressive": 
+                return (
+                    revalt0(state)
+                    and state.has("Revolver - Piercer", player, 2)
+                )
+            return revalt0(state)
         
         def revany0_fire2(state: CollectionState) -> bool:
             """Revolver - Piercer"""
-            return (
-                revany0(state)
-                and state.has("Secondary Fire - Piercer", player)
-            ) if options.randomize_secondary_fire else revany0(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    revany0(state)
+                    and state.has("Secondary Fire - Piercer", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    revany0(state)
+                    and state.has("Revolver - Piercer", player, 2)
+                )
+            return revany0(state)
         
         def revstd1(state: CollectionState) -> bool:
             """Revolver - Sharpshooter"""
@@ -82,24 +107,45 @@ class UltrakillRules:
         
         def revstd1_fire2(state: CollectionState) -> bool:
             """Revolver - Sharpshooter"""
-            return (
-                revstd1(state)
-                and state.has("Secondary Fire - Sharpshooter", player)
-            ) if options.randomize_secondary_fire else revstd1(state)
+            if options.randomize_secondary_fire == "split": 
+                return (
+                    revstd1(state)
+                    and state.has("Secondary Fire - Sharpshooter", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    revstd1(state)
+                    and state.has("Revolver - Sharpshooter", player, 2)
+                )
+            return revstd1(state)
 
         def revalt1_fire2(state: CollectionState) -> bool:
             """Revolver - Sharpshooter"""
-            return (
-                revalt1(state)
-                and state.has("Secondary Fire - Sharpshooter", player)
-            ) if options.randomize_secondary_fire else revalt1(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    revalt1(state)
+                    and state.has("Secondary Fire - Sharpshooter", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    revalt1(state)
+                    and state.has("Revolver - Sharpshooter", player, 2)
+                )
+            return revalt1(state)
 
         def revany1_fire2(state: CollectionState) -> bool:
             """Revolver - Sharpshooter"""
-            return (
-                revany1(state)
-                and state.has("Secondary Fire - Sharpshooter", player)
-            ) if options.randomize_secondary_fire else revany1(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    revany1(state)
+                    and state.has("Secondary Fire - Sharpshooter", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    revany1(state)
+                    and state.has("Revolver - Sharpshooter", player, 2)
+                )
+            return revany1(state)
 
         def revstd2(state: CollectionState) -> bool:
             """Revolver - Marksman"""
@@ -115,24 +161,45 @@ class UltrakillRules:
         
         def revstd2_fire2(state: CollectionState) -> bool:
             """Revolver - Marksman"""
-            return (
-                revstd2(state)
-                and state.has("Secondary Fire - Marksman", player)
-            ) if options.randomize_secondary_fire else revstd2(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    revstd2(state)
+                    and state.has("Secondary Fire - Marksman", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    revstd2(state)
+                    and state.has("Revolver - Marksman", player, 2)
+                )
+            return revstd2(state)
         
         def revalt2_fire2(state: CollectionState) -> bool:
             """Revolver - Marksman"""
-            return (
-                revalt2(state)
-                and state.has("Secondary Fire - Marksman", player)
-            ) if options.randomize_secondary_fire else revalt2(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    revalt2(state)
+                    and state.has("Secondary Fire - Marksman", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    revalt2(state)
+                    and state.has("Revolver - Marksman", player, 2)
+                )
+            return revalt2(state)
         
         def revany2_fire2(state: CollectionState) -> bool:
             """Revolver - Marksman"""
-            return (
-                revany2(state)
-                and state.has("Secondary Fire - Marksman", player)
-            ) if options.randomize_secondary_fire else revany2(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    revany2(state)
+                    and state.has("Secondary Fire - Marksman", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    revany2(state)
+                    and state.has("Revolver - Marksman", player, 2)
+                )
+            return revany2(state)
 
         def revstd_any(state: CollectionState) -> bool:
             return state.has_any({"Revolver - Piercer", "Revolver - Sharpshooter", "Revolver - Marksman"}, player) if not options.revolver_form else (
@@ -163,24 +230,45 @@ class UltrakillRules:
 
         def shostd0_fire2(state: CollectionState) -> bool:
             """Shotgun - Core Eject"""
-            return (
-                shostd0(state)
-                and state.has("Secondary Fire - Core Eject", player)
-            ) if options.randomize_secondary_fire else shostd0(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    shostd0(state)
+                    and state.has("Secondary Fire - Core Eject", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    shostd0(state)
+                    and state.has("Shotgun - Core Eject", player, 2)
+                )
+            return shostd0(state)
 
         def shoalt0_fire2(state: CollectionState) -> bool:
             """Shotgun - Core Eject"""
-            return (
-                shoalt0(state)
-                and state.has("Secondary Fire - Core Eject", player)
-            ) if options.randomize_secondary_fire else shoalt0(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    shoalt0(state)
+                    and state.has("Secondary Fire - Core Eject", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    shoalt0(state)
+                    and state.has("Shotgun - Core Eject", player, 2)
+                )
+            return shoalt0(state)
         
         def shoany0_fire2(state: CollectionState) -> bool:
             """Shotgun - Core Eject"""
-            return (
-                shoany0(state)
-                and state.has("Secondary Fire - Core Eject", player)
-            ) if options.randomize_secondary_fire else shoany0(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    shoany0(state)
+                    and state.has("Secondary Fire - Core Eject", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    shoany0(state)
+                    and state.has("Shotgun - Core Eject", player, 2)
+                )
+            return shoany0(state)
 
         def shostd1(state: CollectionState) -> bool:
             """Shotgun - Pump Charge"""
@@ -196,24 +284,45 @@ class UltrakillRules:
 
         def shostd1_fire2(state: CollectionState) -> bool:
             """Shotgun - Pump Charge"""
-            return (
-                shostd1(state)
-                and state.has("Secondary Fire - Pump Charge", player)
-            ) if options.randomize_secondary_fire else shostd1(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    shostd1(state)
+                    and state.has("Secondary Fire - Pump Charge", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    shostd1(state)
+                    and state.has("Shotgun - Pump Charge", player, 2)
+                )
+            return shostd1(state)
         
         def shoalt1_fire2(state: CollectionState) -> bool:
             """Shotgun - Pump Charge"""
-            return (
-                shoalt1(state)
-                and state.has("Secondary Fire - Pump Charge", player)
-            ) if options.randomize_secondary_fire else shoalt1(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    shoalt1(state)
+                    and state.has("Secondary Fire - Pump Charge", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    shoalt1(state)
+                    and state.has("Shotgun - Pump Charge", player, 2)
+                )
+            return shoalt1(state)
         
         def shoany1_fire2(state: CollectionState) -> bool:
             """Shotgun - Pump Charge"""
-            return (
-                shoany1(state)
-                and state.has("Secondary Fire - Pump Charge", player)
-            ) if options.randomize_secondary_fire else shoany1(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    shoany1(state)
+                    and state.has("Secondary Fire - Pump Charge", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    shoany1(state)
+                    and state.has("Shotgun - Pump Charge", player, 2)
+                )
+            return shoany1(state)
 
         def shostd2(state: CollectionState) -> bool:
             """Shotgun - Sawed-On"""
@@ -229,24 +338,45 @@ class UltrakillRules:
 
         def shostd2_fire2(state: CollectionState) -> bool:
             """Shotgun - Sawed-On"""
-            return (
-                shostd2(state)
-                and state.has("Secondary Fire - Sawed-On", player)
-            ) if options.randomize_secondary_fire else shostd2(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    shostd2(state)
+                    and state.has("Secondary Fire - Sawed-On", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    shostd2(state)
+                    and state.has("Shotgun - Sawed-On", player, 2)
+                )
+            return shostd2(state)
         
         def shoalt2_fire2(state: CollectionState) -> bool:
             """Shotgun - Sawed-On"""
-            return (
-                shoalt2(state)
-                and state.has("Secondary Fire - Sawed-On", player)
-            ) if options.randomize_secondary_fire else shoalt2(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    shoalt2(state)
+                    and state.has("Secondary Fire - Sawed-On", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    shoalt2(state)
+                    and state.has("Shotgun - Sawed-On", player, 2)
+                )
+            return shoalt2(state)
 
         def shoany2_fire2(state: CollectionState) -> bool:
             """Shotgun - Sawed-On"""
-            return (
-                shoany2(state)
-                and state.has("Secondary Fire - Sawed-On", player)
-            ) if options.randomize_secondary_fire else shoany2(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    shoany2(state)
+                    and state.has("Secondary Fire - Sawed-On", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    shoany2(state)
+                    and state.has("Shotgun - Sawed-On", player, 2)
+                )
+            return shoany2(state)
         
         def shostd_any(state: CollectionState) -> bool:
             return state.has_any({"Shotgun - Core Eject", "Shotgun - Pump Charge", "Shotgun - Sawed-On"}, player) if not options.shotgun_form else (
@@ -277,24 +407,45 @@ class UltrakillRules:
         
         def naistd0_fire2(state: CollectionState) -> bool:
             """Nailgun - Attractor"""
-            return (
-                naistd0(state)
-                and state.has("Secondary Fire - Attractor", player)
-            ) if options.randomize_secondary_fire else naistd0(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    naistd0(state)
+                    and state.has("Secondary Fire - Attractor", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    naistd0(state)
+                    and state.has("Nailgun - Attractor", player, 2)
+                )
+            return naistd0(state)
         
         def naialt0_fire2(state: CollectionState) -> bool:
             """Nailgun - Attractor"""
-            return (
-                naialt0(state)
-                and state.has("Secondary Fire - Attractor", player)
-            ) if options.randomize_secondary_fire else naialt0(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    naialt0(state)
+                    and state.has("Secondary Fire - Attractor", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    naialt0(state)
+                    and state.has("Nailgun - Attractor", player, 2)
+                )
+            return naialt0(state)
         
         def naiany0_fire2(state: CollectionState) -> bool:
             """Nailgun - Attractor"""
-            return (
-                naiany0(state)
-                and state.has("Secondary Fire - Attractor", player)
-            ) if options.randomize_secondary_fire else naiany0(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    naiany0(state)
+                    and state.has("Secondary Fire - Attractor", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    naiany0(state)
+                    and state.has("Nailgun - Attractor", player, 2)
+                )
+            return naiany0(state)
 
         def naistd1(state: CollectionState) -> bool:
             """Nailgun - Overheat"""
@@ -310,24 +461,45 @@ class UltrakillRules:
         
         def naistd1_fire2(state: CollectionState) -> bool:
             """Nailgun - Overheat"""
-            return (
-                naistd1(state)
-                and state.has("Secondary Fire - Overheat", player)
-            ) if options.randomize_secondary_fire else naistd1(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    naistd1(state)
+                    and state.has("Secondary Fire - Overheat", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    naistd1(state)
+                    and state.has("Nailgun - Overheat", player, 2)
+                )
+            return naistd1(state)
         
         def naialt1_fire2(state: CollectionState) -> bool:
             """Nailgun - Overheat"""
-            return (
-                naialt1(state)
-                and state.has("Secondary Fire - Overheat", player)
-            ) if options.randomize_secondary_fire else naialt1(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    naialt1(state)
+                    and state.has("Secondary Fire - Overheat", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    naialt1(state)
+                    and state.has("Nailgun - Overheat", player, 2)
+                )
+            return naialt1(state)
         
         def naiany1_fire2(state: CollectionState) -> bool:
             """Nailgun - Overheat"""
-            return (
-                naiany1(state)
-                and state.has("Secondary Fire - Overheat", player)
-            ) if options.randomize_secondary_fire else naiany1(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    naiany1(state)
+                    and state.has("Secondary Fire - Overheat", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    naiany1(state)
+                    and state.has("Nailgun - Overheat", player, 2)
+                )
+            return naiany1(state)
 
         def naistd2(state: CollectionState) -> bool:
             """Nailgun - JumpStart"""
@@ -343,24 +515,45 @@ class UltrakillRules:
         
         def naistd2_fire2(state: CollectionState) -> bool:
             """Nailgun - JumpStart"""
-            return (
-                naistd2(state)
-                and state.has("Secondary Fire - JumpStart", player)
-            ) if options.randomize_secondary_fire else naistd2(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    naistd2(state)
+                    and state.has("Secondary Fire - JumpStart", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    naistd2(state)
+                    and state.has("Nailgun - JumpStart", player, 2)
+                )
+            return naistd2(state)
         
         def naialt2_fire2(state: CollectionState) -> bool:
             """Nailgun - JumpStart"""
-            return (
-                naialt2(state)
-                and state.has("Secondary Fire - JumpStart", player)
-            ) if options.randomize_secondary_fire else naialt2(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    naialt2(state)
+                    and state.has("Secondary Fire - JumpStart", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    naialt2(state)
+                    and state.has("Nailgun - JumpStart", player, 2)
+                )
+            return naialt2(state)
         
         def naiany2_fire2(state: CollectionState) -> bool:
             """Nailgun - JumpStart"""
-            return (
-                naiany2(state)
-                and state.has("Secondary Fire - JumpStart", player)
-            ) if options.randomize_secondary_fire else naiany2(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    naiany2(state)
+                    and state.has("Secondary Fire - JumpStart", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    naiany2(state)
+                    and state.has("Nailgun - JumpStart", player, 2)
+                )
+            return naiany2(state)
         
         def naistd_any(state: CollectionState) -> bool:
             return state.has_any({"Nailgun - Attractor", "Nailgun - Overheat", "Nailgun - JumpStart"}, player) if not options.nailgun_form else (
@@ -398,10 +591,17 @@ class UltrakillRules:
         
         def rock0_fire2(state: CollectionState) -> bool:
             """Rocket Launcher - Freezeframe"""
-            return (
-                rock0(state)
-                and state.has("Secondary Fire - Freezeframe", player)
-            ) if options.randomize_secondary_fire else rock0(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    rock0(state)
+                    and state.has("Secondary Fire - Freezeframe", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    rock0(state)
+                    and state.has("Rocket Launcher - Freezeframe", player, 2)
+                )
+            return rock0(state)
         
         def rock1(state: CollectionState) -> bool:
             """Rocket Launcher - S.R.S. Cannon"""
@@ -409,10 +609,17 @@ class UltrakillRules:
         
         def rock1_fire2(state: CollectionState) -> bool:
             """Rocket Launcher - S.R.S. Cannon"""
-            return (
-                rock1(state)
-                and state.has("Secondary Fire - S.R.S. Cannon", player)
-            ) if options.randomize_secondary_fire else rock1(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    rock1(state)
+                    and state.has("Secondary Fire - S.R.S. Cannon", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    rock1(state)
+                    and state.has("Rocket Launcher - S.R.S. Cannon", player, 2)
+                )
+            return rock1(state)
         
         def rock2(state: CollectionState) -> bool:
             """Rocket Launcher - Firestarter"""
@@ -420,10 +627,17 @@ class UltrakillRules:
         
         def rock2_fire2(state: CollectionState) -> bool:
             """Rocket Launcher - Firestarter"""
-            return (
-                rock2(state)
-                and state.has("Secondary Fire - Firestarter", player)
-            ) if options.randomize_secondary_fire else rock2(state)
+            if options.randomize_secondary_fire == "split":
+                return (
+                    rock2(state)
+                    and state.has("Secondary Fire - Firestarter", player)
+                )
+            elif options.randomize_secondary_fire == "progressive":
+                return (
+                    rock2(state)
+                    and state.has("Rocket Launcher - Firestarter", player, 2)
+                )
+            return rock2(state)
         
         def rock_any(state: CollectionState) -> bool:
             return state.has_any({"Rocket Launcher - Freezeframe", "Rocket Launcher - S.R.S. Cannon", "Rocket Launcher - Firestarter"}, player)
@@ -1185,9 +1399,6 @@ class UltrakillRules:
             "Cleared 0-5":
                 l5_general,
 
-            "0-5: Defeat the Cerberi":
-                l5_general,
-
             "0-5: Don't inflict fatal damage to any enemy":
                 lambda state: (
                     l5_general(state)
@@ -1317,18 +1528,6 @@ class UltrakillRules:
                     and can_break_wall_cancerous_rodent(state)
                 ),
 
-            "1-2: Defeat the Very Cancerous Rodent":
-                lambda state: (
-                    (
-                        grab_item(state)
-                        and skull(state, "1-2", "Blue")
-                        and skull(state, "1-2", "Red")
-                        or can_break_walls(state)
-                        and can_zap(state)
-                    )
-                    and can_break_wall_cancerous_rodent(state)
-                ),
-
             "1-2: Perfect Rank":
                 lambda state: (
                     grab_item(state)
@@ -1416,9 +1615,6 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "1-4", "Blue")
                 ),
-
-            "1-4: Defeat V2":
-                good_weapon,
 
             "1-4: Do not pick up any skulls":
                 good_weapon,
@@ -1554,14 +1750,6 @@ class UltrakillRules:
                     and skull(state, "2-4", "Red")
                 ),
 
-            "2-4: Defeat the Corpse of King Minos":
-                lambda state: (
-                    grab_item(state)
-                    and skull(state, "2-4", "Blue")
-                    and skull(state, "2-4", "Red")
-                    and good_weapon(state)
-                ),
-
             "2-4: Parry a punch":
                 lambda state: (
                     grab_item(state)
@@ -1590,15 +1778,6 @@ class UltrakillRules:
                 lambda state: (
                     slide(state)
                     or naialt_any(state)
-                ),
-
-            "3-2: Defeat Gabriel":
-                lambda state: (
-                    (
-                        slide(state)
-                        or naialt_any(state)
-                    )
-                    and good_weapon(state)
                 ),
 
             "3-2: Drop Gabriel in a pit":
@@ -1742,14 +1921,6 @@ class UltrakillRules:
                     and grab_item(state)
                 ),
 
-            "4-3: Defeat the Mysterious Druid Knight (& Owl)":
-                lambda state: (
-                    l18_general(state)
-                    and can_break_walls(state)
-                    and can_punch(state)
-                    and skull(state, "4-3", "Blue")
-                ),
-
             "4-3: Perfect Rank":
                 lambda state: (
                     l18_general(state)
@@ -1766,12 +1937,6 @@ class UltrakillRules:
                 ),
 
             "4-4: V2's Other Arm":
-                lambda state: (
-                    l19_general(state)
-                    and good_weapon(state)
-                ),
-
-            "4-4: Defeat V2":
                 lambda state: (
                     l19_general(state)
                     and good_weapon(state)
@@ -1850,13 +2015,14 @@ class UltrakillRules:
             "5-2: Secret #1":
                 lambda state: (
                     slide(state)
-                    or rock0_fire2(state)
+                    or rock_any(state)
                 ),
 
             "5-2: Secret #2":
                 lambda state: (
                     slam(state)
                     or stamina(state, 1)
+                    or rock_any(state)
                 ),
 
             "5-2: Secret #3":
@@ -1866,6 +2032,7 @@ class UltrakillRules:
                         or stamina(state, 1)
                     )
                     and jump_general(state, 2)
+                    or rock_any(state)
                 ),
 
             "5-2: Secret #4":
@@ -1875,6 +2042,7 @@ class UltrakillRules:
                         or stamina(state, 1)
                     )
                     and jump_general(state, 2)
+                    or rock_any(state)
                 ),
 
             "5-2: Secret #5":
@@ -1882,6 +2050,7 @@ class UltrakillRules:
                     (
                         slam(state)
                         or stamina(state, 1)
+                        or rock_any(state)
                     )
                     and grab_item(state)
                     and skull(state, "5-2", "Blue")
@@ -1894,6 +2063,7 @@ class UltrakillRules:
                     (
                         slam(state)
                         or stamina(state, 1)
+                        or rock_any(state)
                     )
                     and grab_item(state)
                     and skull(state, "5-2", "Blue")
@@ -1906,6 +2076,7 @@ class UltrakillRules:
                     (
                         slam(state)
                         or stamina(state, 1)
+                        or rock_any(state)
                     )
                     and grab_item(state)
                     and skull(state, "5-2", "Blue")
@@ -1919,6 +2090,7 @@ class UltrakillRules:
                     (
                         slam(state)
                         or stamina(state, 1)
+                        or rock_any(state)
                     )
                     and grab_item(state)
                     and skull(state, "5-2", "Blue")
@@ -2022,9 +2194,6 @@ class UltrakillRules:
                 ),
 
             # 5-4
-            "5-4: Defeat the Leviathan":
-                good_weapon,
-
             "5-4: Reach the surface in under 10 seconds":
                 lambda state: (
                     rock0_fire2(state)
@@ -2097,20 +2266,6 @@ class UltrakillRules:
 
             # 6-2
             "Cleared 6-2":
-                lambda state: (
-                    (
-                        slam(state)
-                        or slam_storage(state)
-                        or walljumps(state, 2)
-                        or shoalt0_fire2(state)
-                        or shoany1_fire2(state)
-                        or rai2(state)
-                        or rock0_fire2(state)
-                    )
-                    and good_weapon(state)
-                ),
-
-            "6-2: Defeat Gabriel":
                 lambda state: (
                     (
                         slam(state)
@@ -2352,17 +2507,6 @@ class UltrakillRules:
                     and good_weapon(state)
                 ),
 
-            '7-4: Defeat 1000-THR "Earthmover"':
-                lambda state: (
-                    slide(state)
-                    and (
-                        arm2(state)
-                        or slam_storage(state)
-                    )
-                    and can_break_idol(state)
-                    and good_weapon(state)
-                ),
-
             "7-4: Don't fight the security system":
                 lambda state: (
                     slide(state)
@@ -2508,6 +2652,1381 @@ class UltrakillRules:
             "Shop: Buy Rocket Launcher Variant 2":
                 rock_any,
 
+            # Enemies
+            "Enemy: Filth":
+                lambda state: (
+                    can_reach_level(state, "0-1")
+                    or can_reach_level(state, "0-2")
+                    or can_reach_level(state, "0-3")
+                    or can_reach_level(state, "0-4")
+                    or (
+                        can_reach_level(state, "1-1")
+                        and grab_item(state)
+                        and skull(state, "1-1", "Red")
+                    )
+                    or can_reach_level(state, "1-2")
+                    or can_reach_level(state, "1-3")
+                    or (
+                        can_reach_level(state, "2-1")
+                        and l10_exit(state)
+                    )
+                    or can_reach_level(state, "2-2")
+                    or can_reach_level(state, "2-3")
+                    or can_reach_level(state, "3-1")
+                    or can_reach_level(state, "4-1")
+                    or can_reach_level(state, "4-2")
+                    or (
+                        can_reach_level(state, "4-3")
+                        and l18_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-1")
+                        and l20_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-2")
+                        and (
+                            slam(state)
+                            or stamina(state, 1)
+                            or rock_any(state)
+                        )
+                    )
+                    or can_reach_level(state, "5-3")
+                    or can_reach_level(state, "6-1")
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-S")
+                        and jump_general(state, 2)
+                    )
+                    or (
+                        can_reach_level(state, "7-4")
+                        and slide(state)
+                        and (
+                            arm2(state)
+                            or slam_storage(state)
+                        )
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                        and slide(state)
+                        and stamina(state, 3)
+                        and skull(state, "0-E", "Blue")
+                        and skull(state, "0-E", "Red")
+                    )
+                ),
+
+            "Enemy: Stray":
+                lambda state: (
+                    can_reach_level(state, "0-1")
+                    or can_reach_level(state, "0-2")
+                    or can_reach_level(state, "0-3")
+                    or can_reach_level(state, "0-4")
+                    or (
+                        can_reach_level(state, "1-1")
+                        and grab_item(state)
+                        and skull(state, "1-1", "Red")
+                    )
+                    or can_reach_level(state, "1-2")
+                    or can_reach_level(state, "1-3")
+                    or can_reach_level(state, "2-1")
+                    or can_reach_level(state, "2-2")
+                    or can_reach_level(state, "2-3")
+                    or can_reach_level(state, "3-1")
+                    or can_reach_level(state, "4-1")
+                    or can_reach_level(state, "4-2")
+                    or (
+                        can_reach_level(state, "4-3")
+                        and l18_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-1")
+                        and l20_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-2")
+                        and can_punch(state)
+                        and (
+                            slam(state)
+                            or stamina(state, 1)
+                            or rock_any(state)
+                        )
+                    )
+                    or can_reach_level(state, "5-3")
+                    or can_reach_level(state, "6-1")
+                    or (
+                        can_reach_level(state, "7-1")
+                        and grab_item(state)
+                        and skull(state, "7-1", "Red")
+                        and skull(state, "7-1", "Blue")
+                    )
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-4")
+                        and slide(state)
+                        and (
+                            arm2(state)
+                            or slam_storage(state)
+                        )
+                        and good_weapon(state)
+                    )
+                ),
+
+            "Enemy: Schism":
+                lambda state: (
+                    can_reach_level(state, "0-3")
+                    or can_reach_level(state, "0-4")
+                    or (
+                        can_reach_level(state, "1-1")
+                        and grab_item(state)
+                        and skull(state, "1-1", "Red")
+                    )
+                    or can_reach_level(state, "1-2")
+                    or can_reach_level(state, "1-3")
+                    or can_reach_level(state, "2-1")
+                    or can_reach_level(state, "2-2")
+                    or can_reach_level(state, "2-3")
+                    or can_reach_level(state, "3-1")
+                    or can_reach_level(state, "4-1")
+                    or can_reach_level(state, "4-2")
+                    or (
+                        can_reach_level(state, "4-3")
+                        and l18_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-1")
+                        and l20_general(state)
+                        and grab_item(state)
+                        and skull(state, "5-1", "Blue", 3)
+                    )
+                    or can_reach_level(state, "5-2")
+                    or can_reach_level(state, "5-3")
+                    or can_reach_level(state, "6-1")
+                    or (
+                        can_reach_level(state, "7-1")
+                        and grab_item(state)
+                        and skull(state, "7-1", "Red")
+                        and skull(state, "7-1", "Blue")
+                    )
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-4")
+                        and slide(state)
+                        and (
+                            arm2(state)
+                            or slam_storage(state)
+                        )
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                    )
+                    or (
+                        can_reach_level(state, "P-2")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and slide(state)
+                        and stamina(state, 3)
+                    )
+                ),
+
+            "Enemy: Soldier":
+                lambda state: (
+                    can_reach_level(state, "2-2")
+                    or can_reach_level(state, "2-3")
+                    or can_reach_level(state, "3-1")
+                    or can_reach_level(state, "4-1")
+                    or can_reach_level(state, "4-2")
+                    or (
+                        can_reach_level(state, "4-3")
+                        and l18_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-1")
+                        and l20_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-2")
+                        and (
+                            slam(state)
+                            or stamina(state, 1)
+                            or rock_any(state)
+                        )
+                    )
+                    or can_reach_level(state, "5-3")
+                    or can_reach_level(state, "6-1")
+                    or (
+                        can_reach_level(state, "7-1")
+                        and grab_item(state)
+                        and skull(state, "7-1", "Red")
+                        and skull(state, "7-1", "Blue")
+                    )
+                    or (
+                        can_reach_level(state, "7-2")
+                        and arm2(state)
+                    )
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-4")
+                        and slide(state)
+                        and (
+                            arm2(state)
+                            or slam_storage(state)
+                        )
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                    )
+                ),
+
+            "Boss: The Corpse of King Minos":
+                lambda state: (
+                    can_reach_level(state, "2-4")
+                    and grab_item(state)
+                    and skull(state, "2-4", "Blue")
+                    and skull(state, "2-4", "Red")
+                    and good_weapon(state)
+                ),
+
+            "Enemy: Stalker":
+                lambda state: (
+                    can_reach_level(state, "4-2")
+                    or (
+                        can_reach_level(state, "4-3")
+                        and l18_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-2")
+                        and (
+                            slam(state)
+                            or stamina(state, 1)
+                            or rock_any(state)
+                        )
+                    )
+                    or (
+                        can_reach_level(state, "7-2")
+                        and arm2(state)
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                        and slide(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_walls(state)
+                        and slide(state)
+                        and stamina(state, 2)
+                        and skull(state, "1-E", "Red")
+                        and skull(state, "1-E", "Blue")
+                    )
+                    or (
+                        can_reach_level(state, "P-2")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and slide(state)
+                        and stamina(state, 3)
+                        and skull(state, "P-2", "Blue")
+                    )
+                ),
+
+            "Enemy: Insurrectionist":
+                lambda state: (
+                    (
+                        can_reach_level(state, "4-2")
+                        and grab_item(state)
+                        and skull(state, "4-2", "Blue")
+                        and skull(state, "4-2", "Red")
+                    )
+                    or (
+                        can_reach_level(state, "6-1")
+                        and grab_item(state)
+                        and skull(state, "6-1", "Red")
+                    )
+                    or (
+                        can_reach_level(state, "7-2")
+                        and arm2(state)
+                    )
+                    or (
+                        can_reach_level(state, "P-2")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and slide(state)
+                        and stamina(state, 3)
+                        and skull(state, "P-2", "Blue")
+                    )
+                ),
+
+            "Boss: Ferryman":
+                lambda state: (
+                    (
+                        can_reach_level(state, "5-2")
+                        and (
+                            slam(state)
+                            or stamina(state, 1)
+                            or rock_any(state)
+                        )
+                        and grab_item(state)
+                        and skull(state, "5-2", "Blue")
+                        and skull(state, "5-2", "Red")
+                        and can_break_idol(state)
+                    )
+                    or (
+                        can_reach_level(state, "P-2")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and slide(state)
+                        and stamina(state, 3)
+                    )
+                ),
+
+            "Enemy: Swordsmachine":
+                lambda state: (
+                    (
+                        can_reach_level(state, "0-2")
+                        and slide(state)
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "0-3")
+                        and (
+                            can_break_walls(state)
+                            or l3_challenge(state)
+                        )
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-3")
+                        and grab_item(state)
+                        and skull(state, "1-3", "Red")
+                        and skull(state, "1-3", "Blue")
+                        and good_weapon(state)
+                    )
+                    or can_reach_level(state, "6-1")
+                    or (
+                        can_reach_level(state, "7-2")
+                        and arm2(state)
+                    )
+                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "7-S")
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                    )
+                    or (
+                        can_reach_level(state, "P-2")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and slide(state)
+                        and stamina(state, 3)
+                    )
+                ),
+
+            "Enemy: Drone":
+                lambda state: (
+                    (
+                        can_reach_level(state, "1-1")
+                        and grab_item(state)
+                        and skull(state, "1-1", "Red")
+                    )
+                    or can_reach_level(state, "1-2")
+                    or can_reach_level(state, "1-3")
+                    or (
+                        can_reach_level(state, "2-1")
+                        and l10_exit(state)
+                    )
+                    or can_reach_level(state, "2-2")
+                    or can_reach_level(state, "2-3")
+                    or can_reach_level(state, "3-1")
+                    or can_reach_level(state, "4-1")
+                    or can_reach_level(state, "4-2")
+                    or (
+                        can_reach_level(state, "4-3")
+                        and l18_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-1")
+                        and l20_general(state)
+                    )
+                    or can_reach_level(state, "5-2")
+                    or can_reach_level(state, "5-3")
+                    or (
+                        can_reach_level(state, "7-1")
+                        and grab_item(state)
+                        and skull(state, "7-1", "Red")
+                        and skull(state, "7-1", "Blue")
+                    )
+                    or (
+                        can_reach_level(state, "7-S")
+                        and (
+                            arm2(state)
+                            or walljumps(state, 3)
+                            or (
+                                walljumps(state, 2)
+                                and stamina(state, 1)
+                            )
+                            or (
+                                shoalt0_fire2(state)
+                                or shoany1_fire2(state)
+                                or rai2(state)
+                            )
+                        )
+                        and grab_item(state)
+                        and skull(state, "7-S", "Red")
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                    )
+                ),
+
+            "Enemy: Streetcleaner":
+                lambda state: (
+                    (
+                        can_reach_level(state, "1-2")
+                        and (
+                            grab_item(state)
+                            and skull(state, "1-2", "Blue")
+                            or can_break_walls(state)
+                            and can_zap(state)
+                        )
+                    )
+                    or can_reach_level(state, "1-3")
+                    or (
+                        can_reach_level(state, "2-1")
+                        and l10_exit(state)
+                    )
+                    or can_reach_level(state, "2-2")
+                    or can_reach_level(state, "2-3")
+                    or can_reach_level(state, "3-1")
+                    or can_reach_level(state, "4-1")
+                    or (
+                        can_reach_level(state, "4-3")
+                        and l18_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-1")
+                        and l20_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-2")
+                        and can_break_idol(state)
+                        and (
+                            slam(state)
+                            or stamina(state, 1)
+                            or rock_any(state)
+                        )
+                    )
+                    or can_reach_level(state, "5-3")
+                    or (
+                        can_reach_level(state, "6-1")
+                        and grab_item(state)
+                        and skull(state, "6-1", "Red")
+                    )
+                    or (
+                        can_reach_level(state, "7-1")
+                        and grab_item(state)
+                        and skull(state, "7-1", "Red")
+                        and skull(state, "7-1", "Blue")
+                    )
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-4")
+                        and slide(state)
+                        and (
+                            arm2(state)
+                            or slam_storage(state)
+                        )
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                    )
+                    or (
+                        can_reach_level(state, "P-2")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and slide(state)
+                        and stamina(state, 3)
+                    )
+                ),
+
+            "Boss: V2":
+                lambda state: (
+                    can_reach_level(state, "1-4")
+                    and good_weapon(state)
+                ),
+
+            "Enemy: Mindflayer":
+                lambda state: (
+                    (
+                        can_reach_level(state, "2-3")
+                        and grab_item(state)
+                        and skull(state, "2-3", "Blue")
+                        and skull(state, "2-3", "Red")
+                    )
+                    or can_reach_level(state, "3-1")
+                    or (
+                        can_reach_level(state, "5-1")
+                        and l20_general(state)
+                    )
+                    or can_reach_level(state, "5-3")
+                    or (
+                        can_reach_level(state, "6-1")
+                        and grab_item(state)
+                        and skull(state, "6-1", "Red")
+                        and jump_general(state, 1)
+                    )
+                    or (
+                        can_reach_level(state, "7-1")
+                        and grab_item(state)
+                        and skull(state, "7-1", "Red")
+                        and skull(state, "7-1", "Blue")
+                    )
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-S")
+                        and (
+                            arm2(state)
+                            or walljumps(state, 3)
+                            or (
+                                walljumps(state, 2)
+                                and stamina(state, 1)
+                            )
+                            or (
+                                shoalt0_fire2(state)
+                                or shoany1_fire2(state)
+                                or rai2(state)
+                            )
+                        )
+                        and grab_item(state)
+                        and skull(state, "7-S", "Red")
+                        and can_break_idol(state)
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                        and slide(state)
+                        and stamina(state, 3)
+                        and skull(state, "0-E", "Blue")
+                        and skull(state, "0-E", "Red")
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                    )
+                    or (
+                        can_reach_level(state, "P-2")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and slide(state)
+                        and stamina(state, 3)
+                    )
+                ),
+            
+            "Boss: V2 (2nd)":
+                lambda state: (
+                    can_reach_level(state, "4-4")
+                    and l19_general(state)
+                    and good_weapon(state)
+                ),
+
+            "Enemy: Sentry":
+                lambda state: (
+                    (
+                        can_reach_level(state, "5-1")
+                        and l20_general(state)
+                        and grab_item(state)
+                        and skull(state, "5-1", "Blue", 3)
+                    )
+                    or can_reach_level(state, "5-2")
+                    or can_reach_level(state, "5-3")
+                    or can_reach_level(state, "6-1")
+                    or (
+                        can_reach_level(state, "7-2")
+                        and arm2(state)
+                    )
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-S")
+                        and (
+                            arm2(state)
+                            or walljumps(state, 3)
+                            or (
+                                walljumps(state, 2)
+                                and stamina(state, 1)
+                            )
+                            or (
+                                shoalt0_fire2(state)
+                                or shoany1_fire2(state)
+                                or rai2(state)
+                            )
+                        )
+                        and grab_item(state)
+                        and skull(state, "7-S", "Red")
+                        and can_break_idol(state)
+                    )
+                    or (
+                        can_reach_level(state, "7-4")
+                        and slide(state)
+                        and (
+                            arm2(state)
+                            or slam_storage(state)
+                        )
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                    )
+                    or (
+                        can_reach_level(state, "P-2")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and slide(state)
+                        and stamina(state, 3)
+                    )
+                ),
+
+            "Enemy: Gutterman":
+                lambda state: (
+                    (
+                        can_reach_level(state, "7-2")
+                        and arm2(state)
+                    )
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-S")
+                        and (
+                            arm2(state)
+                            or walljumps(state, 3)
+                            or (
+                                walljumps(state, 2)
+                                and stamina(state, 1)
+                            )
+                            or (
+                                shoalt0_fire2(state)
+                                or shoany1_fire2(state)
+                                or rai2(state)
+                            )
+                        )
+                        and grab_item(state)
+                        and skull(state, "7-S", "Red")
+                        and can_break_idol(state)
+                    )
+                    or (
+                        can_reach_level(state, "7-4")
+                        and slide(state)
+                        and (
+                            arm2(state)
+                            or slam_storage(state)
+                        )
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                    )
+                ),
+
+            "Enemy: Guttertank":
+                lambda state: (
+                    (
+                        can_reach_level(state, "7-2")
+                        and arm2(state)
+                    )
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-4")
+                        and slide(state)
+                        and (
+                            arm2(state)
+                            or slam_storage(state)
+                        )
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                    )
+                ),
+
+            "Boss: Earthmover":
+                lambda state: (
+                    can_reach_level(state, "7-4")
+                    and slide(state)
+                    and (
+                        arm2(state)
+                        or slam_storage(state)
+                    )
+                    and good_weapon(state)
+                ),
+
+            "Enemy: Malicious Face":
+                lambda state: (
+                    can_reach_level(state, "0-1")
+                    or can_reach_level(state, "0-4")
+                    or (
+                        can_reach_level(state, "1-1")
+                        and grab_item(state)
+                        and skull(state, "1-1", "Red")
+                    )
+                    or can_reach_level(state, "1-3")
+                    or (
+                        can_reach_level(state, "2-1")
+                        and l10_tower(state)
+                    )
+                    or can_reach_level(state, "2-2")
+                    or can_reach_level(state, "2-3")
+                    or can_reach_level(state, "3-1")
+                    or can_reach_level(state, "4-1")
+                    or can_reach_level(state, "4-2")
+                    or (
+                        can_reach_level(state, "4-3")
+                        and l18_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-1")
+                        and l20_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-2")
+                        and (
+                            slam(state)
+                            or stamina(state, 1)
+                            or rock_any(state)
+                        )
+                    )
+                    or can_reach_level(state, "5-3")
+                    or can_reach_level(state, "6-1")
+                    or (
+                        can_reach_level(state, "7-1")
+                        and grab_item(state)
+                        and skull(state, "7-1", "Red")
+                        and skull(state, "7-1", "Blue")
+                    )
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-S")
+                        and (
+                            arm2(state)
+                            or walljumps(state, 3)
+                            or (
+                                walljumps(state, 2)
+                                and stamina(state, 1)
+                            )
+                            or (
+                                shoalt0_fire2(state)
+                                or shoany1_fire2(state)
+                                or rai2(state)
+                            )
+                        )
+                        and grab_item(state)
+                        and skull(state, "7-S", "Red")
+                        and can_break_idol(state)
+                    )
+                    or (
+                        can_reach_level(state, "7-4")
+                        and slide(state)
+                        and (
+                            arm2(state)
+                            or slam_storage(state)
+                        )
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                    )
+                    or (
+                        can_reach_level(state, "P-2")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and slide(state)
+                        and stamina(state, 3)
+                    )
+                ),
+
+            "Enemy: Cerberus":
+                lambda state: (
+                    (
+                        can_reach_level(state, "0-4")
+                        and l5_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-2")
+                        and slide(state)
+                        and (
+                            grab_item(state)
+                            and skull(state, "1-2", "Blue")
+                            and skull(state, "1-2", "Red")
+                            or can_break_walls(state)
+                            and can_zap(state)
+                        )
+                    )
+                    or can_reach_level(state, "1-3")
+                    or (
+                        can_reach_level(state, "2-1")
+                        and l10_exit(state)
+                    )
+                    or can_reach_level(state, "2-2")
+                    or can_reach_level(state, "3-1")
+                    or can_reach_level(state, "4-1")
+                    or can_reach_level(state, "4-2")
+                    or (
+                        can_reach_level(state, "4-3")
+                        and l18_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-1")
+                        and l20_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-2")
+                        and can_break_idol(state)
+                        and (
+                            slam(state)
+                            or stamina(state, 1)
+                            or rock_any(state)
+                        )
+                    )
+                    or can_reach_level(state, "5-3")
+                    or (
+                        can_reach_level(state, "6-1")
+                        and grab_item(state)
+                        and skull(state, "6-1", "Red")
+                    )
+                    or (
+                        can_reach_level(state, "7-1")
+                        and grab_item(state)
+                        and skull(state, "7-1", "Red")
+                        and skull(state, "7-1", "Blue")
+                    )
+                    or (
+                        can_reach_level(state, "7-2")
+                        and arm2(state)
+                    )
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-S")
+                        and jump_general(state, 2)
+                    )
+                    or can_reach_level(state, "0-E")
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_walls(state)
+                        and stamina(state, 2)
+                        and skull(state, "1-E", "Red")
+                    )
+                    or (
+                        can_reach_level(state, "P-2")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and slide(state)
+                        and stamina(state, 3)
+                    )
+                ),
+
+            "Boss: Hideous Mass":
+                lambda state: (
+                    (
+                        can_reach_level(state, "1-3")
+                        and grab_item(state)
+                        and (
+                            skull(state, "1-3", "Red")
+                            or skull(state, "1-3", "Blue")
+                        )
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "6-1")
+                        and grab_item(state)
+                        and skull(state, "6-1", "Red")
+                    )
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-S")
+                        and (
+                            arm2(state)
+                            or walljumps(state, 3)
+                            or (
+                                walljumps(state, 2)
+                                and stamina(state, 1)
+                            )
+                            or (
+                                shoalt0_fire2(state)
+                                or shoany1_fire2(state)
+                                or rai2(state)
+                            )
+                        )
+                        and grab_item(state)
+                        and skull(state, "7-S", "Red")
+                        and can_break_idol(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_walls(state)
+                        and slide(state)
+                        and stamina(state, 2)
+                        and skull(state, "1-E", "Red")
+                        and skull(state, "1-E", "Blue")
+                    )
+                    or (
+                        can_reach_level(state, "P-2")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and slide(state)
+                        and stamina(state, 3)
+                        and skull(state, "P-2", "Blue")
+                    )
+                ),
+
+            "Enemy: Idol":
+                lambda state: (
+                    can_break_idol(state)
+                    and (
+                        (
+                        can_reach_level(state, "5-2")
+                        and (
+                            slam(state)
+                            or stamina(state, 1)
+                            or rock_any(state)
+                        )
+                        )
+                        or (
+                            can_reach_level(state, "5-3")
+                            and grab_item(state)
+                            and (
+                                skull(state, "5-3", "Blue")
+                                or skull(state, "5-3", "Red")
+                            )
+                            and can_break_idol(state)
+                        )
+                        or (
+                            can_reach_level(state, "6-1")
+                            and grab_item(state)
+                            and skull(state, "6-1", "Red")
+                        )
+                        or (
+                            can_reach_level(state, "7-S")
+                            and (
+                                arm2(state)
+                                or walljumps(state, 3)
+                                or (
+                                    walljumps(state, 2)
+                                    and stamina(state, 1)
+                                )
+                                or (
+                                    shoalt0_fire2(state)
+                                    or shoany1_fire2(state)
+                                    or rai2(state)
+                                )
+                            )
+                            and grab_item(state)
+                            and skull(state, "7-S", "Red")
+                        )
+                        or (
+                            can_reach_level(state, "7-4")
+                            and slide(state)
+                            and (
+                                arm2(state)
+                                or slam_storage(state)
+                            )
+                            and good_weapon(state)
+                        )
+                        or (
+                            can_reach_level(state, "0-E")
+                            and arm0(state)
+                            and arm1(state)
+                            and arm2(state)
+                            and has_weapon_types(state, 3)
+                            and can_break_glass(state)
+                            and slide(state)
+                        )
+                        or (
+                            can_reach_level(state, "1-E")
+                            and arm0(state)
+                            and arm1(state)
+                            and arm2(state)
+                            and has_weapon_types(state, 3)
+                            and can_break_walls(state)
+                            and slide(state)
+                            and stamina(state, 2)
+                            and skull(state, "1-E", "Red")
+                            and skull(state, "1-E", "Blue")
+                        )
+                        or (
+                            can_reach_level(state, "P-2")
+                            and arm0(state)
+                            and arm1(state)
+                            and arm2(state)
+                            and has_weapon_types(state, 3)
+                            and slide(state)
+                            and stamina(state, 3)
+                        )
+                    )
+                ),
+
+            "Boss: Leviathan":
+                lambda state: (
+                    can_reach_level(state, "5-4")
+                    and good_weapon(state)
+                    and stamina(state, 1)
+                ),
+
+            "Enemy: Mannequin":
+                lambda state: (
+                    (
+                        can_reach_level(state, "7-1")
+                        and grab_item(state)
+                        and skull(state, "7-1", "Red")
+                    )
+                    or (
+                        can_reach_level(state, "7-2")
+                        and arm2(state)
+                    )
+                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "7-S")
+                    or (
+                        can_reach_level(state, "7-4")
+                        and slide(state)
+                        and (
+                            arm2(state)
+                            or slam_storage(state)
+                        )
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_walls(state)
+                        and stamina(state, 2)
+                        and skull(state, "1-E", "Red")
+                    )
+                ),
+
+            "Boss: Minotaur":
+                lambda state: (
+                    can_reach_level(state, "7-1")
+                    and grab_item(state)
+                    and skull(state, "7-1", "Red")
+                    and skull(state, "7-1", "Blue")
+                ),
+
+            "Boss: Gabriel, Judge of Hell":
+                lambda state: (
+                    can_reach_level(state, "3-2")
+                    and (
+                        slide(state)
+                        or naialt_any(state)
+                    )
+                    and good_weapon(state)
+                ),
+
+            "Enemy: Virtue":
+                lambda state: (
+                    can_reach_level(state, "4-1")
+                    or can_reach_level(state, "4-2")
+                    or (
+                        can_reach_level(state, "4-3")
+                        and l18_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-1")
+                        and l20_general(state)
+                    )
+                    or (
+                        can_reach_level(state, "5-2")
+                        and (
+                            slam(state)
+                            or stamina(state, 1)
+                            or rock_any(state)
+                        )
+                    )
+                    or can_reach_level(state, "5-3")
+                    or can_reach_level(state, "6-1")
+                    or (
+                        can_reach_level(state, "7-1")
+                        and grab_item(state)
+                        and skull(state, "7-1", "Red")
+                    )
+                    or can_reach_level(state, "7-3")
+                    or (
+                        can_reach_level(state, "7-S")
+                        and (
+                            arm2(state)
+                            or walljumps(state, 3)
+                            or (
+                                walljumps(state, 2)
+                                and stamina(state, 1)
+                            )
+                            or (
+                                shoalt0_fire2(state)
+                                or shoany1_fire2(state)
+                                or rai2(state)
+                            )
+                        )
+                        and grab_item(state)
+                        and skull(state, "7-S", "Red")
+                        and can_break_idol(state)
+                    )
+                    or (
+                        can_reach_level(state, "0-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and can_break_glass(state)
+                    )
+                    or (
+                        can_reach_level(state, "1-E")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                    )
+                    or (
+                        can_reach_level(state, "P-2")
+                        and arm0(state)
+                        and arm1(state)
+                        and arm2(state)
+                        and has_weapon_types(state, 3)
+                        and slide(state)
+                        and stamina(state, 3)
+                    )
+                ),
+
+            "Boss: Gabriel, Apostate of Hate":
+                lambda state: (
+                    can_reach_level(state, "6-2")
+                    and (
+                        slam(state)
+                        or slam_storage(state)
+                        or walljumps(state, 2)
+                        or shoalt0_fire2(state)
+                        or shoany1_fire2(state)
+                        or rai2(state)
+                        or rock0_fire2(state)
+                    )
+                    and good_weapon(state)
+                ),
+
+            "Boss: Flesh Prison":
+                lambda state: (
+                    can_reach_level(state, "P-1")
+                    and arm0(state)
+                    and arm1(state)
+                    and has_weapon_types(state, 2)
+                    and slide(state)
+                    and stamina(state, 2)
+                ),
+
+            "Boss: Flesh Panopticon":
+                lambda state: (
+                    can_reach_level(state, "P-2")
+                    and arm0(state)
+                    and arm1(state)
+                    and arm2(state)
+                    and has_weapon_types(state, 3)
+                    and slide(state)
+                    and stamina(state, 3)
+                    and skull(state, "P-2", "Blue")
+                ),
+
+            "Boss: Minos Prime":
+                lambda state: (
+                    can_reach_level(state, "P-1")
+                    and arm0(state)
+                    and arm1(state)
+                    and has_weapon_types(state, 2)
+                    and slide(state)
+                    and stamina(state, 2)
+                ),
+
+            "Boss: Sisyphus Prime":
+                lambda state: (
+                    can_reach_level(state, "P-2")
+                    and arm0(state)
+                    and arm1(state)
+                    and arm2(state)
+                    and has_weapon_types(state, 3)
+                    and slide(state)
+                    and stamina(state, 3)
+                    and skull(state, "P-2", "Blue")
+                ),
+
+            "Boss: Very Cancerous Rodent":
+                lambda state: (
+                    can_reach_level(state, "1-2")
+                    and (
+                        grab_item(state)
+                        and skull(state, "1-2", "Blue")
+                        and skull(state, "1-2", "Red")
+                        or can_break_walls(state)
+                        and can_zap(state)
+                    )
+                    and can_break_wall_cancerous_rodent(state)
+                ),
+
+            "Boss: Mysterious Druid Knight (& Owl)":
+                lambda state: (
+                    can_reach_level(state, "4-3")
+                    and l18_general(state)
+                    and can_break_walls(state)
+                    and can_punch(state)
+                    and skull(state, "4-3", "Blue")
+                ),
+
             # Museum
             "Museum: Win rocket race":
                 rock0_fire2
@@ -2548,6 +4067,9 @@ class UltrakillRules:
         else:
             add_rule(self.world.get_entrance(f"Menu -> {self.world.goal_level.full_name}"), \
                 lambda state: state.has("Level Completed", player, options.goal_requirement.value))
+
+        if options.perfect_goal and "S" not in self.world.goal_level.short_name:
+            location_rules[f"Cleared {self.world.goal_level.short_name}"] = location_rules[f"{self.world.goal_level.short_name}: Perfect Rank"]
                     
         for level, rule in level_rules.items():
             add_entrance_rule(level, rule)

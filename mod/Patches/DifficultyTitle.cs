@@ -16,8 +16,8 @@ namespace ArchipelagoULTRAKILL.Patches
                 {
                     traverse.Field<TMP_Text>("txt2").Value.alignment = TextAlignmentOptions.Top;
 
-                    string startColor = ColorUtility.ToHtmlStringRGBA(LocationManager.GetUKMessageColor(Core.data.start));
-                    string goalColor = ColorUtility.ToHtmlStringRGBA(LocationManager.GetUKMessageColor(Core.data.goal));
+                    string startColor = ColorUtility.ToHtmlStringRGBA(LocationManager.GetLocationColor(Core.data.start));
+                    string goalColor = ColorUtility.ToHtmlStringRGBA(LocationManager.GetLocationColor(Core.data.goal));
 
                     traverse.Field<TMP_Text>("txt2").Value.text = traverse.Field<TMP_Text>("txt2").Value.text + $"\nSTART: <color=#{startColor}>{Core.data.start}</color> | GOAL: <color=#{goalColor}>{Core.data.goal}</color>";
                 }

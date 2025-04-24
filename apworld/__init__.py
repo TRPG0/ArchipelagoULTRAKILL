@@ -2,7 +2,7 @@ from typing import Dict, List, Any, Union
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
-from .Items import ItemType, base_id, item_list, group_dict
+from .Items import ItemType, base_id, item_list, fire2_weapons, group_dict
 from .Locations import LocationType, location_list, start_weapon_locations
 from .Regions import Regions, SecretRegion
 from .Rules import UltrakillRules
@@ -80,12 +80,7 @@ class UltrakillWorld(World):
         if item_list[id].type != None:
             classification = self.item_classifications[item_list[id].type]
 
-        if any(level in name for level in self.options.skipped_levels.value):
-            if item_list[id].type == ItemType.Level and not self.options.auto_exclude_skipped_locations:
-                classification = ItemClassification.progression
-            else:
-                classification = ItemClassification.filler
-        elif name == "Blue Skull (1-4)" and not self.options.hank_rewards:
+        if name == "Blue Skull (1-4)" and not self.options.hank_rewards:
             classification = ItemClassification.filler
 
         return UltrakillItem(name, classification, item_id, self.player)
@@ -214,11 +209,15 @@ class UltrakillWorld(World):
         elif self.options.unlock_type == "layers":
             self.item_classifications[ItemType.Level] = None
 
-        if self.options.boss_rewards == "standard":
+        if self.options.enemy_rewards == "bosses":
             self.skipped_location_types.append(LocationType.BossExt)
-        elif self.options.boss_rewards == "disabled":
+            self.skipped_location_types.append(LocationType.Enemy)
+        elif self.options.enemy_rewards == "extra":
+            self.skipped_location_types.append(LocationType.Enemy)
+        elif self.options.enemy_rewards == "disabled":
             self.skipped_location_types.append(LocationType.Boss)
             self.skipped_location_types.append(LocationType.BossExt)
+            self.skipped_location_types.append(LocationType.Enemy)
 
         if not self.options.challenge_rewards:
             self.skipped_location_types.append(LocationType.Challenge)
@@ -247,7 +246,7 @@ class UltrakillWorld(World):
         if not self.options.randomize_clash_mode:
             self.item_classifications[ItemType.ClashMode] = None
 
-        if not self.options.randomize_secondary_fire:
+        if self.options.randomize_secondary_fire == "disabled" or self.options.randomize_secondary_fire == "progressive":
             self.item_classifications[ItemType.Fire2] = None
 
         if self.options.revolver_form == "standard":
@@ -336,8 +335,6 @@ class UltrakillWorld(World):
                 continue
             elif item.type == ItemType.Filler or item.type == ItemType.Trap:
                 continue
-            elif item.name == self.start_weapon:
-                continue
             
             count: int = item.count
             if item.type == ItemType.Stamina:
@@ -346,6 +343,13 @@ class UltrakillWorld(World):
                 count = 3 - self.options.starting_walljumps.value
             elif item.name == "Feedbacker":
                 count = count - self.options.start_with_arm
+            elif item.name == self.start_weapon:
+                count = 0
+            elif item.type == ItemType.Weapon and item.name in fire2_weapons:
+                if item.name == self.start_weapon:
+                    count = 1
+                else:
+                    count = 2
 
             if count <= 0:
                 continue
@@ -438,12 +442,13 @@ class UltrakillWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
-            "version": "3.1.5",
+            "version": "3.2.0",
             "locations": self.game_id_to_long,
             "start": self.start_level.short_name,
             "goal": self.goal_level.short_name,
             "goal_requirement": self.options.goal_requirement.value,
-            "boss_rewards": self.options.boss_rewards.value,
+            "perfect_goal": bool(self.options.perfect_goal),
+            "enemy_rewards": self.options.enemy_rewards.value,
             "challenge_rewards": bool(self.options.challenge_rewards),
             "p_rank_rewards": bool(self.options.p_rank_rewards),
             "hank_rewards": bool(self.options.hank_rewards),
@@ -452,7 +457,7 @@ class UltrakillWorld(World):
             "cleaning_rewards": bool(self.options.cleaning_rewards),
             "chess_reward": bool(self.options.chess_reward),
             "rocket_race_reward": bool(self.options.rocket_race_reward),
-            "randomize_secondary_fire": bool(self.options.randomize_secondary_fire),
+            "randomize_secondary_fire": self.options.randomize_secondary_fire.value,
             "start_with_arm": bool(self.options.start_with_arm),
             "starting_stamina": self.options.starting_stamina.value,
             "starting_walljumps": self.options.starting_walljumps.value,

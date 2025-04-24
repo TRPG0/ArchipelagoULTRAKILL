@@ -1,17 +1,11 @@
-﻿using Archipelago.MultiClient.Net.Models;
-using Archipelago.MultiClient.Net.Enums;
-using HarmonyLib;
-using PluginConfig.API;
+﻿using PluginConfig.API;
 using PluginConfig.API.Decorators;
 using PluginConfig.API.Fields;
 using PluginConfig.API.Functionals;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
-using Archipelago.MultiClient.Net.Packets;
 using ArchipelagoULTRAKILL.Structures;
 using TMPro;
 
@@ -39,8 +33,9 @@ namespace ArchipelagoULTRAKILL
         public static StringField start;
         public static StringField goal;
         public static StringField goalProgress;
+        public static BoolField perfectGoal;
         public static StringField locationsChecked;
-        public static EnumField<BossOptions> bossRewards;
+        public static EnumField<EnemyOptions> enemyRewards;
         public static BoolField challengeRewards;
         public static BoolField pRankRewards;
         public static BoolField hankRewards;
@@ -49,7 +44,7 @@ namespace ArchipelagoULTRAKILL
         public static BoolField cleanRewards;
         public static BoolField chessReward;
         public static BoolField rocketReward;
-        public static BoolField randomizeFire2;
+        public static EnumField<Fire2Options> randomizeFire2;
         public static EnumField<WeaponForm> revForm;
         public static EnumField<WeaponForm> shoForm;
         public static EnumField<WeaponForm> naiForm;
@@ -60,10 +55,14 @@ namespace ArchipelagoULTRAKILL
         public static BoolField cybergrindHints;
         public static BoolField deathLink;
 
-        public static ConfigPanel logPanel;
+        public static ConfigPanel uiPanel;
+        public static BoolField showRecentLocations;
+        public static BoolField showRecentItems;
         public static BoolField showLog;
+        public static EnumField<LogFont> logFont;
         public static IntField logLines;
         public static IntField logFontSize;
+        public static IntField logOpacity;
         public static ButtonField logClear;
 
         public static ConfigPanel colorPanel;
@@ -93,9 +92,6 @@ namespace ArchipelagoULTRAKILL
         public static ColorField encore1Color;
         public static ColorField primeColor;
         public static ColorField altColor;
-        public static ColorField arm0Color;
-        public static ColorField arm1Color;
-        public static ColorField arm2Color;
         public static ColorField blueSkullColor;
         public static ColorField redSkullColor;
         public static ColorField switchColor;
@@ -125,7 +121,7 @@ namespace ArchipelagoULTRAKILL
             playerPanel = new ConfigPanel(config.rootPanel, "PLAYER SETTINGS", "playerPanel");
             dataInfo = new ConfigHeader(config.rootPanel, "", 16);
             new ConfigHeader(config.rootPanel, "---");
-            logPanel = new ConfigPanel(config.rootPanel, "LOG SETTINGS", "logPanel");
+            uiPanel = new ConfigPanel(config.rootPanel, "UI SETTINGS", "uiPanel");
             colorPanel = new ConfigPanel(config.rootPanel, "COLOR SETTINGS", "colorPanel");
             linksPanel = new ConfigPanel(config.rootPanel, "LINKS", "linksPanel");
 
@@ -218,11 +214,13 @@ namespace ArchipelagoULTRAKILL
             start = new StringField(playerPanel, "START LEVEL", "start", "?", false, false) { interactable = false };
             goal = new StringField(playerPanel, "GOAL LEVEL", "goal", "?", false, false) { interactable = false };
             goalProgress = new StringField(playerPanel, "LEVELS COMPLETED", "goalProgress", "?", false, false) { interactable = false };
+            perfectGoal = new BoolField(playerPanel, "PERFECT GOAL", "perfectGoal", false) { interactable = false };
             locationsChecked = new StringField(playerPanel, "LOCATIONS CHECKED", "locationsChecked", "?", false, false) { interactable = false };
-            bossRewards = new EnumField<BossOptions>(playerPanel, "BOSS REWARDS", "bossRewards", BossOptions.Disabled, false) { interactable = false };
-            bossRewards.SetEnumDisplayName(BossOptions.Disabled, "DISABLED");
-            bossRewards.SetEnumDisplayName(BossOptions.Standard, "STANDARD");
-            bossRewards.SetEnumDisplayName(BossOptions.Extended, "EXTENDED");
+            enemyRewards = new EnumField<EnemyOptions>(playerPanel, "ENEMY REWARDS", "enemyRewards", EnemyOptions.Disabled, false) { interactable = false };
+            enemyRewards.SetEnumDisplayName(EnemyOptions.Disabled, "DISABLED");
+            enemyRewards.SetEnumDisplayName(EnemyOptions.Bosses, "BOSSES");
+            enemyRewards.SetEnumDisplayName(EnemyOptions.Extra, "EXTRA");
+            enemyRewards.SetEnumDisplayName(EnemyOptions.All, "All");
             challengeRewards = new BoolField(playerPanel, "CHALLENGE REWARDS", "challengeRewards", false, false) { interactable = false };
             pRankRewards = new BoolField(playerPanel, "P RANK REWARDS", "pRankRewards", false, false) { interactable = false };
             hankRewards = new BoolField(playerPanel, "HANK REWARDS", "hankRewards", false, false) { interactable = false };
@@ -231,7 +229,10 @@ namespace ArchipelagoULTRAKILL
             cleanRewards = new BoolField(playerPanel, "CLEANING REWARDS", "cleanRewards", false, false) { interactable = false };
             chessReward = new BoolField(playerPanel, "CHESS REWARD", "chessReward", false, false) { interactable = false };
             rocketReward = new BoolField(playerPanel, "ROCKET RACE REWARD", "rocketReward", false, false) { interactable = false };
-            randomizeFire2 = new BoolField(playerPanel, "RANDOMIZE SECONDARY FIRE", "randomizeFire2", false, false) { interactable = false };
+            randomizeFire2 = new EnumField<Fire2Options>(playerPanel, "RANDOMIZE SECONDARY FIRE", "randomizeFire2", Fire2Options.Disabled) { interactable = false };
+            randomizeFire2.SetEnumDisplayName(Fire2Options.Disabled, "DISABLED");
+            randomizeFire2.SetEnumDisplayName(Fire2Options.Split, "SPLIT");
+            randomizeFire2.SetEnumDisplayName(Fire2Options.Progressive, "PROGRESSIVE");
             revForm = new EnumField<WeaponForm>(playerPanel, "REVOLVER FORM", "revForm", WeaponForm.Standard) { interactable = false };
             revForm.SetEnumDisplayName(WeaponForm.Standard, "STANDARD");
             revForm.SetEnumDisplayName(WeaponForm.Alternate, "ALTERNATE");
@@ -248,27 +249,56 @@ namespace ArchipelagoULTRAKILL
             cybergrindHints = new BoolField(playerPanel, "UNLOCK HINTS IN CYBERGRIND", "cybergrindHints", false, false) { interactable = false };
             deathLink = new BoolField(playerPanel, "DEATH LINK", "deathLink", false, false) { interactable = false };
 
-            // log settings
-            showLog = new BoolField(logPanel, "SHOW LOG", "showLog", true, true);
+            // ui settings
+            new ConfigHeader(uiPanel, "PAUSE MENU");
+            showRecentLocations = new BoolField(uiPanel, "SHOW RECENT LOCATIONS", "showRecentLocations", true);
+            showRecentLocations.onValueChange += (BoolField.BoolValueChangeEvent e) =>
+            {
+                UIManager.recentLocationContainer?.SetActive(e.value);
+            };
+
+            showRecentItems = new BoolField(uiPanel, "SHOW RECENT ITEMS", "showRecentItems", true);
+            showRecentItems.onValueChange += (BoolField.BoolValueChangeEvent e) =>
+            {
+                UIManager.recentItemContainer?.SetActive(e.value);
+            };
+
+            new ConfigHeader(uiPanel, "LOG");
+            showLog = new BoolField(uiPanel, "SHOW LOG", "showLog", true, true);
             showLog.onValueChange += (BoolField.BoolValueChangeEvent e) =>
             {
                 UIManager.log.gameObject.SetActive(e.value);
             };
 
-            logLines = new IntField(logPanel, "NUMBER OF MESSAGES", "logLines", 5, 1, 16, true, true);
+            logFont = new EnumField<LogFont>(uiPanel, "FONT", "logFont", LogFont.Pixel1);
+            logFont.SetEnumDisplayName(LogFont.Pixel1, "fs Tahoma 8px");
+            logFont.SetEnumDisplayName(LogFont.Pixel2, "VCR OSD MONO");
+            logFont.SetEnumDisplayName(LogFont.SansSerif, "Roboto");
+            logFont.onValueChange += (EnumField<LogFont>.EnumValueChangeEvent e) =>
+            {
+                UIManager.SetLogFont(e.value, true);
+            };
+
+            logLines = new IntField(uiPanel, "NUMBER OF MESSAGES", "logLines", 5, 1, 16, true, true);
             logLines.onValueChange += (IntField.IntValueChangeEvent e) =>
             {
                 UIManager.lines = e.value;
                 while (Multiworld.messages.Count > e.value) Multiworld.messages.RemoveAt(0);
             };
 
-            logFontSize = new IntField(logPanel, "FONT SIZE", "logFontSize", 16, 1, 32, true, true);
+            logFontSize = new IntField(uiPanel, "FONT SIZE", "logFontSize", 20, 1, 32, true, true);
             logFontSize.onValueChange += (IntField.IntValueChangeEvent e) =>
             {
                 UIManager.log.fontSize = e.value;
             };
 
-            logClear = new ButtonField(logPanel, "CLEAR LOG", "logClear");
+            logOpacity = new IntField(uiPanel, "OPACITY", "logOpacity", 100, 0, 100, true, true);
+            logOpacity.onValueChange += (IntField.IntValueChangeEvent e) =>
+            {
+                UIManager.log.color = new Color(1, 1, 1, (float)e.value / 100);
+            };
+
+            logClear = new ButtonField(uiPanel, "CLEAR LOG", "logClear");
             logClear.onClick += () =>
             {
                 UIManager.SetLogText("");
@@ -319,7 +349,7 @@ namespace ArchipelagoULTRAKILL
             APItemTrap = new ColorField(colorPanel, "ITEM (TRAP)", "APItemTrap", new Color(0.98f, 0.5f, 0.45f), true);
             APLocation = new ColorField(colorPanel, "LOCATION", "APLocation", new Color(0, 1, 0.5f), true);
 
-            new ConfigHeader(colorPanel, "POPUP COLORS");
+            new ConfigHeader(colorPanel, "ITEM / LOCATION COLORS");
             layer0Color = new ColorField(colorPanel, "LAYER 0", "layer0Color", new Color(1, 0.5f, 0.25f), true);
             layer1Color = new ColorField(colorPanel, "LAYER 1", "layer1Color", new Color(0.2667f, 1, 0.2706f), true);
             layer2Color = new ColorField(colorPanel, "LAYER 2", "layer2Color", new Color(0.765f, 0.25f, 1), true);
@@ -332,9 +362,6 @@ namespace ArchipelagoULTRAKILL
             encore1Color = new ColorField(colorPanel, "ENCORE 1", "encore1Color", new Color(0.5f, 0.5f, 0.5f), true);
             primeColor = new ColorField(colorPanel, "PRIME SANCTUMS", "primeColor", new Color(1, 0.2353f, 0.2353f), true);
             altColor = new ColorField(colorPanel, "ALTERNATE WEAPON", "altColor", new Color(1, 0.65f, 0), true);
-            arm0Color = new ColorField(colorPanel, "FEEDBACKER", "arm0Color", new Color(0.251f, 0.9059f, 1), true);
-            arm1Color = new ColorField(colorPanel, "KNUCKLEBLASTER", "arm1Color", new Color(1, 0.2353f, 0.2353f), true);
-            arm2Color = new ColorField(colorPanel, "WHIPLASH", "arm2Color", new Color(0.2667f, 1, 0.2706f), true);
             blueSkullColor = new ColorField(colorPanel, "BLUE SKULL", "blueSkullColor", new Color(0.251f, 0.9059f, 1), true);
             redSkullColor = new ColorField(colorPanel, "RED SKULL", "redSkullColor", new Color(1, 0.2353f, 0.2353f), true);
             switchColor = new ColorField(colorPanel, "SWITCH", "switchColor", new Color(0.25f, 0.3f, 1), true);
@@ -369,11 +396,12 @@ namespace ArchipelagoULTRAKILL
             start.value = Core.data.start;
             goal.value = Core.data.goal;
             goalProgress.value = $"{Core.data.completedLevels.Count} / {Core.data.goalRequirement}";
+            perfectGoal.value = Core.data.perfectGoal;
 
             string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
             locationsChecked.value = $"{Core.data.@checked.Count} / {totalLocations}";
 
-            bossRewards.value = Core.data.bossRewards;
+            enemyRewards.value = Core.data.enemyRewards;
             challengeRewards.value = Core.data.challengeRewards;
             pRankRewards.value = Core.data.pRankRewards;
             hankRewards.value = Core.data.hankRewards;
@@ -402,8 +430,9 @@ namespace ArchipelagoULTRAKILL
             start.value = "?";
             goal.value = "?";
             goalProgress.value = "?";
+            perfectGoal.value = false;
             locationsChecked.value = "?";
-            bossRewards.value = BossOptions.Disabled;
+            enemyRewards.value = EnemyOptions.Disabled;
             challengeRewards.value = false;
             pRankRewards.value = false;
             hankRewards.value = false;
@@ -412,7 +441,7 @@ namespace ArchipelagoULTRAKILL
             cleanRewards.value = false;
             chessReward.value = false;
             rocketReward.value = false;
-            randomizeFire2.value = false;
+            randomizeFire2.value = Fire2Options.Disabled;
             revForm.value = WeaponForm.Standard;
             shoForm.value = WeaponForm.Standard;
             naiForm.value = WeaponForm.Standard;

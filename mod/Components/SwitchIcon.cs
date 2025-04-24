@@ -35,7 +35,7 @@ namespace ArchipelagoULTRAKILL.Components
         {
             if (Reposition)
             {
-                if (PrefsManager.Instance.GetBool("levelLeaderboards", true)) transform.localPosition = new Vector3(transform.localPosition.x, yLeaderboard, transform.localPosition.z);
+                if (GameStateManager.ShowLeaderboards) transform.localPosition = new Vector3(transform.localPosition.x, yLeaderboard, transform.localPosition.z);
                 else transform.localPosition = new Vector3(transform.localPosition.x, yNormal, transform.localPosition.z);
             }
             CheckSwitch();

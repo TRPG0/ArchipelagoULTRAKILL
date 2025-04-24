@@ -6,21 +6,213 @@ using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 using Random = UnityEngine.Random;
+using Object = UnityEngine.Object;
 using Color = UnityEngine.Color;
 
 namespace ArchipelagoULTRAKILL
 {
     public static class LocationManager
     {
+        public static GameProgressMoneyAndGear generalProgress;
+
+        public static List<ItemDefinition> ItemDefinitions { get; private set; }
+
         public static Dictionary<string, long> locations = new Dictionary<string, long>();
         public static Dictionary<string, AItem> shopScouts = new Dictionary<string, AItem>();
 
         public static List<Message> messages = new List<Message>();
         public static List<Powerup> powerupQueue = new List<Powerup>();
-        public static bool soapWaiting = false;
+        public static int soapWaiting = 0;
 
         public static List<QueuedItem> itemQueue = new List<QueuedItem>();
+
+        public static readonly List<string> fire2Weapons = new List<string>()
+        {
+            "Revolver - Piercer",
+            "Revolver - Marksman",
+            "Revolver - Sharpshooter",
+            "Shotgun - Core Eject",
+            "Shotgun - Pump Charge",
+            "Shotgun - Sawed-On",
+            "Nailgun - Attractor",
+            "Nailgun - Overheat",
+            "Nailgun - JumpStart",
+            "Rocket Launcher - Freezeframe",
+            "Rocket Launcher - S.R.S. Cannon",
+            "Rocket Launcher - Firestarter"
+        };
+
+        public static void RegenerateItemDefinitions()
+        {
+            ItemDefinitions = new List<ItemDefinition>()
+            {
+                new ItemDefinition("Revolver - Piercer", UKType.Weapon, () => { return Colors.VariationBlue; }, Core.data.revForm == WeaponForm.Standard ? "rev" : "revalt"),
+                new ItemDefinition("Revolver - Marksman", UKType.Weapon, () => { return Colors.VariationGreen; }, Core.data.revForm == WeaponForm.Standard ? "rev" : "revalt"),
+                new ItemDefinition("Revolver - Sharpshooter", UKType.Weapon, () => { return Colors.VariationRed; }, Core.data.revForm == WeaponForm.Standard ? "rev" : "revalt"),
+                new ItemDefinition("Revolver - Standard", UKType.WeaponAlt, () => { return Colors.WeaponAlt; }, "rev"),
+                new ItemDefinition("Revolver - Alternate", UKType.WeaponAlt, () => { return Colors.WeaponAlt; }, "revalt"),
+
+                new ItemDefinition("Shotgun - Core Eject", UKType.Weapon, () => { return Colors.VariationBlue; }, Core.data.shoForm == WeaponForm.Standard ? "sho" : "shoalt"),
+                new ItemDefinition("Shotgun - Pump Charge", UKType.Weapon, () => { return Colors.VariationGreen; }, Core.data.shoForm == WeaponForm.Standard ? "sho" : "shoalt"),
+                new ItemDefinition("Shotgun - Sawed-On", UKType.Weapon, () => { return Colors.VariationRed; }, Core.data.shoForm == WeaponForm.Standard ? "sho" : "shoalt"),
+                new ItemDefinition("Shotgun - Standard", UKType.WeaponAlt, () => { return Colors.WeaponAlt; }, "sho"),
+                new ItemDefinition("Shotgun - Alternate", UKType.WeaponAlt, () => { return Colors.WeaponAlt; }, "shoalt"),
+
+                new ItemDefinition("Nailgun - Attractor", UKType.Weapon, () => { return Colors.VariationBlue; }, Core.data.naiForm == WeaponForm.Standard ? "nai" : "naialt"),
+                new ItemDefinition("Nailgun - Overheat", UKType.Weapon, () => { return Colors.VariationGreen; }, Core.data.naiForm == WeaponForm.Standard ? "nai" : "naialt"),
+                new ItemDefinition("Nailgun - JumpStart", UKType.Weapon, () => { return Colors.VariationRed; }, Core.data.naiForm == WeaponForm.Standard ? "nai" : "naialt"),
+                new ItemDefinition("Nailgun - Standard", UKType.WeaponAlt, () => { return Colors.WeaponAlt; }, "nai"),
+                new ItemDefinition("Nailgun - Alternate", UKType.WeaponAlt, () => { return Colors.WeaponAlt; }, "naialt"),
+
+                new ItemDefinition("Railcannon - Electric", UKType.Weapon, () => { return Colors.VariationBlue; }, "rai"),
+                new ItemDefinition("Railcannon - Screwdriver", UKType.Weapon, () => { return Colors.VariationGreen; }, "rai"),
+                new ItemDefinition("Railcannon - Malicious", UKType.Weapon, () => { return Colors.VariationRed; }, "rai"),
+
+                new ItemDefinition("Rocket Launcher - Freezeframe", UKType.Weapon, () => { return Colors.VariationBlue; }, "rock"),
+                new ItemDefinition("Rocket Launcher - S.R.S. Cannon", UKType.Weapon, () => { return Colors.VariationGreen; }, "rock"),
+                new ItemDefinition("Rocket Launcher - Firestarter", UKType.Weapon, () => { return Colors.VariationRed; }, "rock"),
+
+                new ItemDefinition("Secondary Fire - Piercer", UKType.Fire2, () => { return Colors.VariationBlue; }, "rev0_fire2"),
+                new ItemDefinition("Secondary Fire - Marksman", UKType.Fire2, () => { return Colors.VariationGreen; }, "rev2_fire2"),
+                new ItemDefinition("Secondary Fire - Sharpshooter", UKType.Fire2, () => { return Colors.VariationRed; }, "rev1_fire2"),
+                new ItemDefinition("Secondary Fire - Core Eject", UKType.Fire2, () => { return Colors.VariationBlue; }, "sho0_fire2"),
+                new ItemDefinition("Secondary Fire - Pump Charge", UKType.Fire2, () => { return Colors.VariationGreen; }, "sho1_fire2"),
+                new ItemDefinition("Secondary Fire - Sawed-On", UKType.Fire2, () => { return Colors.VariationRed; }, "sho2_fire2"),
+                new ItemDefinition("Secondary Fire - Attractor", UKType.Fire2, () => { return Colors.VariationBlue; }, "nai0_fire2"),
+                new ItemDefinition("Secondary Fire - Overheat", UKType.Fire2, () => { return Colors.VariationGreen; }, Core.data.naiForm == WeaponForm.Standard ? "naistd1_fire2" : "naialt1_fire2"),
+                new ItemDefinition("Secondary Fire - JumpStart", UKType.Fire2, () => { return Colors.VariationRed; }, "nai2_fire2"),
+                new ItemDefinition("Secondary Fire - Freezeframe", UKType.Fire2, () => { return Colors.VariationBlue; }, "rock0_fire2"),
+                new ItemDefinition("Secondary Fire - S.R.S. Cannon", UKType.Fire2, () => { return Colors.VariationGreen; }, "rock1_fire2"),
+                new ItemDefinition("Secondary Fire - Firestarter", UKType.Fire2, () => { return Colors.VariationRed; }, "rock2_fire2"),
+
+                new ItemDefinition("Feedbacker", UKType.Arm, () => { return Colors.VariationBlue; }, "arm0"),
+                new ItemDefinition("Knuckleblaster", UKType.Arm, () => { return Colors.VariationRed; }, "arm1"),
+                new ItemDefinition("Whiplash", UKType.Arm, () => { return Colors.VariationGreen; }, "arm2"),
+
+                new ItemDefinition("Stamina Bar", UKType.Ability, () => { return Colors.Stamina; }, "dash"),
+                new ItemDefinition("Wall Jump", UKType.Ability, () => { return Colors.Stamina; }, "walljump"),
+                new ItemDefinition("Slide", UKType.Ability, () => { return Colors.Stamina; }, "slide"),
+                new ItemDefinition("Slam", UKType.Ability, () => { return Colors.Stamina; }, "slam"),
+
+                new ItemDefinition("Blue Skull (0-2)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Blue Skull (0-S)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (0-S)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Red Skull (1-1)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Blue Skull (1-1)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Blue Skull (1-2)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (1-2)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Blue Skull (1-3)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (1-3)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Blue Skull (1-4)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Blue Skull (2-3)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (2-3)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Blue Skull (2-4)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (2-4)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Blue Skull (4-2)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (4-2)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Blue Skull (4-3)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Blue Skull (4-4)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Blue Skull (5-1)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Blue Skull (5-2)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (5-2)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Blue Skull (5-3)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (5-3)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Red Skull (6-1)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Red Skull (7-1)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Blue Skull (7-1)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (7-2)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Red Skull (7-S)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Blue Skull (7-S)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Blue Skull (0-E)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (0-E)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Red Skull (1-E)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Blue Skull (1-E)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Blue Skull (P-2)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+
+                new ItemDefinition("0-1: INTO THE FIRE", UKType.Level, () => { return Colors.Layer0; }, "layer0"),
+                new ItemDefinition("0-2: THE MEATGRINDER", UKType.Level, () => { return Colors.Layer0; }, "layer0"),
+                new ItemDefinition("0-3: DOUBLE DOWN", UKType.Level, () => { return Colors.Layer0; }, "layer0"),
+                new ItemDefinition("0-4: A ONE-MACHINE ARMY", UKType.Level, () => { return Colors.Layer0; }, "layer0"),
+                new ItemDefinition("0-5: CERBERUS", UKType.Level, () => { return Colors.Layer0; }, "layer0"),
+                new ItemDefinition("1-1: HEART OF THE SUNRISE", UKType.Level, () => { return Colors.Layer1; }, "layer1"),
+                new ItemDefinition("1-2: THE BURNING WORLD", UKType.Level, () => { return Colors.Layer1; }, "layer1"),
+                new ItemDefinition("1-3: HALLS OF SACRED REMAINS", UKType.Level, () => { return Colors.Layer1; }, "layer1"),
+                new ItemDefinition("1-4: CLAIR DE LUNE", UKType.Level, () => { return Colors.Layer1; }, "layer1"),
+                new ItemDefinition("2-1: BRIDGEBURNER", UKType.Level, () => { return Colors.Layer2; }, "layer2"),
+                new ItemDefinition("2-2: DEATH AT 20,000 VOLTS", UKType.Level, () => { return Colors.Layer2; }, "layer2"),
+                new ItemDefinition("2-3: SHEER HEART ATTACK", UKType.Level, () => { return Colors.Layer2; }, "layer2"),
+                new ItemDefinition("2-4: COURT OF THE CORPSE KING", UKType.Level, () => { return Colors.Layer2; }, "layer2"),
+                new ItemDefinition("3-1: BELLY OF THE BEAST", UKType.Level, () => { return Colors.Layer3; }, "layer3"),
+                new ItemDefinition("3-2: IN THE FLESH", UKType.Level, () => { return Colors.Layer3; }, "layer3"),
+                new ItemDefinition("4-1: SLAVES TO POWER", UKType.Level, () => { return Colors.Layer4; }, "layer4"),
+                new ItemDefinition("4-2: GOD DAMN THE SUN", UKType.Level, () => { return Colors.Layer4; }, "layer4"),
+                new ItemDefinition("4-3: A SHOT IN THE DARK", UKType.Level, () => { return Colors.Layer4; }, "layer4"),
+                new ItemDefinition("4-4: CLAIR DE SOLEIL", UKType.Level, () => { return Colors.Layer4; }, "layer4"),
+                new ItemDefinition("5-1: IN THE WAKE OF POSEIDON", UKType.Level, () => { return Colors.Layer5; }, "layer5"),
+                new ItemDefinition("5-2: WAVES OF THE STARLESS SEA", UKType.Level, () => { return Colors.Layer5; }, "layer5"),
+                new ItemDefinition("5-3: SHIP OF FOOLS", UKType.Level, () => { return Colors.Layer5; }, "layer5"),
+                new ItemDefinition("5-4: LEVIATHAN", UKType.Level, () => { return Colors.Layer5; }, "layer5"),
+                new ItemDefinition("6-1: CRY FOR THE WEEPER", UKType.Level, () => { return Colors.Layer6; }, "layer6"),
+                new ItemDefinition("6-2: AESTHETICS OF HATE", UKType.Level, () => { return Colors.Layer6; }, "layer6"),
+                new ItemDefinition("7-1: GARDEN OF FORKING PATHS", UKType.Level, () => { return Colors.Layer7; }, "layer7"),
+                new ItemDefinition("7-2: LIGHT UP THE NIGHT", UKType.Level, () => { return Colors.Layer7; }, "layer7"),
+                new ItemDefinition("7-3: NO SOUND, NO MEMORY", UKType.Level, () => { return Colors.Layer7; }, "layer7"),
+                new ItemDefinition("7-4: ...LIKE ANTENNAS TO HEAVEN", UKType.Level, () => { return Colors.Layer7; }, "layer7"),
+                new ItemDefinition("0-E: THIS HEAT, AN EVIL HEAT", UKType.Level, () => { return Colors.Encore0; }, "layer0"),
+                new ItemDefinition("1-E: ...THEN FELL THE ASHES", UKType.Level, () => { return Colors.Encore1; }, "layer1"),
+                new ItemDefinition("P-1: SOUL SURVIVOR", UKType.Level, () => { return Colors.Prime; }, "layer3"),
+                new ItemDefinition("P-2: WAIT OF THE WORLD", UKType.Level, () => { return Colors.Prime; }, "layer6"),
+
+                new ItemDefinition("OVERTURE: THE MOUTH OF HELL", UKType.Layer, () => { return Colors.Layer0; }, "layer0"),
+                new ItemDefinition("LAYER 1: LIMBO", UKType.Layer, () => { return Colors.Layer1; }, "layer1"),
+                new ItemDefinition("LAYER 2: LUST", UKType.Layer, () => { return Colors.Layer2; }, "layer2"),
+                new ItemDefinition("LAYER 3: GLUTTONY", UKType.Layer, () => { return Colors.Layer3; }, "layer3"),
+                new ItemDefinition("LAYER 4: GREED", UKType.Layer, () => { return Colors.Layer4; }, "layer4"),
+                new ItemDefinition("LAYER 5: WRATH", UKType.Layer, () => { return Colors.Layer5; }, "layer5"),
+                new ItemDefinition("LAYER 6: HERESY", UKType.Layer, () => { return Colors.Layer6; }, "layer6"),
+                new ItemDefinition("LAYER 7: VIOLENCE", UKType.Layer, () => { return Colors.Layer7; }, "layer7"),
+
+                new ItemDefinition("+10,000P", UKType.Points, () => { return Colors.Points; }, "points"),
+                new ItemDefinition("Overheal", UKType.Powerup, () => { return Colors.Overheal; }, "overheal"),
+                new ItemDefinition("Dual Wield", UKType.Powerup, () => { return Colors.DualWield; }, "dualwield"),
+                new ItemDefinition("Infinite Stamina", UKType.Powerup, () => { return Colors.Stamina; }, "infinitestamina"),
+                new ItemDefinition("Air Jump", UKType.Powerup, () => { return Colors.DoubleJump; }, "doublejump"),
+                new ItemDefinition("Soap", UKType.Soap, () => { return Colors.White; }, "soap"),
+                new ItemDefinition("Confusing Aura", UKType.Powerup, () => { return Colors.Confusion; }, "confusion"),
+                new ItemDefinition("Quick Charge", UKType.Powerup, () => { return Colors.VariationBlue; }, "quickcharge"),
+
+                new ItemDefinition("Hard Damage", UKType.Trap, () => { return Colors.Trap; }, "overheal"),
+                new ItemDefinition("Stamina Limiter", UKType.Trap, () => { return Colors.Trap; }, "infinitestamina"),
+                new ItemDefinition("Wall Jump Limiter", UKType.Trap, () => { return Colors.Trap; }, "walljumptrap"),
+                new ItemDefinition("Weapon Malfunction", UKType.Trap, () => { return Colors.Trap; }, "quickcharge"),
+                new ItemDefinition("Empty Ammunition", UKType.Trap, () => { return Colors.Trap; }, "quickcharge"),
+                new ItemDefinition("Radiant Aura", UKType.Trap, () => { return Colors.Trap; }, "radiance"),
+                new ItemDefinition("Hands-Free Mode", UKType.Trap, () => { return Colors.Trap; }, "noarms"),
+                new ItemDefinition("Short-Term Sandstorm", UKType.Trap, () => { return Colors.Trap; }, "sandstorm"),
+
+                new ItemDefinition("Limbo Switch I", UKType.LimboSwitch, () => { return Colors.Switch; }, "switch1"),
+                new ItemDefinition("Limbo Switch II", UKType.LimboSwitch, () => { return Colors.Switch; }, "switch2"),
+                new ItemDefinition("Limbo Switch III", UKType.LimboSwitch, () => { return Colors.Switch; }, "switch3"),
+                new ItemDefinition("Limbo Switch IV", UKType.LimboSwitch, () => { return Colors.Switch; }, "switch4"),
+                new ItemDefinition("Violence Switch I", UKType.ShotgunSwitch, () => { return Colors.Switch; }, "switch1"),
+                new ItemDefinition("Violence Switch II", UKType.ShotgunSwitch, () => { return Colors.Switch; }, "switch2"),
+                new ItemDefinition("Violence Switch III", UKType.ShotgunSwitch, () => { return Colors.Switch; }, "switch3"),
+
+                new ItemDefinition("Clash Mode", UKType.ClashMode, () => { return Colors.Layer4; }, "clash")
+            };
+        }
+
+        public static ItemDefinition GetItemDefinition(string name)
+        {
+            foreach (ItemDefinition itemDefinition in ItemDefinitions)
+            {
+                if (itemDefinition.Name == name) return itemDefinition;
+            }
+            Core.Logger.LogWarning($"No item definition for name \"{name}\"");
+            return null;
+        }
 
         public static void CheckLocation(string loc)
         {
@@ -67,7 +259,7 @@ namespace ArchipelagoULTRAKILL
 
         public static void GetUKItem(UKItem item, string sendingPlayer = null, bool silent = false, bool save = true)
         {
-            string itemColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(item.itemName));
+            string itemColor = ColorUtility.ToHtmlStringRGB(GetItemDefinition(item.itemName).Color.Invoke());
             string playerColor = ColorUtility.ToHtmlStringRGB(Colors.PlayerOther);
             string text = "";
 
@@ -94,6 +286,7 @@ namespace ArchipelagoULTRAKILL
                             if (FistControl.Instance.shopping) GunControl.Instance.NoWeapon();
                         }
                         text = "WEAPON: ";
+                        generalProgress = GameProgressSaver.GetGeneralProgress();
                         break;
 
                     case UKType.WeaponAlt:
@@ -322,7 +515,7 @@ namespace ArchipelagoULTRAKILL
                         break;
 
                     case UKType.Soap:
-                        if (Core.IsInLevel) Core.SpawnSoap();
+                        soapWaiting++;
                         if (sendingPlayer == null) text = "FOUND: ";
                         else text = "GOT: ";
                         break;
@@ -376,8 +569,8 @@ namespace ArchipelagoULTRAKILL
                 {
                     messages.Add(new Message
                     {
-                        image = GetUKMessageImage(item.itemName),
-                        color = GetUKMessageColor(item.itemName),
+                        image = GetItemDefinition(item.itemName).Image,
+                        color = GetItemDefinition(item.itemName).Color.Invoke(),
                         message = text
                     });
                 }
@@ -389,7 +582,7 @@ namespace ArchipelagoULTRAKILL
                 {
                     messages.Add(new Message
                     {
-                        image = GetUKMessageImage(item.itemName),
+                        image = GetItemDefinition(item.itemName).Image,
                         color = Colors.Gray,
                         message = text
                     });
@@ -415,15 +608,15 @@ namespace ArchipelagoULTRAKILL
                 ScoutedItemInfo info = Multiworld.Session.Locations.ScoutLocationsAsync(true, locationId).Result[locationId];
                 string locationName = Multiworld.Session.Locations.GetLocationNameFromId(info.LocationId, Multiworld.Session.Players.GetPlayerInfo(Multiworld.Session.ConnectionInfo.Slot).Game);
 
-                string itemColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(info.ItemName));
-                Color color = GetUKMessageColor(info.ItemName);
+                string itemColor = ColorUtility.ToHtmlStringRGB(GetItemDefinition(info.ItemName).Color.Invoke());
+                Color color = GetItemDefinition(info.ItemName).Color.Invoke();
                 if (itemColor == "FFFFFF")
                 {
                     itemColor = ColorUtility.ToHtmlStringRGB(GetAPMessageColor(info.Flags));
                     color = GetAPMessageColor(info.Flags);
                 }
                 string playerColor = ColorUtility.ToHtmlStringRGB(Colors.PlayerOther);
-                string locationColor = ColorUtility.ToHtmlStringRGB(GetUKMessageColor(locationName.Substring(0, 3)));
+                string locationColor = ColorUtility.ToHtmlStringRGB(GetLocationColor(locationName.Substring(0, 3)));
 
                 string hint = "HINT: <color=#" + itemColor + "FF>";
                 hint += info.ItemName.ToUpper() + "</color> ";
@@ -433,7 +626,7 @@ namespace ArchipelagoULTRAKILL
 
                 messages.Add(new Message
                 {
-                    image = GetUKMessageImage(info.ItemName),
+                    image = GetItemDefinition(info.ItemName).Image,
                     color = color,
                     message = hint
                 });
@@ -445,430 +638,62 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
-        public static string GetUKMessageImage(string itemName)
+        public static Color GetLocationColor(string locationName)
         {
-            switch (itemName)
-            {
-                case "Revolver - Piercer":
-                case "Revolver - Marksman":
-                case "Revolver - Sharpshooter":
-                    if (Core.data.revForm == WeaponForm.Standard) return "rev";
-                    else return "revalt";
-                case "Secondary Fire - Piercer":
-                    return "rev0_fire2";
-                case "Secondary Fire - Marksman":
-                    return "rev2_fire2";
-                case "Secondary Fire - Sharpshooter":
-                    return "rev1_fire2";
-                case "Shotgun - Core Eject":
-                case "Shotgun - Pump Charge":
-                case "Shotgun - Sawed-On":
-                    if (Core.data.shoForm == WeaponForm.Standard) return "sho";
-                    else return "shoalt";
-                case "Secondary Fire - Core Eject":
-                    return "sho0_fire2";
-                case "Secondary Fire - Pump Charge":
-                    return "sho1_fire2";
-                case "Secondary Fire - Sawed-On":
-                    return "sho2_fire2";
-                case "Nailgun - Attractor":
-                case "Nailgun - Overheat":
-                case "Nailgun - JumpStart":
-                    if (Core.data.naiForm == WeaponForm.Standard) return "nai";
-                    else return "naialt";
-                case "Secondary Fire - Attractor":
-                    return "nai0_fire2";
-                case "Secondary Fire - Overheat":
-                    if (Core.data.naiForm == WeaponForm.Standard) return "naistd1_fire2";
-                    else return "naialt1_fire2";
-                case "Secondary Fire - JumpStart":
-                    return "nai2_fire2";
-                case "Railcannon - Electric":
-                case "Railcannon - Screwdriver":
-                case "Railcannon - Malicious":
-                    return "rai";
-                case "Rocket Launcher - Freezeframe":
-                case "Rocket Launcher - S.R.S. Cannon":
-                case "Rocket Launcher - Firestarter":
-                    return "rock";
-                case "Secondary Fire - Freezeframe":
-                    return "rock0_fire2";
-                case "Secondary Fire - S.R.S. Cannon":
-                    return "rock1_fire2";
-                case "Secondary Fire - Firestarter":
-                    return "rock2_fire2";
-                case "Revolver - Standard":
-                case "Revolver - Alternate":
-                    if (Core.data.revForm == WeaponForm.Standard) return "revalt";
-                    else return "rev";
-                case "Shotgun - Standard":
-                case "Shotgun - Alternate":
-                    if (Core.data.shoForm == WeaponForm.Standard) return "shoalt";
-                    else return "sho";
-                case "Nailgun - Standard":
-                case "Nailgun - Alternate":
-                    if (Core.data.naiForm == WeaponForm.Standard) return "naialt";
-                    else return "nai";
-                case "Feedbacker":
-                case "Knuckleblaster":
-                case "Whiplash":
-                    return "arm";
-                case "Stamina Bar":
-                    return "dash";
-                case "Wall Jump":
-                    return "walljump";
-                case "Slide":
-                    return "slide";
-                case "Slam":
-                    return "slam";
-                case "Blue Skull (0-2)":
-                case "Blue Skull (0-S)":
-                case "Red Skull (0-S)":
-                case "Red Skull (1-1)":
-                case "Blue Skull (1-1)":
-                case "Blue Skull (1-2)":
-                case "Red Skull (1-2)":
-                case "Blue Skull (1-3)":
-                case "Red Skull (1-3)":
-                case "Blue Skull (1-4)":
-                case "Blue Skull (2-3)":
-                case "Red Skull (2-3)":
-                case "Blue Skull (2-4)":
-                case "Red Skull (2-4)":
-                case "Blue Skull (4-2)":
-                case "Red Skull (4-2)":
-                case "Blue Skull (4-3)":
-                case "Blue Skull (4-4)":
-                case "Blue Skull (5-1)":
-                case "Blue Skull (5-2)":
-                case "Red Skull (5-2)":
-                case "Blue Skull (5-3)":
-                case "Red Skull (5-3)":
-                case "Blue Skull (5-4)":
-                case "Red Skull (6-1)":
-                case "Red Skull (7-1)":
-                case "Blue Skull (7-1)":
-                case "Red Skull (7-2)":
-                case "Red Skull (7-S)":
-                case "Blue Skull (7-S)":
-                case "Blue Skull (0-E)":
-                case "Red Skull (0-E)":
-                case "Blue Skull (1-E)":
-                case "Red Skull (1-E)":
-                case "Blue Skull (P-2)":
-                    return "skull";
-                case "0-1: INTO THE FIRE":
-                case "0-2: THE MEATGRINDER":
-                case "0-3: DOUBLE DOWN":
-                case "0-4: A ONE-MACHINE ARMY":
-                case "0-5: CERBERUS":
-                case "0-E: THIS HEAT, AN EVIL HEAT":
-                case "OVERTURE: THE MOUTH OF HELL":
-                    return "layer0";
-                case "1-1: HEART OF THE SUNRISE":
-                case "1-2: THE BURNING WORLD":
-                case "1-3: HALLS OF SACRED REMAINS":
-                case "1-4: CLAIR DE LUNE":
-                case "1-E: ...THEN FELL THE ASHES":
-                case "LAYER 1: LIMBO":
-                    return "layer1";
-                case "2-1: BRIDGEBURNER":
-                case "2-2: DEATH AT 20,000 VOLTS":
-                case "2-3: SHEER HEART ATTACK":
-                case "2-4: COURT OF THE CORPSE KING":
-                case "LAYER 2: LUST":
-                    return "layer2";
-                case "3-1: BELLY OF THE BEAST":
-                case "3-2: IN THE FLESH":
-                case "LAYER 3: GLUTTONY":
-                    return "layer3";
-                case "4-1: SLAVES TO POWER":
-                case "4-2: GOD DAMN THE SUN":
-                case "4-3: A SHOT IN THE DARK":
-                case "4-4: CLAIR DE SOLEIL":
-                case "LAYER 4: GREED":
-                    return "layer4";
-                case "5-1: IN THE WAKE OF POSEIDON":
-                case "5-2: WAVES OF THE STARLESS SEA":
-                case "5-3: SHIP OF FOOLS":
-                case "5-4: LEVIATHAN":
-                case "LAYER 5: WRATH":
-                    return "layer5";
-                case "6-1: CRY FOR THE WEEPER":
-                case "6-2: AESTHETICS OF HATE":
-                case "LAYER 6: HERESY":
-                    return "layer6";
-                case "7-1: GARDEN OF FORKING PATHS":
-                case "7-2: LIGHT UP THE NIGHT":
-                case "7-3: NO SOUND, NO MEMORY":
-                case "7-4: ...LIKE ANTENNAS TO HEAVEN":
-                case "LAYER 7: VIOLENCE":
-                    return "layer7";
-                // TO DO: make prime sanctum icons
-                case "P-1: SOUL SURVIVOR":
-                case "P-2: WAIT OF THE WORLD":
-                    return "layer3";
-                case "+10,000P":
-                    return "points";
-                case "Overheal":
-                case "Hard Damage":
-                    return "overheal";
-                case "Dual Wield":
-                    return "dualwield";
-                case "Infinite Stamina":
-                case "Stamina Limiter":
-                    return "infinitestamina";
-                case "Wall Jump Limiter":
-                    return "walljumptrap";
-                case "Air Jump":
-                    return "doublejump";
-                case "Radiant Aura":
-                    return "radiance";
-                case "Soap":
-                    return "soap";
-                case "Limbo Switch I":
-                case "Violence Switch I":
-                    return "switch1";
-                case "Limbo Switch II":
-                case "Violence Switch II":
-                    return "switch2";
-                case "Limbo Switch III":
-                case "Violence Switch III":
-                    return "switch3";
-                case "Limbo Switch IV":
-                    return "switch4";
-                case "Clash Mode":
-                    return "clash";
-                case "Empty Ammunition":
-                case "Weapon Malfunction":
-                    return "malfunction";
-                case "Hands-Free Mode":
-                    return "noarms";
-                case "Quick Charge":
-                    return "quickcharge";
-                case "Confusing Aura":
-                    return "confusion";
-                case "Short-Term Sandstorm":
-                    return "sandstorm";
-                default:
-                    return "archipelago";
-            }
+            if (locationName.StartsWith("0-E")) return Colors.Encore0;
+            if (locationName.StartsWith("1-E")) return Colors.Encore1;
+            else if (locationName.StartsWith("0-")) return Colors.Layer0;
+            else if (locationName.StartsWith("1-")) return Colors.Layer1;
+            else if (locationName.StartsWith("2-")) return Colors.Layer2;
+            else if (locationName.StartsWith("3-")) return Colors.Layer3;
+            else if (locationName.StartsWith("4-")) return Colors.Layer4;
+            else if (locationName.StartsWith("5-")) return Colors.Layer5;
+            else if (locationName.StartsWith("6-")) return Colors.Layer6;
+            else if (locationName.StartsWith("7-")) return Colors.Layer7;
+            else if (locationName.StartsWith("P-")) return Colors.Prime;
+            else if (locationName.StartsWith("Shop")) return Colors.Points;
+            else return Colors.White;
         }
 
-        public static Color GetUKMessageColor(string itemName)
+        public static string GetLocationImage(string locationName)
         {
-            switch (itemName)
+            if (locationName.StartsWith("0-")) return "layer0";
+            else if (locationName.StartsWith("1-")) return "layer1";
+            else if (locationName.StartsWith("2-")) return "layer2";
+            else if (locationName.StartsWith("3-")) return "layer3";
+            else if (locationName.StartsWith("4-")) return "layer4";
+            else if (locationName.StartsWith("5-")) return "layer5";
+            else if (locationName.StartsWith("6-")) return "layer6";
+            else if (locationName.StartsWith("7-")) return "layer7";
+            else if (locationName.StartsWith("P-1")) return "layer3";
+            else if (locationName.StartsWith("P-2")) return "layer6";
+            else if (locationName.Contains("Buy Revolver")) return Core.data.revForm == WeaponForm.Standard ? "rev" : "revalt";
+            else if (locationName.Contains("Buy Shotgun")) return Core.data.shoForm == WeaponForm.Standard ? "sho" : "shoalt";
+            else if (locationName.Contains("Buy Nailgun")) return Core.data.naiForm == WeaponForm.Standard ? "nai" : "naialt";
+            else if (locationName.Contains("Buy Railcannon")) return "rai";
+            else if (locationName.Contains("Buy Rocket")) return "rock";
+            else if (locationName.StartsWith("Museum")) return "layer1";
+            else return "archipelago";
+        }
+
+        public static string GetCurrentLevelImage()
+        {
+            if (Core.CurrentLevelHasInfo)
             {
-                case "Revolver - Piercer":
-                case "Shotgun - Core Eject":
-                case "Nailgun - Attractor":
-                case "Railcannon - Electric":
-                case "Rocket Launcher - Freezeframe":
-                case "Secondary Fire - Piercer":
-                case "Secondary Fire - Core Eject":
-                case "Secondary Fire - Attractor":
-                case "Secondary Fire - Freezeframe":
-                    return ColorBlindSettings.Instance.variationColors[0]; // blue
-                case "Revolver - Marksman":
-                case "Shotgun - Pump Charge":
-                case "Nailgun - Overheat":
-                case "Railcannon - Screwdriver":
-                case "Rocket Launcher - S.R.S. Cannon":
-                case "Secondary Fire - Marksman":
-                case "Secondary Fire - Pump Charge":
-                case "Secondary Fire - Overheat":
-                case "Secondary Fire - S.R.S. Cannon":
-                    return ColorBlindSettings.Instance.variationColors[1]; // green
-                case "Revolver - Sharpshooter":
-                case "Shotgun - Sawed-On":
-                case "Nailgun - JumpStart":
-                case "Railcannon - Malicious":
-                case "Rocket Launcher - Firestarter":
-                case "Secondary Fire - Sharpshooter":
-                case "Secondary Fire - Sawed-On":
-                case "Secondary Fire - JumpStart":
-                case "Secondary Fire - Firestarter":
-                    return ColorBlindSettings.Instance.variationColors[2]; // red
-                case "Revolver - Standard":
-                case "Revolver - Alternate":
-                case "Shotgun - Standard":
-                case "Shotgun - Alternate":
-                case "Nailgun - Standard":
-                case "Nailgun - Alternate":
-                    return Colors.WeaponAlt;
-                case "Stamina Bar":
-                case "Wall Jump":
-                case "Slide":
-                case "Slam":
-                case "Infinite Stamina":
-                case "Quick Charge":
-                    return ColorBlindSettings.Instance.staminaColor;
-                case "Feedbacker":
-                    return Colors.Arm0;
-                case "5-1: IN THE WAKE OF POSEIDON":
-                case "5-2: WAVES OF THE STARLESS SEA":
-                case "5-3: SHIP OF FOOLS":
-                case "5-4: LEVIATHAN":
-                case "5-1":
-                case "5-2":
-                case "5-3":
-                case "5-4":
-                case "5-S":
-                case "LAYER 5: WRATH":
-                    return Colors.Layer5;
-                case "Blue Skull (0-2)":
-                case "Blue Skull (0-S)":
-                case "Blue Skull (1-1)":
-                case "Blue Skull (1-2)":
-                case "Blue Skull (1-3)":
-                case "Blue Skull (1-4)":
-                case "Blue Skull (2-3)":
-                case "Blue Skull (2-4)":
-                case "Blue Skull (4-2)":
-                case "Blue Skull (4-3)":
-                case "Blue Skull (4-4)":
-                case "Blue Skull (5-1)":
-                case "Blue Skull (5-2)":
-                case "Blue Skull (5-3)":
-                case "Blue Skull (5-4)":
-                case "Blue Skull (7-1)":
-                case "Blue Skull (7-S)":
-                case "Blue Skull (0-E)":
-                case "Blue Skull (1-E)":
-                case "Blue Skull (P-2)":
-                    return Colors.BlueSkull;
-                case "Whiplash":
-                    return Colors.Arm2;
-                case "1-1: HEART OF THE SUNRISE":
-                case "1-2: THE BURNING WORLD":
-                case "1-3: HALLS OF SACRED REMAINS":
-                case "1-4: CLAIR DE LUNE":
-                case "1-1":
-                case "1-2":
-                case "1-3":
-                case "1-4":
-                case "1-S":
-                case "1-E":
-                case "LAYER 1: LIMBO":
-                    return Colors.Layer1;
-                case "Knuckleblaster":
-                    return Colors.Arm1;
-                case "6-1: CRY FOR THE WEEPER":
-                case "6-2: AESTHETICS OF HATE":
-                case "6-1":
-                case "6-2":
-                case "LAYER 6: HERESY":
-                    return Colors.Layer6;
-                case "7-1: GARDEN OF FORKING PATHS":
-                case "7-2: LIGHT UP THE NIGHT":
-                case "7-3: NO SOUND, NO MEMORY":
-                case "7-4: ...LIKE ANTENNAS TO HEAVEN":
-                case "7-1":
-                case "7-2":
-                case "7-3":
-                case "7-4":
-                case "7-S":
-                case "LAYER 7: VIOLENCE":
-                    return Colors.Layer7;
-                case "P-1: SOUL SURVIVOR":
-                case "P-2: WAIT OF THE WORLD":
-                case "P-1":
-                case "P-2":
-                    return Colors.Prime;
-                case "Red Skull (0-S)":
-                case "Red Skull (1-1)":
-                case "Red Skull (1-2)":
-                case "Red Skull (1-3)":
-                case "Red Skull (2-3)":
-                case "Red Skull (2-4)":
-                case "Red Skull (4-2)":
-                case "Red Skull (5-2)":
-                case "Red Skull (5-3)":
-                case "Red Skull (6-1)":
-                case "Red Skull (7-1)":
-                case "Red Skull (7-2)":
-                case "Red Skull (7-S)":
-                case "Red Skull (0-E)":
-                case "Red Skull (1-E)":
-                    return Colors.RedSkull;
-                case "0-1: INTO THE FIRE":
-                case "0-2: THE MEATGRINDER":
-                case "0-3: DOUBLE DOWN":
-                case "0-4: A ONE-MACHINE ARMY":
-                case "0-5: CERBERUS":
-                case "OVERTURE: THE MOUTH OF HELL":
-                case "0-1":
-                case "0-2":
-                case "0-3":
-                case "0-4":
-                case "0-5":
-                case "0-S":
-                case "0-E":
-                    return Colors.Layer0;
-                case "2-1: BRIDGEBURNER":
-                case "2-2: DEATH AT 20,000 VOLTS":
-                case "2-3: SHEER HEART ATTACK":
-                case "2-4: COURT OF THE CORPSE KING":
-                case "LAYER 2: LUST":
-                case "2-1":
-                case "2-2":
-                case "2-3":
-                case "2-4":
-                case "2-S":
-                    return Colors.Layer2;
-                case "3-1: BELLY OF THE BEAST":
-                case "3-2: IN THE FLESH":
-                case "3-1":
-                case "3-2":
-                case "LAYER 3: GLUTTONY":
-                    return Colors.Layer3;
-                case "4-1: SLAVES TO POWER":
-                case "4-2: GOD DAMN THE SUN":
-                case "4-3: A SHOT IN THE DARK":
-                case "4-4: CLAIR DE SOLEIL":
-                case "LAYER 4: GREED":
-                case "4-1":
-                case "4-2":
-                case "4-3":
-                case "4-4":
-                case "4-S":
-                case "Clash Mode":
-                    return Colors.Layer4;
-                case "Dual Wield":
-                    return Colors.DualWield;
-                case "Air Jump":
-                    return Colors.DoubleJump;
-                case "Overheal":
-                    return ColorBlindSettings.Instance.overHealColor;
-                case "+10,000P":
-                case "Sho":
-                    return Colors.Points;
-                case "Hard Damage":
-                case "Stamina Limiter":
-                case "Wall Jump Limiter":
-                case "Empty Ammunition":
-                case "Weapon Malfunction":
-                case "Radiant Aura":
-                case "Hands-Free Mode":
-                case "Short-Term Sandstorm":
-                    return Colors.Trap;
-                case "Violence Switch I":
-                case "Violence Switch II":
-                case "Violence Switch III":
-                case "Limbo Switch I":
-                case "Limbo Switch II":
-                case "Limbo Switch III":
-                case "Limbo Switch IV":
-                    return Colors.Switch;
-                case "Confusing Aura":
-                    return Colors.Confusion;
-                case "0-E: THIS HEAT, AN EVIL HEAT":
-                    return Colors.Encore0;
-                case "1-E: ...THEN FELL THE ASHES":
-                    return Colors.Encore1;
-                default:
-                    return Colors.White;
+                switch (Core.CurrentLevelInfo.Layer)
+                {
+                    case 0: return "layer0";
+                    case 1: return "layer1";
+                    case 2: return "layer2";
+                    case 3: return "layer3";
+                    case 4: return "layer4";
+                    case 5: return "layer5";
+                    case 6: return "layer6";
+                    case 7: return "layer7";
+                    default: return "confusion";
+                }
             }
+            else return "confusion";
         }
 
         public static Color GetAPMessageColor(ItemFlags flag)
@@ -877,170 +702,6 @@ namespace ArchipelagoULTRAKILL
             else if (flag.HasFlag(ItemFlags.NeverExclude)) return Colors.ItemNeverExclude;
             else if (flag.HasFlag(ItemFlags.Trap)) return Colors.ItemTrap;
             else return Colors.ItemFiller;
-        }
-
-        public static UKType? GetTypeFromName(string name)
-        {
-            switch (name)
-            {
-                case "Revolver - Piercer":
-                case "Revolver - Marksman":
-                case "Revolver - Sharpshooter":
-                case "Shotgun - Core Eject":
-                case "Shotgun - Pump Charge":
-                case "Shotgun - Sawed-On":
-                case "Nailgun - Attractor":
-                case "Nailgun - Overheat":
-                case "Nailgun - JumpStart":
-                case "Railcannon - Electric":
-                case "Railcannon - Screwdriver":
-                case "Railcannon - Malicious":
-                case "Rocket Launcher - Freezeframe":
-                case "Rocket Launcher - S.R.S. Cannon":
-                case "Rocket Launcher - Firestarter":
-                    return UKType.Weapon;
-                case "Revolver - Standard":
-                case "Revolver - Alternate":
-                case "Shotgun - Standard":
-                case "Shotgun - Alternate":
-                case "Nailgun - Standard":
-                case "Nailgun - Alternate":
-                    return UKType.WeaponAlt;
-                case "Feedbacker":
-                case "Knuckleblaster":
-                case "Whiplash":
-                    return UKType.Arm;
-                case "Stamina Bar":
-                case "Wall Jump":
-                case "Slide":
-                case "Slam":
-                    return UKType.Ability;
-                case "Blue Skull (0-2)":
-                case "Blue Skull (0-S)":
-                case "Red Skull (0-S)":
-                case "Red Skull (1-1)":
-                case "Blue Skull (1-1)":
-                case "Blue Skull (1-2)":
-                case "Red Skull (1-2)":
-                case "Blue Skull (1-3)":
-                case "Red Skull (1-3)":
-                case "Blue Skull (1-4)":
-                case "Blue Skull (2-3)":
-                case "Red Skull (2-3)":
-                case "Blue Skull (2-4)":
-                case "Red Skull (2-4)":
-                case "Blue Skull (4-2)":
-                case "Red Skull (4-2)":
-                case "Blue Skull (4-3)":
-                case "Blue Skull (4-4)":
-                case "Blue Skull (5-1)":
-                case "Blue Skull (5-2)":
-                case "Red Skull (5-2)":
-                case "Blue Skull (5-3)":
-                case "Red Skull (5-3)":
-                case "Blue Skull (5-4)":
-                case "Red Skull (6-1)":
-                case "Red Skull (7-1)":
-                case "Blue Skull (7-1)":
-                case "Red Skull (7-2)":
-                case "Red Skull (7-S)":
-                case "Blue Skull (7-S)":
-                case "Blue Skull (0-E)":
-                case "Red Skull (0-E)":
-                case "Red Skull (1-E)":
-                case "Blue Skull (1-E)":
-                case "Blue Skull (P-2)":
-                    return UKType.Skull;
-                case "0-1: INTO THE FIRE":
-                case "0-2: THE MEATGRINDER":
-                case "0-3: DOUBLE DOWN":
-                case "0-4: A ONE-MACHINE ARMY":
-                case "0-5: CERBERUS":
-                case "1-1: HEART OF THE SUNRISE":
-                case "1-2: THE BURNING WORLD":
-                case "1-3: HALLS OF SACRED REMAINS":
-                case "1-4: CLAIR DE LUNE":
-                case "2-1: BRIDGEBURNER":
-                case "2-2: DEATH AT 20,000 VOLTS":
-                case "2-3: SHEER HEART ATTACK":
-                case "2-4: COURT OF THE CORPSE KING":
-                case "3-1: BELLY OF THE BEAST":
-                case "3-2: IN THE FLESH":
-                case "4-1: SLAVES TO POWER":
-                case "4-2: GOD DAMN THE SUN":
-                case "4-3: A SHOT IN THE DARK":
-                case "4-4: CLAIR DE SOLEIL":
-                case "5-1: IN THE WAKE OF POSEIDON":
-                case "5-2: WAVES OF THE STARLESS SEA":
-                case "5-3: SHIP OF FOOLS":
-                case "5-4: LEVIATHAN":
-                case "6-1: CRY FOR THE WEEPER":
-                case "6-2: AESTHETICS OF HATE":
-                case "7-1: GARDEN OF FORKING PATHS":
-                case "7-2: LIGHT UP THE NIGHT":
-                case "7-3: NO SOUND, NO MEMORY":
-                case "7-4: ...LIKE ANTENNAS TO HEAVEN":
-                case "0-E: THIS HEAT, AN EVIL HEAT":
-                case "1-E: ...THEN FELL THE ASHES":
-                case "P-1: SOUL SURVIVOR":
-                case "P-2: WAIT OF THE WORLD":
-                    return UKType.Level;
-                case "OVERTURE: THE MOUTH OF HELL":
-                case "LAYER 1: LIMBO":
-                case "LAYER 2: LUST":
-                case "LAYER 3: GLUTTONY":
-                case "LAYER 4: GREED":
-                case "LAYER 5: WRATH":
-                case "LAYER 6: HERESY":
-                case "LAYER 7: VIOLENCE":
-                    return UKType.Layer;
-                case "+10,000P":
-                    return UKType.Points;
-                case "Overheal":
-                case "Dual Wield":
-                case "Infinite Stamina":
-                case "Air Jump":
-                case "Confusing Aura":
-                case "Quick Charge":
-                    return UKType.Powerup;
-                case "Hard Damage":
-                case "Stamina Limiter":
-                case "Wall Jump Limiter":
-                case "Empty Ammunition":
-                case "Weapon Malfunction":
-                case "Radiant Aura":
-                case "Hands-Free Mode":
-                case "Short-Term Sandstorm":
-                    return UKType.Trap;
-                case "Soap":
-                    return UKType.Soap;
-                case "Secondary Fire - Piercer":
-                case "Secondary Fire - Marksman":
-                case "Secondary Fire - Sharpshooter":
-                case "Secondary Fire - Core Eject":
-                case "Secondary Fire - Pump Charge":
-                case "Secondary Fire - Sawed-On":
-                case "Secondary Fire - Attractor":
-                case "Secondary Fire - Overheat":
-                case "Secondary Fire - JumpStart":
-                case "Secondary Fire - Freezeframe":
-                case "Secondary Fire - S.R.S. Cannon":
-                case "Secondary Fire - Firestarter":
-                    return UKType.Fire2;
-                case "Limbo Switch I":
-                case "Limbo Switch II":
-                case "Limbo Switch III":
-                case "Limbo Switch IV":
-                    return UKType.LimboSwitch;
-                case "Violence Switch I":
-                case "Violence Switch II":
-                case "Violence Switch III":
-                    return UKType.ShotgunSwitch;
-                case "Clash Mode":
-                    return UKType.ClashMode;
-                default: 
-                    return null;
-            }
         }
 
         public static string GetWeaponIdFromName(string name)

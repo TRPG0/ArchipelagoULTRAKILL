@@ -202,6 +202,22 @@ item_list: List[UKItem] = [
 ]
 
 
+fire2_weapons: Set[str] = {
+    "Revolver - Piercer",
+    "Revolver - Marksman",
+    "Revolver - Sharpshooter",
+    "Shotgun - Core Eject",
+    "Shotgun - Pump Charge",
+    "Shotgun - Sawed-On",
+    "Nailgun - Attractor",
+    "Nailgun - Overheat",
+    "Nailgun - JumpStart",
+    "Rocket Launcher - Freezeframe",
+    "Rocket Launcher - S.R.S. Cannon",
+    "Rocket Launcher - Firestarter"
+}
+
+
 group_dict: Dict[str, Set[str]] = {
     "rev0": {"Revolver - Piercer"},
     "rev1": {"Revolver - Sharpshooter"},
