@@ -3578,7 +3578,7 @@ class UltrakillRules:
             "Enemy: Cerberus":
                 lambda state: (
                     (
-                        can_reach_level(state, "0-4")
+                        can_reach_level(state, "0-5")
                         and l5_general(state)
                     )
                     or (

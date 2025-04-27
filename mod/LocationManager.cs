@@ -593,7 +593,7 @@ namespace ArchipelagoULTRAKILL
 
         public static void GetRandomHint()
         {
-            if (!Multiworld.Authenticated) return;
+            if (Multiworld.Session == null) return;
 
             var missing = Multiworld.Session.Locations.AllMissingLocations;
             var alreadyHinted = Multiworld.Session.DataStorage.GetHints()
@@ -608,13 +608,22 @@ namespace ArchipelagoULTRAKILL
                 ScoutedItemInfo info = Multiworld.Session.Locations.ScoutLocationsAsync(true, locationId).Result[locationId];
                 string locationName = Multiworld.Session.Locations.GetLocationNameFromId(info.LocationId, Multiworld.Session.Players.GetPlayerInfo(Multiworld.Session.ConnectionInfo.Slot).Game);
 
-                string itemColor = ColorUtility.ToHtmlStringRGB(GetItemDefinition(info.ItemName).Color.Invoke());
-                Color color = GetItemDefinition(info.ItemName).Color.Invoke();
-                if (itemColor == "FFFFFF")
+                string itemColor = "";
+                Color color = Color.white;
+                string itemImage = "archipelago";
+
+                if (info.ItemGame == "ULTRAKILL" && GetItemDefinition(info.ItemName) != null)
+                {
+                    itemColor = ColorUtility.ToHtmlStringRGB(GetItemDefinition(info.ItemName).Color.Invoke());
+                    color = GetItemDefinition(info.ItemName).Color.Invoke();
+                    itemImage = GetItemDefinition(info.ItemName).Image;
+                }
+                else
                 {
                     itemColor = ColorUtility.ToHtmlStringRGB(GetAPMessageColor(info.Flags));
                     color = GetAPMessageColor(info.Flags);
                 }
+
                 string playerColor = ColorUtility.ToHtmlStringRGB(Colors.PlayerOther);
                 string locationColor = ColorUtility.ToHtmlStringRGB(GetLocationColor(locationName.Substring(0, 3)));
 
@@ -626,7 +635,7 @@ namespace ArchipelagoULTRAKILL
 
                 messages.Add(new Message
                 {
-                    image = GetItemDefinition(info.ItemName).Image,
+                    image = itemImage,
                     color = color,
                     message = hint
                 });

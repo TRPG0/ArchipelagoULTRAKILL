@@ -1,3 +1,8 @@
+## 3.2.2
+
+- Fixed a bug that would cause The Cyber Grind to freeze when getting a hint with an item from a different game.
+- Fixed a logic error for Enemy: Cerberus.
+
 ## 3.2.1
 
 - Fixed a disconnect that could happen if specific items were sent by other players before connecting for the first time.
