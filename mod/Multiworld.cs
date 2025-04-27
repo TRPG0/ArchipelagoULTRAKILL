@@ -14,6 +14,7 @@ using Archipelago.MultiClient.Net.Models;
 using Color = UnityEngine.Color;
 using BepInEx;
 using System.Reflection;
+using System.Linq;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -702,6 +703,23 @@ namespace ArchipelagoULTRAKILL
         {
             Core.Logger.LogInfo("Goal completed!");
             Session?.SetGoalAchieved();
+        }
+
+        public static void UpdateCompletedLevels()
+        {
+            if (Session != null)
+            {
+                Core.Logger.LogInfo("1");
+                Session.DataStorage[Scope.Slot, "completedLevels"] = Core.data.completedLevels.ToArray();
+                Core.Logger.LogInfo("2");
+                Session.Socket.SendPacketAsync(new BouncePacket() 
+                { 
+                    Slots = new List<int>() { Session.Players.ActivePlayer.Slot },
+                    Tags = new List<string>() { "Tracker" },
+                    Data = new Dictionary<string, JToken>() { ["completedLevels"] = null },
+                });
+                Core.Logger.LogInfo("3");
+            }
         }
 
         public static bool ServerVersionIsAtLeast(string version)

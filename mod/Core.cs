@@ -25,7 +25,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.2.0";
+        public const string PluginVersion = "3.2.1";
 
         public static string workingPath;
         public static string workingDir;
@@ -205,6 +205,8 @@ namespace ArchipelagoULTRAKILL
             ConfigManager.Initialize();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            LocationManager.RegenerateItemDefinitions();
 
             AsyncOperationHandle<Sprite> asyncHandle1 = Addressables.LoadAssetAsync<Sprite>("Assets/Textures/UI/Controls/Round_VertHandle_Invert 1.png");
             UIManager.menuSprite1 = asyncHandle1.WaitForCompletion();

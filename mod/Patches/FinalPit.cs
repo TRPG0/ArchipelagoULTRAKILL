@@ -50,6 +50,7 @@ namespace ArchipelagoULTRAKILL.Patches
                             if (!Core.data.completedLevels.Contains(Core.CurrentLevelInfo.Name))
                             {
                                 Core.data.completedLevels.Add(Core.CurrentLevelInfo.Name);
+                                Multiworld.UpdateCompletedLevels();
                             }
                         }
                     }

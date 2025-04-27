@@ -1,3 +1,7 @@
+## 3.2.1
+
+- Fixed a disconnect that could happen if specific items were sent by other players before connecting for the first time.
+
 ## 3.2.0
 
 Happy 2 years of ULTRAKILL randomizer! :)

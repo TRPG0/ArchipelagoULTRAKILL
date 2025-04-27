@@ -442,12 +442,13 @@ class UltrakillWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
-            "version": "3.2.0",
+            "version": "3.2.1",
             "locations": self.game_id_to_long,
             "start": self.start_level.short_name,
             "goal": self.goal_level.short_name,
             "goal_requirement": self.options.goal_requirement.value,
             "perfect_goal": bool(self.options.perfect_goal),
+            "skipped_levels": self.options.skipped_levels.value,
             "enemy_rewards": self.options.enemy_rewards.value,
             "challenge_rewards": bool(self.options.challenge_rewards),
             "p_rank_rewards": bool(self.options.p_rank_rewards),
