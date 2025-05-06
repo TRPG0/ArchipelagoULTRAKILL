@@ -163,7 +163,7 @@ namespace ArchipelagoULTRAKILL
                     Core.data.password = serverPassword.value;
                     if (Core.data.password == "") Core.data.password = null;
                     if (hintMode.value) Multiworld.ConnectBK();
-                    else Multiworld.Connect();
+                    else Core.mw.StartCoroutine("Connect");
                 }
             };
 

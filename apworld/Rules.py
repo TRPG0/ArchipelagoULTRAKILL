@@ -661,7 +661,7 @@ class UltrakillRules:
             return arm0(state) or arm1(state)
         
         def can_break_idol(state: CollectionState) -> bool:
-            return can_punch(state) or shoalt_any(state)
+            return can_punch(state) or shoalt_any(state) or slam(state)
         
         def grab_item(state: CollectionState) -> bool:
             return arm0(state) or arm1(state) or arm2(state)
@@ -674,6 +674,9 @@ class UltrakillRules:
         
         def can_proj_boost(state: CollectionState) -> bool:
             return shostd_any(state) and arm0(state)
+
+        def can_rocket_ride(state: CollectionState) -> bool:
+            return rock0_fire2(state) or rock_any(state) and arm2(state)
         
         def slam_storage(state: CollectionState) -> bool:
             return slam(state) and walljumps(state, 1)
@@ -820,7 +823,7 @@ class UltrakillRules:
                         shostd0_fire2(state)
                         and walljumps(state, 2)
                     )
-                    or rock0_fire2(state)
+                    or can_rocket_ride(state)
                     or rai2(state)
                 )
             )
@@ -890,7 +893,7 @@ class UltrakillRules:
                 can_break_walls(state)
                 and (
                     # reach end of level
-                    rock0_fire2(state)
+                    can_rocket_ride(state)
                     or slam_storage(state)
                     or (
                         walljumps(state, 3)
@@ -950,7 +953,7 @@ class UltrakillRules:
         def l16_challenge(state: CollectionState) -> bool:
             """4-1: Challenge (Don't activate any enemies)"""
             return (
-                rock0_fire2(state)
+                can_rocket_ride(state)
                 or (
                     slam_storage(state)
                     and can_break_walls(state)
@@ -990,7 +993,7 @@ class UltrakillRules:
                 )
                 or walljumps(state, 2)
                 or slam(state)
-                or rock0_fire2(state)
+                or rock_any(state)
             )
         
         def l20_general(state: CollectionState) -> bool:
@@ -1003,7 +1006,7 @@ class UltrakillRules:
                         and walljumps(state, 3)
                         and stamina(state, 2)
                     )
-                    or rock0_fire2(state)
+                    or can_rocket_ride(state)
                     or arm2(state)
                 )
             )
@@ -1636,7 +1639,7 @@ class UltrakillRules:
                         shoalt0_fire2(state)
                         or shoany1_fire2(state)
                         or rai2(state)
-                        or rock0_fire2(state)
+                        or can_rocket_ride(state)
                     )
                 ),
 
@@ -1803,7 +1806,7 @@ class UltrakillRules:
             "4-1: Secret #1":
                 lambda state: (
                     stamina(state, 1)
-                    or rock0_fire2(state)
+                    or can_rocket_ride(state)
                 ),
 
             "4-1: Secret #2":
@@ -1815,7 +1818,7 @@ class UltrakillRules:
             "4-1: Secret #4":
                 lambda state: (
                     slam_storage(state)
-                    or rock0_fire2(state)
+                    or can_rocket_ride(state)
                     or shoalt0_fire2(state)
                     or shoany1_fire2(state)
                     or rai2(state)
@@ -1971,7 +1974,7 @@ class UltrakillRules:
                 lambda state: (
                     (
                         arm2(state)
-                        or rock0_fire2(state)
+                        or can_rocket_ride(state)
                     )
                     and l20_general(state)
                     and grab_item(state)
@@ -2015,7 +2018,7 @@ class UltrakillRules:
             "5-2: Secret #1":
                 lambda state: (
                     slide(state)
-                    or rock_any(state)
+                    or can_rocket_ride(state)
                 ),
 
             "5-2: Secret #2":
@@ -2054,7 +2057,11 @@ class UltrakillRules:
                     )
                     and grab_item(state)
                     and skull(state, "5-2", "Blue")
-                    and skull(state, "5-2", "Red")
+                    and (
+                        skull(state, "5-2", "Red")
+                        or slam_storage(state)
+                        or can_rocket_ride(state)
+                    )
                     and can_break_idol(state)
                 ),
 
@@ -2067,7 +2074,11 @@ class UltrakillRules:
                     )
                     and grab_item(state)
                     and skull(state, "5-2", "Blue")
-                    and skull(state, "5-2", "Red")
+                    and (
+                        skull(state, "5-2", "Red")
+                        or slam_storage(state)
+                        or can_rocket_ride(state)
+                    )
                     and can_break_idol(state)
                 ),
 
@@ -2080,7 +2091,11 @@ class UltrakillRules:
                     )
                     and grab_item(state)
                     and skull(state, "5-2", "Blue")
-                    and skull(state, "5-2", "Red")
+                    and (
+                        skull(state, "5-2", "Red")
+                        or slam_storage(state)
+                        or can_rocket_ride(state)
+                    )
                     and can_break_idol(state)
                     and revany2_fire2(state)
                 ),
@@ -2094,7 +2109,11 @@ class UltrakillRules:
                     )
                     and grab_item(state)
                     and skull(state, "5-2", "Blue")
-                    and skull(state, "5-2", "Red")
+                    and (
+                        skull(state, "5-2", "Red")
+                        or slam_storage(state)
+                        or can_rocket_ride(state)
+                    )
                     and can_break_idol(state)
                     and good_weapon(state)
                 ),
@@ -2196,13 +2215,13 @@ class UltrakillRules:
             # 5-4
             "5-4: Reach the surface in under 10 seconds":
                 lambda state: (
-                    rock0_fire2(state)
+                    can_rocket_ride(state)
                     and good_weapon(state)
                 ),
 
             "5-4: Perfect Rank":
                 lambda state: (
-                    rock0_fire2(state)
+                    can_rocket_ride(state)
                     and good_weapon(state)
                 ),
 
@@ -2251,7 +2270,7 @@ class UltrakillRules:
                         or shoany1_fire2(state)
                         or can_proj_boost(state)
                         or rai2(state)
-                        or rock0_fire2(state)
+                        or can_rocket_ride(state)
                     )
                 ),
 
@@ -2274,7 +2293,7 @@ class UltrakillRules:
                         or shoalt0_fire2(state)
                         or shoany1_fire2(state)
                         or rai2(state)
-                        or rock0_fire2(state)
+                        or can_rocket_ride(state)
                     )
                     and good_weapon(state)
                 ),
@@ -2288,7 +2307,7 @@ class UltrakillRules:
                         or shoalt0_fire2(state)
                         or shoany1_fire2(state)
                         or rai2(state)
-                        or rock0_fire2(state)
+                        or can_rocket_ride(state)
                     )
                     and good_weapon(state)
                     and rock_any(state)
@@ -2303,7 +2322,7 @@ class UltrakillRules:
                         or shoalt0_fire2(state)
                         or shoany1_fire2(state)
                         or rai2(state)
-                        or rock0_fire2(state)
+                        or can_rocket_ride(state)
                     )
                     and good_weapon(state)
                 ),
@@ -2502,6 +2521,7 @@ class UltrakillRules:
                     and (
                         arm2(state)
                         or slam_storage(state)
+                        or can_rocket_ride(state)
                     )
                     and can_break_idol(state)
                     and good_weapon(state)
@@ -2513,6 +2533,7 @@ class UltrakillRules:
                     and (
                         arm2(state)
                         or slam_storage(state)
+                        or can_rocket_ride(state)
                     )
                     and can_break_idol(state)
                     and good_weapon(state)
@@ -2704,6 +2725,7 @@ class UltrakillRules:
                         and (
                             arm2(state)
                             or slam_storage(state)
+                            or can_rocket_ride(state)
                         )
                         and good_weapon(state)
                     )
@@ -2772,6 +2794,7 @@ class UltrakillRules:
                         and (
                             arm2(state)
                             or slam_storage(state)
+                            or can_rocket_ride(state)
                         )
                         and good_weapon(state)
                     )
@@ -2820,6 +2843,7 @@ class UltrakillRules:
                         and (
                             arm2(state)
                             or slam_storage(state)
+                            or can_rocket_ride(state)
                         )
                         and good_weapon(state)
                     )
@@ -2891,6 +2915,7 @@ class UltrakillRules:
                         and (
                             arm2(state)
                             or slam_storage(state)
+                            or can_rocket_ride(state)
                         )
                     )
                     or (
@@ -3004,7 +3029,11 @@ class UltrakillRules:
                         )
                         and grab_item(state)
                         and skull(state, "5-2", "Blue")
-                        and skull(state, "5-2", "Red")
+                        and (
+                            skull(state, "5-2", "Red")
+                            or slam_storage(state)
+                            or can_rocket_ride(state)
+                        )
                         and can_break_idol(state)
                     )
                     or (
@@ -3198,6 +3227,7 @@ class UltrakillRules:
                         and (
                             arm2(state)
                             or slam_storage(state)
+                            or can_rocket_ride(state)
                         )
                     )
                     or (
@@ -3356,6 +3386,7 @@ class UltrakillRules:
                         and (
                             arm2(state)
                             or slam_storage(state)
+                            or can_rocket_ride(state)
                         )
                     )
                     or (
@@ -3416,6 +3447,7 @@ class UltrakillRules:
                         and (
                             arm2(state)
                             or slam_storage(state)
+                            or can_rocket_ride(state)
                         )
                     )
                     or (
@@ -3448,6 +3480,7 @@ class UltrakillRules:
                         and (
                             arm2(state)
                             or slam_storage(state)
+                            or can_rocket_ride(state)
                         )
                     )
                     or (
@@ -3474,6 +3507,7 @@ class UltrakillRules:
                     and (
                         arm2(state)
                         or slam_storage(state)
+                        or can_rocket_ride(state)
                     )
                     and good_weapon(state)
                 ),
@@ -3547,6 +3581,7 @@ class UltrakillRules:
                         and (
                             arm2(state)
                             or slam_storage(state)
+                            or can_rocket_ride(state)
                         )
                     )
                     or (
@@ -3771,6 +3806,7 @@ class UltrakillRules:
                             and (
                                 arm2(state)
                                 or slam_storage(state)
+                                or can_rocket_ride(state)
                             )
                             and good_weapon(state)
                         )
@@ -3833,6 +3869,7 @@ class UltrakillRules:
                         and (
                             arm2(state)
                             or slam_storage(state)
+                            or can_rocket_ride(state)
                         )
                     )
                     or (
@@ -3956,7 +3993,7 @@ class UltrakillRules:
                         or shoalt0_fire2(state)
                         or shoany1_fire2(state)
                         or rai2(state)
-                        or rock0_fire2(state)
+                        or can_rocket_ride(state)
                     )
                     and good_weapon(state)
                 ),

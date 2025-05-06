@@ -6,7 +6,9 @@ namespace ArchipelagoULTRAKILL
 {
     public class Data
     {
+        public string seed = string.Empty;
         public string version = string.Empty;
+        public string serverVersion = string.Empty;
         public long index;
         public string host_name;
         public string slot_name;

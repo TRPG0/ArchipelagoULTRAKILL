@@ -30,7 +30,9 @@ namespace ArchipelagoULTRAKILL.Patches
             {
                 if (Multiworld.ServerVersionIsAtLeast("3.2.0") && Core.data.enemyRewards > EnemyOptions.Disabled)
                 {
-                    if ((enemy == EnemyType.V2 && StatsManager.Instance.levelNumber != 9)
+                    if (SceneHelper.CurrentScene == "Endless"
+                        || SceneHelper.CurrentScene == "uk_construct"
+                        || (enemy == EnemyType.V2 && StatsManager.Instance.levelNumber != 9)
                         || (enemy == EnemyType.Gabriel && StatsManager.Instance.levelNumber != 15)
                         || (enemy == EnemyType.Centaur && StatsManager.Instance.levelNumber != 29))
                         return;

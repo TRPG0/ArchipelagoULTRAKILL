@@ -10,6 +10,7 @@ using System;
 using Random = UnityEngine.Random;
 using Object = UnityEngine.Object;
 using Color = UnityEngine.Color;
+using System.Reflection;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -265,6 +266,17 @@ namespace ArchipelagoULTRAKILL
 
             if (item.playerName == Core.data.slot_name)
             {
+                if (item.type == UKType.Weapon && Core.data.randomizeFire2 == Fire2Options.Progressive && LocationManager.fire2Weapons.Contains(item.itemName))
+                {
+                    // avoiding a file sharing violation lol
+                    FieldInfo field = typeof(GameProgressMoneyAndGear).GetField(LocationManager.GetWeaponIdFromName(item.itemName), BindingFlags.Public | BindingFlags.Instance);
+                    if ((int)field.GetValue(LocationManager.generalProgress) > 0)
+                    {
+                        item.itemName = "Secondary Fire -" + item.itemName.Split('-')[1];
+                        item.type = UKType.Fire2;
+                    }
+                }
+
                 switch (item.type)
                 {
                     case UKType.Weapon:

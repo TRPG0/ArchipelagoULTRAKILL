@@ -1,3 +1,11 @@
+## 3.2.3
+
+- Added a check to prevent accidentally connecting to a server with the wrong save data.
+- Fixed a bug where a second item of the starting weapon wouldn't get created when secondary fires are set to progressive.
+- Fixed a bug where progressive secondary fires sometimes wouldn't unlock properly if found by other players while offline.
+- Various logic fixes and adjustments.
+- Enemy and Boss locations are no longer counted when in The Cyber Grind.
+
 ## 3.2.2
 
 - Fixed a bug that would cause The Cyber Grind to freeze when getting a hint with an item from a different game.

@@ -28,7 +28,7 @@ namespace ArchipelagoULTRAKILL.Commands
                     }
                     else
                     {
-                        Multiworld.Connect();
+                        Core.mw.StartCoroutine("Connect");
                         UIManager.CreateGoalCounter();
                     }
                 }
@@ -64,7 +64,7 @@ namespace ArchipelagoULTRAKILL.Commands
                         Core.data.slot_name = args[1];
                     }
 
-                    Multiworld.Connect();
+                    Core.mw.StartCoroutine("Connect");
                     UIManager.CreateGoalCounter();
                 }
             }

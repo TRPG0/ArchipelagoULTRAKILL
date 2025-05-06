@@ -347,12 +347,7 @@ class TestFire2Progressive(UltrakillTestBase):
             self.assertNotIn(item, item_names)
 
         for item in fire2_weapons:
-            if item == self.world.start_weapon:
-                continue
             self.assertEqual(len([i for i in item_names if i == item]), 2)
-
-        self.assertEqual(len([i for i in item_names if i == self.world.start_weapon]), 1)
-
 
 class TestNotStartArm(UltrakillTestBase):
     options = { "start_with_arm": "false" }

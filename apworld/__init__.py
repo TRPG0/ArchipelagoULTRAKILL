@@ -77,7 +77,7 @@ class UltrakillWorld(World):
         item_id: int = self.item_name_to_id[name]
         id = item_id - base_id
         classification = ItemClassification.filler
-        if item_list[id].type != None:
+        if self.item_classifications[item_list[id].type] != None:
             classification = self.item_classifications[item_list[id].type]
 
         if name == "Blue Skull (1-4)" and not self.options.hank_rewards:
@@ -345,7 +345,8 @@ class UltrakillWorld(World):
                 count = count - self.options.start_with_arm
             elif item.name == self.start_weapon:
                 count = 0
-            elif item.type == ItemType.Weapon and item.name in fire2_weapons:
+
+            if item.type == ItemType.Weapon and item.name in fire2_weapons and self.options.randomize_secondary_fire == "progressive":
                 if item.name == self.start_weapon:
                     count = 1
                 else:
@@ -442,7 +443,7 @@ class UltrakillWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
-            "version": "3.2.2",
+            "version": "3.2.3",
             "locations": self.game_id_to_long,
             "start": self.start_level.short_name,
             "goal": self.goal_level.short_name,

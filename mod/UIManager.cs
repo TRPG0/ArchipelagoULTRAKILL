@@ -53,7 +53,7 @@ namespace ArchipelagoULTRAKILL
 
         public void Update()
         {
-            if (LocationManager.itemQueue.Count > 0)
+            if (LocationManager.itemQueue.Count > 0 && Multiworld.CanGetItems)
             {
                 QueuedItem qItem = LocationManager.itemQueue[0];
                 LocationManager.GetUKItem(qItem.item, qItem.sendingPlayer, qItem.silent);

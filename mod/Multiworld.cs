@@ -13,12 +13,13 @@ using Newtonsoft.Json;
 using Archipelago.MultiClient.Net.Models;
 using Color = UnityEngine.Color;
 using BepInEx;
-using System.Reflection;
 using System.Linq;
+using TMPro;
+using System.Collections;
 
 namespace ArchipelagoULTRAKILL
 {
-    public static class Multiworld
+    public class Multiworld : MonoBehaviour
     {
         public static Version apVersion = new Version(0, 6, 1);
         public static DeathLinkService DeathLinkService = null;
@@ -28,8 +29,81 @@ namespace ArchipelagoULTRAKILL
         public static bool HintMode = false;
         public static ArchipelagoSession Session;
         public static List<string> messages = new List<string>();
+        public static bool CanGetItems { get; private set; } = false;
+        public GameObject serverCheckBlocker;
+        public TextMeshProUGUI serverCheckText;
+        public static bool? AllowConnect { get; private set; } = null;
 
         public static List<RecentItem> recentItems = new List<RecentItem>();
+
+        public void SetupServerCheckBlocker()
+        {
+            if (SceneHelper.CurrentScene != "Main Menu") return;
+
+            serverCheckBlocker = GameObject.Instantiate(OptionsManager.Instance.optionsMenu.transform.Find("Save Slots").Find("Reload Consent Blocker").gameObject, UIManager.canvas.transform).transform.GetChild(0).transform.parent.gameObject;
+            serverCheckBlocker.name = "Archipelago Server Check Blocker";
+            Component.Destroy(serverCheckBlocker.GetComponent<ComponentEvents>());
+            Component.Destroy(serverCheckBlocker.transform.Find("Consent").GetComponent<Image>());
+
+            serverCheckBlocker.transform.Find("Consent").Find("Panel").GetComponent<RectTransform>().sizeDelta = new Vector2(0, 180);
+
+            serverCheckText = serverCheckBlocker.transform.Find("Consent").Find("Panel").Find("Text").GetComponent<TextMeshProUGUI>();
+
+            GameObject yesObject = serverCheckBlocker.transform.Find("Consent").Find("Panel").Find("Yes").gameObject;
+            yesObject.GetComponentInChildren<TextMeshProUGUI>(true).text = "YES";
+            Button yesButton = yesObject.GetComponent<Button>();
+            yesButton.onClick.SetPersistentListenerState(0, UnityEngine.Events.UnityEventCallState.Off);
+            yesButton.onClick.RemoveAllListeners();
+            yesButton.onClick.AddListener(delegate 
+            {
+                AllowConnect = true;
+                serverCheckBlocker.SetActive(false);
+            });
+
+            GameObject noObject = serverCheckBlocker.transform.Find("Consent").Find("Panel").Find("No").gameObject;
+            noObject.GetComponentInChildren<TextMeshProUGUI>(true).text = "NO";
+            Button noButton = noObject.GetComponent<Button>();
+            noButton.onClick.SetPersistentListenerState(0, UnityEngine.Events.UnityEventCallState.Off);
+            noButton.onClick.RemoveAllListeners();
+            noButton.onClick.AddListener(delegate
+            {
+                AllowConnect = false;
+                serverCheckBlocker.SetActive(false);
+            });
+        } 
+
+        public void DoServerCheck(ArchipelagoSession session, Dictionary<string, object> slotData)
+        {
+            if (Core.data.seed != session.RoomState.Seed
+                || Core.data.version != slotData["version"].ToString()
+                || Core.data.serverVersion != session.RoomState.GeneratorVersion.ToString())
+            {
+                ShowServerCheckBlocker(session, slotData);
+            }
+            else AllowConnect = true;
+        }
+
+        public void ShowServerCheckBlocker(ArchipelagoSession session, Dictionary<string, object> slotData)
+        {
+            if (serverCheckBlocker == null) return;
+
+            serverCheckText.text =
+                "Server does not match saved data." +
+                "\n" +
+                "\nSaved:" +
+                $"\n<size=16>Seed: {(Core.data.seed.IsNullOrWhiteSpace() ? "<color=grey>not saved</color>" : Core.data.seed)}" +
+                $"\nWorld Version: {(Core.data.version.IsNullOrWhiteSpace() ? "<color=grey>not saved</color>" : Core.data.version)}" +
+                $"\nGenerator Version: {(Core.data.serverVersion.IsNullOrWhiteSpace() ? "<color=grey>not saved</color>" : Core.data.serverVersion)}</size>" +
+                "\n" +
+                "\nServer:" +
+                $"\n<size=16>Seed: {session.RoomState.Seed}" +
+                $"\nWorld Version: {slotData["version"]}" +
+                $"\nGenerator Version: {session.RoomState.GeneratorVersion}</size>" +
+                "\n" +
+                "\nConnect anyway?";
+
+            serverCheckBlocker.SetActive(true);
+        }
 
         public static void TryGetStart(ref HashSet<string> unlockedLevels, Dictionary<string, object> slotData, string defaultValue)
         {
@@ -166,11 +240,11 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
-        public static bool Connect()
+        public IEnumerator Connect()
         {
             if (Authenticated)
             {
-                return true;
+                yield break;
             }
 
             WeaponLoadout loadout = WeaponLoadout.Get();
@@ -212,8 +286,21 @@ namespace ArchipelagoULTRAKILL
                 ConfigManager.hintMode.interactable = false;
                 ConfigManager.chat.interactable = true;
 
+                if (Core.DataExists()) DoServerCheck(Session, success.SlotData);
+                else AllowConnect = true;
+                yield return new WaitUntil(() => AllowConnect.HasValue);
+                if (AllowConnect.Value == false)
+                {
+                    LocationManager.itemQueue.Clear();
+                    Disconnect();
+                    yield break;
+                }
+
+                Core.data.seed = Session.RoomState.Seed;
                 TryGetSlotDataValue(ref Core.data.version, success.SlotData, "version", string.Empty);
+                Core.data.serverVersion = Session.RoomState.GeneratorVersion.ToString();
                 Core.Logger.LogInfo($"Server version: {Session.RoomState.Version} / {(Core.data.version == string.Empty ? "?" : Core.data.version)}");
+
                 TryGetStart(ref Core.data.unlockedLevels, success.SlotData, "0-1");
                 TryGetGoal(ref Core.data.goal, success.SlotData, "6-2");
 
@@ -364,6 +451,7 @@ namespace ArchipelagoULTRAKILL
                     LocationManager.CheckLocation(loc);
                 }
 
+                CanGetItems = true;
                 Core.Instance.StartCoroutine("ApplyLoadout", loadout);
             }
             else if (loginResult is LoginFailure failure)
@@ -375,10 +463,11 @@ namespace ArchipelagoULTRAKILL
                 ConfigManager.connectionInfo.text = String.Join("\n", failure.Errors);
                 Session.Socket.DisconnectAsync();
                 Session = null;
+                CanGetItems = false;
+                AllowConnect = null;
                 UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
                 Core.SaveGeneralProgress(gameProgress);
             }
-            return loginResult.Successful;
         }
 
         public static bool ConnectBK()
@@ -454,6 +543,8 @@ namespace ArchipelagoULTRAKILL
             DeathLinkService = null;
             Authenticated = false;
             HintMode = false;
+            CanGetItems = false;
+            AllowConnect = null;
         }
 
         public static void SocketClosed(string reason)
@@ -647,17 +738,6 @@ namespace ArchipelagoULTRAKILL
                 if (helper.Index > Core.data.index) Core.Logger.LogInfo("Name: \"" + name + "\" | Type: " + LocationManager.GetItemDefinition(name).Type + " | Player: \"" + player + "\"");
 
                 UKType type = LocationManager.GetItemDefinition(name).Type;
-
-                if (type == UKType.Weapon && Core.data.randomizeFire2 == Fire2Options.Progressive && LocationManager.fire2Weapons.Contains(name))
-                {
-                    // avoiding a file sharing violation lol
-                    FieldInfo field = typeof(GameProgressMoneyAndGear).GetField(LocationManager.GetWeaponIdFromName(name), BindingFlags.Public | BindingFlags.Instance);
-                    if ((int)field.GetValue(LocationManager.generalProgress) > 0)
-                    {
-                        name = "Secondary Fire -" + name.Split('-')[1];
-                        type = UKType.Fire2;
-                    }
-                }
 
                 UKItem ukitem = new UKItem()
                 {

@@ -25,7 +25,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.2.2";
+        public const string PluginVersion = "3.2.3";
 
         public static string workingPath;
         public static string workingDir;
@@ -36,6 +36,7 @@ namespace ArchipelagoULTRAKILL
         public static Core Instance { get; private set; }
         public static GameObject obj;
         public static UIManager uim;
+        public static Multiworld mw;
 
         public static bool IsInIntro => GameStateManager.Instance.IsStateActive("intro");
         public static bool IsPitFalling => GameStateManager.Instance.IsStateActive("pit-falling");
@@ -234,6 +235,7 @@ namespace ArchipelagoULTRAKILL
                 DontDestroyOnLoad(obj);
                 obj.transform.localPosition = new Vector3(960, 540, 0);
                 uim = obj.AddComponent<UIManager>();
+                mw = obj.AddComponent<Multiworld>();
             }
 
             uim.StopCoroutine("DisplayMessage");
@@ -254,24 +256,27 @@ namespace ArchipelagoULTRAKILL
 
             if (SceneHelper.CurrentScene == "Main Menu")
             {
-                UIManager.FindMenuObjects();
+                bool dataExists = DataExists();
 
-                if (DataExists() && GameProgressSaver.GetTutorial() && !firstTimeLoad)
+                UIManager.FindMenuObjects();
+                mw.SetupServerCheckBlocker();
+
+                if (dataExists && GameProgressSaver.GetTutorial() && !firstTimeLoad)
                 {
                     LoadData();
                     ConfigManager.LoadConnectionInfo();
                     ConfigManager.LoadStats();
                     firstTimeLoad = true;
                 }
-                else if (!DataExists()) ConfigManager.ResetStatsDefaults();
+                else if (!dataExists) ConfigManager.ResetStatsDefaults();
 
                 UIManager.CreateMenuUI();
-                if (DataExists() && Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
-                else if (DataExists() && !Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
+                if (dataExists && Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
+                else if (dataExists && !Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
                 if (UIManager.log == null) uim.CreateLogObject();
 
-                if (DataExists() && data.randomizeSkulls) UIManager.CreateMenuSkullIcons();
-                if (DataExists() && (data.l1switch || data.l7switch)) UIManager.CreateMenuSwitchIcons();
+                if (dataExists && data.randomizeSkulls) UIManager.CreateMenuSkullIcons();
+                if (dataExists && (data.l1switch || data.l7switch)) UIManager.CreateMenuSwitchIcons();
 
                 if (data.completedLevels.Count >= data.goalRequirement)
                 {
