@@ -2523,7 +2523,10 @@ class UltrakillRules:
                         or slam_storage(state)
                         or can_rocket_ride(state)
                     )
-                    and can_break_idol(state)
+                    and (
+                        can_punch(state)
+                        or shoalt_any(state)
+                    )
                     and good_weapon(state)
                 ),
 
@@ -2535,7 +2538,10 @@ class UltrakillRules:
                         or slam_storage(state)
                         or can_rocket_ride(state)
                     )
-                    and can_break_idol(state)
+                    and (
+                        can_punch(state)
+                        or shoalt_any(state)
+                    )
                     and good_weapon(state)
                     and can_zap(state)
                 ),
@@ -2544,7 +2550,10 @@ class UltrakillRules:
                 lambda state: (
                     slide(state)
                     and arm2(state)
-                    and can_break_idol(state)
+                    and (
+                        can_punch(state)
+                        or shoalt_any(state)
+                    )
                     and good_weapon(state)
                 ),
 
