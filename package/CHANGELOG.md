@@ -1,3 +1,7 @@
+## 3.2.4
+
+- Fixed a bug where the Sawed-On secondary fire wouldn't unlock when progressive.
+
 ## 3.2.3
 
 - Added a check to prevent accidentally connecting to a server with the wrong save data.

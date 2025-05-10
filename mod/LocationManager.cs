@@ -272,7 +272,7 @@ namespace ArchipelagoULTRAKILL
                     FieldInfo field = typeof(GameProgressMoneyAndGear).GetField(LocationManager.GetWeaponIdFromName(item.itemName), BindingFlags.Public | BindingFlags.Instance);
                     if ((int)field.GetValue(LocationManager.generalProgress) > 0)
                     {
-                        item.itemName = "Secondary Fire -" + item.itemName.Split('-')[1];
+                        item.itemName = "Secondary Fire -" + item.itemName.Split(new char[] { '-' }, 2)[1];
                         item.type = UKType.Fire2;
                     }
                 }
