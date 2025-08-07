@@ -237,7 +237,7 @@ location_list: List[UKLocation] = [
 
     # 5-4: LEVIATHAN
     UKLocation("5-4: Reach the surface in under 10 seconds", Regions.l23, "23_c", LocationType.Challenge),
-    UKLocation("5-4: Perfect Rank", Regions.l22, "23_p", LocationType.PerfectRank),
+    UKLocation("5-4: Perfect Rank", Regions.l23, "23_p", LocationType.PerfectRank),
 
     # 6-1: CRY FOR THE WEEPER
     UKLocation("6-1: Secret #1", Regions.l24, "24_s1", LocationType.Normal),

@@ -535,6 +535,11 @@
             The possible reasons for a connection to be refused.
             </summary>
         </member>
+        <member name="F:Archipelago.MultiClient.Net.Enums.ConnectionRefusedError.UnknownError">
+            <summary>
+            Indicates that server the server send en error code not known to this library.
+            </summary>
+        </member>
         <member name="F:Archipelago.MultiClient.Net.Enums.ConnectionRefusedError.InvalidSlot">
             <summary>
             Indicates that the sent 'name' field did not match any auth entry on the server.

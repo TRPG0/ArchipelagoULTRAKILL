@@ -1,3 +1,10 @@
+## 3.2.5
+
+- Fixed a logic error for 5-4: Perfect Rank.
+- Fixed a bug where the goal would not be completed correctly if P Rank Rewards and Perfect Goal are both enabled.
+- Fixed the number of chat log lines to display being reset to 5 every time the game was launched.
+- Updated `Archipelago.MultiClient.Net` to `6.6.1`.
+
 ## 3.2.4
 
 - Fixed a bug where the Sawed-On secondary fire wouldn't unlock when progressive.

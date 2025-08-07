@@ -11,7 +11,7 @@ namespace ArchipelagoULTRAKILL.Patches
             if (Core.DataExists()) {
                 if (Core.data.pRankRewards && !AssistController.Instance.cheatsEnabled && StatsManager.Instance.rankScore == 12)
                     LocationManager.CheckLocation(StatsManager.Instance.levelNumber + "_p");
-                else if (Core.data.perfectGoal && Core.CurrentLevelInfo.Name == Core.data.goal && StatsManager.Instance.rankScore == 12)
+                if (Core.data.perfectGoal && Core.CurrentLevelInfo.Name == Core.data.goal && StatsManager.Instance.rankScore == 12)
                     Multiworld.SendCompletion();
             }
         }

@@ -65,6 +65,8 @@ namespace ArchipelagoULTRAKILL
         {
             StartCoroutine(VersionChecker.CheckVersion());
 
+            lines = ConfigManager.logLines.value;
+
             GameConsole.Console.Instance.RegisterCommand(new Commands.Connect());
             GameConsole.Console.Instance.RegisterCommand(new Commands.Disconnect());
             GameConsole.Console.Instance.RegisterCommand(new Commands.Say());
