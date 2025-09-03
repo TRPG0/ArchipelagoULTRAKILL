@@ -1,5 +1,5 @@
 from . import UltrakillTestBase
-from ..Items import item_list, fire2_weapons, group_dict, ItemType
+from ..Items import item_list, fire2_weapons, item_groups, ItemType
 from ..Locations import location_list, LocationType
 
 
@@ -9,10 +9,10 @@ class TestUnlockLevels(UltrakillTestBase):
     def test_unlock_levels(self) -> None:
         item_names = [i.name for i in self.multiworld.get_items()]
 
-        for item in [i for i in group_dict["levels"] if not (i == self.world.start_level.full_name or i == self.world.goal_level.full_name)]:
+        for item in [i for i in item_groups["levels"] if not (i == self.world.start_level.full_name or i == self.world.goal_level.full_name)]:
             self.assertIn(item, item_names)
 
-        for item in group_dict["layers"]:
+        for item in item_groups["layers"]:
             self.assertNotIn(item, item_names)
 
 
@@ -22,10 +22,10 @@ class TestUnlockLayers(UltrakillTestBase):
     def test_unlock_layers(self) -> None:
         item_names = [i.name for i in self.multiworld.get_items()]
 
-        for item in group_dict["layers"]:
+        for item in item_groups["layers"]:
             self.assertIn(item, item_names)
 
-        for item in group_dict["levels"]:
+        for item in item_groups["levels"]:
             self.assertNotIn(item, item_names)
 
 
@@ -40,7 +40,6 @@ class TestPerfectGoal(UltrakillTestBase):
 class TestEnemyDisabled(UltrakillTestBase):
     options = {
         "enemy_rewards": "disabled",
-        "skipped_levels": {}
     }
 
     def test_enemy_disabled(self) -> None:
@@ -55,7 +54,6 @@ class TestEnemyDisabled(UltrakillTestBase):
 class TestEnemyBosses(UltrakillTestBase):
     options = {
         "enemy_rewards": "bosses",
-        "skipped_levels": {}
     }
 
     def test_enemy_bosses(self) -> None:
@@ -75,7 +73,6 @@ class TestEnemyBosses(UltrakillTestBase):
 class TestEnemyExtra(UltrakillTestBase):
     options = {
         "enemy_rewards": "extra",
-        "skipped_levels": {}
     }
 
     def test_enemy_extra(self) -> None:

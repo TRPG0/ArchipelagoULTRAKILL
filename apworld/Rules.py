@@ -21,8 +21,12 @@ class UltrakillRules:
         player = self.world.player
         options = self.world.options
 
-        def can_reach_level(state: CollectionState, short_name: str) -> bool:
+        def can_reach_level(state: CollectionState, location_name: str, short_name: str) -> bool:
             full_name: str = Regions.get_from_short_name(short_name).full_name
+
+            if location_name in options.exclude_locations.value:
+                return state.can_reach_region(full_name, player)
+            
             return state.can_reach_region(full_name, player) if short_name not in options.skipped_levels.value else False
 
         def stamina(state: CollectionState, needs: int) -> bool:
@@ -1891,6 +1895,10 @@ class UltrakillRules:
                     and (
                         shoany0_fire2(state)
                         or can_proj_boost(state)
+                        or (
+                            rock0_fire2(state)
+                            and rev_any(state)
+                        )
                     )
                 ),
 
@@ -2685,51 +2693,51 @@ class UltrakillRules:
             # Enemies
             "Enemy: Filth":
                 lambda state: (
-                    can_reach_level(state, "0-1")
-                    or can_reach_level(state, "0-2")
-                    or can_reach_level(state, "0-3")
-                    or can_reach_level(state, "0-4")
+                    can_reach_level(state, "Enemy: Filth", "0-1")
+                    or can_reach_level(state, "Enemy: Filth", "0-2")
+                    or can_reach_level(state, "Enemy: Filth", "0-3")
+                    or can_reach_level(state, "Enemy: Filth", "0-4")
                     or (
-                        can_reach_level(state, "1-1")
+                        can_reach_level(state, "Enemy: Filth", "1-1")
                         and grab_item(state)
                         and skull(state, "1-1", "Red")
                     )
-                    or can_reach_level(state, "1-2")
-                    or can_reach_level(state, "1-3")
+                    or can_reach_level(state, "Enemy: Filth", "1-2")
+                    or can_reach_level(state, "Enemy: Filth", "1-3")
                     or (
-                        can_reach_level(state, "2-1")
+                        can_reach_level(state, "Enemy: Filth", "2-1")
                         and l10_exit(state)
                     )
-                    or can_reach_level(state, "2-2")
-                    or can_reach_level(state, "2-3")
-                    or can_reach_level(state, "3-1")
-                    or can_reach_level(state, "4-1")
-                    or can_reach_level(state, "4-2")
+                    or can_reach_level(state, "Enemy: Filth", "2-2")
+                    or can_reach_level(state, "Enemy: Filth", "2-3")
+                    or can_reach_level(state, "Enemy: Filth", "3-1")
+                    or can_reach_level(state, "Enemy: Filth", "4-1")
+                    or can_reach_level(state, "Enemy: Filth", "4-2")
                     or (
-                        can_reach_level(state, "4-3")
+                        can_reach_level(state, "Enemy: Filth", "4-3")
                         and l18_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-1")
+                        can_reach_level(state, "Enemy: Filth", "5-1")
                         and l20_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-2")
+                        can_reach_level(state, "Enemy: Filth", "5-2")
                         and (
                             slam(state)
                             or stamina(state, 1)
                             or rock_any(state)
                         )
                     )
-                    or can_reach_level(state, "5-3")
-                    or can_reach_level(state, "6-1")
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Enemy: Filth", "5-3")
+                    or can_reach_level(state, "Enemy: Filth", "6-1")
+                    or can_reach_level(state, "Enemy: Filth", "7-3")
                     or (
-                        can_reach_level(state, "7-S")
+                        can_reach_level(state, "Enemy: Filth", "7-S")
                         and jump_general(state, 2)
                     )
                     or (
-                        can_reach_level(state, "7-4")
+                        can_reach_level(state, "Enemy: Filth", "7-4")
                         and slide(state)
                         and (
                             arm2(state)
@@ -2739,7 +2747,7 @@ class UltrakillRules:
                         and good_weapon(state)
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Filth", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -2754,33 +2762,33 @@ class UltrakillRules:
 
             "Enemy: Stray":
                 lambda state: (
-                    can_reach_level(state, "0-1")
-                    or can_reach_level(state, "0-2")
-                    or can_reach_level(state, "0-3")
-                    or can_reach_level(state, "0-4")
+                    can_reach_level(state, "Enemy: Stray", "0-1")
+                    or can_reach_level(state, "Enemy: Stray", "0-2")
+                    or can_reach_level(state, "Enemy: Stray", "0-3")
+                    or can_reach_level(state, "Enemy: Stray", "0-4")
                     or (
-                        can_reach_level(state, "1-1")
+                        can_reach_level(state, "Enemy: Stray", "1-1")
                         and grab_item(state)
                         and skull(state, "1-1", "Red")
                     )
-                    or can_reach_level(state, "1-2")
-                    or can_reach_level(state, "1-3")
-                    or can_reach_level(state, "2-1")
-                    or can_reach_level(state, "2-2")
-                    or can_reach_level(state, "2-3")
-                    or can_reach_level(state, "3-1")
-                    or can_reach_level(state, "4-1")
-                    or can_reach_level(state, "4-2")
+                    or can_reach_level(state, "Enemy: Stray", "1-2")
+                    or can_reach_level(state, "Enemy: Stray", "1-3")
+                    or can_reach_level(state, "Enemy: Stray", "2-1")
+                    or can_reach_level(state, "Enemy: Stray", "2-2")
+                    or can_reach_level(state, "Enemy: Stray", "2-3")
+                    or can_reach_level(state, "Enemy: Stray", "3-1")
+                    or can_reach_level(state, "Enemy: Stray", "4-1")
+                    or can_reach_level(state, "Enemy: Stray", "4-2")
                     or (
-                        can_reach_level(state, "4-3")
+                        can_reach_level(state, "Enemy: Stray", "4-3")
                         and l18_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-1")
+                        can_reach_level(state, "Enemy: Stray", "5-1")
                         and l20_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-2")
+                        can_reach_level(state, "Enemy: Stray", "5-2")
                         and can_punch(state)
                         and (
                             slam(state)
@@ -2788,17 +2796,17 @@ class UltrakillRules:
                             or rock_any(state)
                         )
                     )
-                    or can_reach_level(state, "5-3")
-                    or can_reach_level(state, "6-1")
+                    or can_reach_level(state, "Enemy: Stray", "5-3")
+                    or can_reach_level(state, "Enemy: Stray", "6-1")
                     or (
-                        can_reach_level(state, "7-1")
+                        can_reach_level(state, "Enemy: Stray", "7-1")
                         and grab_item(state)
                         and skull(state, "7-1", "Red")
                         and skull(state, "7-1", "Blue")
                     )
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Enemy: Stray", "7-3")
                     or (
-                        can_reach_level(state, "7-4")
+                        can_reach_level(state, "Enemy: Stray", "7-4")
                         and slide(state)
                         and (
                             arm2(state)
@@ -2811,43 +2819,43 @@ class UltrakillRules:
 
             "Enemy: Schism":
                 lambda state: (
-                    can_reach_level(state, "0-3")
-                    or can_reach_level(state, "0-4")
+                    can_reach_level(state, "Enemy: Schism", "0-3")
+                    or can_reach_level(state, "Enemy: Schism", "0-4")
                     or (
-                        can_reach_level(state, "1-1")
+                        can_reach_level(state, "Enemy: Schism", "1-1")
                         and grab_item(state)
                         and skull(state, "1-1", "Red")
                     )
-                    or can_reach_level(state, "1-2")
-                    or can_reach_level(state, "1-3")
-                    or can_reach_level(state, "2-1")
-                    or can_reach_level(state, "2-2")
-                    or can_reach_level(state, "2-3")
-                    or can_reach_level(state, "3-1")
-                    or can_reach_level(state, "4-1")
-                    or can_reach_level(state, "4-2")
+                    or can_reach_level(state, "Enemy: Schism", "1-2")
+                    or can_reach_level(state, "Enemy: Schism", "1-3")
+                    or can_reach_level(state, "Enemy: Schism", "2-1")
+                    or can_reach_level(state, "Enemy: Schism", "2-2")
+                    or can_reach_level(state, "Enemy: Schism", "2-3")
+                    or can_reach_level(state, "Enemy: Schism", "3-1")
+                    or can_reach_level(state, "Enemy: Schism", "4-1")
+                    or can_reach_level(state, "Enemy: Schism", "4-2")
                     or (
-                        can_reach_level(state, "4-3")
+                        can_reach_level(state, "Enemy: Schism", "4-3")
                         and l18_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-1")
+                        can_reach_level(state, "Enemy: Schism", "5-1")
                         and l20_general(state)
                         and grab_item(state)
                         and skull(state, "5-1", "Blue", 3)
                     )
-                    or can_reach_level(state, "5-2")
-                    or can_reach_level(state, "5-3")
-                    or can_reach_level(state, "6-1")
+                    or can_reach_level(state, "Enemy: Schism", "5-2")
+                    or can_reach_level(state, "Enemy: Schism", "5-3")
+                    or can_reach_level(state, "Enemy: Schism", "6-1")
                     or (
-                        can_reach_level(state, "7-1")
+                        can_reach_level(state, "Enemy: Schism", "7-1")
                         and grab_item(state)
                         and skull(state, "7-1", "Red")
                         and skull(state, "7-1", "Blue")
                     )
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Enemy: Schism", "7-3")
                     or (
-                        can_reach_level(state, "7-4")
+                        can_reach_level(state, "Enemy: Schism", "7-4")
                         and slide(state)
                         and (
                             arm2(state)
@@ -2857,7 +2865,7 @@ class UltrakillRules:
                         and good_weapon(state)
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Schism", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -2865,14 +2873,14 @@ class UltrakillRules:
                         and can_break_glass(state)
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Schism", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
                         and has_weapon_types(state, 3)
                     )
                     or (
-                        can_reach_level(state, "P-2")
+                        can_reach_level(state, "Enemy: Schism", "P-2")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -2884,42 +2892,42 @@ class UltrakillRules:
 
             "Enemy: Soldier":
                 lambda state: (
-                    can_reach_level(state, "2-2")
-                    or can_reach_level(state, "2-3")
-                    or can_reach_level(state, "3-1")
-                    or can_reach_level(state, "4-1")
-                    or can_reach_level(state, "4-2")
+                    can_reach_level(state, "Enemy: Soldier", "2-2")
+                    or can_reach_level(state, "Enemy: Soldier", "2-3")
+                    or can_reach_level(state, "Enemy: Soldier", "3-1")
+                    or can_reach_level(state, "Enemy: Soldier", "4-1")
+                    or can_reach_level(state, "Enemy: Soldier", "4-2")
                     or (
-                        can_reach_level(state, "4-3")
+                        can_reach_level(state, "Enemy: Soldier", "4-3")
                         and l18_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-1")
+                        can_reach_level(state, "Enemy: Soldier", "5-1")
                         and l20_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-2")
+                        can_reach_level(state, "Enemy: Soldier", "5-2")
                         and (
                             slam(state)
                             or stamina(state, 1)
                             or rock_any(state)
                         )
                     )
-                    or can_reach_level(state, "5-3")
-                    or can_reach_level(state, "6-1")
+                    or can_reach_level(state, "Enemy: Soldier", "5-3")
+                    or can_reach_level(state, "Enemy: Soldier", "6-1")
                     or (
-                        can_reach_level(state, "7-1")
+                        can_reach_level(state, "Enemy: Soldier", "7-1")
                         and grab_item(state)
                         and skull(state, "7-1", "Red")
                         and skull(state, "7-1", "Blue")
                     )
                     or (
-                        can_reach_level(state, "7-2")
+                        can_reach_level(state, "Enemy: Soldier", "7-2")
                         and arm2(state)
                     )
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Enemy: Soldier", "7-3")
                     or (
-                        can_reach_level(state, "7-4")
+                        can_reach_level(state, "Enemy: Soldier", "7-4")
                         and slide(state)
                         and (
                             arm2(state)
@@ -2928,7 +2936,7 @@ class UltrakillRules:
                         )
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Soldier", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -2939,7 +2947,7 @@ class UltrakillRules:
 
             "Boss: The Corpse of King Minos":
                 lambda state: (
-                    can_reach_level(state, "2-4")
+                    can_reach_level(state, "Boss: The Corpse of King Minos", "2-4")
                     and grab_item(state)
                     and skull(state, "2-4", "Blue")
                     and skull(state, "2-4", "Red")
@@ -2948,13 +2956,13 @@ class UltrakillRules:
 
             "Enemy: Stalker":
                 lambda state: (
-                    can_reach_level(state, "4-2")
+                    can_reach_level(state, "Enemy: Stalker", "4-2")
                     or (
-                        can_reach_level(state, "4-3")
+                        can_reach_level(state, "Enemy: Stalker", "4-3")
                         and l18_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-2")
+                        can_reach_level(state, "Enemy: Stalker", "5-2")
                         and (
                             slam(state)
                             or stamina(state, 1)
@@ -2962,11 +2970,11 @@ class UltrakillRules:
                         )
                     )
                     or (
-                        can_reach_level(state, "7-2")
+                        can_reach_level(state, "Enemy: Stalker", "7-2")
                         and arm2(state)
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Stalker", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -2975,7 +2983,7 @@ class UltrakillRules:
                         and slide(state)
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Stalker", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -2987,7 +2995,7 @@ class UltrakillRules:
                         and skull(state, "1-E", "Blue")
                     )
                     or (
-                        can_reach_level(state, "P-2")
+                        can_reach_level(state, "Enemy: Stalker", "P-2")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3001,22 +3009,22 @@ class UltrakillRules:
             "Enemy: Insurrectionist":
                 lambda state: (
                     (
-                        can_reach_level(state, "4-2")
+                        can_reach_level(state, "Enemy: Insurrectionist", "4-2")
                         and grab_item(state)
                         and skull(state, "4-2", "Blue")
                         and skull(state, "4-2", "Red")
                     )
                     or (
-                        can_reach_level(state, "6-1")
+                        can_reach_level(state, "Enemy: Insurrectionist", "6-1")
                         and grab_item(state)
                         and skull(state, "6-1", "Red")
                     )
                     or (
-                        can_reach_level(state, "7-2")
+                        can_reach_level(state, "Enemy: Insurrectionist", "7-2")
                         and arm2(state)
                     )
                     or (
-                        can_reach_level(state, "P-2")
+                        can_reach_level(state, "Enemy: Insurrectionist", "P-2")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3030,7 +3038,7 @@ class UltrakillRules:
             "Boss: Ferryman":
                 lambda state: (
                     (
-                        can_reach_level(state, "5-2")
+                        can_reach_level(state, "Boss: Ferryman", "5-2")
                         and (
                             slam(state)
                             or stamina(state, 1)
@@ -3046,7 +3054,7 @@ class UltrakillRules:
                         and can_break_idol(state)
                     )
                     or (
-                        can_reach_level(state, "P-2")
+                        can_reach_level(state, "Boss: Ferryman", "P-2")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3059,12 +3067,12 @@ class UltrakillRules:
             "Enemy: Swordsmachine":
                 lambda state: (
                     (
-                        can_reach_level(state, "0-2")
+                        can_reach_level(state, "Enemy: Swordsmachine", "0-2")
                         and slide(state)
                         and good_weapon(state)
                     )
                     or (
-                        can_reach_level(state, "0-3")
+                        can_reach_level(state, "Enemy: Swordsmachine", "0-3")
                         and (
                             can_break_walls(state)
                             or l3_challenge(state)
@@ -3072,21 +3080,21 @@ class UltrakillRules:
                         and good_weapon(state)
                     )
                     or (
-                        can_reach_level(state, "1-3")
+                        can_reach_level(state, "Enemy: Swordsmachine", "1-3")
                         and grab_item(state)
                         and skull(state, "1-3", "Red")
                         and skull(state, "1-3", "Blue")
                         and good_weapon(state)
                     )
-                    or can_reach_level(state, "6-1")
+                    or can_reach_level(state, "Enemy: Swordsmachine", "6-1")
                     or (
-                        can_reach_level(state, "7-2")
+                        can_reach_level(state, "Enemy: Swordsmachine", "7-2")
                         and arm2(state)
                     )
-                    or can_reach_level(state, "7-3")
-                    or can_reach_level(state, "7-S")
+                    or can_reach_level(state, "Enemy: Swordsmachine", "7-3")
+                    or can_reach_level(state, "Enemy: Swordsmachine", "7-S")
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Swordsmachine", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3094,14 +3102,14 @@ class UltrakillRules:
                         and can_break_glass(state)
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Swordsmachine", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
                         and has_weapon_types(state, 3)
                     )
                     or (
-                        can_reach_level(state, "P-2")
+                        can_reach_level(state, "Enemy: Swordsmachine", "P-2")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3114,39 +3122,39 @@ class UltrakillRules:
             "Enemy: Drone":
                 lambda state: (
                     (
-                        can_reach_level(state, "1-1")
+                        can_reach_level(state, "Enemy: Drone", "1-1")
                         and grab_item(state)
                         and skull(state, "1-1", "Red")
                     )
-                    or can_reach_level(state, "1-2")
-                    or can_reach_level(state, "1-3")
+                    or can_reach_level(state, "Enemy: Drone", "1-2")
+                    or can_reach_level(state, "Enemy: Drone", "1-3")
                     or (
-                        can_reach_level(state, "2-1")
+                        can_reach_level(state, "Enemy: Drone", "2-1")
                         and l10_exit(state)
                     )
-                    or can_reach_level(state, "2-2")
-                    or can_reach_level(state, "2-3")
-                    or can_reach_level(state, "3-1")
-                    or can_reach_level(state, "4-1")
-                    or can_reach_level(state, "4-2")
+                    or can_reach_level(state, "Enemy: Drone", "2-2")
+                    or can_reach_level(state, "Enemy: Drone", "2-3")
+                    or can_reach_level(state, "Enemy: Drone", "3-1")
+                    or can_reach_level(state, "Enemy: Drone", "4-1")
+                    or can_reach_level(state, "Enemy: Drone", "4-2")
                     or (
-                        can_reach_level(state, "4-3")
+                        can_reach_level(state, "Enemy: Drone", "4-3")
                         and l18_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-1")
+                        can_reach_level(state, "Enemy: Drone", "5-1")
                         and l20_general(state)
                     )
-                    or can_reach_level(state, "5-2")
-                    or can_reach_level(state, "5-3")
+                    or can_reach_level(state, "Enemy: Drone", "5-2")
+                    or can_reach_level(state, "Enemy: Drone", "5-3")
                     or (
-                        can_reach_level(state, "7-1")
+                        can_reach_level(state, "Enemy: Drone", "7-1")
                         and grab_item(state)
                         and skull(state, "7-1", "Red")
                         and skull(state, "7-1", "Blue")
                     )
                     or (
-                        can_reach_level(state, "7-S")
+                        can_reach_level(state, "Enemy: Drone", "7-S")
                         and (
                             arm2(state)
                             or walljumps(state, 3)
@@ -3164,7 +3172,7 @@ class UltrakillRules:
                         and skull(state, "7-S", "Red")
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Drone", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3172,7 +3180,7 @@ class UltrakillRules:
                         and can_break_glass(state)
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Drone", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3183,7 +3191,7 @@ class UltrakillRules:
             "Enemy: Streetcleaner":
                 lambda state: (
                     (
-                        can_reach_level(state, "1-2")
+                        can_reach_level(state, "Enemy: Streetcleaner", "1-2")
                         and (
                             grab_item(state)
                             and skull(state, "1-2", "Blue")
@@ -3191,25 +3199,25 @@ class UltrakillRules:
                             and can_zap(state)
                         )
                     )
-                    or can_reach_level(state, "1-3")
+                    or can_reach_level(state, "Enemy: Streetcleaner", "1-3")
                     or (
-                        can_reach_level(state, "2-1")
+                        can_reach_level(state, "Enemy: Streetcleaner", "2-1")
                         and l10_exit(state)
                     )
-                    or can_reach_level(state, "2-2")
-                    or can_reach_level(state, "2-3")
-                    or can_reach_level(state, "3-1")
-                    or can_reach_level(state, "4-1")
+                    or can_reach_level(state, "Enemy: Streetcleaner", "2-2")
+                    or can_reach_level(state, "Enemy: Streetcleaner", "2-3")
+                    or can_reach_level(state, "Enemy: Streetcleaner", "3-1")
+                    or can_reach_level(state, "Enemy: Streetcleaner", "4-1")
                     or (
-                        can_reach_level(state, "4-3")
+                        can_reach_level(state, "Enemy: Streetcleaner", "4-3")
                         and l18_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-1")
+                        can_reach_level(state, "Enemy: Streetcleaner", "5-1")
                         and l20_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-2")
+                        can_reach_level(state, "Enemy: Streetcleaner", "5-2")
                         and can_break_idol(state)
                         and (
                             slam(state)
@@ -3217,21 +3225,21 @@ class UltrakillRules:
                             or rock_any(state)
                         )
                     )
-                    or can_reach_level(state, "5-3")
+                    or can_reach_level(state, "Enemy: Streetcleaner", "5-3")
                     or (
-                        can_reach_level(state, "6-1")
+                        can_reach_level(state, "Enemy: Streetcleaner", "6-1")
                         and grab_item(state)
                         and skull(state, "6-1", "Red")
                     )
                     or (
-                        can_reach_level(state, "7-1")
+                        can_reach_level(state, "Enemy: Streetcleaner", "7-1")
                         and grab_item(state)
                         and skull(state, "7-1", "Red")
                         and skull(state, "7-1", "Blue")
                     )
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Enemy: Streetcleaner", "7-3")
                     or (
-                        can_reach_level(state, "7-4")
+                        can_reach_level(state, "Enemy: Streetcleaner", "7-4")
                         and slide(state)
                         and (
                             arm2(state)
@@ -3240,7 +3248,7 @@ class UltrakillRules:
                         )
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Streetcleaner", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3248,14 +3256,14 @@ class UltrakillRules:
                         and can_break_glass(state)
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Streetcleaner", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
                         and has_weapon_types(state, 3)
                     )
                     or (
-                        can_reach_level(state, "P-2")
+                        can_reach_level(state, "Enemy: Streetcleaner", "P-2")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3266,40 +3274,37 @@ class UltrakillRules:
                 ),
 
             "Boss: V2":
-                lambda state: (
-                    can_reach_level(state, "1-4")
-                    and good_weapon(state)
-                ),
+                good_weapon,
 
             "Enemy: Mindflayer":
                 lambda state: (
                     (
-                        can_reach_level(state, "2-3")
+                        can_reach_level(state, "Enemy: Mindflayer", "2-3")
                         and grab_item(state)
                         and skull(state, "2-3", "Blue")
                         and skull(state, "2-3", "Red")
                     )
-                    or can_reach_level(state, "3-1")
+                    or can_reach_level(state, "Enemy: Mindflayer", "3-1")
                     or (
-                        can_reach_level(state, "5-1")
+                        can_reach_level(state, "Enemy: Mindflayer", "5-1")
                         and l20_general(state)
                     )
-                    or can_reach_level(state, "5-3")
+                    or can_reach_level(state, "Enemy: Mindflayer", "5-3")
                     or (
-                        can_reach_level(state, "6-1")
+                        can_reach_level(state, "Enemy: Mindflayer", "6-1")
                         and grab_item(state)
                         and skull(state, "6-1", "Red")
                         and jump_general(state, 1)
                     )
                     or (
-                        can_reach_level(state, "7-1")
+                        can_reach_level(state, "Enemy: Mindflayer", "7-1")
                         and grab_item(state)
                         and skull(state, "7-1", "Red")
                         and skull(state, "7-1", "Blue")
                     )
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Enemy: Mindflayer", "7-3")
                     or (
-                        can_reach_level(state, "7-S")
+                        can_reach_level(state, "Enemy: Mindflayer", "7-S")
                         and (
                             arm2(state)
                             or walljumps(state, 3)
@@ -3318,7 +3323,7 @@ class UltrakillRules:
                         and can_break_idol(state)
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Mindflayer", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3330,14 +3335,14 @@ class UltrakillRules:
                         and skull(state, "0-E", "Red")
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Mindflayer", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
                         and has_weapon_types(state, 3)
                     )
                     or (
-                        can_reach_level(state, "P-2")
+                        can_reach_level(state, "Enemy: Mindflayer", "P-2")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3349,29 +3354,28 @@ class UltrakillRules:
             
             "Boss: V2 (2nd)":
                 lambda state: (
-                    can_reach_level(state, "4-4")
-                    and l19_general(state)
+                    l19_general(state)
                     and good_weapon(state)
                 ),
 
             "Enemy: Sentry":
                 lambda state: (
                     (
-                        can_reach_level(state, "5-1")
+                        can_reach_level(state, "Enemy: Sentry", "5-1")
                         and l20_general(state)
                         and grab_item(state)
                         and skull(state, "5-1", "Blue", 3)
                     )
-                    or can_reach_level(state, "5-2")
-                    or can_reach_level(state, "5-3")
-                    or can_reach_level(state, "6-1")
+                    or can_reach_level(state, "Enemy: Sentry", "5-2")
+                    or can_reach_level(state, "Enemy: Sentry", "5-3")
+                    or can_reach_level(state, "Enemy: Sentry", "6-1")
                     or (
-                        can_reach_level(state, "7-2")
+                        can_reach_level(state, "Enemy: Sentry", "7-2")
                         and arm2(state)
                     )
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Enemy: Sentry", "7-3")
                     or (
-                        can_reach_level(state, "7-S")
+                        can_reach_level(state, "Enemy: Sentry", "7-S")
                         and (
                             arm2(state)
                             or walljumps(state, 3)
@@ -3390,7 +3394,7 @@ class UltrakillRules:
                         and can_break_idol(state)
                     )
                     or (
-                        can_reach_level(state, "7-4")
+                        can_reach_level(state, "Enemy: Sentry", "7-4")
                         and slide(state)
                         and (
                             arm2(state)
@@ -3399,7 +3403,7 @@ class UltrakillRules:
                         )
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Sentry", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3407,14 +3411,14 @@ class UltrakillRules:
                         and can_break_glass(state)
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Sentry", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
                         and has_weapon_types(state, 3)
                     )
                     or (
-                        can_reach_level(state, "P-2")
+                        can_reach_level(state, "Enemy: Sentry", "P-2")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3427,12 +3431,12 @@ class UltrakillRules:
             "Enemy: Gutterman":
                 lambda state: (
                     (
-                        can_reach_level(state, "7-2")
+                        can_reach_level(state, "Enemy: Gutterman", "7-2")
                         and arm2(state)
                     )
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Enemy: Gutterman", "7-3")
                     or (
-                        can_reach_level(state, "7-S")
+                        can_reach_level(state, "Enemy: Gutterman", "7-S")
                         and (
                             arm2(state)
                             or walljumps(state, 3)
@@ -3451,7 +3455,7 @@ class UltrakillRules:
                         and can_break_idol(state)
                     )
                     or (
-                        can_reach_level(state, "7-4")
+                        can_reach_level(state, "Enemy: Gutterman", "7-4")
                         and slide(state)
                         and (
                             arm2(state)
@@ -3460,7 +3464,7 @@ class UltrakillRules:
                         )
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Gutterman", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3468,7 +3472,7 @@ class UltrakillRules:
                         and can_break_glass(state)
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Gutterman", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3479,12 +3483,12 @@ class UltrakillRules:
             "Enemy: Guttertank":
                 lambda state: (
                     (
-                        can_reach_level(state, "7-2")
+                        can_reach_level(state, "Enemy: Guttertank", "7-2")
                         and arm2(state)
                     )
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Enemy: Guttertank", "7-3")
                     or (
-                        can_reach_level(state, "7-4")
+                        can_reach_level(state, "Enemy: Guttertank", "7-4")
                         and slide(state)
                         and (
                             arm2(state)
@@ -3493,7 +3497,7 @@ class UltrakillRules:
                         )
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Guttertank", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3501,7 +3505,7 @@ class UltrakillRules:
                         and can_break_glass(state)
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Guttertank", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3511,8 +3515,7 @@ class UltrakillRules:
 
             "Boss: Earthmover":
                 lambda state: (
-                    can_reach_level(state, "7-4")
-                    and slide(state)
+                    slide(state)
                     and (
                         arm2(state)
                         or slam_storage(state)
@@ -3523,50 +3526,50 @@ class UltrakillRules:
 
             "Enemy: Malicious Face":
                 lambda state: (
-                    can_reach_level(state, "0-1")
-                    or can_reach_level(state, "0-4")
+                    can_reach_level(state, "Enemy: Malicious Face", "0-1")
+                    or can_reach_level(state, "Enemy: Malicious Face", "0-4")
                     or (
-                        can_reach_level(state, "1-1")
+                        can_reach_level(state, "Enemy: Malicious Face", "1-1")
                         and grab_item(state)
                         and skull(state, "1-1", "Red")
                     )
-                    or can_reach_level(state, "1-3")
+                    or can_reach_level(state, "Enemy: Malicious Face", "1-3")
                     or (
-                        can_reach_level(state, "2-1")
+                        can_reach_level(state, "Enemy: Malicious Face", "2-1")
                         and l10_tower(state)
                     )
-                    or can_reach_level(state, "2-2")
-                    or can_reach_level(state, "2-3")
-                    or can_reach_level(state, "3-1")
-                    or can_reach_level(state, "4-1")
-                    or can_reach_level(state, "4-2")
+                    or can_reach_level(state, "Enemy: Malicious Face", "2-2")
+                    or can_reach_level(state, "Enemy: Malicious Face", "2-3")
+                    or can_reach_level(state, "Enemy: Malicious Face", "3-1")
+                    or can_reach_level(state, "Enemy: Malicious Face", "4-1")
+                    or can_reach_level(state, "Enemy: Malicious Face", "4-2")
                     or (
-                        can_reach_level(state, "4-3")
+                        can_reach_level(state, "Enemy: Malicious Face", "4-3")
                         and l18_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-1")
+                        can_reach_level(state, "Enemy: Malicious Face", "5-1")
                         and l20_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-2")
+                        can_reach_level(state, "Enemy: Malicious Face", "5-2")
                         and (
                             slam(state)
                             or stamina(state, 1)
                             or rock_any(state)
                         )
                     )
-                    or can_reach_level(state, "5-3")
-                    or can_reach_level(state, "6-1")
+                    or can_reach_level(state, "Enemy: Malicious Face", "5-3")
+                    or can_reach_level(state, "Enemy: Malicious Face", "6-1")
                     or (
-                        can_reach_level(state, "7-1")
+                        can_reach_level(state, "Enemy: Malicious Face", "7-1")
                         and grab_item(state)
                         and skull(state, "7-1", "Red")
                         and skull(state, "7-1", "Blue")
                     )
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Enemy: Malicious Face", "7-3")
                     or (
-                        can_reach_level(state, "7-S")
+                        can_reach_level(state, "Enemy: Malicious Face", "7-S")
                         and (
                             arm2(state)
                             or walljumps(state, 3)
@@ -3585,7 +3588,7 @@ class UltrakillRules:
                         and can_break_idol(state)
                     )
                     or (
-                        can_reach_level(state, "7-4")
+                        can_reach_level(state, "Enemy: Malicious Face", "7-4")
                         and slide(state)
                         and (
                             arm2(state)
@@ -3594,7 +3597,7 @@ class UltrakillRules:
                         )
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Malicious Face", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3602,14 +3605,14 @@ class UltrakillRules:
                         and can_break_glass(state)
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Malicious Face", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
                         and has_weapon_types(state, 3)
                     )
                     or (
-                        can_reach_level(state, "P-2")
+                        can_reach_level(state, "Enemy: Malicious Face", "P-2")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3622,11 +3625,11 @@ class UltrakillRules:
             "Enemy: Cerberus":
                 lambda state: (
                     (
-                        can_reach_level(state, "0-5")
+                        can_reach_level(state, "Enemy: Cerberus", "0-5")
                         and l5_general(state)
                     )
                     or (
-                        can_reach_level(state, "1-2")
+                        can_reach_level(state, "Enemy: Cerberus", "1-2")
                         and slide(state)
                         and (
                             grab_item(state)
@@ -3636,25 +3639,25 @@ class UltrakillRules:
                             and can_zap(state)
                         )
                     )
-                    or can_reach_level(state, "1-3")
+                    or can_reach_level(state, "Enemy: Cerberus", "1-3")
                     or (
-                        can_reach_level(state, "2-1")
+                        can_reach_level(state, "Enemy: Cerberus", "2-1")
                         and l10_exit(state)
                     )
-                    or can_reach_level(state, "2-2")
-                    or can_reach_level(state, "3-1")
-                    or can_reach_level(state, "4-1")
-                    or can_reach_level(state, "4-2")
+                    or can_reach_level(state, "Enemy: Cerberus", "2-2")
+                    or can_reach_level(state, "Enemy: Cerberus", "3-1")
+                    or can_reach_level(state, "Enemy: Cerberus", "4-1")
+                    or can_reach_level(state, "Enemy: Cerberus", "4-2")
                     or (
-                        can_reach_level(state, "4-3")
+                        can_reach_level(state, "Enemy: Cerberus", "4-3")
                         and l18_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-1")
+                        can_reach_level(state, "Enemy: Cerberus", "5-1")
                         and l20_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-2")
+                        can_reach_level(state, "Enemy: Cerberus", "5-2")
                         and can_break_idol(state)
                         and (
                             slam(state)
@@ -3662,30 +3665,30 @@ class UltrakillRules:
                             or rock_any(state)
                         )
                     )
-                    or can_reach_level(state, "5-3")
+                    or can_reach_level(state, "Enemy: Cerberus", "5-3")
                     or (
-                        can_reach_level(state, "6-1")
+                        can_reach_level(state, "Enemy: Cerberus", "6-1")
                         and grab_item(state)
                         and skull(state, "6-1", "Red")
                     )
                     or (
-                        can_reach_level(state, "7-1")
+                        can_reach_level(state, "Enemy: Cerberus", "7-1")
                         and grab_item(state)
                         and skull(state, "7-1", "Red")
                         and skull(state, "7-1", "Blue")
                     )
                     or (
-                        can_reach_level(state, "7-2")
+                        can_reach_level(state, "Enemy: Cerberus", "7-2")
                         and arm2(state)
                     )
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Enemy: Cerberus", "7-3")
                     or (
-                        can_reach_level(state, "7-S")
+                        can_reach_level(state, "Enemy: Cerberus", "7-S")
                         and jump_general(state, 2)
                     )
-                    or can_reach_level(state, "0-E")
+                    or can_reach_level(state, "Enemy: Cerberus", "0-E")
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Cerberus", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3695,7 +3698,7 @@ class UltrakillRules:
                         and skull(state, "1-E", "Red")
                     )
                     or (
-                        can_reach_level(state, "P-2")
+                        can_reach_level(state, "Enemy: Cerberus", "P-2")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3708,7 +3711,7 @@ class UltrakillRules:
             "Boss: Hideous Mass":
                 lambda state: (
                     (
-                        can_reach_level(state, "1-3")
+                        can_reach_level(state, "Boss: Hideous Mass", "1-3")
                         and grab_item(state)
                         and (
                             skull(state, "1-3", "Red")
@@ -3717,13 +3720,13 @@ class UltrakillRules:
                         and good_weapon(state)
                     )
                     or (
-                        can_reach_level(state, "6-1")
+                        can_reach_level(state, "Boss: Hideous Mass", "6-1")
                         and grab_item(state)
                         and skull(state, "6-1", "Red")
                     )
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Boss: Hideous Mass", "7-3")
                     or (
-                        can_reach_level(state, "7-S")
+                        can_reach_level(state, "Boss: Hideous Mass", "7-S")
                         and (
                             arm2(state)
                             or walljumps(state, 3)
@@ -3742,7 +3745,7 @@ class UltrakillRules:
                         and can_break_idol(state)
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Boss: Hideous Mass", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3754,7 +3757,7 @@ class UltrakillRules:
                         and skull(state, "1-E", "Blue")
                     )
                     or (
-                        can_reach_level(state, "P-2")
+                        can_reach_level(state, "Boss: Hideous Mass", "P-2")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3770,7 +3773,7 @@ class UltrakillRules:
                     can_break_idol(state)
                     and (
                         (
-                        can_reach_level(state, "5-2")
+                        can_reach_level(state, "Enemy: Idol", "5-2")
                         and (
                             slam(state)
                             or stamina(state, 1)
@@ -3778,7 +3781,7 @@ class UltrakillRules:
                         )
                         )
                         or (
-                            can_reach_level(state, "5-3")
+                            can_reach_level(state, "Enemy: Idol", "5-3")
                             and grab_item(state)
                             and (
                                 skull(state, "5-3", "Blue")
@@ -3787,12 +3790,12 @@ class UltrakillRules:
                             and can_break_idol(state)
                         )
                         or (
-                            can_reach_level(state, "6-1")
+                            can_reach_level(state, "Enemy: Idol", "6-1")
                             and grab_item(state)
                             and skull(state, "6-1", "Red")
                         )
                         or (
-                            can_reach_level(state, "7-S")
+                            can_reach_level(state, "Enemy: Idol", "7-S")
                             and (
                                 arm2(state)
                                 or walljumps(state, 3)
@@ -3810,7 +3813,7 @@ class UltrakillRules:
                             and skull(state, "7-S", "Red")
                         )
                         or (
-                            can_reach_level(state, "7-4")
+                            can_reach_level(state, "Enemy: Idol", "7-4")
                             and slide(state)
                             and (
                                 arm2(state)
@@ -3820,7 +3823,7 @@ class UltrakillRules:
                             and good_weapon(state)
                         )
                         or (
-                            can_reach_level(state, "0-E")
+                            can_reach_level(state, "Enemy: Idol", "0-E")
                             and arm0(state)
                             and arm1(state)
                             and arm2(state)
@@ -3829,7 +3832,7 @@ class UltrakillRules:
                             and slide(state)
                         )
                         or (
-                            can_reach_level(state, "1-E")
+                            can_reach_level(state, "Enemy: Idol", "1-E")
                             and arm0(state)
                             and arm1(state)
                             and arm2(state)
@@ -3841,7 +3844,7 @@ class UltrakillRules:
                             and skull(state, "1-E", "Blue")
                         )
                         or (
-                            can_reach_level(state, "P-2")
+                            can_reach_level(state, "Enemy: Idol", "P-2")
                             and arm0(state)
                             and arm1(state)
                             and arm2(state)
@@ -3854,26 +3857,25 @@ class UltrakillRules:
 
             "Boss: Leviathan":
                 lambda state: (
-                    can_reach_level(state, "5-4")
-                    and good_weapon(state)
+                    good_weapon(state)
                     and stamina(state, 1)
                 ),
 
             "Enemy: Mannequin":
                 lambda state: (
                     (
-                        can_reach_level(state, "7-1")
+                        can_reach_level(state, "Enemy: Mannequin", "7-1")
                         and grab_item(state)
                         and skull(state, "7-1", "Red")
                     )
                     or (
-                        can_reach_level(state, "7-2")
+                        can_reach_level(state, "Enemy: Mannequin", "7-2")
                         and arm2(state)
                     )
-                    or can_reach_level(state, "7-3")
-                    or can_reach_level(state, "7-S")
+                    or can_reach_level(state, "Enemy: Mannequin", "7-3")
+                    or can_reach_level(state, "Enemy: Mannequin", "7-S")
                     or (
-                        can_reach_level(state, "7-4")
+                        can_reach_level(state, "Enemy: Mannequin", "7-4")
                         and slide(state)
                         and (
                             arm2(state)
@@ -3882,7 +3884,7 @@ class UltrakillRules:
                         )
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Mannequin", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3890,7 +3892,7 @@ class UltrakillRules:
                         and can_break_glass(state)
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Mannequin", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3903,16 +3905,14 @@ class UltrakillRules:
 
             "Boss: Minotaur":
                 lambda state: (
-                    can_reach_level(state, "7-1")
-                    and grab_item(state)
+                    grab_item(state)
                     and skull(state, "7-1", "Red")
                     and skull(state, "7-1", "Blue")
                 ),
 
             "Boss: Gabriel, Judge of Hell":
                 lambda state: (
-                    can_reach_level(state, "3-2")
-                    and (
+                    (
                         slide(state)
                         or naialt_any(state)
                     )
@@ -3921,34 +3921,34 @@ class UltrakillRules:
 
             "Enemy: Virtue":
                 lambda state: (
-                    can_reach_level(state, "4-1")
-                    or can_reach_level(state, "4-2")
+                    can_reach_level(state, "Enemy: Virtue", "4-1")
+                    or can_reach_level(state, "Enemy: Virtue", "4-2")
                     or (
-                        can_reach_level(state, "4-3")
+                        can_reach_level(state, "Enemy: Virtue", "4-3")
                         and l18_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-1")
+                        can_reach_level(state, "Enemy: Virtue", "5-1")
                         and l20_general(state)
                     )
                     or (
-                        can_reach_level(state, "5-2")
+                        can_reach_level(state, "Enemy: Virtue", "5-2")
                         and (
                             slam(state)
                             or stamina(state, 1)
                             or rock_any(state)
                         )
                     )
-                    or can_reach_level(state, "5-3")
-                    or can_reach_level(state, "6-1")
+                    or can_reach_level(state, "Enemy: Virtue", "5-3")
+                    or can_reach_level(state, "Enemy: Virtue", "6-1")
                     or (
-                        can_reach_level(state, "7-1")
+                        can_reach_level(state, "Enemy: Virtue", "7-1")
                         and grab_item(state)
                         and skull(state, "7-1", "Red")
                     )
-                    or can_reach_level(state, "7-3")
+                    or can_reach_level(state, "Enemy: Virtue", "7-3")
                     or (
-                        can_reach_level(state, "7-S")
+                        can_reach_level(state, "Enemy: Virtue", "7-S")
                         and (
                             arm2(state)
                             or walljumps(state, 3)
@@ -3967,7 +3967,7 @@ class UltrakillRules:
                         and can_break_idol(state)
                     )
                     or (
-                        can_reach_level(state, "0-E")
+                        can_reach_level(state, "Enemy: Virtue", "0-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3975,14 +3975,14 @@ class UltrakillRules:
                         and can_break_glass(state)
                     )
                     or (
-                        can_reach_level(state, "1-E")
+                        can_reach_level(state, "Enemy: Virtue", "1-E")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
                         and has_weapon_types(state, 3)
                     )
                     or (
-                        can_reach_level(state, "P-2")
+                        can_reach_level(state, "Enemy: Virtue", "P-2")
                         and arm0(state)
                         and arm1(state)
                         and arm2(state)
@@ -3994,8 +3994,7 @@ class UltrakillRules:
 
             "Boss: Gabriel, Apostate of Hate":
                 lambda state: (
-                    can_reach_level(state, "6-2")
-                    and (
+                    (
                         slam(state)
                         or slam_storage(state)
                         or walljumps(state, 2)
@@ -4009,8 +4008,7 @@ class UltrakillRules:
 
             "Boss: Flesh Prison":
                 lambda state: (
-                    can_reach_level(state, "P-1")
-                    and arm0(state)
+                    arm0(state)
                     and arm1(state)
                     and has_weapon_types(state, 2)
                     and slide(state)
@@ -4019,8 +4017,7 @@ class UltrakillRules:
 
             "Boss: Flesh Panopticon":
                 lambda state: (
-                    can_reach_level(state, "P-2")
-                    and arm0(state)
+                    arm0(state)
                     and arm1(state)
                     and arm2(state)
                     and has_weapon_types(state, 3)
@@ -4031,8 +4028,7 @@ class UltrakillRules:
 
             "Boss: Minos Prime":
                 lambda state: (
-                    can_reach_level(state, "P-1")
-                    and arm0(state)
+                    arm0(state)
                     and arm1(state)
                     and has_weapon_types(state, 2)
                     and slide(state)
@@ -4041,8 +4037,7 @@ class UltrakillRules:
 
             "Boss: Sisyphus Prime":
                 lambda state: (
-                    can_reach_level(state, "P-2")
-                    and arm0(state)
+                    arm0(state)
                     and arm1(state)
                     and arm2(state)
                     and has_weapon_types(state, 3)
@@ -4053,8 +4048,7 @@ class UltrakillRules:
 
             "Boss: Very Cancerous Rodent":
                 lambda state: (
-                    can_reach_level(state, "1-2")
-                    and (
+                    (
                         grab_item(state)
                         and skull(state, "1-2", "Blue")
                         and skull(state, "1-2", "Red")
@@ -4066,8 +4060,7 @@ class UltrakillRules:
 
             "Boss: Mysterious Druid Knight (& Owl)":
                 lambda state: (
-                    can_reach_level(state, "4-3")
-                    and l18_general(state)
+                    l18_general(state)
                     and can_break_walls(state)
                     and can_punch(state)
                     and skull(state, "4-3", "Blue")

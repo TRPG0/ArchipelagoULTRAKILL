@@ -2,8 +2,8 @@ from typing import Dict, List, Any, Union
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
-from .Items import ItemType, base_id, item_list, fire2_weapons, group_dict
-from .Locations import LocationType, location_list, start_weapon_locations
+from .Items import ItemType, base_id, item_list, fire2_weapons, item_groups
+from .Locations import LocationType, location_list, start_weapon_locations, location_groups
 from .Regions import Regions, SecretRegion
 from .Rules import UltrakillRules
 from .Options import UltrakillOptions
@@ -31,7 +31,8 @@ class UltrakillWorld(World):
     item_name_to_id = {item.name: (base_id + index) for index, item in enumerate(item_list)}
     location_name_to_id = {loc.name: (base_id + index) for index, loc in enumerate(location_list)}
 
-    item_name_groups = group_dict
+    item_name_groups = item_groups
+    location_name_groups = location_groups
     options_dataclass = UltrakillOptions
     options: UltrakillOptions
 
@@ -379,7 +380,7 @@ class UltrakillWorld(World):
         first_loc = world.get_location(self.start_location, player)
 
         if first_loc.item != None:
-            if not first_loc.item.name in group_dict["start_weapons"]:
+            if not first_loc.item.name in item_groups["start_weapons"]:
                 raise Exception(f"[ULTRAKILL - {world.get_player_name(player)}] "
                                 f"'{first_loc.item.name}' is not a valid starting weapon.")
             
@@ -443,7 +444,7 @@ class UltrakillWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
-            "version": "3.2.5",
+            "version": "3.2.6",
             "locations": self.game_id_to_long,
             "start": self.start_level.short_name,
             "goal": self.goal_level.short_name,

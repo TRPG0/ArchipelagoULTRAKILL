@@ -1,3 +1,9 @@
+## 3.2.6
+
+- Fixed an issue where some enemy and/or boss locations could sometimes be considered unreachable in logic.
+- Added new item and location groups.
+- Adjusted logic for the challenge in 4-3.
+
 ## 3.2.5
 
 - Fixed a logic error for 5-4: Perfect Rank.

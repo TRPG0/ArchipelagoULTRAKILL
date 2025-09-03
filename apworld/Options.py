@@ -2,7 +2,7 @@ import typing, random
 from dataclasses import dataclass
 from Options import T, Choice, Range, OptionSet, Toggle, DefaultOnToggle, ItemDict, DeathLink, PerGameCommonOptions, Removed
 from .Regions import Regions
-from .Items import group_dict
+from .Items import item_groups
 
 
 class UKLevelChoice(Choice):
@@ -157,15 +157,15 @@ class TrapPercent(Range):
 class FillerWeights(ItemWeights):
     """Choose the odds of each filler item being created when filling the item pool with junk."""
     display_name = "Filler Item Weights"
-    valid_keys = group_dict["filler"]
-    default = {item: 50 for item in group_dict["filler"]}
+    valid_keys = item_groups["filler"]
+    default = {item: 50 for item in item_groups["filler"]}
 
 
 class TrapWeights(ItemWeights):
     """Choose the odds of each trap item being created when filling the item pool with traps."""
     display_name = "Trap Item Weights"
-    valid_keys = group_dict["trap"]
-    default = {item: 50 for item in group_dict["trap"]}
+    valid_keys = item_groups["trap"]
+    default = {item: 50 for item in item_groups["trap"]}
 
 
 class EnemyRewards(Choice):
@@ -257,8 +257,8 @@ class StartingWeaponPool(ItemWeights):
     If choosing to randomize secondary fire, not to start with Feedbacker, and for the Nailgun to be in its Alternate form, the Overheat is removed from the pool.
     """
     display_name = "Starting Weapon Pool"
-    valid_keys = group_dict["start_weapons"]
-    default = {item: 50 for item in group_dict["start_weapons"]}
+    valid_keys = item_groups["start_weapons"]
+    default = {item: 50 for item in item_groups["start_weapons"]}
 
 
 class RandomizeFire2(Choice):
