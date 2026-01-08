@@ -3,8 +3,6 @@ using UnityEngine;
 using ArchipelagoULTRAKILL.Structures;
 using ArchipelagoULTRAKILL.Powerups;
 using ULTRAKILL.Cheats;
-using System.Collections;
-using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using BepInEx;
 
 namespace ArchipelagoULTRAKILL.Components
@@ -48,7 +46,11 @@ namespace ArchipelagoULTRAKILL.Components
                     if (!Multiworld.lastDeathLink.Cause.IsNullOrWhiteSpace()) cause = Multiworld.lastDeathLink.Cause;
                     else cause = string.Format(cause, Multiworld.lastDeathLink.Source);
 
-                    if (Core.uim.deathLinkMessage != null) Core.uim.deathLinkMessage.SetDeathMessage(cause);
+                    if (Core.uim.deathLinkMessage != null)
+                    {
+                        Core.Logger.LogWarning($"Killed by Death Link! {cause}");
+                        Core.uim.deathLinkMessage.SetDeathMessage(cause);
+                    }
                     NewMovement.Instance.GetHurt(200, false);
                 }
 
@@ -87,6 +89,14 @@ namespace ArchipelagoULTRAKILL.Components
             {
                 Powerup powerup = LocationManager.powerupQueue[0];
                 LocationManager.powerupQueue.RemoveAt(0);
+
+                if (powerup == Powerup.Radiance && ConfigManager.permaRadiance.value
+                    || powerup == Powerup.Sandstorm && ConfigManager.permaSand.value)
+                {
+                    Core.Logger.LogInfo($"Skipping {nameof(powerup)} powerup.");
+                    return;
+                }
+
                 GameObject gameObject = new GameObject();
                 CurrentPowerup = powerup;
                 switch (powerup)
@@ -182,9 +192,9 @@ namespace ArchipelagoULTRAKILL.Components
 
         public void UpdateWeapons()
         {
-            // piercer
             if (!NoWeaponCooldown.NoCooldown && Core.data.randomizeFire2 > Fire2Options.Disabled)
             {
+                // piercer
                 if ((!Core.data.unlockedFire2.Contains("rev0") || CurrentPowerup == Powerup.EmptyAmmo) && GetHeldWeapon() == "rev0")
                 {
                     if (GameProgressSaver.GetGeneralProgress().rev0 == 1)

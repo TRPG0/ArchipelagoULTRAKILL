@@ -1,3 +1,12 @@
+## 3.2.7
+
+- Added a new "modifiers" section in the plugin options, for people who want the game to be even harder.
+	- Radiance can be permanently enabled. Radiant Aura trap items have no effect while active.
+	- Sand can be permanently enabled. Short-Term Sandstorm trap items have no effect while active.
+- Added an option to only send Death Links after a certain number of deaths have happened.
+- Fixed a logic error for Boss: Very Cancerous Rodent.
+- Updated `Archipelago.MultiClient.Net` to `6.7.0`.
+
 ## 3.2.6
 
 - Fixed an issue where some enemy and/or boss locations could sometimes be considered unreachable in logic.

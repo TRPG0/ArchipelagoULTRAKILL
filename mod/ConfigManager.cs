@@ -54,6 +54,7 @@ namespace ArchipelagoULTRAKILL
         public static BoolField musicRandomizer;
         public static BoolField cybergrindHints;
         public static BoolField deathLink;
+        public static StringField deathLinkAmnesty;
 
         public static ConfigPanel uiPanel;
         public static BoolField showRecentLocations;
@@ -64,6 +65,11 @@ namespace ArchipelagoULTRAKILL
         public static IntField logFontSize;
         public static IntField logOpacity;
         public static ButtonField logClear;
+
+        public static ConfigPanel modifierPanel;
+        public static BoolField permaRadiance;
+        public static FloatField radianceLevel;
+        public static BoolField permaSand;
 
         public static ConfigPanel colorPanel;
 
@@ -120,6 +126,7 @@ namespace ArchipelagoULTRAKILL
             new ConfigHeader(config.rootPanel, "ARCHIPELAGO");
             playerPanel = new ConfigPanel(config.rootPanel, "PLAYER SETTINGS", "playerPanel");
             dataInfo = new ConfigHeader(config.rootPanel, "", 16);
+            modifierPanel = new ConfigPanel(config.rootPanel, "MODIFIERS", "modifierPanel");
             new ConfigHeader(config.rootPanel, "---");
             uiPanel = new ConfigPanel(config.rootPanel, "UI SETTINGS", "uiPanel");
             colorPanel = new ConfigPanel(config.rootPanel, "COLOR SETTINGS", "colorPanel");
@@ -248,6 +255,7 @@ namespace ArchipelagoULTRAKILL
             musicRandomizer = new BoolField(playerPanel, "MUSIC RANDOMIZER", "musicRandomizer", false, false) { interactable = false };
             cybergrindHints = new BoolField(playerPanel, "UNLOCK HINTS IN CYBERGRIND", "cybergrindHints", false, false) { interactable = false };
             deathLink = new BoolField(playerPanel, "DEATH LINK", "deathLink", false, false) { interactable = false };
+            deathLinkAmnesty = new StringField(playerPanel, "DEATH LINK AMNESTY", "deathLinkAmnesty", "1", false, false) { interactable = false };
 
             // ui settings
             new ConfigHeader(uiPanel, "PAUSE MENU");
@@ -304,6 +312,27 @@ namespace ArchipelagoULTRAKILL
                 UIManager.SetLogText("");
                 Multiworld.messages.Clear();
             };
+
+            // modifier settings
+            permaRadiance = new BoolField(modifierPanel, "PERMANENT RADIANCE", "permaRadiance", false, true);
+            permaRadiance.onValueChange += (BoolField.BoolValueChangeEvent e) =>
+            {
+                OptionsManager.forceRadiance = e.value;
+            };
+            radianceLevel = new FloatField(modifierPanel, "RADIANCE TIER", "radianceLevel", 1f, true);
+            radianceLevel.onValueChange += (FloatField.FloatValueChangeEvent e) =>
+            {
+                OptionsManager.radianceTier = e.value;
+            };
+
+            new ConfigHeader(modifierPanel, "-----");
+            permaSand = new BoolField(modifierPanel, "PERMANENT SAND", "permaSand", false, true);
+            permaSand.onValueChange += (BoolField.BoolValueChangeEvent e) =>
+            {
+                OptionsManager.forceSand = e.value;
+            };
+            new ConfigHeader(modifierPanel, "Changes will not affect enemies that have already spawned.", 12);
+
 
             // color settings
             uiColorRandomizer = new EnumField<ColorOptions>(colorPanel, "UI COLOR RANDOMIZER", "uiColorRandomizer", ColorOptions.Off, true);
@@ -420,6 +449,7 @@ namespace ArchipelagoULTRAKILL
             musicRandomizer.value = Core.data.musicRandomizer;
             cybergrindHints.value = Core.data.cybergrindHints;
             deathLink.value = Core.data.deathLink;
+            deathLinkAmnesty.value = Core.data.deathLinkAmnesty.ToString();
         }
 
         public static void ResetStatsDefaults()
@@ -451,6 +481,7 @@ namespace ArchipelagoULTRAKILL
             musicRandomizer.value = false;
             cybergrindHints.value = false;
             deathLink.value = false;
+            deathLinkAmnesty.value = "1";
         }
     }
 }

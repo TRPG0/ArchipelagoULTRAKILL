@@ -438,6 +438,16 @@ class UltrakillDeathLink(DeathLink):
     """
 
 
+class DeathLinkAmnesty(Range):
+    """
+    Choose how many deaths must happen before a death link is sent to the multiworld.
+    """
+    display_name = "Death Link Amnesty"
+    range_start = 1
+    range_end = 10
+    default = 1
+
+
 @dataclass
 class UltrakillOptions(PerGameCommonOptions):
     start_level: StartLevel
@@ -478,6 +488,7 @@ class UltrakillOptions(PerGameCommonOptions):
     music_randomizer: MusicRando
     cybergrind_hints: CybergrindHints
     death_link: UltrakillDeathLink
+    death_link_amnesty: DeathLinkAmnesty
 
     goal: Removed
     include_secret_mission_completion: Removed

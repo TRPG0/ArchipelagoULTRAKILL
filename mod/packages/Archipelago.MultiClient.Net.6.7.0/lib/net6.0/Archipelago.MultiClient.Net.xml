@@ -56,6 +56,11 @@
             Provides simplified handlers to receive messages about events that happen in the multiworld
             </summary>
         </member>
+        <member name="P:Archipelago.MultiClient.Net.IArchipelagoSession.Hints">
+            <summary>
+            Provides methods to interact with the hints system
+            </summary>
+        </member>
         <member name="M:Archipelago.MultiClient.Net.IArchipelagoSession.ConnectAsync">
             <summary>
             Connect the websocket to the server
@@ -134,6 +139,9 @@
             <inheritdoc/>
         </member>
         <member name="P:Archipelago.MultiClient.Net.ArchipelagoSession.MessageLog">
+            <inheritdoc/>
+        </member>
+        <member name="P:Archipelago.MultiClient.Net.ArchipelagoSession.Hints">
             <inheritdoc/>
         </member>
         <member name="M:Archipelago.MultiClient.Net.ArchipelagoSession.ConnectAsync">
@@ -1366,6 +1374,108 @@
             Retrieves the server's race mode setting. false for disabled or unavailable, true for enabled
             </summary>
             <returns>The race mode setting. false for disabled or unavailable, true for enabled</returns>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.IHintsHelper">
+            <summary>
+            Provides information about the current state of the server
+            </summary>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IHintsHelper.CreateHints(System.Int32,Archipelago.MultiClient.Net.Enums.HintStatus,System.Int64[])">
+             <summary>
+                 Tell the server to create hints for the specified locations.
+                 When creating hints for another slot's locations, the packet will fail if any of those locations do not contain an item for the requesting slot.
+                 When creating hints for your own slot's locations, non-existing locations will be silently skipped.
+            
+                 NOTE: AP does not provide a way for you to know what locations exists in other players worlds, such information needs to be saved during generation if needed
+             </summary>
+             <param name="player">
+                 The ID of the player whose locations are being hinted for.
+             </param>
+             <param name="hintStatus">
+                 If included, sets the status of the created hints to this status.
+                 Defaults to unspecified.
+             </param>
+             <param name="locationIds">
+                 The location ids to create hints for.
+             </param>
+             <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                 The websocket connection is not alive.
+             </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IHintsHelper.CreateHints(Archipelago.MultiClient.Net.Enums.HintStatus,System.Int64[])">
+             <summary>
+                 Tell the server to create hints for the specified locations.
+                 This version does not include the player id, and as such will only hint for locations in the active player's game.
+                 When creating hints, non-existing locations will be silently skipped.
+            
+                NOTE: AP does not provide a way for you to know what locations exists in other players worlds, such information needs to be saved during generation if needed
+             </summary>
+             <param name="hintStatus">
+                 If included, sets the status of the created hints to this status.
+                 Defaults to unspecified.
+             </param>
+             <param name="locationIds">
+                 The location ids to create hints for.
+             </param>
+             <exception cref="T:Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException">
+                 The websocket connection is not alive.
+             </exception>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IHintsHelper.UpdateHintStatus(System.Int32,System.Int64,Archipelago.MultiClient.Net.Enums.HintStatus)">
+             <summary>
+                Update the hint status for a specific location in a specific players their world.
+            
+                NOTE: AP does not provide a way for you to know what locations exists in other players worlds, such information needs to be saved during generation if needed
+             </summary>
+             <param name="player">The ID of the player whose location's hint is being updated.</param>
+             <param name="locationId">The ID of the location in the players world to update</param>
+             <param name="newHintStatus">The new desired hint status for this hint, cannot be status HintStatus.Found as that is automaticly handled by AP</param>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IHintsHelper.GetHints(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Retrieves all unlocked hints for the specified player slot and team
+            </summary>
+            <param name="slot">the slot id of the player to request hints for, defaults to the current player's slot if left empty</param>
+            <param name="team">the team id of the player to request hints for, defaults to the current player's team if left empty</param>
+            <returns>An array of unlocked hints or null if the slot or team does not exist</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IHintsHelper.GetHintsAsync(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Retrieves all unlocked hints for the specified player slot and team
+            </summary>
+            <param name="slot">the slot id of the player to request hints for, defaults to the current player's slot if left empty</param>
+            <param name="team">the team id of the player to request hints for, defaults to the current player's team if left empty</param>
+            <returns>An array of unlocked hints or null if the slot or team does not exist</returns>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.IHintsHelper.TrackHints(System.Action{Archipelago.MultiClient.Net.Models.Hint[]},System.Boolean,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Sets a callback to be called with all updates to the unlocked hints for the specified player slot and team
+            </summary>
+            <param name="onHintsUpdated">the method to call with the updated hints</param>
+            <param name="retrieveCurrentlyUnlockedHints">should the currently unlocked hints be retrieved or just the updates</param>
+            <param name="slot">the slot id of the player to request hints for, defaults to the current player's slot if left empty</param>
+            <param name="team">the team id of the player to request hints for, defaults to the current player's team if left empty</param>
+        </member>
+        <member name="T:Archipelago.MultiClient.Net.Helpers.HintsHelper">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.HintsHelper.CreateHints(System.Int32,Archipelago.MultiClient.Net.Enums.HintStatus,System.Int64[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.HintsHelper.CreateHints(Archipelago.MultiClient.Net.Enums.HintStatus,System.Int64[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.HintsHelper.UpdateHintStatus(System.Int32,System.Int64,Archipelago.MultiClient.Net.Enums.HintStatus)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.HintsHelper.GetHints(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.HintsHelper.GetHintsAsync(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Archipelago.MultiClient.Net.Helpers.HintsHelper.TrackHints(System.Action{Archipelago.MultiClient.Net.Models.Hint[]},System.Boolean,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <inheritdoc/>
         </member>
         <member name="T:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelperDelagates">
             <summary>

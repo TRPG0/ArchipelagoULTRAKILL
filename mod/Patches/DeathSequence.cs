@@ -10,21 +10,43 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix()
         {
-            if (Multiworld.DeathLinkService != null && Core.uim.deathLinkMessage != null && Multiworld.lastDeathLink == null) 
+            if (Multiworld.DeathLinkService != null)
             {
-                int index = 0;
+                bool sendDeathLink = false;
+                if (Core.uim.deathLinkMessage != null && Multiworld.lastDeathLink == null)
+                {
+                    if (Core.data.deathLinkAmnesty > 1)
+                    {
+                        Multiworld.currentDeathCount++;
+                        Core.Logger.LogInfo($"Death count is at {Multiworld.currentDeathCount}/{Core.data.deathLinkAmnesty}!");
+                        if (Multiworld.currentDeathCount >= Core.data.deathLinkAmnesty)
+                        {
+                            sendDeathLink = true;
+                            Multiworld.currentDeathCount = 0;
+                        }
+                    }
+                    else
+                    {
+                        sendDeathLink = true;
+                    }
 
-                if (DeathLinkMessage.specialMessages.ContainsKey(SceneHelper.CurrentScene))
-                {
-                    index = Random.Range(0, DeathLinkMessage.specialMessages[SceneHelper.CurrentScene].Count);
-                    Core.Logger.LogWarning($"Sending Death Link with message: {string.Format(DeathLinkMessage.specialMessages[SceneHelper.CurrentScene][index], Core.data.slot_name)}");
-                    Multiworld.DeathLinkService.SendDeathLink(new DeathLink(Core.data.slot_name, string.Format(DeathLinkMessage.specialMessages[SceneHelper.CurrentScene][index], Core.data.slot_name)));
-                }
-                else
-                {
-                    index = Random.Range(0, DeathLinkMessage.deathMessages.Count);
-                    Core.Logger.LogWarning($"Sending Death Link with message: {string.Format(DeathLinkMessage.deathMessages[index], Core.data.slot_name)}");
-                    Multiworld.DeathLinkService.SendDeathLink(new DeathLink(Core.data.slot_name, string.Format(DeathLinkMessage.deathMessages[index], Core.data.slot_name)));
+                    if (sendDeathLink)
+                    {
+                        int index = 0;
+
+                        if (DeathLinkMessage.specialMessages.ContainsKey(SceneHelper.CurrentScene))
+                        {
+                            index = Random.Range(0, DeathLinkMessage.specialMessages[SceneHelper.CurrentScene].Count);
+                            Core.Logger.LogWarning($"Sending Death Link with message: {string.Format(DeathLinkMessage.specialMessages[SceneHelper.CurrentScene][index], Core.data.slot_name)}");
+                            Multiworld.DeathLinkService.SendDeathLink(new DeathLink(Core.data.slot_name, string.Format(DeathLinkMessage.specialMessages[SceneHelper.CurrentScene][index], Core.data.slot_name)));
+                        }
+                        else
+                        {
+                            index = Random.Range(0, DeathLinkMessage.deathMessages.Count);
+                            Core.Logger.LogWarning($"Sending Death Link with message: {string.Format(DeathLinkMessage.deathMessages[index], Core.data.slot_name)}");
+                            Multiworld.DeathLinkService.SendDeathLink(new DeathLink(Core.data.slot_name, string.Format(DeathLinkMessage.deathMessages[index], Core.data.slot_name)));
+                        }
+                    }
                 }
             }
         }

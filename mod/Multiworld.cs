@@ -16,14 +16,16 @@ using BepInEx;
 using System.Linq;
 using TMPro;
 using System.Collections;
+using HarmonyXInterop;
 
 namespace ArchipelagoULTRAKILL
 {
     public class Multiworld : MonoBehaviour
     {
-        public static Version apVersion = new Version(0, 6, 1);
+        public static Version apVersion = new Version(0, 6, 5);
         public static DeathLinkService DeathLinkService = null;
         public static DeathLink lastDeathLink = null;
+        public static int currentDeathCount = 0;
 
         public static bool Authenticated;
         public static bool HintMode = false;
@@ -402,6 +404,7 @@ namespace ArchipelagoULTRAKILL
                     if (ConfigManager.gunColorRandomizer.value != ColorOptions.Off) ColorRandomizer.RandomizeGunColors();
 
                     Core.data.deathLink = bool.Parse(success.SlotData["death_link"].ToString());
+                    TryGetSlotDataValue(ref Core.data.deathLinkAmnesty, success.SlotData, "death_link_amnesty", 1);
                 }
 
                 if (Core.data.deathLink) EnableDeathLink();

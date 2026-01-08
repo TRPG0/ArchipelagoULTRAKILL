@@ -73,6 +73,7 @@ namespace ArchipelagoULTRAKILL
         public bool cybergrindHints = true;
 
         public bool deathLink = false;
+        public int deathLinkAmnesty = 1;
 
         public override string ToString()
         {

@@ -347,7 +347,7 @@ location_list: List[UKLocation] = [
     UKLocation("Boss: Flesh Panopticon", Regions.p2, "e_fleshpanopticon", LocationType.Boss),
     UKLocation("Boss: Minos Prime", Regions.p1, "e_minosprime", LocationType.Boss),
     UKLocation("Boss: Sisyphus Prime", Regions.p2, "e_sisyphusprime", LocationType.Boss),
-    UKLocation("Boss: Very Cancerous Rodent", Regions.l8, "e_verycancerousrodent", LocationType.BossExt),
+    UKLocation("Boss: Very Cancerous Rodent", Regions.l7, "e_verycancerousrodent", LocationType.BossExt),
     UKLocation("Boss: Mysterious Druid Knight (& Owl)", Regions.l18, "e_mandalore", LocationType.BossExt),
 
     # Misc
