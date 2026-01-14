@@ -51,8 +51,16 @@ namespace ArchipelagoULTRAKILL.Components
 
         public void OnEnable()
         {
-            if (text) text.transform.localPosition = new Vector3(75, -75, 0);
-            if (itemIcon) itemIcon.transform.localPosition = new Vector3(185, -60, 0);
+            if (text)
+            {
+                text.transform.localPosition = new Vector3(75, -75, 0);
+                text.transform.localRotation = Quaternion.identity;
+            }
+            if (itemIcon)
+            {
+                itemIcon.transform.localPosition = new Vector3(185, -60, 0);
+                itemIcon.transform.localRotation = Quaternion.identity;
+            }
             StartCoroutine(DelayedUpdate());
         }
 
@@ -110,6 +118,7 @@ namespace ArchipelagoULTRAKILL.Components
                         description += " for <color=#" + ColorUtility.ToHtmlStringRGB(Colors.PlayerOther) + "FF>" + apitem.playerName + "</color>";
                         description += "]\n\n";
 
+                        itemSprite = LocationManager.GetAPImage(apitem.type);
                         itemColor = LocationManager.GetAPMessageColor(apitem.type);
 
                         if (apitem.type.HasFlag(ItemFlags.Advancement)) description += "You don't know what this is, but it seems <color=#" + ColorUtility.ToHtmlStringRGB(Colors.ItemAdvancement) + "FF>important.</color>";

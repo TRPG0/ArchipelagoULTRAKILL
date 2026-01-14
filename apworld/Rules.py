@@ -1225,24 +1225,34 @@ class UltrakillRules:
 
             "0-S":
                 lambda state: (
-                    l2_secret_exit(state)
+                    options.secret_mission_unlock_type == "secret_exits"
+                    and l2_secret_exit(state)
                     and grab_item(state)
                     and skull(state, "0-2", "Blue")
+                    or state.has("0-S: SOMETHING WICKED", player)
                 ),
 
             "1-S":
-                revany2_fire2,
+                lambda state: (
+                    options.secret_mission_unlock_type == "secret_exits"\
+                    and revany2_fire2(state)
+                    or state.has("1-S: THE WITLESS", player)
+                ),
 
             "2-S":
                 lambda state: (
-                    l12_s3(state)
+                    options.secret_mission_unlock_type == "secret_exits"
+                    and l12_s3(state)
                     and slide(state)
+                    and grab_item(state)
                     and skull(state, "2-3", "Blue")
+                    or state.has("2-S: ALL IMPERFECT LOVE SONG", player)
                 ),
 
             "4-S":
                 lambda state: (
-                    (
+                    options.secret_mission_unlock_type == "secret_exits"
+                    and (
                         slam(state)
                         or walljumps(state, 3)
                         or rock_any(state)
@@ -1257,34 +1267,24 @@ class UltrakillRules:
                         )
                     )
                     and grab_item(state)
+                    or state.has("4-S: CLASH OF THE BRANDICOOT", player)
                 ),
 
             "5-S":
                 lambda state: (
-                    slide(state)
+                    options.secret_mission_unlock_type == "secret_exits"
+                    and slide(state)
                     and l20_general(state)
                     and grab_item(state)
                     and skull(state, "5-1", "Blue", 3)
                     and jump_general(state, 1)
+                    or state.has("5-S: I ONLY SAY MORNING", player)
                 ),
 
             "7-S":
                 lambda state: (
-                    good_weapon(state)
-                    and can_break_idol(state)
-                    and (
-                        arm2(state)
-                        or walljumps(state, 3)
-                        or (
-                            walljumps(state, 2)
-                            and stamina(state, 1)
-                        )
-                        or (
-                            shoalt0_fire2(state)
-                            or shoany1_fire2(state)
-                            or rai2(state)
-                        )
-                    )
+                    options.secret_mission_unlock_type == "secret_exits"
+                    or state.has("7-S: HELL BATH NO FURY", player)
                 )
         }
         
@@ -1335,10 +1335,18 @@ class UltrakillRules:
             "0-2: Perfect Rank":
                 good_weapon,
 
+            "0-2: Secret Exit":
+                lambda state: (
+                    l2_secret_exit(state)
+                    and grab_item(state)
+                    and skull(state, "0-2", "Blue")
+                ),
+
             # 0-S
             "Cleared 0-S":
                 lambda state: (
-                    skull(state, "0-2", "Blue")
+                    grab_item(state)
+                    and skull(state, "0-2", "Blue")
                     and skull(state, "0-S", "Blue")
                     and skull(state, "0-S", "Red")
                 ),
@@ -1464,6 +1472,13 @@ class UltrakillRules:
                     and skull(state, "1-1", "Blue")
                 ),
 
+            "1-1: Secret Exit":
+                lambda state: (
+                    grab_item(state)
+                    and skull(state, "1-1", "Red")
+                    and skull(state, "1-1", "Blue")
+                ),
+
             "Cleared 1-1":
                 lambda state: (
                     (
@@ -1471,7 +1486,10 @@ class UltrakillRules:
                         and skull(state, "1-1", "Red")
                         and skull(state, "1-1", "Blue")
                     )
-                    or revany2_fire2(state)
+                    or (
+                        options.secret_exit_behavior == "standard"
+                        and revany2_fire2(state)
+                    )
                 ),
 
             # 1-2
@@ -1721,9 +1739,10 @@ class UltrakillRules:
                     grab_item(state)
                     and (
                         (
-                            l12_s3(state)
+                            options.secret_exit_behavior == "standard"
+                            and l12_s3(state)
                             and skull(state, "2-3", "Blue")
-                            and slide
+                            and slide(state)
                         )
                         or (
                             skull(state, "2-3", "Blue")
@@ -1747,6 +1766,14 @@ class UltrakillRules:
                     and skull(state, "2-3", "Blue")
                     and skull(state, "2-3", "Red")
                     and good_weapon(state)
+                ),
+
+            "2-3: Secret Exit":
+                lambda state: (
+                    grab_item(state)
+                    and l12_s3(state)
+                    and skull(state, "2-3", "Blue")
+                    and slide(state)
                 ),
 
             # 2-4
@@ -1862,12 +1889,25 @@ class UltrakillRules:
                 lambda state: (
                     grab_item(state)
                     and (
-                        jump_general(state, 2)
-                        or revany1_fire2(state)
-                        or (
-                            skull(state, "4-2", "Blue")
-                            and skull(state, "4-2", "Red")
+                        options.secret_exit_behavior == "standard"
+                        and (
+                            slam(state)
+                            or walljumps(state, 3)
+                            or rock_any(state)
+                            or shoany0_fire2(state)
+                            or shoany1_fire2(state)
+                            or can_proj_boost(state)
+                            or rai2(state)
+                            or revany1_fire2(state)
+                            or (
+                                shoalt_any(state)
+                                and walljumps(state, 2)
+                            )
                         )
+                    )
+                    or (
+                        skull(state, "4-2", "Blue")
+                        and skull(state, "4-2", "Red")
                     )
                 ),
 
@@ -1885,6 +1925,25 @@ class UltrakillRules:
                     and skull(state, "4-2", "Blue")
                     and skull(state, "4-2", "Red")
                     and good_weapon(state)
+                ),
+
+            "4-2: Secret Exit":
+                lambda state: (
+                    grab_item(state)
+                    and (
+                        slam(state)
+                        or walljumps(state, 3)
+                        or rock_any(state)
+                        or shoany0_fire2(state)
+                        or shoany1_fire2(state)
+                        or can_proj_boost(state)
+                        or rai2(state)
+                        or revany1_fire2(state)
+                        or (
+                            shoalt_any(state)
+                            and walljumps(state, 2)
+                        )
+                    )
                 ),
 
             # 4-3
@@ -2020,6 +2079,15 @@ class UltrakillRules:
                     l20_general(state)
                     and grab_item(state)
                     and skull(state, "5-1", "Blue", 3)
+                ),
+
+            "5-1: Secret Exit":
+                lambda state: (
+                    slide(state)
+                    and l20_general(state)
+                    and grab_item(state)
+                    and skull(state, "5-1", "Blue", 3)
+                    and jump_general(state, 1)
                 ),
 
             # 5-2
@@ -2478,6 +2546,28 @@ class UltrakillRules:
             # 7-3
             "7-3: Perfect Rank":
                 good_weapon,
+
+            "Cleared 7-3":
+                lambda state: (
+                    options.secret_exit_behavior == "standard"
+                    or (
+                        good_weapon(state)
+                        and can_break_idol(state)
+                        and (
+                            arm2(state)
+                            or walljumps(state, 3)
+                            or (
+                                walljumps(state, 2)
+                                and stamina(state, 1)
+                            )
+                            or (
+                                shoalt0_fire2(state)
+                                or shoany1_fire2(state)
+                                or rai2(state)
+                            )
+                        )
+                    )
+                ),
 
             # 7-S
             "Cleared 7-S":

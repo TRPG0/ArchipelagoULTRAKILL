@@ -16,7 +16,6 @@ using BepInEx;
 using System.Linq;
 using TMPro;
 using System.Collections;
-using HarmonyXInterop;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -308,6 +307,8 @@ namespace ArchipelagoULTRAKILL
 
                 TryGetSlotDataValue(ref Core.data.goalRequirement, success.SlotData, "goal_requirement", 15);
                 TryGetSlotDataValue(ref Core.data.perfectGoal, success.SlotData, "perfect_goal", false);
+                TryGetSlotDataValue(ref Core.data.secretExitUnlock, success.SlotData, "secret_mission_unlock_type", true);
+                TryGetSlotDataValue(ref Core.data.secretExitComplete, success.SlotData, "secret_exit_behavior", true);
                 TryGetEnemyOption(ref Core.data.enemyRewards, success.SlotData, "enemy_rewards", EnemyOptions.Disabled);
                 TryGetSlotDataValue(ref Core.data.challengeRewards, success.SlotData, "challenge_rewards", false);
                 TryGetSlotDataValue(ref Core.data.pRankRewards, success.SlotData, "p_rank_rewards", false);
@@ -645,7 +646,7 @@ namespace ArchipelagoULTRAKILL
                                 messageColor = LocationManager.GetAPMessageColor(p.Data[2].Flags.Value);
                                 LocationManager.messages.Add(new Message()
                                 {
-                                    image = "archipelago",
+                                    image = LocationManager.GetAPImage(p.Data[2].Flags.Value),
                                     color = LocationManager.GetAPMessageColor(p.Data[2].Flags.Value),
                                     message = $"FOUND: <color=#{ColorUtility.ToHtmlStringRGBA(messageColor)}>{itemName.ToUpper()}</color> (<color=#{ColorUtility.ToHtmlStringRGBA(Colors.PlayerOther)}>{forPlayer}</color>)"
                                 });
@@ -793,12 +794,6 @@ namespace ArchipelagoULTRAKILL
             if (Session != null)
             {
                 Session.DataStorage[Scope.Slot, "completedLevels"] = Core.data.completedLevels.ToArray();
-                Session.Socket.SendPacketAsync(new BouncePacket() 
-                { 
-                    Slots = new List<int>() { Session.Players.ActivePlayer.Slot },
-                    Tags = new List<string>() { "Tracker" },
-                    Data = new Dictionary<string, JToken>() { ["completedLevels"] = null },
-                });
             }
         }
 

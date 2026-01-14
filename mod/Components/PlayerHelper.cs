@@ -17,6 +17,8 @@ namespace ArchipelagoULTRAKILL.Components
         public bool CanGetPowerup { get; internal set; } = false;
         public static Powerup CurrentPowerup { get; private set; }
 
+        public static bool IsSecretExiting { get; internal set; } = false;
+
         public void Init(NewMovement nm)
         {
             Instance = this;
@@ -29,6 +31,7 @@ namespace ArchipelagoULTRAKILL.Components
         {
             GunControl.Instance.NoWeapon();
             GunControl.Instance.YesWeapon();
+            IsSecretExiting = false;
         }
 
         public void OnDestroy()

@@ -11,7 +11,8 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists())
             {
-                if (!__instance.targetLevelName.Contains("-S") || __instance.targetLevelName.Contains(Core.data.goal)) __instance.targetLevelName = "Main Menu";
+                if (!__instance.targetLevelName.Contains("-S")
+                    || __instance.targetLevelName.Contains("-S") && !Core.data.secretExitUnlock) __instance.targetLevelName = "Main Menu";
             }
         }
     }
@@ -20,10 +21,12 @@ namespace ArchipelagoULTRAKILL.Patches
     [HarmonyPatch(typeof(FinalPit), "SendInfo")]
     class FinalPit_SendInfo_Patch
     {
-        public static void Prefix()
+        public static void Prefix(FinalPit __instance)
         {
             if (Core.DataExists())
             {
+                if (__instance.GetComponent<SecretMissionPit>() && !Core.data.secretExitComplete) PlayerHelper.IsSecretExiting = true;
+
                 if (PlayerHelper.Instance)
                 {
                     PlayerHelper.Instance.EndPowerup();
@@ -43,6 +46,11 @@ namespace ArchipelagoULTRAKILL.Patches
                             if (!Core.data.perfectGoal
                                 || Core.data.perfectGoal && Core.data.goal.Contains("S")) 
                                 Multiworld.SendCompletion();
+                        }
+                        else if (PlayerHelper.IsSecretExiting)
+                        {
+                            LocationManager.CheckLocation($"se_{Core.CurrentLevelInfo.Layer}");
+                            return;
                         }
                         else
                         {

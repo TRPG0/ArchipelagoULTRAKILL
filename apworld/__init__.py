@@ -1,3 +1,4 @@
+import json
 from typing import Dict, List, Any, Union
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from Options import OptionError
@@ -64,6 +65,7 @@ class UltrakillWorld(World):
         self.item_classifications[ItemType.ShoAlt] = ItemClassification.progression
         self.item_classifications[ItemType.NaiStd] = ItemClassification.progression
         self.item_classifications[ItemType.NaiAlt] = ItemClassification.progression
+        self.item_classifications[ItemType.SecretMission] = ItemClassification.progression
 
         self.event_names: List[str] = []
         self.game_id_to_long: Dict[str, int] = {}
@@ -205,6 +207,12 @@ class UltrakillWorld(World):
         if self.options.start_with_slam:
             self.item_classifications[ItemType.Slam] = None
 
+        if self.options.secret_mission_unlock_type == "secret_exits":
+            self.item_classifications[ItemType.SecretMission] = None
+
+        if self.options.secret_exit_behavior == "standard":
+            self.skipped_location_types.append(LocationType.SecretExit)
+
         if self.options.unlock_type == "levels":
             self.item_classifications[ItemType.Layer] = None
         elif self.options.unlock_type == "layers":
@@ -332,7 +340,7 @@ class UltrakillWorld(World):
         for item in item_list:
             if self.item_classifications[item.type] == None:
                 continue
-            elif item.type == ItemType.Level and item.name in {self.start_level.full_name, self.goal_level.full_name}:
+            elif (item.type == ItemType.Level or item.type == ItemType.SecretMission) and item.name in {self.start_level.full_name, self.goal_level.full_name}:
                 continue
             elif item.type == ItemType.Filler or item.type == ItemType.Trap:
                 continue
@@ -444,12 +452,14 @@ class UltrakillWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
-            "version": "3.2.7",
+            "version": self.world_version.as_simple_string(),
             "locations": self.game_id_to_long,
             "start": self.start_level.short_name,
             "goal": self.goal_level.short_name,
             "goal_requirement": self.options.goal_requirement.value,
             "perfect_goal": bool(self.options.perfect_goal),
+            "secret_mission_unlock_type": bool(self.options.secret_mission_unlock_type.value),
+            "secret_exit_behavior": bool(self.options.secret_exit_behavior.value),
             "skipped_levels": self.options.skipped_levels.value,
             "enemy_rewards": self.options.enemy_rewards.value,
             "challenge_rewards": bool(self.options.challenge_rewards),
@@ -481,7 +491,26 @@ class UltrakillWorld(World):
             "death_link": bool(self.options.death_link),
             "death_link_amnesty": self.options.death_link_amnesty.value
         }
+
+        #self.export_lua()
+
         return slot_data
+    
+
+    def export_lua(self) -> None:
+        with open("item_mapping.lua", "w") as item_map:
+            item_map.write(f"-- Generated from apworld version {self.world_version.as_simple_string()}\n\nITEM_MAPPING = " + "{\n")
+            for item in item_list:
+                if item.tracker_strings == None:
+                    continue
+                item_map.write("    [" + str(self.item_name_to_id[item.name]) + "] = {\"" + "\", \"".join(item.tracker_strings) + "\"},\n")
+            item_map.write("}")
+
+        with open("location_mapping.lua", "w") as location_map:
+            location_map.write(f"-- Generated from apworld version {self.world_version.as_simple_string()}\n\nLOCATION_MAPPING = " + "{\n")
+            for location in location_list:
+                location_map.write("    [" + str(self.location_name_to_id[location.name]) + "] = {\"" + location.tracker_string + "\"},\n")
+            location_map.write("}")
 
 
 class UltrakillItem(Item):

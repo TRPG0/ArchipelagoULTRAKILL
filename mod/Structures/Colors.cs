@@ -9,6 +9,9 @@ namespace ArchipelagoULTRAKILL.Structures
         public static Color Red => new Color(1, 0.2353f, 0.2353f);
         public static Color Green => new Color(0.2667f, 1, 0.2706f);
         public static Color Perfect => new Color(0.96f, 0.659f, 0);
+        public static Color ActHighlight => ConfigManager.actHighlightColor.value;
+        public static Color ActComplete => ConfigManager.actCompleteColor.value;
+        public static Color ActGoal => ConfigManager.actGoalColor.value;
         public static Color PlayerSelf => ConfigManager.APPlayerSelf.value;
         public static Color PlayerOther => ConfigManager.APPlayerOther.value;
         public static Color ItemAdvancement => ConfigManager.APItemAdvancement.value;

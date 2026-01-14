@@ -26,6 +26,8 @@ namespace ArchipelagoULTRAKILL
         public string goal = "6-2";
         public int goalRequirement = 20;
         public bool perfectGoal = false;
+        public bool secretExitUnlock = true;
+        public bool secretExitComplete = true;
         public EnemyOptions enemyRewards = EnemyOptions.Disabled;
         public bool challengeRewards = false;
         public bool pRankRewards = false;

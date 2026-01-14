@@ -25,7 +25,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.2.7";
+        public const string PluginVersion = "3.3.0";
 
         public static string workingPath;
         public static string workingDir;
@@ -238,7 +238,7 @@ namespace ArchipelagoULTRAKILL
                 mw = obj.AddComponent<Multiworld>();
             }
 
-            uim.StopCoroutine("DisplayMessage");
+            uim.StopAllCoroutines();
 
             UIManager.displayingMessage = false;
             UIManager.levels.Clear();
@@ -292,12 +292,14 @@ namespace ArchipelagoULTRAKILL
             else if (SceneHelper.CurrentScene == "Endless" && Multiworld.HintMode) UIManager.CreateMessageUI();
             if (!IsInIntro) OptionsManager.Instance.optionsMenu.gameObject.AddComponent<OptionsMenuState>();
 
-            if (DataExists() && UIManager.log != null) UIManager.AdjustLogBounds();
-
-            if (DataExists() && SceneHelper.CurrentScene == "Level 0-1") LevelManager.ChangeIntro();
-            else if (DataExists() && SceneHelper.CurrentScene == "Level 1-2" && GameProgressSaver.GetGeneralProgress().nai0 == 0) LevelManager.DeactivateNailgun();
-            else if (DataExists() && (SceneHelper.CurrentScene == "Level 1-4" || SceneHelper.CurrentScene == "Level 5-3") && data.hankRewards) LevelManager.FindHank();
-            else if (DataExists() && SceneHelper.CurrentScene == "CreditsMuseum2") LevelManager.FindRocketRaceButton();
+            if (DataExists())
+            {
+                if (UIManager.log != null) UIManager.AdjustLogBounds();
+                if (SceneHelper.CurrentScene == "Level 0-1") LevelManager.ChangeIntro();
+                if (SceneHelper.CurrentScene == "Level 1-2" && GameProgressSaver.GetGeneralProgress().nai0 == 0) LevelManager.DeactivateNailgun();
+                if ((SceneHelper.CurrentScene == "Level 1-4" || SceneHelper.CurrentScene == "Level 5-3") && data.hankRewards) LevelManager.FindHank();
+                if (SceneHelper.CurrentScene == "CreditsMuseum2") LevelManager.FindRocketRaceButton();
+            }
         }
 
         public static bool DataExists()

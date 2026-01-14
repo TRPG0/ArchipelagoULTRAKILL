@@ -32,11 +32,11 @@ Optionally, you can also download [NoTutorial](https://github.com/TRPG0/UK-NoTut
 
 2. Download `ultrakill.apworld` from the mod's [releases page](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases) and install it, either by double clicking the `.apworld` file, opening the Archipelago Launcher and selecting "Install APWorld", or by selecting "Browse Files" and adding it to the `custom_worlds` folder.
 
-3. Set up all `.yaml` files for each player in the multiworld, then add them to the `Players` folder. A template can be downloaded for ULTRAKILL from the mod's [releases page,](https://github.com/TRPG0/ArchipelagoULTRAKILL/releases) or you can click "Generate Template Options" in the Archipelago Launcher. A guide for advanced settings can be found [here.](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en)
+3. Set up all `.yaml` files for each player in the multiworld, then add them to the `Players` folder. You can use the "Options Creator" in the launcher to make a `.yaml`, or for more advanced settings, you can click "Generate Template Options" and edit the file in a text editor. A guide for advanced settings can be found [here.](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en)
 
-4. Run `ArchipelagoGenerate.exe` or click "Generate" in the launcher to generate a game, which will appear in the `output` folder.
+4. Click "Generate" in the launcher or run `ArchipelagoGenerate.exe` to generate a game, which will appear in the `output` folder.
 
-5. Host a game, either manually by running `ArchipelagoServer.exe` or clicking "Host" in the launcher, or by [uploading](https://archipelago.gg/uploads) it to the Archipelago website.
+5. Host a game by [uploading](https://archipelago.gg/uploads) it to the Archipelago website, or manually, by clicking "Host" in the launcher or running `ArchipelagoServer.exe`.
 
 6. To connect to the server, first select a new save file. Then open the options menu, click the PLUGIN CONFIG button, click Configure next to Archipelago, and open the PLAYER SETTINGS menu. Enter your name, the server's address in the form of `address:port`, and a password if necessary, then click the Connect button.
 

@@ -198,8 +198,8 @@ namespace ArchipelagoULTRAKILL.Components
 
         public string BuildString(string part, int value, int total)
         {
-            string color = "red";
-            if (value >= total) color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.Perfect);
+            string color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.ActHighlight);
+            if (value >= total) color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.ActComplete);
 
             return $"{part}: <color={color}>{value}/{total}</color>";
         }
@@ -235,10 +235,10 @@ namespace ArchipelagoULTRAKILL.Components
 
                 if (!ActIncludes(secretMissionLevel)) return "";
 
-                if (GameProgressSaver.GetSecretMission(int.Parse(Core.data.goal.Substring(0, 1))) >= 2) return "Goal: <color=green>Completed</color>\n";
+                if (GameProgressSaver.GetSecretMission(int.Parse(Core.data.goal.Substring(0, 1))) >= 2) return $"Goal: <color=#{ColorUtility.ToHtmlStringRGBA(Colors.ActGoal)}>Completed</color>\n";
 
-                string color = "red";
-                if (value >= total) color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.Perfect);
+                string color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.ActHighlight);
+                if (value >= total) color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.ActComplete);
 
                 return $"Goal: <color={color}>{value}/{total}</color>\n";
             }
@@ -253,20 +253,20 @@ namespace ArchipelagoULTRAKILL.Components
                     {
                         if (grade >= 12)
                         {
-                            return "Goal: <color=green>Completed</color>\n";
+                            return $"Goal: <color=#{ColorUtility.ToHtmlStringRGBA(Colors.ActGoal)}>Completed</color>\n";
                         }
                     }
                     else
                     {
                         if (grade >= 0)
                         {
-                            return "Goal: <color=green>Completed</color>\n";
+                            return $"Goal: <color=#{ColorUtility.ToHtmlStringRGBA(Colors.ActGoal)}>Completed</color>\n";
                         }
                     }
                 }
 
-                string color = "red";
-                if (value >= total) color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.Perfect);
+                string color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.ActHighlight);
+                if (value >= total) color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.ActComplete);
 
                 return $"Goal: <color={color}>{value}/{total}</color>\n";
             }

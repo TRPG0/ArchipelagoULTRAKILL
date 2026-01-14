@@ -10,7 +10,7 @@ namespace ArchipelagoULTRAKILL.Patches
             if (Core.DataExists())
             {
                 string level = __instance.missionNumber + "-S";
-                if (level == Core.data.goal && __instance.halfUnlock) return false;
+                if (__instance.halfUnlock && (level == Core.data.goal || !Core.data.secretExitUnlock)) return false;
                 return true;
             }
             return true;

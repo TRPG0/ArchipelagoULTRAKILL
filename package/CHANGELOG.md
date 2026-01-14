@@ -1,3 +1,11 @@
+## 3.3.0
+
+- Added an option to unlock secret missions by finding items, instead of by using secret exits.
+- Added an option for secret exits to no longer count the current level as completed, but act as a location check instead.
+- Added new item icons for each classfication of Archipelago item.
+- Colors used in the act summary can now be customized.
+- Fixed item icons in shops sometimes being rotated in the wrong direction.
+
 ## 3.2.7
 
 - Added a new "modifiers" section in the plugin options, for people who want the game to be even harder.

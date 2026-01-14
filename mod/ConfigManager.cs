@@ -34,6 +34,8 @@ namespace ArchipelagoULTRAKILL
         public static StringField goal;
         public static StringField goalProgress;
         public static BoolField perfectGoal;
+        public static EnumField<SecretUnlockType> secretExitUnlock;
+        public static EnumField<SecretExitType> secretExitComplete;
         public static StringField locationsChecked;
         public static EnumField<EnemyOptions> enemyRewards;
         public static BoolField challengeRewards;
@@ -77,6 +79,10 @@ namespace ArchipelagoULTRAKILL
         public static EnumField<ColorOptions> gunColorRandomizer;
         public static ButtonField enableCustomButton;
         public static ButtonField disableCustomButton;
+
+        public static ColorField actHighlightColor;
+        public static ColorField actCompleteColor;
+        public static ColorField actGoalColor;
 
         public static ColorField APPlayerSelf;
         public static ColorField APPlayerOther;
@@ -222,6 +228,12 @@ namespace ArchipelagoULTRAKILL
             goal = new StringField(playerPanel, "GOAL LEVEL", "goal", "?", false, false) { interactable = false };
             goalProgress = new StringField(playerPanel, "LEVELS COMPLETED", "goalProgress", "?", false, false) { interactable = false };
             perfectGoal = new BoolField(playerPanel, "PERFECT GOAL", "perfectGoal", false) { interactable = false };
+            secretExitUnlock = new EnumField<SecretUnlockType>(playerPanel, "SECRET MISSION UNLOCK TYPE", "secretExitUnlock", SecretUnlockType.SecretExits, false) { interactable = false };
+            secretExitUnlock.SetEnumDisplayName(SecretUnlockType.SecretExits, "SECRET EXITS");
+            secretExitUnlock.SetEnumDisplayName(SecretUnlockType.Items, "ITEMS");
+            secretExitComplete = new EnumField<SecretExitType>(playerPanel, "SECRET EXIT BEHAVIOR", "secretExitComplete", SecretExitType.Standard, false) { interactable = false };
+            secretExitComplete.SetEnumDisplayName(SecretExitType.Standard, "STANDARD");
+            secretExitComplete.SetEnumDisplayName(SecretExitType.AddRewards, "ADD REWARDS");
             locationsChecked = new StringField(playerPanel, "LOCATIONS CHECKED", "locationsChecked", "?", false, false) { interactable = false };
             enemyRewards = new EnumField<EnemyOptions>(playerPanel, "ENEMY REWARDS", "enemyRewards", EnemyOptions.Disabled, false) { interactable = false };
             enemyRewards.SetEnumDisplayName(EnemyOptions.Disabled, "DISABLED");
@@ -369,6 +381,11 @@ namespace ArchipelagoULTRAKILL
                 PrefsManager.Instance.SetBool("gunColorType.5", false);
             };
 
+            new ConfigHeader(colorPanel, "ACT SUMMARY COLORS");
+            actHighlightColor = new ColorField(colorPanel, "HIGHLIGHTED", "actHighlightColor", Color.red);
+            actCompleteColor = new ColorField(colorPanel, "COMPLETED", "actCompleteColor", Colors.Perfect);
+            actGoalColor = new ColorField(colorPanel, "GOAL", "actGoalColor", Color.green);
+
             new ConfigHeader(colorPanel, "ARCHIPELAGO COLORS");
             APPlayerSelf = new ColorField(colorPanel, "PLAYER (YOU)", "APPlayerSelf", new Color(0.93f, 0, 0.93f), true);
             APPlayerOther = new ColorField(colorPanel, "PLAYER (OTHERS)", "APPlayerOther", new Color(0.98f, 0.98f, 0.82f), true);
@@ -427,7 +444,13 @@ namespace ArchipelagoULTRAKILL
             goalProgress.value = $"{Core.data.completedLevels.Count} / {Core.data.goalRequirement}";
             perfectGoal.value = Core.data.perfectGoal;
 
-            string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
+            if (Core.data.secretExitUnlock) secretExitUnlock.value = SecretUnlockType.SecretExits;
+            else secretExitUnlock.value = SecretUnlockType.Items;
+
+            if (Core.data.secretExitComplete) secretExitComplete.value = SecretExitType.Standard;
+            else secretExitComplete.value = SecretExitType.AddRewards;
+
+                string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
             locationsChecked.value = $"{Core.data.@checked.Count} / {totalLocations}";
 
             enemyRewards.value = Core.data.enemyRewards;
@@ -461,6 +484,8 @@ namespace ArchipelagoULTRAKILL
             goal.value = "?";
             goalProgress.value = "?";
             perfectGoal.value = false;
+            secretExitUnlock.value = SecretUnlockType.SecretExits;
+            secretExitComplete.value = SecretExitType.Standard;
             locationsChecked.value = "?";
             enemyRewards.value = EnemyOptions.Disabled;
             challengeRewards.value = false;

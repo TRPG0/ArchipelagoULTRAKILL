@@ -137,30 +137,36 @@ namespace ArchipelagoULTRAKILL
                 new ItemDefinition("0-3: DOUBLE DOWN", UKType.Level, () => { return Colors.Layer0; }, "layer0"),
                 new ItemDefinition("0-4: A ONE-MACHINE ARMY", UKType.Level, () => { return Colors.Layer0; }, "layer0"),
                 new ItemDefinition("0-5: CERBERUS", UKType.Level, () => { return Colors.Layer0; }, "layer0"),
+                new ItemDefinition("0-S: SOMETHING WICKED", UKType.SecretMission, () => { return Colors.Layer0; }, "layer0"),
                 new ItemDefinition("1-1: HEART OF THE SUNRISE", UKType.Level, () => { return Colors.Layer1; }, "layer1"),
                 new ItemDefinition("1-2: THE BURNING WORLD", UKType.Level, () => { return Colors.Layer1; }, "layer1"),
                 new ItemDefinition("1-3: HALLS OF SACRED REMAINS", UKType.Level, () => { return Colors.Layer1; }, "layer1"),
                 new ItemDefinition("1-4: CLAIR DE LUNE", UKType.Level, () => { return Colors.Layer1; }, "layer1"),
+                new ItemDefinition("1-S: THE WITLESS", UKType.SecretMission, () => { return Colors.Layer1; }, "layer1"),
                 new ItemDefinition("2-1: BRIDGEBURNER", UKType.Level, () => { return Colors.Layer2; }, "layer2"),
                 new ItemDefinition("2-2: DEATH AT 20,000 VOLTS", UKType.Level, () => { return Colors.Layer2; }, "layer2"),
                 new ItemDefinition("2-3: SHEER HEART ATTACK", UKType.Level, () => { return Colors.Layer2; }, "layer2"),
                 new ItemDefinition("2-4: COURT OF THE CORPSE KING", UKType.Level, () => { return Colors.Layer2; }, "layer2"),
+                new ItemDefinition("2-S: ALL IMPERFECT LOVE SONG", UKType.SecretMission, () => { return Colors.Layer2; }, "layer2"),
                 new ItemDefinition("3-1: BELLY OF THE BEAST", UKType.Level, () => { return Colors.Layer3; }, "layer3"),
                 new ItemDefinition("3-2: IN THE FLESH", UKType.Level, () => { return Colors.Layer3; }, "layer3"),
                 new ItemDefinition("4-1: SLAVES TO POWER", UKType.Level, () => { return Colors.Layer4; }, "layer4"),
                 new ItemDefinition("4-2: GOD DAMN THE SUN", UKType.Level, () => { return Colors.Layer4; }, "layer4"),
                 new ItemDefinition("4-3: A SHOT IN THE DARK", UKType.Level, () => { return Colors.Layer4; }, "layer4"),
                 new ItemDefinition("4-4: CLAIR DE SOLEIL", UKType.Level, () => { return Colors.Layer4; }, "layer4"),
+                new ItemDefinition("4-S: CLASH OF THE BRANDICOOT", UKType.SecretMission, () => { return Colors.Layer4; }, "layer4"),
                 new ItemDefinition("5-1: IN THE WAKE OF POSEIDON", UKType.Level, () => { return Colors.Layer5; }, "layer5"),
                 new ItemDefinition("5-2: WAVES OF THE STARLESS SEA", UKType.Level, () => { return Colors.Layer5; }, "layer5"),
                 new ItemDefinition("5-3: SHIP OF FOOLS", UKType.Level, () => { return Colors.Layer5; }, "layer5"),
                 new ItemDefinition("5-4: LEVIATHAN", UKType.Level, () => { return Colors.Layer5; }, "layer5"),
+                new ItemDefinition("5-S: I ONLY SAY MORNING", UKType.SecretMission, () => { return Colors.Layer5; }, "layer5"),
                 new ItemDefinition("6-1: CRY FOR THE WEEPER", UKType.Level, () => { return Colors.Layer6; }, "layer6"),
                 new ItemDefinition("6-2: AESTHETICS OF HATE", UKType.Level, () => { return Colors.Layer6; }, "layer6"),
                 new ItemDefinition("7-1: GARDEN OF FORKING PATHS", UKType.Level, () => { return Colors.Layer7; }, "layer7"),
                 new ItemDefinition("7-2: LIGHT UP THE NIGHT", UKType.Level, () => { return Colors.Layer7; }, "layer7"),
                 new ItemDefinition("7-3: NO SOUND, NO MEMORY", UKType.Level, () => { return Colors.Layer7; }, "layer7"),
                 new ItemDefinition("7-4: ...LIKE ANTENNAS TO HEAVEN", UKType.Level, () => { return Colors.Layer7; }, "layer7"),
+                new ItemDefinition("7-S: HELL BATH NO FURY", UKType.SecretMission, () => { return Colors.Layer7; }, "layer7"),
                 new ItemDefinition("0-E: THIS HEAT, AN EVIL HEAT", UKType.Level, () => { return Colors.Encore0; }, "layer0"),
                 new ItemDefinition("1-E: ...THEN FELL THE ASHES", UKType.Level, () => { return Colors.Encore1; }, "layer1"),
                 new ItemDefinition("P-1: SOUL SURVIVOR", UKType.Level, () => { return Colors.Prime; }, "layer3"),
@@ -211,7 +217,7 @@ namespace ArchipelagoULTRAKILL
             {
                 if (itemDefinition.Name == name) return itemDefinition;
             }
-            Core.Logger.LogWarning($"No item definition for name \"{name}\"");
+            //Core.Logger.LogWarning($"No item definition for name \"{name}\"");
             return null;
         }
 
@@ -251,7 +257,8 @@ namespace ArchipelagoULTRAKILL
                 UKType.Fire2,
                 UKType.LimboSwitch,
                 UKType.ShotgunSwitch,
-                UKType.ClashMode
+                UKType.ClashMode,
+                UKType.SecretMission
             };
 
             if (types.Contains(type)) return true;
@@ -444,6 +451,11 @@ namespace ArchipelagoULTRAKILL
                         text = "UNLOCKED: ";
                         break;
 
+                    case UKType.SecretMission:
+                        GameProgressSaver.FoundSecretMission(int.Parse(item.itemName.Substring(0, 1)));
+                        text = "UNLOCKED: ";
+                        break;
+
                     case UKType.Layer:
                         int layer;
                         if (item.itemName.Contains("OVERTURE")) layer = 0;
@@ -622,7 +634,7 @@ namespace ArchipelagoULTRAKILL
 
                 string itemColor = "";
                 Color color = Color.white;
-                string itemImage = "archipelago";
+                string itemImage = "filler";
 
                 if (info.ItemGame == "ULTRAKILL" && GetItemDefinition(info.ItemName) != null)
                 {
@@ -694,7 +706,7 @@ namespace ArchipelagoULTRAKILL
             else if (locationName.Contains("Buy Railcannon")) return "rai";
             else if (locationName.Contains("Buy Rocket")) return "rock";
             else if (locationName.StartsWith("Museum")) return "layer1";
-            else return "archipelago";
+            else return "filler";
         }
 
         public static string GetCurrentLevelImage()
@@ -715,6 +727,14 @@ namespace ArchipelagoULTRAKILL
                 }
             }
             else return "confusion";
+        }
+
+        public static string GetAPImage(ItemFlags flag)
+        {
+            if (flag.HasFlag(ItemFlags.Advancement)) return "progression";
+            else if (flag.HasFlag(ItemFlags.NeverExclude)) return "useful";
+            else if (flag.HasFlag(ItemFlags.Trap)) return "trap";
+            else return "filler";
         }
 
         public static Color GetAPMessageColor(ItemFlags flag)

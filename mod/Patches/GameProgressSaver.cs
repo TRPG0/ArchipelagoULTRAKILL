@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ArchipelagoULTRAKILL.Components;
+using HarmonyLib;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
@@ -96,6 +97,18 @@ namespace ArchipelagoULTRAKILL.Patches
                 return false;
             }
             return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(GameProgressSaver), "SaveRank")]
+    class GameProgressSaver_SaveRank_Patch
+    {
+        public static void Prefix()
+        {
+            if (Core.DataExists() && PlayerHelper.IsSecretExiting)
+            {
+                StatsManager.Instance.rankScore = -1;
+            }
         }
     }
 }

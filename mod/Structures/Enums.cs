@@ -38,7 +38,8 @@
         Fire2,
         LimboSwitch,
         ShotgunSwitch,
-        ClashMode
+        ClashMode,
+        SecretMission
     }
 
     public enum Powerup
@@ -85,6 +86,18 @@
         Disabled,
         Split,
         Progressive
+    }
+
+    public enum SecretUnlockType
+    {
+        SecretExits,
+        Items
+    }
+
+    public enum SecretExitType
+    {
+        Standard,
+        AddRewards
     }
 
     public enum LogFont
