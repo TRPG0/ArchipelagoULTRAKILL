@@ -1,6 +1,6 @@
 import typing, random
 from dataclasses import dataclass
-from Options import T, Choice, Range, OptionSet, Toggle, DefaultOnToggle, ItemDict, DeathLink, PerGameCommonOptions, Removed
+from Options import T, Choice, Range, OptionSet, Toggle, DefaultOnToggle, ItemDict, DeathLink, PerGameCommonOptions, StartInventoryPool, Removed
 from .Regions import Regions
 from .Items import item_groups
 
@@ -514,6 +514,8 @@ class UltrakillOptions(PerGameCommonOptions):
     cybergrind_hints: CybergrindHints
     death_link: UltrakillDeathLink
     death_link_amnesty: DeathLinkAmnesty
+
+    start_inventory_from_pool: StartInventoryPool
 
     goal: Removed
     include_secret_mission_completion: Removed

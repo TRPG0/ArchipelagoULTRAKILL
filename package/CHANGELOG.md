@@ -1,3 +1,9 @@
+## 3.3.1
+
+- Added Start Inventory From Pool option.
+- Fixed secret missions not being counted as complete if Secret Exit Behavior is set to Add Rewards.
+- Fixed two Feedbackers appearing in the item pool if a Feedbacker is chosen as the starting weapon.
+
 ## 3.3.0
 
 - Added an option to unlock secret missions by finding items, instead of by using secret exits.

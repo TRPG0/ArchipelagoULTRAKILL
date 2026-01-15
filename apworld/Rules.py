@@ -1283,8 +1283,27 @@ class UltrakillRules:
 
             "7-S":
                 lambda state: (
-                    options.secret_mission_unlock_type == "secret_exits"
-                    or state.has("7-S: HELL BATH NO FURY", player)
+                    (
+                        options.secret_mission_unlock_type == "secret_exits"
+                        or state.has("7-S: HELL BATH NO FURY", player)
+                    )
+                    and (
+                        good_weapon(state)
+                        and can_break_idol(state)
+                        and (
+                            arm2(state)
+                            or walljumps(state, 3)
+                            or (
+                                walljumps(state, 2)
+                                and stamina(state, 1)
+                            )
+                            or (
+                                shoalt0_fire2(state)
+                                or shoany1_fire2(state)
+                                or rai2(state)
+                            )
+                        )
+                    )
                 )
         }
         
@@ -2550,23 +2569,7 @@ class UltrakillRules:
             "Cleared 7-3":
                 lambda state: (
                     options.secret_exit_behavior == "standard"
-                    or (
-                        good_weapon(state)
-                        and can_break_idol(state)
-                        and (
-                            arm2(state)
-                            or walljumps(state, 3)
-                            or (
-                                walljumps(state, 2)
-                                and stamina(state, 1)
-                            )
-                            or (
-                                shoalt0_fire2(state)
-                                or shoany1_fire2(state)
-                                or rai2(state)
-                            )
-                        )
-                    )
+                    or good_weapon(state)
                 ),
 
             # 7-S

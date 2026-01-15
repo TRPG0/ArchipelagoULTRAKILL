@@ -25,7 +25,7 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists())
             {
-                if (__instance.GetComponent<SecretMissionPit>() && !Core.data.secretExitComplete) PlayerHelper.IsSecretExiting = true;
+                if (!SceneHelper.CurrentScene.Contains("-S") && __instance.GetComponent<SecretMissionPit>() && !Core.data.secretExitComplete) PlayerHelper.IsSecretExiting = true;
 
                 if (PlayerHelper.Instance)
                 {

@@ -350,10 +350,10 @@ class UltrakillWorld(World):
                 count = 3 - self.options.starting_stamina.value
             elif item.type == ItemType.WallJump:
                 count = 3 - self.options.starting_walljumps.value
-            elif item.name == "Feedbacker":
-                count = count - self.options.start_with_arm
             elif item.name == self.start_weapon:
                 count = 0
+            elif item.name == "Feedbacker":
+                count = count - self.options.start_with_arm.value
 
             if item.type == ItemType.Weapon and item.name in fire2_weapons and self.options.randomize_secondary_fire == "progressive":
                 if item.name == self.start_weapon:
@@ -379,6 +379,16 @@ class UltrakillWorld(World):
             pool.append(self.create_item(self.random.choices(list(self.options.filler_weights.value.keys()), list(self.options.filler_weights.value.values()))[0]))
             
         self.multiworld.itempool += pool
+
+
+    def get_filler_item_name(self):
+        num: int = self.random.randint(0, 99)
+        is_trap: bool = num < self.options.trap_percent
+
+        if is_trap:
+            return self.random.choices(list(self.options.trap_weights.value.keys()), list(self.options.trap_weights.value.values()))[0]
+        else:
+            return self.random.choices(list(self.options.filler_weights.value.keys()), list(self.options.filler_weights.value.values()))[0]
 
 
     def pre_fill(self):
