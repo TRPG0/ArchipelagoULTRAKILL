@@ -196,7 +196,7 @@ location_list: List[UKLocation] = [
     UKLocation("4-4: V2's Other Arm", Regions.l19, "19_w1", LocationType.Normal, "@Hell/4-4 CLAIR DE SOLEIL/V2's Other Arm"),
     UKLocation("4-4: Secret Weapon", Regions.l19, "19_w2", LocationType.Normal, "@Hell/4-4 CLAIR DE SOLEIL/Secret Weapon"),
     UKLocation("4-4: Reach the boss room in 18 seconds", Regions.l19, "19_c", LocationType.Challenge, "@Hell/4-4 CLAIR DE SOLEIL/Reach the boss room in 18 seconds"),
-    UKLocation("4-4: Perfect Rank", Regions.l19, "19_p", LocationType.PerfectRank, "@Hell/4-4 CLAIR DE SOLEIL/"),
+    UKLocation("4-4: Perfect Rank", Regions.l19, "19_p", LocationType.PerfectRank, "@Hell/4-4 CLAIR DE SOLEIL/P Rank"),
 
     # 5-1: IN THE WAKE OF POSEIDON
     UKLocation("5-1: Secret #1", Regions.l20, "20_s1", LocationType.Normal, "@Hell/5-1 IN THE WAKE OF POSEIDON/Secret #1"),
@@ -215,7 +215,7 @@ location_list: List[UKLocation] = [
     UKLocation("5-S: Metal Fish", Regions.s5, "fish3", LocationType.Fish, "@Hell/5-S I ONLY SAY MORNIN/Metal Fish"),
     UKLocation("5-S: Chomper", Regions.s5, "fish4", LocationType.Fish, "@Hell/5-S I ONLY SAY MORNIN/Chomper"),
     UKLocation("5-S: Bomb Fish", Regions.s5, "fish5", LocationType.Fish, "@Hell/5-S I ONLY SAY MORNIN/Bomb Fish"),
-    UKLocation("5-S: Eyeball", Regions.s5, "fish6", LocationType.Fish, "@Hell/5-S I ONLY SAY MORNIN/@Hell/5-S I ONLY SAY MORNIN/Eyeball"),
+    UKLocation("5-S: Eyeball", Regions.s5, "fish6", LocationType.Fish, "@Hell/5-S I ONLY SAY MORNIN/Eyeball"),
     UKLocation("5-S: Frog (?)", Regions.s5, "fish7", LocationType.Fish, "@Hell/5-S I ONLY SAY MORNIN/Frog (?)"),
     UKLocation("5-S: Dope Fish", Regions.s5, "fish8", LocationType.Fish, "@Hell/5-S I ONLY SAY MORNIN/Dope Fish"),
     UKLocation("5-S: Stickfish", Regions.s5, "fish9", LocationType.Fish, "@Hell/5-S I ONLY SAY MORNIN/Stickfish"),
@@ -336,7 +336,7 @@ location_list: List[UKLocation] = [
     UKLocation("Enemy: Streetcleaner", Regions.shop, "e_streetcleaner", LocationType.Enemy, "@Hell/Enemies/Enemy: Streetcleaner"),
     UKLocation("Boss: V2", Regions.l9, "e_v2", LocationType.Boss, "@Hell/Enemies/Boss: V2"),
     UKLocation("Enemy: Mindflayer", Regions.shop, "e_mindflayer", LocationType.Enemy, "@Hell/Enemies/Enemy: Mindflayer"),
-    UKLocation("Boss: V2 (2nd)", Regions.l19, "e_v2second", LocationType.Boss, "@Hell/Enemies/Enemy: V2 (2nd)"),
+    UKLocation("Boss: V2 (2nd)", Regions.l19, "e_v2second", LocationType.Boss, "@Hell/Enemies/Boss: V2 (2nd)"),
     UKLocation("Enemy: Sentry", Regions.shop, "e_turret", LocationType.Enemy, "@Hell/Enemies/Enemy: Sentry"),
     UKLocation("Enemy: Gutterman", Regions.shop, "e_gutterman", LocationType.Enemy, "@Hell/Enemies/Enemy: Gutterman"),
     UKLocation("Enemy: Guttertank", Regions.shop, "e_guttertank", LocationType.Enemy, "@Hell/Enemies/Enemy: Guttertank"),
@@ -348,7 +348,7 @@ location_list: List[UKLocation] = [
     UKLocation("Boss: Leviathan", Regions.l23, "e_leviathan", LocationType.Boss, "@Hell/Enemies/Boss: Leviathan"),
     UKLocation("Enemy: Mannequin", Regions.shop, "e_mannequin", LocationType.Enemy, "@Hell/Enemies/Enemy: Mannequin"),
     UKLocation("Boss: Minotaur", Regions.l26, "e_minotaur", LocationType.BossExt, "@Hell/Enemies/Boss: Minotaur"),
-    UKLocation("Boss: Gabriel, Judge of Hell", Regions.l15, "e_gabriel", LocationType.Boss, "@Hell/Enemies/Gabriel, Judge of Hell"),
+    UKLocation("Boss: Gabriel, Judge of Hell", Regions.l15, "e_gabriel", LocationType.Boss, "@Hell/Enemies/Boss: Gabriel, Judge of Hell"),
     UKLocation("Enemy: Virtue", Regions.shop, "e_virtue", LocationType.Enemy, "@Hell/Enemies/Enemy: Virtue"),
     UKLocation("Boss: Gabriel, Apostate of Hate", Regions.l25, "e_gabrielsecond", LocationType.Boss, "@Hell/Enemies/Boss: Gabriel, Apostate of Hate"),
     UKLocation("Boss: Flesh Prison", Regions.p1, "e_fleshprison", LocationType.Boss, "@Hell/Enemies/Boss: Flesh Prison"),
@@ -356,7 +356,7 @@ location_list: List[UKLocation] = [
     UKLocation("Boss: Minos Prime", Regions.p1, "e_minosprime", LocationType.Boss, "@Hell/Enemies/Boss: Minos Prime"),
     UKLocation("Boss: Sisyphus Prime", Regions.p2, "e_sisyphusprime", LocationType.Boss, "@Hell/Enemies/Boss: Sisyphus Prime"),
     UKLocation("Boss: Very Cancerous Rodent", Regions.l7, "e_verycancerousrodent", LocationType.BossExt, "@Hell/Enemies/Boss: Very Cancerous Rodent"),
-    UKLocation("Boss: Mysterious Druid Knight (& Owl)", Regions.l18, "e_mandalore", LocationType.BossExt, "@Hell/Enemies/Mysterious Druid Knight (& Owl)"),
+    UKLocation("Boss: Mysterious Druid Knight (& Owl)", Regions.l18, "e_mandalore", LocationType.BossExt, "@Hell/Enemies/Boss: Mysterious Druid Knight (& Owl)"),
 
     # Misc
     UKLocation("Museum: Win chess", Regions.museum, "chess", LocationType.Chess, "@Hell/Museum/Win chess"),
