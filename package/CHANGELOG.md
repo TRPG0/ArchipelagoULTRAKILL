@@ -1,3 +1,8 @@
+## 3.3.2
+
+- Fixed to work on Fraud patch.
+	- This update *does not* contain any new content from Layer 8. That will be coming soon.
+
 ## 3.3.1
 
 - Added Start Inventory From Pool option.

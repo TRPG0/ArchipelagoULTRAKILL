@@ -395,7 +395,7 @@ namespace ArchipelagoULTRAKILL
                     GameProgressSaver.UnlockWeaponCustomization(GameProgressSaver.WeaponCustomizationType.Nailgun);
                     GameProgressSaver.UnlockWeaponCustomization(GameProgressSaver.WeaponCustomizationType.Railcannon);
                     GameProgressSaver.UnlockWeaponCustomization(GameProgressSaver.WeaponCustomizationType.RocketLauncher);
-                    GameProgressSaver.SaveProgress(30);
+                    GameProgressSaver.SaveProgress(34);
                     GameProgressSaver.SetEncoreProgress(101);
                     GameProgressSaver.SetPrime(1, 1);
                     GameProgressSaver.SetPrime(2, 1);

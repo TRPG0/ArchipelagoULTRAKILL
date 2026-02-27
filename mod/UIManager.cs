@@ -338,6 +338,18 @@ namespace ArchipelagoULTRAKILL
                     case "7-4 Panel":
                         levels["7-4"] = component.gameObject;
                         break;
+                    case "8-1 Panel":
+                        levels["8-1"] = component.gameObject;
+                        break;
+                    case "8-2 Panel":
+                        levels["8-2"] = component.gameObject;
+                        break;
+                    case "8-3 Panel":
+                        levels["8-3"] = component.gameObject;
+                        break;
+                    case "8-4 Panel":
+                        levels["8-4"] = component.gameObject;
+                        break;
                     case "P-1 Panel":
                         levels["P-1"] = component.gameObject;
                         break;
@@ -442,7 +454,7 @@ namespace ArchipelagoULTRAKILL
                 GameObject go = new GameObject();
                 go.transform.SetParent(levels[Core.data.goal].transform);
                 if (Core.data.goal.Contains("P")) go.transform.localPosition = new Vector3(0, 20, 0);
-                else if (GameStateManager.ShowLeaderboards) go.transform.localPosition = new Vector3(0, 90, 0);
+                else if (LeaderboardController.ShowLevelLeaderboards) go.transform.localPosition = new Vector3(0, 90, 0);
                 else go.transform.localPosition = new Vector3(0, 22.5f, 0);
                 go.layer = 5;
                 goalCount = go.AddComponent<TextMeshProUGUI>();
