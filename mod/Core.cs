@@ -25,7 +25,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.3.2";
+        public const string PluginVersion = "3.3.3";
 
         public static string workingPath;
         public static string workingDir;
@@ -399,11 +399,7 @@ namespace ArchipelagoULTRAKILL
                 else if (data.revForm == WeaponForm.Alternate) return true;
             }
             // Marksman
-            if (save.rev2 > 0)
-            {
-                if (data.revForm == WeaponForm.Standard && IsFire2Unlocked("rev2")) return true;
-                else if (data.revForm == WeaponForm.Alternate) return true;
-            }
+            if (save.rev2 > 0 && data.revForm == WeaponForm.Alternate) return true;
 
             // Core Eject
             if (save.sho0 > 0)

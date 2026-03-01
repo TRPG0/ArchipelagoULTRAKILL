@@ -620,7 +620,7 @@ namespace ArchipelagoULTRAKILL
             if (Multiworld.Session == null) return;
 
             var missing = Multiworld.Session.Locations.AllMissingLocations;
-            var alreadyHinted = Multiworld.Session.DataStorage.GetHints()
+            var alreadyHinted = Multiworld.Session.DataStorage.GetHintsAsync().Result
                 .Where(h => h.FindingPlayer == Multiworld.Session.ConnectionInfo.Slot)
                 .Select(h => h.LocationId);
             var available = missing.Except(alreadyHinted).ToArray();

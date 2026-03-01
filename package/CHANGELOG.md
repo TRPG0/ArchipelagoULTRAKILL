@@ -1,3 +1,7 @@
+## 3.3.3
+
+- Updated logic for breaking glass, since marksman coins cannot break glass anymore.
+
 ## 3.3.2
 
 - Fixed to work on Fraud patch.
