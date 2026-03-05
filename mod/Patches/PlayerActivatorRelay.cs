@@ -14,7 +14,11 @@ namespace ArchipelagoULTRAKILL.Patches
             {
                 NewMovement.Instance.gameObject.AddComponent<PlayerHelper>().Init(NewMovement.Instance);
 
-                if (SceneHelper.CurrentScene == "Level 0-1") Core.obj.AddComponent<FirstLevelSetup>();
+                if (SceneHelper.CurrentScene == "Level 0-1")
+                {
+                    GunSetter.Instance.enabled = true;
+                    Core.obj.AddComponent<FirstLevelSetup>();
+                }
 
                 if ((SceneHelper.CurrentScene == "Level 1-1" || SceneHelper.CurrentScene == "Level 1-2" || SceneHelper.CurrentScene == "Level 2-3"
                     || SceneHelper.CurrentScene == "Level 4-4" || SceneHelper.CurrentScene == "Level 5-2" || SceneHelper.CurrentScene == "Level 5-3"

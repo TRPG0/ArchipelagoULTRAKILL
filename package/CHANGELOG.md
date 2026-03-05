@@ -1,3 +1,7 @@
+## 3.3.4
+
+- Fixed the currently held weapon sometimes disappearing after the intro in 0-1.
+
 ## 3.3.3
 
 - Updated logic for breaking glass, since marksman coins cannot break glass anymore.
