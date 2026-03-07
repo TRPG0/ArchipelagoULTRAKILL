@@ -172,7 +172,7 @@ class UltrakillWorld(World):
         
         start_weapons: Dict[str, int] = {k: v for k, v in self.options.starting_weapon_pool.value.items() if v > 0}
 
-        if self.start_level.short_name == "2-3":
+        if self.start_level.short_name in {"2-3", "8-2", "8-3"}:
             remove_from_dict(start_weapons, "Feedbacker")
             remove_from_dict(start_weapons, "Knuckleblaster")
             remove_from_dict(start_weapons, "Whiplash")

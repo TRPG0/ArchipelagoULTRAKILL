@@ -1211,6 +1211,30 @@ class UltrakillRules:
                     or state.has("LAYER 7: VIOLENCE", player)
                 ),
 
+            "8-1":
+                lambda state: (
+                    state.has("8-1: HURTBREAK WONDERLAND", player)
+                    or state.has("LAYER 8: FRAUD", player)
+                ),
+
+            "8-2":
+                lambda state: (
+                    state.has("8-2: THROUGH THE MIRROR", player)
+                    or state.has("LAYER 8: FRAUD", player)
+                ),
+
+            "8-3":
+                lambda state: (
+                    state.has("8-3: DISINTEGRATION LOOP", player)
+                    or state.has("LAYER 8: FRAUD", player)
+                ),
+
+            "8-4":
+                lambda state: (
+                    state.has("8-4: FINAL FLIGHT", player)
+                    or state.has("LAYER 8: FRAUD", player)
+                ),
+
             "0-E":
                 lambda state: (
                     state.has("0-E: THIS HEAT, AN EVIL HEAT", player)
@@ -4219,6 +4243,10 @@ class UltrakillRules:
                         arm2(state)
                         or slam_storage(state)
                         or can_rocket_ride(state)
+                    )
+                    and (
+                        can_punch(state)
+                        or shoalt_any(state)
                     )
                     and good_weapon(state)
                 ),

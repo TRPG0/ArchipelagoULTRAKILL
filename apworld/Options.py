@@ -279,6 +279,8 @@ class StartingWeaponPool(ItemWeights):
 
     Some weapons will not be considered valid depending on other options:
 
+    If the start level is 2-3, 8-2, or 8-3, all arms will be removed from the pool.
+
     If choosing to start with Feedbacker, it will be removed from the pool.
 
     If choosing not to start with Feedbacker, the Whiplash, Freezeframe, and all Railcannons are removed from the pool.
