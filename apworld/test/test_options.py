@@ -388,7 +388,7 @@ class TestNotStartArm(UltrakillTestBase):
     options = { "start_with_arm": "false" }
     
     def test_not_start_arm(self) -> None:
-        self.assertIn("Feedbacker", [i.name for i in self.multiworld.get_items()])
+        self.assertEqual(1, [i.name for i in self.multiworld.get_items()].count("Feedbacker"))
 
 
 class TestStartArm(UltrakillTestBase):

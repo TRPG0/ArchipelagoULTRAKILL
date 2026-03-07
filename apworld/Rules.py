@@ -664,7 +664,7 @@ class UltrakillRules:
         def can_punch(state: CollectionState) -> bool:
             return arm0(state) or arm1(state)
         
-        def can_break_idol(state: CollectionState) -> bool:
+        def can_break_idol_or_deathcatcher(state: CollectionState) -> bool:
             return can_punch(state) or shoalt_any(state) or slam(state)
         
         def grab_item(state: CollectionState) -> bool:
@@ -689,8 +689,8 @@ class UltrakillRules:
             return (
                 (
                     rev_any(state)
-                    or shoany0_fire2(state)
-                    or shoany1_fire2(state)
+                    or shostd0_fire2(state)
+                    or shostd1_fire2(state)
                     or naistd2(state)
                     or can_proj_boost(state)
                 )
@@ -698,6 +698,20 @@ class UltrakillRules:
                     slide(state)
                     or stamina(state, 1)
                 )
+            )
+        
+        def non_explosive_ranged_weapon(state: CollectionState) -> bool:
+            return (
+                rev_any(state)
+                or (
+                    shoany2_fire2(state)
+                    and arm1(state)
+                )
+                or nai_any(state)
+                or rai0(state)
+                or rai1(state)
+                or rock1_fire2(state)
+                or rock2_fire2(state)
             )
         
         def has_weapon_types(state: CollectionState, count: int) -> bool:
@@ -1287,7 +1301,7 @@ class UltrakillRules:
                     )
                     and (
                         good_weapon(state)
-                        and can_break_idol(state)
+                        and can_break_idol_or_deathcatcher(state)
                         and (
                             arm2(state)
                             or walljumps(state, 3)
@@ -2155,7 +2169,7 @@ class UltrakillRules:
                         or slam_storage(state)
                         or can_rocket_ride(state)
                     )
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                 ),
 
             "Cleared 5-2":
@@ -2172,7 +2186,7 @@ class UltrakillRules:
                         or slam_storage(state)
                         or can_rocket_ride(state)
                     )
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                 ),
 
             "5-2: Don't fight the ferryman":
@@ -2189,7 +2203,7 @@ class UltrakillRules:
                         or slam_storage(state)
                         or can_rocket_ride(state)
                     )
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                     and revany2_fire2(state)
                 ),
 
@@ -2207,7 +2221,7 @@ class UltrakillRules:
                         or slam_storage(state)
                         or can_rocket_ride(state)
                     )
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                     and good_weapon(state)
                 ),
 
@@ -2242,7 +2256,7 @@ class UltrakillRules:
                         skull(state, "5-3", "Blue")
                         or skull(state, "5-3", "Red")
                     )
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                 ),
 
             "5-3: Secret #4":
@@ -2252,7 +2266,7 @@ class UltrakillRules:
                         skull(state, "5-3", "Blue")
                         or skull(state, "5-3", "Red")
                     )
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                 ),
 
             "5-3: Secret #5":
@@ -2262,7 +2276,7 @@ class UltrakillRules:
                         skull(state, "5-3", "Blue")
                         or skull(state, "5-3", "Red")
                     )
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                 ),
 
             "5-3: Assemble Hank Jr.":
@@ -2270,7 +2284,7 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "5-3", "Blue")
                     and skull(state, "5-3", "Red")
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                 ),
 
             "Cleared 5-3":
@@ -2280,7 +2294,7 @@ class UltrakillRules:
                         skull(state, "5-3", "Blue")
                         or skull(state, "5-3", "Red")
                     )
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                 ),
 
             "5-3: Don't touch any water":
@@ -2288,7 +2302,7 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "5-3", "Blue")
                     and skull(state, "5-3", "Red")
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                     and slide(state)
                     and stamina(state, 3)
                     and jump_general(state, 2)
@@ -2301,7 +2315,7 @@ class UltrakillRules:
                         skull(state, "5-3", "Blue")
                         or skull(state, "5-3", "Red")
                     )
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                     and good_weapon(state)
                 ),
 
@@ -2343,7 +2357,7 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "6-1", "Red")
                     and jump_general(state, 2)
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                 ),
 
             "Cleared 6-1":
@@ -2351,7 +2365,7 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "6-1", "Red")
                     and jump_general(state, 1)
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                 ),
 
             "6-1: Beat the secret encounter":
@@ -2372,7 +2386,7 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "6-1", "Red")
                     and jump_general(state, 1)
-                    and can_break_idol(state)
+                    and can_break_idol_or_deathcatcher(state)
                     and good_weapon(state)
                 ),
 
@@ -2656,6 +2670,381 @@ class UltrakillRules:
                     and good_weapon(state)
                 ),
 
+            # 8-1
+            "8-1: Secret #2":
+                lambda state: (
+                    good_weapon(state)
+                    and grab_item(state)
+                    and skull(state, "8-1", "Blue")
+                    and skull(state, "8-1", "Red")
+                    and (
+                        arm2(state)
+                        or rock0_fire2(state)
+                        or slam_storage(state)
+                    )
+                ),
+
+            "8-1: Secret #3":
+                lambda state: (
+                    good_weapon(state)
+                    and grab_item(state)
+                    and skull(state, "8-1", "Blue")
+                    and skull(state, "8-1", "Red")
+                    and can_break_glass(state)
+                ),
+
+            "8-1: Secret #4":
+                lambda state: (
+                    good_weapon(state)
+                    and grab_item(state)
+                    and skull(state, "8-1", "Blue")
+                    and skull(state, "8-1", "Red")
+                    and can_break_glass(state)
+                    and (
+                        arm2(state)
+                        or can_rocket_ride(state)
+                        or stamina(state, 3)
+                        or (
+                            stamina(state, 2)
+                            and walljumps(state, 1)
+                        )
+                        or shoany0_fire2(state)
+                        or shoany1_fire2(state)
+                        or rai2(state)
+                        or (
+                            rock_any(state)
+                            and stamina(state, 1)
+                        )
+                    )
+                    and (
+                        rock_any(state)
+                        or shoany0_fire2(state)
+                        or shoany1_fire2(state)
+                        or rai2(state)
+                        or stamina(state, 2)
+                    )
+                ),
+
+            "8-1: Secret #5":
+                lambda state: (
+                    good_weapon(state)
+                    and grab_item(state)
+                    and skull(state, "8-1", "Blue")
+                    and skull(state, "8-1", "Red")
+                    and can_break_glass(state)
+                    and (
+                        arm2(state)
+                        or can_rocket_ride(state)
+                        or stamina(state, 3)
+                        or (
+                            stamina(state, 2)
+                            and walljumps(state, 1)
+                        )
+                        or shoany0_fire2(state)
+                        or shoany1_fire2(state)
+                        or rai2(state)
+                        or (
+                            rock_any(state)
+                            and stamina(state, 1)
+                        )
+                    )
+                ),
+
+            "Cleared 8-1":
+                lambda state: (
+                    good_weapon(state)
+                    and grab_item(state)
+                    and skull(state, "8-1", "Blue")
+                    and skull(state, "8-1", "Red")
+                    and can_break_glass(state)
+                    and (
+                        arm2(state)
+                        or can_rocket_ride(state)
+                        or stamina(state, 3)
+                        or (
+                            stamina(state, 2)
+                            and walljumps(state, 1)
+                        )
+                        or shoany0_fire2(state)
+                        or shoany1_fire2(state)
+                        or rai2(state)
+                        or (
+                            rock_any(state)
+                            and stamina(state, 1)
+                        )
+                    )
+                ),
+
+            "8-1: Parry a Providence":
+                lambda state: (
+                    good_weapon(state)
+                    and grab_item(state)
+                    and skull(state, "8-1", "Blue")
+                    and skull(state, "8-1", "Red")
+                    and can_break_glass(state)
+                    and (
+                        arm2(state)
+                        or can_rocket_ride(state)
+                        or stamina(state, 3)
+                        or (
+                            stamina(state, 2)
+                            and walljumps(state, 1)
+                        )
+                        or shoany0_fire2(state)
+                        or shoany1_fire2(state)
+                        or rai2(state)
+                        or (
+                            rock_any(state)
+                            and stamina(state, 1)
+                        )
+                    )
+                    and arm0(state)
+                ),
+
+            "8-1: Perfect Rank":
+                lambda state: (
+                    good_weapon(state)
+                    and grab_item(state)
+                    and skull(state, "8-1", "Blue")
+                    and skull(state, "8-1", "Red")
+                    and can_break_glass(state)
+                    and (
+                        arm2(state)
+                        or can_rocket_ride(state)
+                        or stamina(state, 3)
+                        or (
+                            stamina(state, 2)
+                            and walljumps(state, 1)
+                        )
+                        or shoany0_fire2(state)
+                        or shoany1_fire2(state)
+                        or rai2(state)
+                        or (
+                            rock_any(state)
+                            and stamina(state, 1)
+                        )
+                    )
+                ),
+
+            # 8-2
+            "8-2: Secret #2":
+                lambda state: (
+                    jump_general(state, 1)
+                ),
+
+            "8-2: Secret #3":
+                slide,
+
+            "8-2: Secret #4":
+                lambda state: (
+                    grab_item(state)
+                    and skull(state, "8-2", "Blue")
+                    and jump_general(state, 3)
+                    and (
+                        arm2(state)
+                        or non_explosive_ranged_weapon(state)
+                    )
+                    and good_weapon(state)
+                    and can_break_idol_or_deathcatcher(state)
+                ),
+
+            "8-2: Secret #5":
+                lambda state: (
+                    grab_item(state)
+                    and skull(state, "8-2", "Blue")
+                    and jump_general(state, 3)
+                    and (
+                        arm2(state)
+                        or non_explosive_ranged_weapon(state)
+                    )
+                    and good_weapon(state)
+                    and can_break_idol_or_deathcatcher(state)
+                    and skull(state, "8-2", "Red")
+                ),
+
+            "Cleared 8-2":
+                lambda state: (
+                    grab_item(state)
+                    and skull(state, "8-2", "Blue")
+                    and jump_general(state, 3)
+                    and (
+                        arm2(state)
+                        or non_explosive_ranged_weapon(state)
+                    )
+                    and good_weapon(state)
+                    and can_break_idol_or_deathcatcher(state)
+                    and skull(state, "8-2", "Red")
+                    and can_break_glass(state)
+                ),
+
+            "8-2: Finish the level upside down":
+                lambda state: (
+                    grab_item(state)
+                    and skull(state, "8-2", "Blue")
+                    and jump_general(state, 3)
+                    and (
+                        arm2(state)
+                        or non_explosive_ranged_weapon(state)
+                    )
+                    and good_weapon(state)
+                    and can_break_idol_or_deathcatcher(state)
+                    and (
+                        walljumps(state, 2)
+                        or (
+                            slam(state)
+                            and walljumps(state, 1)
+                        )
+                        or shoany0_fire2(state)
+                        or shoany1_fire2(state)
+                        or can_proj_boost(state)
+                        or rai2(state)
+                        or rock_any(state)
+                    )
+                    and skull(state, "8-2", "Red")
+                    and can_break_glass(state)
+                ),
+
+            "8-2: Perfect Rank":
+                lambda state: (
+                    grab_item(state)
+                    and skull(state, "8-2", "Blue")
+                    and jump_general(state, 3)
+                    and (
+                        arm2(state)
+                        or non_explosive_ranged_weapon(state)
+                    )
+                    and good_weapon(state)
+                    and can_break_idol_or_deathcatcher(state)
+                    and skull(state, "8-2", "Red")
+                    and can_break_glass(state)
+                ),
+
+            # 8-3
+            "8-3: Secret #2":
+                lambda state: (
+                    good_weapon(state)
+                    and slide(state)
+                ),
+
+            "8-3: Secret #3":
+                good_weapon,
+
+            "8-3: Secret #4":
+                lambda state: (
+                    good_weapon(state)
+                    and slide(state)
+                ),
+
+            "8-3: Secret #5":
+                lambda state: (
+                    good_weapon(state)
+                    and grab_item(state)
+                    and (
+                        slide(state)
+                        and skull(state, "8-3", "Red")
+                        or (
+                            stamina(state, 1)
+                            or walljumps(state, 3)
+                            or shoalt_any(state)
+                            or rock_any(state)
+                        )
+                        and skull(state, "8-3", "Blue")
+                    )
+                ),
+
+            "Cleared 8-3":
+                lambda state: (
+                    good_weapon(state)
+                    and grab_item(state)
+                    and (
+                        slide(state)
+                        and skull(state, "8-3", "Red")
+                        or (
+                            stamina(state, 1)
+                            or walljumps(state, 3)
+                            or shoalt_any(state)
+                            or rock_any(state)
+                        )
+                        and skull(state, "8-3", "Blue")
+                    )
+                ),
+
+            "8-3: Kill a Power with terminal velocity":
+                lambda state: (
+                    good_weapon(state)
+                    and (
+                        arm0(state)
+                        or sho_any(state)
+                    )
+                ),
+
+            "8-3: Perfect Rank":
+                lambda state: (
+                    good_weapon(state)
+                    and grab_item(state)
+                    and slide(state)
+                    and skull(state, "8-3", "Red")
+                    and (
+                        stamina(state, 1)
+                        or walljumps(state, 3)
+                        or shoalt_any(state)
+                        or rock_any(state)
+                    )
+                    and skull(state, "8-3", "Blue")
+                ),
+
+            # 8-4
+            "Cleared 8-4":
+                lambda state: (
+                    good_weapon(state)
+                    and stamina(state, 2)
+                    and (
+                        grab_item(state)
+                        and skull(state, "8-4", "Blue")
+                        and skull(state, "8-4", "Red")
+                        or walljumps(state, 3)
+                        and rock_any(state)
+                        or slam_storage(state)
+                        or shoalt0_fire2(state)
+                        or shoany1_fire2(state)
+                        or rai2(state)
+                        or rock0_fire2(state)
+                    )
+                ),
+
+            "8-4: Do not pick up any skulls":
+                lambda state: (
+                    good_weapon(state)
+                    and stamina(state, 2)
+                    and (
+                        walljumps(state, 3)
+                        and rock_any(state)
+                        or slam_storage(state)
+                        or shoalt0_fire2(state)
+                        or shoany1_fire2(state)
+                        or rai2(state)
+                        or rock0_fire2(state)
+                    )
+                ),
+
+            "8-4: Perfect Rank":
+                lambda state: (
+                    good_weapon(state)
+                    and stamina(state, 2)
+                    and (
+                        grab_item(state)
+                        and skull(state, "8-4", "Blue")
+                        and skull(state, "8-4", "Red")
+                        or walljumps(state, 3)
+                        and rock_any(state)
+                        or slam_storage(state)
+                        or shoalt0_fire2(state)
+                        or shoany1_fire2(state)
+                        or rai2(state)
+                        or rock0_fire2(state)
+                    )
+                ),
+
             # Encores
             "Cleared 0-E":
                 lambda state: (
@@ -2838,6 +3227,22 @@ class UltrakillRules:
                         and good_weapon(state)
                     )
                     or (
+                        can_reach_level(state, "Enemy: Filth", "8-1")
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Filth", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 3)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                    )
+                    or can_reach_level(state, "Enemy: Filth", "8-3")
+                    or (
                         can_reach_level(state, "Enemy: Filth", "0-E")
                         and arm0(state)
                         and arm1(state)
@@ -2906,6 +3311,18 @@ class UltrakillRules:
                         )
                         and good_weapon(state)
                     )
+                    or (
+                        can_reach_level(state, "Enemy: Stray", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 1)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                    )
+                    or can_reach_level(state, "Enemy: Stray", "8-3")
                 ),
 
             "Enemy: Schism":
@@ -2955,6 +3372,22 @@ class UltrakillRules:
                         )
                         and good_weapon(state)
                     )
+                    or (
+                        can_reach_level(state, "Enemy: Schism", "8-1")
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Schism", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 1)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                    )
+                    or can_reach_level(state, "Enemy: Schism", "8-3")
                     or (
                         can_reach_level(state, "Enemy: Schism", "0-E")
                         and arm0(state)
@@ -3027,6 +3460,21 @@ class UltrakillRules:
                         )
                     )
                     or (
+                        can_reach_level(state, "Enemy: Soldier", "8-1")
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Soldier", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and (
+                            jump_general(state, 1)
+                            or arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                    )
+                    or can_reach_level(state, "Enemy: Soldier", "8-3")
+                    or (
                         can_reach_level(state, "Enemy: Soldier", "0-E")
                         and arm0(state)
                         and arm1(state)
@@ -3063,6 +3511,11 @@ class UltrakillRules:
                     or (
                         can_reach_level(state, "Enemy: Stalker", "7-2")
                         and arm2(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Stalker", "8-3")
+                        and good_weapon(state)
+                        and slide(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Stalker", "0-E")
@@ -3115,6 +3568,18 @@ class UltrakillRules:
                         and arm2(state)
                     )
                     or (
+                        can_reach_level(state, "Enemy: Insurrectionist", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 3)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                        and can_break_idol_or_deathcatcher(state)
+                    )
+                    or (
                         can_reach_level(state, "Enemy: Insurrectionist", "P-2")
                         and arm0(state)
                         and arm1(state)
@@ -3142,7 +3607,21 @@ class UltrakillRules:
                             or slam_storage(state)
                             or can_rocket_ride(state)
                         )
-                        and can_break_idol(state)
+                        and can_break_idol_or_deathcatcher(state)
+                    )
+                    or (
+                        can_reach_level(state, "Boss: Ferryman", "8-3")
+                        and good_weapon(state)
+                        and grab_item(state)
+                        and slide(state)
+                        and skull(state, "8-3", "Red")
+                        and (
+                            stamina(state, 1)
+                            or walljumps(state, 3)
+                            or shoalt_any(state)
+                            or rock_any(state)
+                        )
+                        and skull(state, "8-3", "Blue")
                     )
                     or (
                         can_reach_level(state, "Boss: Ferryman", "P-2")
@@ -3153,6 +3632,22 @@ class UltrakillRules:
                         and slide(state)
                         and stamina(state, 3)
                     )
+                ),
+
+            "Boss: Mirror Reaper":
+                lambda state: (
+                    can_reach_level(state, "Enemy: Mirror Reaper", "8-2")
+                    and grab_item(state)
+                    and skull(state, "8-2", "Blue")
+                    and jump_general(state, 3)
+                    and (
+                        arm2(state)
+                        or non_explosive_ranged_weapon(state)
+                    )
+                    and good_weapon(state)
+                    and can_break_idol_or_deathcatcher(state)
+                    and skull(state, "8-2", "Red")
+                    and can_break_glass(state)
                 ),
 
             "Enemy: Swordsmachine":
@@ -3184,6 +3679,25 @@ class UltrakillRules:
                     )
                     or can_reach_level(state, "Enemy: Swordsmachine", "7-3")
                     or can_reach_level(state, "Enemy: Swordsmachine", "7-S")
+                    or (
+                        can_reach_level(state, "Enemy: Swordsmachine", "8-1")
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Swordsmachine", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 3)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Swordsmachine", "8-3")
+                        and good_weapon(state)
+                    )
                     or (
                         can_reach_level(state, "Enemy: Swordsmachine", "0-E")
                         and arm0(state)
@@ -3263,6 +3777,25 @@ class UltrakillRules:
                         and skull(state, "7-S", "Red")
                     )
                     or (
+                        can_reach_level(state, "Enemy: Drone", "8-1")
+                        and good_weapon(state)
+                        and grab_item(state)
+                        and skull(state, "8-1", "Blue")
+                        and skull(state, "8-1", "Red")
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Drone", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 1)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                    )
+                    or can_reach_level(state, "Enemy: Drone", "8-3")
+                    or (
                         can_reach_level(state, "Enemy: Drone", "0-E")
                         and arm0(state)
                         and arm1(state)
@@ -3309,7 +3842,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Streetcleaner", "5-2")
-                        and can_break_idol(state)
+                        and can_break_idol_or_deathcatcher(state)
                         and (
                             slam(state)
                             or stamina(state, 1)
@@ -3338,6 +3871,19 @@ class UltrakillRules:
                             or can_rocket_ride(state)
                         )
                     )
+                    or (
+                        can_reach_level(state, "Enemy: Streetcleaner", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 3)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                        and can_break_idol_or_deathcatcher(state)
+                    )
+                    or can_reach_level(state, "Enemy: Streetcleaner", "8-3")
                     or (
                         can_reach_level(state, "Enemy: Streetcleaner", "0-E")
                         and arm0(state)
@@ -3411,7 +3957,19 @@ class UltrakillRules:
                         )
                         and grab_item(state)
                         and skull(state, "7-S", "Red")
-                        and can_break_idol(state)
+                        and can_break_idol_or_deathcatcher(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Mindflayer", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 3)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                        and can_break_idol_or_deathcatcher(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Mindflayer", "0-E")
@@ -3482,7 +4040,7 @@ class UltrakillRules:
                         )
                         and grab_item(state)
                         and skull(state, "7-S", "Red")
-                        and can_break_idol(state)
+                        and can_break_idol_or_deathcatcher(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Sentry", "7-4")
@@ -3492,6 +4050,26 @@ class UltrakillRules:
                             or slam_storage(state)
                             or can_rocket_ride(state)
                         )
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Sentry", "8-1")
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Sentry", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 3)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                        and can_break_idol_or_deathcatcher(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Sentry", "8-3")
+                        and good_weapon(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Sentry", "0-E")
@@ -3543,7 +4121,7 @@ class UltrakillRules:
                         )
                         and grab_item(state)
                         and skull(state, "7-S", "Red")
-                        and can_break_idol(state)
+                        and can_break_idol_or_deathcatcher(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Gutterman", "7-4")
@@ -3553,6 +4131,23 @@ class UltrakillRules:
                             or slam_storage(state)
                             or can_rocket_ride(state)
                         )
+                    )
+                    or can_reach_level(state, "Enemy: Gutterman", "8-1")
+                    or (
+                        can_reach_level(state, "Enemy: Gutterman", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 3)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                        and can_break_idol_or_deathcatcher(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Gutterman", "8-3")
+                        and good_weapon(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Gutterman", "0-E")
@@ -3586,6 +4181,19 @@ class UltrakillRules:
                             or slam_storage(state)
                             or can_rocket_ride(state)
                         )
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Guttertank", "8-1")
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Guttertank", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Guttertank", "8-3")
+                        and good_weapon(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Guttertank", "0-E")
@@ -3676,7 +4284,7 @@ class UltrakillRules:
                         )
                         and grab_item(state)
                         and skull(state, "7-S", "Red")
-                        and can_break_idol(state)
+                        and can_break_idol_or_deathcatcher(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Malicious Face", "7-4")
@@ -3687,6 +4295,18 @@ class UltrakillRules:
                             or can_rocket_ride(state)
                         )
                     )
+                    or can_reach_level(state, "Enemy: Malicious Face", "8-1")
+                    or (
+                        can_reach_level(state, "Enemy: Malicious Face", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 1)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                    )
+                    or can_reach_level(state, "Enemy: Malicious Face", "8-3")
                     or (
                         can_reach_level(state, "Enemy: Malicious Face", "0-E")
                         and arm0(state)
@@ -3749,7 +4369,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Cerberus", "5-2")
-                        and can_break_idol(state)
+                        and can_break_idol_or_deathcatcher(state)
                         and (
                             slam(state)
                             or stamina(state, 1)
@@ -3776,6 +4396,25 @@ class UltrakillRules:
                     or (
                         can_reach_level(state, "Enemy: Cerberus", "7-S")
                         and jump_general(state, 2)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Cerberus", "8-1")
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Cerberus", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 3)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Cerberus", "8-3")
+                        and good_weapon(state)
                     )
                     or can_reach_level(state, "Enemy: Cerberus", "0-E")
                     or (
@@ -3833,7 +4472,11 @@ class UltrakillRules:
                         )
                         and grab_item(state)
                         and skull(state, "7-S", "Red")
-                        and can_break_idol(state)
+                        and can_break_idol_or_deathcatcher(state)
+                    )
+                    or (
+                        can_reach_level(state, "Boss: Hideous Mass", "8-3")
+                        and good_weapon(state)
                     )
                     or (
                         can_reach_level(state, "Boss: Hideous Mass", "1-E")
@@ -3861,7 +4504,7 @@ class UltrakillRules:
 
             "Enemy: Idol":
                 lambda state: (
-                    can_break_idol(state)
+                    can_break_idol_or_deathcatcher(state)
                     and (
                         (
                         can_reach_level(state, "Enemy: Idol", "5-2")
@@ -3878,7 +4521,7 @@ class UltrakillRules:
                                 skull(state, "5-3", "Blue")
                                 or skull(state, "5-3", "Red")
                             )
-                            and can_break_idol(state)
+                            and can_break_idol_or_deathcatcher(state)
                         )
                         or (
                             can_reach_level(state, "Enemy: Idol", "6-1")
@@ -3912,6 +4555,22 @@ class UltrakillRules:
                                 or can_rocket_ride(state)
                             )
                             and good_weapon(state)
+                        )
+                        or (
+                            can_reach_level(state, "Enemy: Idol", "8-3")
+                            and good_weapon(state)
+                            and grab_item(state)
+                            and (
+                                slide(state)
+                                and skull(state, "8-3", "Red")
+                                or (
+                                    stamina(state, 1)
+                                    or walljumps(state, 3)
+                                    or shoalt_any(state)
+                                    or rock_any(state)
+                                )
+                                and skull(state, "8-3", "Blue")
+                            )
                         )
                         or (
                             can_reach_level(state, "Enemy: Idol", "0-E")
@@ -3975,6 +4634,31 @@ class UltrakillRules:
                         )
                     )
                     or (
+                        can_reach_level(state, "Enemy: Mannequin", "8-1")
+                        and good_weapon(state)
+                        and grab_item(state)
+                        and skull(state, "8-1", "Blue")
+                        and skull(state, "8-1", "Red")
+                        and can_break_glass(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Mannequin", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 3)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                        and can_break_idol_or_deathcatcher(state)
+                        and skull(state, "8-2", "Red")
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Mannequin", "8-3")
+                        and good_weapon(state)
+                    )
+                    or (
                         can_reach_level(state, "Enemy: Mannequin", "0-E")
                         and arm0(state)
                         and arm1(state)
@@ -3999,6 +4683,53 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "7-1", "Red")
                     and skull(state, "7-1", "Blue")
+                ),
+
+            "Enemy: Deathcatcher":
+                lambda state: (
+                    can_break_idol_or_deathcatcher(state)
+                    and (
+                        (
+                            can_reach_level(state, "Enemy: Deathcatcher", "8-2")
+                            and grab_item(state)
+                            and skull(state, "8-2", "Blue")
+                            and jump_general(state, 3)
+                            and (
+                                arm2(state)
+                                or non_explosive_ranged_weapon(state)
+                            )
+                            and good_weapon(state)
+                        )
+                        or (
+                            can_reach_level(state, "Enemy: Deathcatcher", "8-3")
+                            and good_weapon(state)
+                            and (
+                                stamina(state, 1)
+                                or walljumps(state, 3)
+                                or shoalt_any(state)
+                                or rock_any(state)
+                            )
+                        )
+                    )
+                ),
+
+            "Boss: Geryon, Watcher of the Skies":
+                lambda state: (
+                    can_reach_level(state, "Boss: Geryon, Watcher of the Skies", "8-4")
+                    and good_weapon(state)
+                    and stamina(state, 2)
+                    and (
+                        grab_item(state)
+                        and skull(state, "8-4", "Blue")
+                        and skull(state, "8-4", "Red")
+                        or walljumps(state, 3)
+                        and rock_any(state)
+                        or slam_storage(state)
+                        or shoalt0_fire2(state)
+                        or shoany1_fire2(state)
+                        or rai2(state)
+                        or rock0_fire2(state)
+                    )
                 ),
 
             "Boss: Gabriel, Judge of Hell":
@@ -4055,7 +4786,45 @@ class UltrakillRules:
                         )
                         and grab_item(state)
                         and skull(state, "7-S", "Red")
-                        and can_break_idol(state)
+                        and can_break_idol_or_deathcatcher(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Virtue", "8-1")
+                        and good_weapon(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Virtue", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 3)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                        and can_break_idol_or_deathcatcher(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Virtue", "8-3")
+                        and good_weapon(state)
+                        and slide(state)
+                    )
+                    or (
+                        can_reach_level(state, "Enemy: Virtue", "8-4")
+                        and good_weapon(state)
+                        and stamina(state, 2)
+                        and (
+                            grab_item(state)
+                            and skull(state, "8-4", "Blue")
+                            and skull(state, "8-4", "Red")
+                            or walljumps(state, 3)
+                            and rock_any(state)
+                            or slam_storage(state)
+                            or shoalt0_fire2(state)
+                            or shoany1_fire2(state)
+                            or rai2(state)
+                            or rock0_fire2(state)
+                        )
                     )
                     or (
                         can_reach_level(state, "Enemy: Virtue", "0-E")
@@ -4094,6 +4863,46 @@ class UltrakillRules:
                         or rai2(state)
                         or can_rocket_ride(state)
                     )
+                    and good_weapon(state)
+                ),
+
+            "Enemy: Providence":
+                lambda state: (
+                    can_reach_level(state, "Enemy: Providence", "8-1")
+                    or (
+                        can_reach_level(state, "Enemy: Providence", "8-2")
+                        and grab_item(state)
+                        and skull(state, "8-2", "Blue")
+                        and jump_general(state, 1)
+                        and (
+                            arm2(state)
+                            or non_explosive_ranged_weapon(state)
+                        )
+                        and good_weapon(state)
+                    )
+                    or can_reach_level(state, "Enemy: Providence", "8-3")
+                    or (
+                        can_reach_level(state, "Enemy: Providence", "8-4")
+                        and good_weapon(state)
+                        and stamina(state, 2)
+                        and (
+                            grab_item(state)
+                            and skull(state, "8-4", "Blue")
+                            and skull(state, "8-4", "Red")
+                            or walljumps(state, 3)
+                            and rock_any(state)
+                            or slam_storage(state)
+                            or shoalt0_fire2(state)
+                            or shoany1_fire2(state)
+                            or rai2(state)
+                            or rock0_fire2(state)
+                        )
+                    )
+                ),
+
+            "Enemy: Power":
+                lambda state: (
+                    can_reach_level(state, "Enemy: Power", "8-3")
                     and good_weapon(state)
                 ),
 
