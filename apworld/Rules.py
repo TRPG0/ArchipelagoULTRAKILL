@@ -2824,7 +2824,7 @@ class UltrakillRules:
                     )
                     and (
                         arm0(state)
-                        or shoalt_any(state)
+                        or sho_any(state)
                     )
                 ),
 
@@ -2999,9 +2999,18 @@ class UltrakillRules:
             "8-3: Kill a Power with terminal velocity":
                 lambda state: (
                     good_weapon(state)
+                    and arm0(state)
+                    and grab_item(state)
                     and (
-                        arm0(state)
-                        or sho_any(state)
+                        slide(state)
+                        and skull(state, "8-3", "Red")
+                        or (
+                            stamina(state, 1)
+                            or walljumps(state, 3)
+                            or shoalt_any(state)
+                            or rock_any(state)
+                        )
+                        and skull(state, "8-3", "Blue")
                     )
                 ),
 
