@@ -2740,13 +2740,6 @@ class UltrakillRules:
                             and stamina(state, 1)
                         )
                     )
-                    and (
-                        rock_any(state)
-                        or shoany0_fire2(state)
-                        or shostd1_fire2(state)
-                        or rai2(state)
-                        or stamina(state, 2)
-                    )
                 ),
 
             "8-1: Secret #5":
@@ -2771,6 +2764,13 @@ class UltrakillRules:
                             rock_any(state)
                             and stamina(state, 1)
                         )
+                    )
+                    and (
+                        rock_any(state)
+                        or shoany0_fire2(state)
+                        or shostd1_fire2(state)
+                        or rai2(state)
+                        or stamina(state, 2)
                     )
                 ),
 
@@ -2822,7 +2822,10 @@ class UltrakillRules:
                             and stamina(state, 1)
                         )
                     )
-                    and arm0(state)
+                    and (
+                        arm0(state)
+                        or shoalt_any(state)
+                    )
                 ),
 
             "8-1: Perfect Rank":
@@ -3034,6 +3037,10 @@ class UltrakillRules:
                         or rai2(state)
                         or rock0_fire2(state)
                     )
+                    and (
+                        arm0(state)
+                        or arm2(state)
+                    )
                 ),
 
             "8-4: Do not pick up any skulls":
@@ -3048,6 +3055,10 @@ class UltrakillRules:
                         or shostd1_fire2(state)
                         or rai2(state)
                         or rock0_fire2(state)
+                    )
+                    and (
+                        arm0(state)
+                        or arm2(state)
                     )
                 ),
 
@@ -3066,6 +3077,10 @@ class UltrakillRules:
                         or shostd1_fire2(state)
                         or rai2(state)
                         or rock0_fire2(state)
+                    )
+                    and (
+                        arm0(state)
+                        or arm2(state)
                     )
                 ),
 
