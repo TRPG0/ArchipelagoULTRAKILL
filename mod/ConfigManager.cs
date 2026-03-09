@@ -71,7 +71,7 @@ namespace ArchipelagoULTRAKILL
         public static ConfigPanel modifierPanel;
         public static BoolField permaRadiance;
         public static FloatField radianceLevel;
-        public static BoolField permaSand;
+        //public static BoolField permaSand;
 
         public static ConfigPanel colorPanel;
 
@@ -100,6 +100,7 @@ namespace ArchipelagoULTRAKILL
         public static ColorField layer5Color;
         public static ColorField layer6Color;
         public static ColorField layer7Color;
+        public static ColorField layer8Color;
         public static ColorField encore0Color;
         public static ColorField encore1Color;
         public static ColorField primeColor;
@@ -337,6 +338,7 @@ namespace ArchipelagoULTRAKILL
                 OptionsManager.radianceTier = e.value;
             };
 
+            /*
             new ConfigHeader(modifierPanel, "-----");
             permaSand = new BoolField(modifierPanel, "PERMANENT SAND", "permaSand", false, true);
             permaSand.onValueChange += (BoolField.BoolValueChangeEvent e) =>
@@ -344,6 +346,7 @@ namespace ArchipelagoULTRAKILL
                 OptionsManager.forceSand = e.value;
             };
             new ConfigHeader(modifierPanel, "Changes will not affect enemies that have already spawned.", 12);
+            */
 
 
             // color settings
@@ -382,9 +385,9 @@ namespace ArchipelagoULTRAKILL
             };
 
             new ConfigHeader(colorPanel, "ACT SUMMARY COLORS");
-            actHighlightColor = new ColorField(colorPanel, "HIGHLIGHTED", "actHighlightColor", Color.red);
-            actCompleteColor = new ColorField(colorPanel, "COMPLETED", "actCompleteColor", Colors.Perfect);
-            actGoalColor = new ColorField(colorPanel, "GOAL", "actGoalColor", Color.green);
+            actHighlightColor = new ColorField(colorPanel, "HIGHLIGHTED", "actHighlightColor", Color.red, true);
+            actCompleteColor = new ColorField(colorPanel, "COMPLETED", "actCompleteColor", Colors.Perfect, true);
+            actGoalColor = new ColorField(colorPanel, "GOAL", "actGoalColor", Color.green, true);
 
             new ConfigHeader(colorPanel, "ARCHIPELAGO COLORS");
             APPlayerSelf = new ColorField(colorPanel, "PLAYER (YOU)", "APPlayerSelf", new Color(0.93f, 0, 0.93f), true);
@@ -396,14 +399,15 @@ namespace ArchipelagoULTRAKILL
             APLocation = new ColorField(colorPanel, "LOCATION", "APLocation", new Color(0, 1, 0.5f), true);
 
             new ConfigHeader(colorPanel, "ITEM / LOCATION COLORS");
-            layer0Color = new ColorField(colorPanel, "LAYER 0", "layer0Color", new Color(1, 0.5f, 0.25f), true);
-            layer1Color = new ColorField(colorPanel, "LAYER 1", "layer1Color", new Color(0.2667f, 1, 0.2706f), true);
-            layer2Color = new ColorField(colorPanel, "LAYER 2", "layer2Color", new Color(0.765f, 0.25f, 1), true);
-            layer3Color = new ColorField(colorPanel, "LAYER 3", "layer3Color", new Color(1, 0.9479f, 0.8566f), true);
-            layer4Color = new ColorField(colorPanel, "LAYER 4", "layer4Color", new Color(1, 1, 0.25f), true);
-            layer5Color = new ColorField(colorPanel, "LAYER 5", "layer5Color", new Color(0.251f, 0.9059f, 1), true);
-            layer6Color = new ColorField(colorPanel, "LAYER 6", "layer6Color", new Color(1, 0.2353f, 0.2353f), true);
-            layer7Color = new ColorField(colorPanel, "LAYER 7", "layer7Color", new Color(0.8f, 0.8f, 0.8f), true);
+            layer0Color = new ColorField(colorPanel, "LAYER 0: PRELUDE", "layer0Color", new Color(1, 0.5f, 0.25f), true);
+            layer1Color = new ColorField(colorPanel, "LAYER 1: LIMBO", "layer1Color", new Color(0.2667f, 1, 0.2706f), true);
+            layer2Color = new ColorField(colorPanel, "LAYER 2: LUST", "layer2Color", new Color(0.765f, 0.25f, 1), true);
+            layer3Color = new ColorField(colorPanel, "LAYER 3: GLUTTONY", "layer3Color", new Color(1, 0.9479f, 0.8566f), true);
+            layer4Color = new ColorField(colorPanel, "LAYER 4: GREED", "layer4Color", new Color(1, 1, 0.25f), true);
+            layer5Color = new ColorField(colorPanel, "LAYER 5: WRATH", "layer5Color", new Color(0.251f, 0.9059f, 1), true);
+            layer6Color = new ColorField(colorPanel, "LAYER 6: HERESY", "layer6Color", new Color(1, 0.2353f, 0.2353f), true);
+            layer7Color = new ColorField(colorPanel, "LAYER 7: VIOLENCE", "layer7Color", new Color(0.8f, 0.8f, 0.8f), true);
+            layer8Color = new ColorField(colorPanel, "LAYER 8: FRAUD", "layer8Color", new Color(0.5373f, 0.3804f, 0.2706f), true);
             encore0Color = new ColorField(colorPanel, "ENCORE 0", "encore0Color", new Color(0.6431f, 0.8745f, 0.9882f), true);
             encore1Color = new ColorField(colorPanel, "ENCORE 1", "encore1Color", new Color(0.5f, 0.5f, 0.5f), true);
             primeColor = new ColorField(colorPanel, "PRIME SANCTUMS", "primeColor", new Color(1, 0.2353f, 0.2353f), true);

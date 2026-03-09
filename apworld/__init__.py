@@ -392,22 +392,22 @@ class UltrakillWorld(World):
 
 
     def pre_fill(self):
-        world = self.multiworld
+        multiworld = self.multiworld
         player = self.player
 
-        first_loc = world.get_location(self.start_location, player)
+        first_loc = multiworld.get_location(self.start_location, player)
 
         if first_loc.item != None:
             if not first_loc.item.name in item_groups["start_weapons"]:
-                raise Exception(f"[ULTRAKILL - {world.get_player_name(player)}] "
+                raise Exception(f"[ULTRAKILL - {multiworld.get_player_name(player)}] "
                                 f"'{first_loc.item.name}' is not a valid starting weapon.")
             
             # plando check
             if first_loc.item.name != self.start_weapon:
-                print(f"[ULTRAKILL - '{world.get_player_name(player)}'] An item already exists at \"{self.start_location}\". "
+                print(f"[ULTRAKILL - '{multiworld.get_player_name(player)}'] An item already exists at \"{self.start_location}\". "
                     "Selected starting weapon is being returned to the item pool.")
                 
-                world.itempool.append(self.create_item(self.start_weapon))
+                multiworld.itempool.append(self.create_item(self.start_weapon))
         else:
             first_loc.place_locked_item(self.create_item(self.start_weapon))
 

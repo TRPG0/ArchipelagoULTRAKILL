@@ -126,6 +126,14 @@ namespace ArchipelagoULTRAKILL
                 new ItemDefinition("Red Skull (7-2)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
                 new ItemDefinition("Red Skull (7-S)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
                 new ItemDefinition("Blue Skull (7-S)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Blue Skull (8-1)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (8-1)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Blue Skull (8-2)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (8-2)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Red Skull (8-3)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
+                new ItemDefinition("Blue Skull (8-3)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Blue Skull (8-4)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
+                new ItemDefinition("Red Skull (8-4)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
                 new ItemDefinition("Blue Skull (0-E)", UKType.Skull, () => { return Colors.BlueSkull; }, "skullb"),
                 new ItemDefinition("Red Skull (0-E)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
                 new ItemDefinition("Red Skull (1-E)", UKType.Skull, () => { return Colors.RedSkull; }, "skullr"),
@@ -167,6 +175,10 @@ namespace ArchipelagoULTRAKILL
                 new ItemDefinition("7-3: NO SOUND, NO MEMORY", UKType.Level, () => { return Colors.Layer7; }, "layer7"),
                 new ItemDefinition("7-4: ...LIKE ANTENNAS TO HEAVEN", UKType.Level, () => { return Colors.Layer7; }, "layer7"),
                 new ItemDefinition("7-S: HELL BATH NO FURY", UKType.SecretMission, () => { return Colors.Layer7; }, "layer7"),
+                new ItemDefinition("8-1: HURTBREAK WONDERLAND", UKType.Level, () => { return Colors.Layer8; }, "layer8"),
+                new ItemDefinition("8-2: THROUGH THE MIRROR", UKType.Level, () => { return Colors.Layer8; }, "layer8"),
+                new ItemDefinition("8-3: DISINTEGRATION LOOP", UKType.Level, () => { return Colors.Layer8; }, "layer8"),
+                new ItemDefinition("8-4: FINAL FLIGHT", UKType.Level, () => { return Colors.Layer8; }, "layer8"),
                 new ItemDefinition("0-E: THIS HEAT, AN EVIL HEAT", UKType.Level, () => { return Colors.Encore0; }, "layer0"),
                 new ItemDefinition("1-E: ...THEN FELL THE ASHES", UKType.Level, () => { return Colors.Encore1; }, "layer1"),
                 new ItemDefinition("P-1: SOUL SURVIVOR", UKType.Level, () => { return Colors.Prime; }, "layer3"),
@@ -180,6 +192,7 @@ namespace ArchipelagoULTRAKILL
                 new ItemDefinition("LAYER 5: WRATH", UKType.Layer, () => { return Colors.Layer5; }, "layer5"),
                 new ItemDefinition("LAYER 6: HERESY", UKType.Layer, () => { return Colors.Layer6; }, "layer6"),
                 new ItemDefinition("LAYER 7: VIOLENCE", UKType.Layer, () => { return Colors.Layer7; }, "layer7"),
+                new ItemDefinition("LAYER 8: FRAUD", UKType.Layer, () => { return Colors.Layer8; }, "layer8"),
 
                 new ItemDefinition("+10,000P", UKType.Points, () => { return Colors.Points; }, "points"),
                 new ItemDefinition("Overheal", UKType.Powerup, () => { return Colors.Overheal; }, "overheal"),
@@ -403,7 +416,7 @@ namespace ArchipelagoULTRAKILL
                         }
                         else
                         {
-                            Core.Logger.LogInfo(item.itemName.Substring(item.itemName.Length - 4, 3));
+                            //Core.Logger.LogInfo(item.itemName.Substring(item.itemName.Length - 4, 3));
                             string skull = Core.GetLevelIdFromName(item.itemName.Substring(item.itemName.Length - 4, 3)).ToString();
                             if (item.itemName.Contains("Blue")) skull += "_b";
                             else if (item.itemName.Contains("Red")) skull += "_r";
@@ -683,6 +696,7 @@ namespace ArchipelagoULTRAKILL
             else if (locationName.StartsWith("5-")) return Colors.Layer5;
             else if (locationName.StartsWith("6-")) return Colors.Layer6;
             else if (locationName.StartsWith("7-")) return Colors.Layer7;
+            else if (locationName.StartsWith("8-")) return Colors.Layer8;
             else if (locationName.StartsWith("P-")) return Colors.Prime;
             else if (locationName.StartsWith("Shop")) return Colors.Points;
             else return Colors.White;
@@ -698,6 +712,7 @@ namespace ArchipelagoULTRAKILL
             else if (locationName.StartsWith("5-")) return "layer5";
             else if (locationName.StartsWith("6-")) return "layer6";
             else if (locationName.StartsWith("7-")) return "layer7";
+            else if (locationName.StartsWith("8-")) return "layer8";
             else if (locationName.StartsWith("P-1")) return "layer3";
             else if (locationName.StartsWith("P-2")) return "layer6";
             else if (locationName.Contains("Buy Revolver")) return Core.data.revForm == WeaponForm.Standard ? "rev" : "revalt";
@@ -723,6 +738,7 @@ namespace ArchipelagoULTRAKILL
                     case 5: return "layer5";
                     case 6: return "layer6";
                     case 7: return "layer7";
+                    case 8: return "layer8";
                     default: return "confusion";
                 }
             }

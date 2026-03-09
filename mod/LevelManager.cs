@@ -26,10 +26,33 @@ namespace ArchipelagoULTRAKILL
             {
                 if ((item.itemType == ItemType.SkullBlue || item.itemType == ItemType.SkullRed) && item.gameObject.scene.name == SceneManager.GetActiveScene().name)
                 {
-                    if (SceneHelper.CurrentScene == "Level 7-S")
+                    if (SceneHelper.CurrentScene == "Level 2-4")
+                    {
+                        if (item.gameObject.transform.parent == null) continue;
+                        if (item.gameObject.transform.parent.parent.name != "Altar (1)") continue;
+                    }
+                    else if (SceneHelper.CurrentScene == "Level 7-S")
                     {
                         if (item.itemType == ItemType.SkullBlue && !item.transform.parent.parent.parent) continue;
                         else if (item.itemType == ItemType.SkullRed && item.transform.parent.parent.parent.name != "Interactives") continue;
+                    }
+                    else if (SceneHelper.CurrentScene == "Level 8-1")
+                    {
+                        if (item.gameObject.transform.parent.parent.parent.name != "Inside") continue;
+                    }
+                    else if (SceneHelper.CurrentScene == "Level 8-2")
+                    {
+                        if (item.itemType == ItemType.SkullBlue && item.transform.parent.parent.name != "Altar (Blue) (1)") continue;
+                        else if (item.itemType == ItemType.SkullRed && item.transform.parent.parent.name != "Altar (Red) (1)") continue;
+                    }
+                    else if (SceneHelper.CurrentScene == "Level 8-3")
+                    {
+                        if (item.gameObject.transform.parent.parent.parent.name == "10 Nonstuff") continue;
+                    }
+                    else if (SceneHelper.CurrentScene == "Level 8-4")
+                    {
+                        if (item.itemType == ItemType.SkullBlue && item.transform.parent.name != "Bathroom") continue;
+                        else if (item.itemType == ItemType.SkullRed && item.transform.parent.parent.name != "Altar (Red)") continue;
                     }
                     else if (SceneHelper.CurrentScene == "Level 0-E")
                     {
@@ -81,23 +104,29 @@ namespace ArchipelagoULTRAKILL
 
         public static void ActivateSkull(GameObject skull)
         {
-            ItemPlaceZone ipz = skull.GetComponentInParent<ItemPlaceZone>(true);
-            ipz.elementChangeEffect.Play();
-            foreach (InstantiateObject io in ipz.altarElements)
+            if (skull.transform.parent.TryGetComponent<ItemPlaceZone>(out ItemPlaceZone ipz))
             {
-                io.gameObject.SetActive(true);
-                if (io.gameObject.activeInHierarchy) io.Instantiate();
+                ipz.elementChangeEffect.Play();
+                foreach (InstantiateObject io in ipz.altarElements)
+                {
+                    io.gameObject.SetActive(true);
+                    if (io.gameObject.activeInHierarchy) io.Instantiate();
+                }
             }
+            else Core.Logger.LogWarning($"{skull.name} GameObject has no ItemPlaceZone in parent");
             skull.SetActive(true);
         }
 
         public static void DeactivateSkull(GameObject skull)
         {
-            ItemPlaceZone ipz = skull.GetComponentInParent<ItemPlaceZone>(true);
-            foreach (InstantiateObject io in ipz.altarElements)
+            if (skull.transform.parent.TryGetComponent<ItemPlaceZone>(out ItemPlaceZone ipz))
             {
-                io.gameObject.SetActive(false);
+                foreach (InstantiateObject io in ipz.altarElements)
+                {
+                    io.gameObject.SetActive(false);
+                }
             }
+            else Core.Logger.LogWarning($"{skull.name} GameObject has no ItemPlaceZone in parent");
             skull.SetActive(false);
         }
 

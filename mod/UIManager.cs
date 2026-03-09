@@ -188,9 +188,17 @@ namespace ArchipelagoULTRAKILL
             chapterSelect.transform.Find("Prelude").gameObject.AddComponent<ActStats>().Init(1, 5);
             chapterSelect.transform.Find("Act I").gameObject.AddComponent<ActStats>().Init(6, 15);
             chapterSelect.transform.Find("Act II").gameObject.AddComponent<ActStats>().Init(16, 25);
-            chapterSelect.transform.Find("Act III").gameObject.AddComponent<ActStats>().Init(26, 29);
+            chapterSelect.transform.Find("Act III").gameObject.AddComponent<ActStats>().Init(26, 33);
             chapterSelect.transform.Find("Encore").gameObject.AddComponent<ActStats>().Init(100, 101, true);
             chapterSelect.transform.Find("Prime").gameObject.AddComponent<ActStats>().Init(666, 667, true);
+
+            Button cyberGrindButton = chapterSelect.transform.Find("The Cyber Grind").GetComponent<Button>();
+            cyberGrindButton.onClick.SetPersistentListenerState(0, UnityEngine.Events.UnityEventCallState.Off);
+            cyberGrindButton.onClick.AddListener(delegate { SceneHelper.LoadScene("Endless"); });
+
+            Button sandboxButton = chapterSelect.transform.Find("Sandbox").GetComponent<Button>();
+            sandboxButton.onClick.SetPersistentListenerState(0, UnityEngine.Events.UnityEventCallState.Off);
+            sandboxButton.onClick.AddListener(delegate { SceneHelper.LoadScene("uk_construct"); });
 
             foreach (LayerSelect component in canvas.GetComponentsInChildren<LayerSelect>(true))
             {

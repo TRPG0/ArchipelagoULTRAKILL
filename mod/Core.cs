@@ -25,7 +25,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.3.4";
+        public const string PluginVersion = "3.4.0";
 
         public static string workingPath;
         public static string workingDir;
@@ -80,10 +80,10 @@ namespace ArchipelagoULTRAKILL
             new LevelInfo("7-2", 27, 7, true, MusicType.Special, SkullsType.Normal, new List<string>() { "27_r" }),
             new LevelInfo("7-3", 28, 7, true, MusicType.Special, SkullsType.None),
             new LevelInfo("7-4", 29, 7, false, MusicType.Skip, SkullsType.None),
-            new LevelInfo("8-1", 30, 8, false, MusicType.Skip, SkullsType.None),
-            new LevelInfo("8-2", 31, 8, false, MusicType.Skip, SkullsType.None),
-            new LevelInfo("8-3", 32, 8, false, MusicType.Skip, SkullsType.None),
-            new LevelInfo("8-4", 33, 8, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("8-1", 30, 8, true, MusicType.Skip, SkullsType.Normal, new List<string>() { "30_r", "30_b" }),
+            new LevelInfo("8-2", 31, 8, true, MusicType.Skip, SkullsType.Normal, new List<string>() { "31_r", "31_b" }),
+            new LevelInfo("8-3", 32, 8, true, MusicType.Skip, SkullsType.Normal, new List<string>() { "32_b", "32_r" }),
+            new LevelInfo("8-4", 33, 8, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "33_r", "33_b" }),
             new LevelInfo("0-E", 100, 0, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "100_r", "100_b"}),
             new LevelInfo("1-E", 101, 1, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "101_b", "101_r"}),
             new LevelInfo("P-1", 666, 3, false, MusicType.Special, SkullsType.None),

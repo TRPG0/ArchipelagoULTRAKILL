@@ -8,17 +8,38 @@
 
 All weapons and arms are randomized. Extra abilities can also be randomized, including the ability to dash, walljump, slide, slam, and use a weapon's alternate fire.
 
-Items are found by collecting secrets, and optionally by completing level challenges and getting Perfect Ranks.
+The revolver, shotgun, and nailgun can start in either their standard or alternate forms, and the other form must be found before it can be used.
+
+Items are found by collecting secrets, and optionally by completing level challenges, getting Perfect Ranks, and more.
 
 Levels are unlocked by finding access to them within the multiworld. Levels can either be unlocked individually, or whole layers at once.
 
-One level must be chosen as a goal for the randomizer, and a number of levels must be completed to unlock the goal. Completing secret missions and Prime Sanctums will also count. Prime Sanctums will never be considered in logic, unless chosen as the goal level.
+One level must be chosen as a goal for the randomizer, and a number of levels must be completed to unlock the goal. Secret missions, Prime Sanctums, and Encore levels will also count.
+
+Individual levels can be excluded, which will prevent them from being considered in logic in any way.
 
 Levels will be unlocked for all difficulties, and you can switch difficulties at any time.
 
-Skulls can also be randomized, meaning they will not appear in any levels until found in the multiworld.
+Skulls can be randomized, meaning they will not appear in any levels until found in the multiworld.
 
 Note that the logic for the randomizer assumes that the player is willing to take intentional damage to get items.
+
+Because there are far fewer items than locations in ULTRAKILL, there are many filler and trap items added to make the item and location amounts equal:
+
+- +10,000P: Instantly gives 10,000P.
+- Overheal: Sets the player's health to 200.
+- Dual Wield: Gain an additional copy of the currently held weapon for 15 seconds.
+- Infinite Stamina: Dash around infinitely with no cooldown for 15 seconds.
+- Air Jump: Use your wall jumps as additional midair jumps for 15 seconds.
+- Soap: Spawns soap in the player's hand, or on the ground at the player's position if already holding something.
+- Hard Damage: Instantly take 75 hard damage.
+- Stamina Limiter: Removes all dashes for 15 seconds.
+- Wall Jump Limiter: Removes all wall jumps for 15 seconds.
+- Weapon Malfunction: Removes all weapon ammo and prevents cooldowns, such as marksman coins, nailgun ammo, and railcannon charge for 15 seconds.
+- Radiant Aura: All enemies are radiant for 15 seconds.
+- Confusing Aura: All enemies will ignore the player and attack each other for 15 seconds.
+- Quick Charge: Weapon ammo and cooldowns recharge at 3x speed for 15 seconds.
+- Hands-Free Mode: All arms cannot be used for 15 seconds.
 
 # Setup
 

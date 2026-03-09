@@ -1,3 +1,9 @@
+## 3.4.0
+
+- Added new content from Layer 8: Fraud.
+- Fixed a freeze that would happen when loading into The Cyber Grind from the main menu.
+- Removed permanent sand modifier and sand trap item because they were causing problems with puppeted enemies.
+
 ## 3.3.4
 
 - Fixed the currently held weapon sometimes disappearing after the intro in 0-1.

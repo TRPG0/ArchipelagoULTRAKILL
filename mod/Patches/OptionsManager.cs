@@ -9,7 +9,7 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             OptionsManager.forceRadiance = ConfigManager.permaRadiance.value;
             OptionsManager.radianceTier = ConfigManager.radianceLevel.value;
-            OptionsManager.forceSand = ConfigManager.permaSand.value;
+            //OptionsManager.forceSand = ConfigManager.permaSand.value;
         }
     }
 }

@@ -94,7 +94,7 @@ namespace ArchipelagoULTRAKILL.Components
                 LocationManager.powerupQueue.RemoveAt(0);
 
                 if (powerup == Powerup.Radiance && ConfigManager.permaRadiance.value
-                    || powerup == Powerup.Sandstorm && ConfigManager.permaSand.value)
+                    /*|| powerup == Powerup.Sandstorm && ConfigManager.permaSand.value*/)
                 {
                     Core.Logger.LogInfo($"Skipping {nameof(powerup)} powerup.");
                     return;
