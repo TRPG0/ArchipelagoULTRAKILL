@@ -25,14 +25,23 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists())
             {
-                if (!SceneHelper.CurrentScene.Contains("-S") && __instance.GetComponent<SecretMissionPit>() && !Core.data.secretExitComplete) PlayerHelper.IsSecretExiting = true;
+                if (Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.HasSecretExit)
+                {
+                    if (!SceneHelper.CurrentScene.Contains("-S") && __instance.GetComponent<SecretMissionPit>() && !Core.data.secretExitComplete) PlayerHelper.IsSecretExiting = true;
+                }
 
                 if (PlayerHelper.Instance)
                 {
                     PlayerHelper.Instance.EndPowerup();
                     PlayerHelper.Instance.CanGetPowerup = false;
                 }
-                
+            }
+        }
+
+        public static void Postfix(FinalPit __instance)
+        {
+            if (Core.DataExists())
+            {
                 if (AssistController.Instance.cheatsEnabled)
                 {
                     Core.Logger.LogWarning("Cheats enabled! Completion not counted.");
@@ -44,7 +53,7 @@ namespace ArchipelagoULTRAKILL.Patches
                         if (Core.CurrentLevelInfo.Name == Core.data.goal)
                         {
                             if (!Core.data.perfectGoal
-                                || Core.data.perfectGoal && Core.data.goal.Contains("S")) 
+                                || Core.data.perfectGoal && Core.data.goal.Contains("S"))
                                 Multiworld.SendCompletion();
                         }
                         else if (PlayerHelper.IsSecretExiting)

@@ -25,7 +25,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.4.0";
+        public const string PluginVersion = "3.4.1";
 
         public static string workingPath;
         public static string workingDir;
@@ -51,53 +51,53 @@ namespace ArchipelagoULTRAKILL
 
         public static readonly List<LevelInfo> levelInfos = new List<LevelInfo>()
         {
-            new LevelInfo("0-1", 1, 0, true, MusicType.Normal, SkullsType.None),
-            new LevelInfo("0-2", 2, 0, true, MusicType.Normal, SkullsType.Normal, new List<string>() { "2_b" }),
-            new LevelInfo("0-3", 3, 0, true, MusicType.Normal, SkullsType.None),
-            new LevelInfo("0-4", 4, 0, true, MusicType.Normal, SkullsType.None),
-            new LevelInfo("0-5", 5, 0, false, MusicType.Special2, SkullsType.None),
-            new LevelInfo("1-1", 6, 1, true, MusicType.Special, SkullsType.Normal, new List<string>() { "6_b", "6_r" }),
-            new LevelInfo("1-2", 7, 1, true, MusicType.Special, SkullsType.Normal, new List<string>() { "7_r", "7_b" }),
-            new LevelInfo("1-3", 8, 1, true, MusicType.Normal, SkullsType.Normal, new List<string>() { "8_r", "8_b" }),
-            new LevelInfo("1-4", 9, 1, false, MusicType.Special, SkullsType.Special),
-            new LevelInfo("2-1", 10, 2, true, MusicType.Special, SkullsType.None),
-            new LevelInfo("2-2", 11, 2, true, MusicType.Normal, SkullsType.None),
-            new LevelInfo("2-3", 12, 2, true, MusicType.Normal, SkullsType.Normal, new List<string>() { "12_r", "12_b" }),
-            new LevelInfo("2-4", 13, 2, false, MusicType.Special, SkullsType.Normal, new List<string>() { "13_r", "13_b" }),
-            new LevelInfo("3-1", 14, 3, true, MusicType.Special, SkullsType.None),
-            new LevelInfo("3-2", 15, 3, false, MusicType.Special, SkullsType.None),
-            new LevelInfo("4-1", 16, 4, true, MusicType.Normal, SkullsType.None),
-            new LevelInfo("4-2", 17, 4, true, MusicType.Normal, SkullsType.Normal, new List<string>() { "17_r", "17_b" }),
-            new LevelInfo("4-3", 18, 4, true, MusicType.Special, SkullsType.Normal, new List<string>() { "18_b" }),
-            new LevelInfo("4-4", 19, 4, false, MusicType.Special, SkullsType.Normal, new List<string>() { "19_b" }),
-            new LevelInfo("5-1", 20, 5, true, MusicType.Normal, SkullsType.Special),
-            new LevelInfo("5-2", 21, 5, true, MusicType.Skip, SkullsType.Normal, new List<string>() { "21_r", "21_b" }),
-            new LevelInfo("5-3", 22, 5, true, MusicType.Special, SkullsType.Normal, new List<string>() { "22_r", "22_b" }),
-            new LevelInfo("5-4", 23, 5, false, MusicType.Skip, SkullsType.None),
-            new LevelInfo("6-1", 24, 6, true, MusicType.Special, SkullsType.Normal, new List<string>() { "24_r" }),
-            new LevelInfo("6-2", 25, 6, false, MusicType.Special, SkullsType.None),
-            new LevelInfo("7-1", 26, 7, true, MusicType.Special, SkullsType.Normal, new List<string>() { "26_b", "26_r" }),
-            new LevelInfo("7-2", 27, 7, true, MusicType.Special, SkullsType.Normal, new List<string>() { "27_r" }),
-            new LevelInfo("7-3", 28, 7, true, MusicType.Special, SkullsType.None),
-            new LevelInfo("7-4", 29, 7, false, MusicType.Skip, SkullsType.None),
-            new LevelInfo("8-1", 30, 8, true, MusicType.Skip, SkullsType.Normal, new List<string>() { "30_r", "30_b" }),
-            new LevelInfo("8-2", 31, 8, true, MusicType.Skip, SkullsType.Normal, new List<string>() { "31_r", "31_b" }),
-            new LevelInfo("8-3", 32, 8, true, MusicType.Skip, SkullsType.Normal, new List<string>() { "32_b", "32_r" }),
-            new LevelInfo("8-4", 33, 8, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "33_r", "33_b" }),
-            new LevelInfo("0-E", 100, 0, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "100_r", "100_b"}),
-            new LevelInfo("1-E", 101, 1, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "101_b", "101_r"}),
-            new LevelInfo("P-1", 666, 3, false, MusicType.Special, SkullsType.None),
-            new LevelInfo("P-2", 667, 6, false, MusicType.Special, SkullsType.Normal, new List<string> { "667_b" })
+            new LevelInfo("0-1", 1, 0, true, false, MusicType.Normal, SkullsType.None),
+            new LevelInfo("0-2", 2, 0, true, true, MusicType.Normal, SkullsType.Normal, new List<string>() { "2_b" }),
+            new LevelInfo("0-3", 3, 0, true, false, MusicType.Normal, SkullsType.None),
+            new LevelInfo("0-4", 4, 0, true, false, MusicType.Normal, SkullsType.None),
+            new LevelInfo("0-5", 5, 0, false, false, MusicType.Special2, SkullsType.None),
+            new LevelInfo("1-1", 6, 1, true, true, MusicType.Special, SkullsType.Normal, new List<string>() { "6_b", "6_r" }),
+            new LevelInfo("1-2", 7, 1, true, false, MusicType.Special, SkullsType.Normal, new List<string>() { "7_r", "7_b" }),
+            new LevelInfo("1-3", 8, 1, true, false, MusicType.Normal, SkullsType.Normal, new List<string>() { "8_r", "8_b" }),
+            new LevelInfo("1-4", 9, 1, false, false, MusicType.Special, SkullsType.Special),
+            new LevelInfo("2-1", 10, 2, true, false, MusicType.Special, SkullsType.None),
+            new LevelInfo("2-2", 11, 2, true, false, MusicType.Normal, SkullsType.None),
+            new LevelInfo("2-3", 12, 2, true, true, MusicType.Normal, SkullsType.Normal, new List<string>() { "12_r", "12_b" }),
+            new LevelInfo("2-4", 13, 2, false, false, MusicType.Special, SkullsType.Normal, new List<string>() { "13_r", "13_b" }),
+            new LevelInfo("3-1", 14, 3, true, false, MusicType.Special, SkullsType.None),
+            new LevelInfo("3-2", 15, 3, false, false, MusicType.Special, SkullsType.None),
+            new LevelInfo("4-1", 16, 4, true, false, MusicType.Normal, SkullsType.None),
+            new LevelInfo("4-2", 17, 4, true, true, MusicType.Normal, SkullsType.Normal, new List<string>() { "17_r", "17_b" }),
+            new LevelInfo("4-3", 18, 4, true, false, MusicType.Special, SkullsType.Normal, new List<string>() { "18_b" }),
+            new LevelInfo("4-4", 19, 4, false, false, MusicType.Special, SkullsType.Normal, new List<string>() { "19_b" }),
+            new LevelInfo("5-1", 20, 5, true, true, MusicType.Normal, SkullsType.Special),
+            new LevelInfo("5-2", 21, 5, true, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "21_r", "21_b" }),
+            new LevelInfo("5-3", 22, 5, true, false, MusicType.Special, SkullsType.Normal, new List<string>() { "22_r", "22_b" }),
+            new LevelInfo("5-4", 23, 5, false, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("6-1", 24, 6, true, false, MusicType.Special, SkullsType.Normal, new List<string>() { "24_r" }),
+            new LevelInfo("6-2", 25, 6, false, false, MusicType.Special, SkullsType.None),
+            new LevelInfo("7-1", 26, 7, true, false, MusicType.Special, SkullsType.Normal, new List<string>() { "26_b", "26_r" }),
+            new LevelInfo("7-2", 27, 7, true, false, MusicType.Special, SkullsType.Normal, new List<string>() { "27_r" }),
+            new LevelInfo("7-3", 28, 7, true, true, MusicType.Special, SkullsType.None),
+            new LevelInfo("7-4", 29, 7, false, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("8-1", 30, 8, true, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "30_r", "30_b" }),
+            new LevelInfo("8-2", 31, 8, true, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "31_r", "31_b" }),
+            new LevelInfo("8-3", 32, 8, true, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "32_b", "32_r" }),
+            new LevelInfo("8-4", 33, 8, false, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "33_r", "33_b" }),
+            new LevelInfo("0-E", 100, 0, false, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "100_r", "100_b"}),
+            new LevelInfo("1-E", 101, 1, false, false, MusicType.Skip, SkullsType.Normal, new List<string>() { "101_b", "101_r"}),
+            new LevelInfo("P-1", 666, 3, false, false, MusicType.Special, SkullsType.None),
+            new LevelInfo("P-2", 667, 6, false, false, MusicType.Special, SkullsType.Normal, new List<string> { "667_b" })
         };
 
         public static readonly List<LevelInfo> secretMissionInfos = new List<LevelInfo>()
         {
-            new LevelInfo("0-S", 0, 0, false, MusicType.Skip, SkullsType.Normal, new List<string> { "0S_r", "0S_b" }),
-            new LevelInfo("1-S", 0, 1, false, MusicType.Skip, SkullsType.None),
-            new LevelInfo("2-S", 0, 2, false, MusicType.Skip, SkullsType.None),
-            new LevelInfo("4-S", 0, 4, false, MusicType.Skip, SkullsType.None),
-            new LevelInfo("5-S", 0, 5, false, MusicType.Skip, SkullsType.None),
-            new LevelInfo("7-S", 0, 7, false, MusicType.Skip, SkullsType.Normal, new List<string> { "7S_b", "7S_r" })
+            new LevelInfo("0-S", 0, 0, false, false, MusicType.Skip, SkullsType.Normal, new List<string> { "0S_r", "0S_b" }),
+            new LevelInfo("1-S", 0, 1, false, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("2-S", 0, 2, false, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("4-S", 0, 4, false, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("5-S", 0, 5, false, false, MusicType.Skip, SkullsType.None),
+            new LevelInfo("7-S", 0, 7, false, false, MusicType.Skip, SkullsType.Normal, new List<string> { "7S_b", "7S_r" })
         };
 
         public static List<string> AllLevels

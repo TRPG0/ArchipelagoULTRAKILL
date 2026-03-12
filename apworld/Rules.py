@@ -3616,6 +3616,30 @@ class UltrakillRules:
                         and arm2(state)
                     )
                     or (
+                        can_reach_level(state, "Enemy: Insurrectionist", "8-1")
+                        and good_weapon(state)
+                        and grab_item(state)
+                        and skull(state, "8-1", "Blue")
+                        and skull(state, "8-1", "Red")
+                        and can_break_glass(state)
+                        and (
+                            arm2(state)
+                            or can_rocket_ride(state)
+                            or stamina(state, 3)
+                            or (
+                                stamina(state, 2)
+                                and walljumps(state, 1)
+                            )
+                            or shoany0_fire2(state)
+                            or shostd1_fire2(state)
+                            or rai2(state)
+                            or (
+                                rock_any(state)
+                                and stamina(state, 1)
+                            )
+                        )
+                    )
+                    or (
                         can_reach_level(state, "Enemy: Insurrectionist", "8-2")
                         and grab_item(state)
                         and skull(state, "8-2", "Blue")

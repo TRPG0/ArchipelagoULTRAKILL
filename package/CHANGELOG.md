@@ -1,3 +1,8 @@
+## 3.4.1
+
+- Tweaked how secret exits are checked to hopefully make them more consistent.
+- Fixed missing logic for the Insurrectionist in 8-1.
+
 ## 3.4.0
 
 - Added new content from Layer 8: Fraud.
