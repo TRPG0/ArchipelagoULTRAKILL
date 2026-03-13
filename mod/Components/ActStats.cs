@@ -96,6 +96,8 @@ namespace ArchipelagoULTRAKILL.Components
             int completed = 0;
             int missionsCompleted = 0;
             int missionsTotal = 0;
+            int exitsCompleted = 0;
+            int exitsTotal = 0;
             int secretsFound = 0;
             int secretsTotal = 0;
             int challenges = 0;
@@ -123,7 +125,9 @@ namespace ArchipelagoULTRAKILL.Components
                     }
                 }
 
-                if (Core.GetLevelInfo(i).HasSecrets)
+                LevelInfo levelInfo = Core.GetLevelInfo(i);
+
+                if (levelInfo.HasSecrets)
                 {
                     foreach (bool found in rank.secretsFound)
                     {
@@ -138,6 +142,12 @@ namespace ArchipelagoULTRAKILL.Components
                     missionsTotal++;
                 }
 
+                if (levelInfo.HasSecretExit)
+                {
+                    if (Core.data.@checked.Contains($"se_{levelInfo.Layer}")) exitsCompleted++;
+                    exitsTotal++;
+                }
+
                 if (rank.challenge) challenges++;
             }
 
@@ -145,6 +155,7 @@ namespace ArchipelagoULTRAKILL.Components
             result += BuildString("Levels unlocked", unlocked, total);
             result += BuildString("\nLevels completed", completed, total);
             result += BuildString("\nSecret missions", missionsCompleted, missionsTotal);
+            if (!Core.data.secretExitComplete) result += BuildString("\nSecret exits", exitsCompleted, exitsTotal);
             result += BuildString("\nSecrets", secretsFound, secretsTotal);
             if (Core.data.challengeRewards) result += BuildString("\nChallenges", challenges, total);
             if (Core.data.pRankRewards) result += BuildString("\nPerfect Ranks", perfects, total);

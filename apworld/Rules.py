@@ -2976,6 +2976,7 @@ class UltrakillRules:
                             or shoalt_any(state)
                             or rock_any(state)
                         )
+                        and arm2(state)
                         and skull(state, "8-3", "Blue")
                     )
                 ),
@@ -2993,6 +2994,7 @@ class UltrakillRules:
                             or shoalt_any(state)
                             or rock_any(state)
                         )
+                        and arm2(state)
                         and skull(state, "8-3", "Blue")
                     )
                 ),
@@ -3011,6 +3013,7 @@ class UltrakillRules:
                             or shoalt_any(state)
                             or rock_any(state)
                         )
+                        and arm2(state)
                         and skull(state, "8-3", "Blue")
                     )
                 ),
@@ -3027,6 +3030,7 @@ class UltrakillRules:
                         or shoalt_any(state)
                         or rock_any(state)
                     )
+                    and arm2(state)
                     and skull(state, "8-3", "Blue")
                 ),
 

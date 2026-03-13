@@ -1,3 +1,9 @@
+## 3.4.2
+
+- Fixed incorrect logic for 1-1: Secret Exit.
+- Fixed incorrect logic for the blue skull path of 8-3.
+- Added secret exits to the act summary.
+
 ## 3.4.1
 
 - Tweaked how secret exits are checked to hopefully make them more consistent.
