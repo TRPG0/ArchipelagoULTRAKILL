@@ -29,6 +29,7 @@ class UKLocation:
     game_id: str
     type: LocationType
     tracker_string: str
+    applicable_levels: set[str] | None = None
 
 
 location_list: List[UKLocation] = [
@@ -361,8 +362,10 @@ location_list: List[UKLocation] = [
     UKLocation("Boss: The Corpse of King Minos", Regions.l13, "e_minos", LocationType.Boss, "@Hell/Enemies/Boss: The Corpse of King Minos"),
     UKLocation("Enemy: Stalker", Regions.shop, "e_stalker", LocationType.Enemy, "@Hell/Enemies/Enemy: Stalker"),
     UKLocation("Enemy: Insurrectionist", Regions.shop, "e_sisyphus", LocationType.Enemy, "@Hell/Enemies/Enemy: Insurrectionist"),
-    UKLocation("Boss: Ferryman", Regions.shop, "e_ferryman", LocationType.BossExt, "@Hell/Enemies/Boss: Ferryman"),
-    UKLocation("Boss: Mirror Reaper", Regions.shop, "e_mirrorreaper", LocationType.BossExt, "@Hell/Enemies/Boss: Mirror Reaper"),
+    UKLocation("Boss: Ferryman", Regions.shop, "e_ferryman", LocationType.BossExt, "@Hell/Enemies/Boss: Ferryman",
+               applicable_levels={"5-2", "8-3", "P-2"}),
+    UKLocation("Boss: Mirror Reaper", Regions.shop, "e_mirrorreaper", LocationType.BossExt, "@Hell/Enemies/Boss: Mirror Reaper",
+               applicable_levels={"8-2"}),
     UKLocation("Enemy: Swordsmachine", Regions.shop, "e_swordsmachine", LocationType.Enemy, "@Hell/Enemies/Enemy: Swordsmachine"),
     UKLocation("Enemy: Drone", Regions.shop, "e_drone", LocationType.Enemy, "@Hell/Enemies/Enemy: Drone"),
     UKLocation("Enemy: Streetcleaner", Regions.shop, "e_streetcleaner", LocationType.Enemy, "@Hell/Enemies/Enemy: Streetcleaner"),
@@ -380,13 +383,16 @@ location_list: List[UKLocation] = [
     UKLocation("Boss: Leviathan", Regions.l23, "e_leviathan", LocationType.Boss, "@Hell/Enemies/Boss: Leviathan"),
     UKLocation("Enemy: Mannequin", Regions.shop, "e_mannequin", LocationType.Enemy, "@Hell/Enemies/Enemy: Mannequin"),
     UKLocation("Boss: Minotaur", Regions.l26, "e_minotaur", LocationType.BossExt, "@Hell/Enemies/Boss: Minotaur"),
-    UKLocation("Enemy: Deathcatcher", Regions.shop, "e_deathcatcher", LocationType.Enemy, "@Hell/Enemies/Enemy: Deathcatcher"),
+    UKLocation("Enemy: Deathcatcher", Regions.shop, "e_deathcatcher", LocationType.Enemy, "@Hell/Enemies/Enemy: Deathcatcher",
+               applicable_levels={"8-2", "8-3"}),
     UKLocation("Boss: Geryon, Watcher of the Skies", Regions.l33, "e_geryon", LocationType.Boss, "@Hell/Enemies/Boss: Geryon, Watcher of the Skies"),
     UKLocation("Boss: Gabriel, Judge of Hell", Regions.l15, "e_gabriel", LocationType.Boss, "@Hell/Enemies/Boss: Gabriel, Judge of Hell"),
     UKLocation("Enemy: Virtue", Regions.shop, "e_virtue", LocationType.Enemy, "@Hell/Enemies/Enemy: Virtue"),
     UKLocation("Boss: Gabriel, Apostate of Hate", Regions.l25, "e_gabrielsecond", LocationType.Boss, "@Hell/Enemies/Boss: Gabriel, Apostate of Hate"),
-    UKLocation("Enemy: Providence", Regions.shop, "e_providence", LocationType.Enemy, "@Hell/Enemies/Enemy: Providence"),
-    UKLocation("Enemy: Power", Regions.shop, "e_power", LocationType.Enemy, "@Hell/Enemies/Enemy: Power"),
+    UKLocation("Enemy: Providence", Regions.shop, "e_providence", LocationType.Enemy, "@Hell/Enemies/Enemy: Providence",
+               applicable_levels={"8-1", "8-2", "8-3", "8-4"}),
+    UKLocation("Enemy: Power", Regions.shop, "e_power", LocationType.Enemy, "@Hell/Enemies/Enemy: Power",
+               applicable_levels={"8-3"}),
     UKLocation("Boss: Flesh Prison", Regions.p1, "e_fleshprison", LocationType.Boss, "@Hell/Enemies/Boss: Flesh Prison"),
     UKLocation("Boss: Flesh Panopticon", Regions.p2, "e_fleshpanopticon", LocationType.Boss, "@Hell/Enemies/Boss: Flesh Panopticon"),
     UKLocation("Boss: Minos Prime", Regions.p1, "e_minosprime", LocationType.Boss, "@Hell/Enemies/Boss: Minos Prime"),
