@@ -1528,12 +1528,7 @@ class UltrakillRules:
                 ),
 
             "1-1: Secret Exit":
-                lambda state: (
-                    grab_item(state)
-                    and skull(state, "1-1", "Red")
-                    and skull(state, "1-1", "Blue")
-                    and revany2_fire2(state)
-                ),
+                revany2_fire2,
 
             "Cleared 1-1":
                 lambda state: (

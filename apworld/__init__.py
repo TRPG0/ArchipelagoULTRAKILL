@@ -4,7 +4,7 @@ from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
 from .Items import ItemType, base_id, item_list, fire2_weapons, item_groups
-from .Locations import LocationType, location_list, start_weapon_locations, location_groups
+from .Locations import LocationType, UKEnemyLocation, location_list, start_weapon_locations, location_groups
 from .Regions import Regions, SecretRegion
 from .Rules import UltrakillRules
 from .Options import UltrakillOptions
@@ -429,7 +429,6 @@ class UltrakillWorld(World):
         multiworld.regions.append(menu)
 
         skipped = self.options.skipped_levels.value
-        enemy_types = {LocationType.Boss, LocationType.BossExt, LocationType.Enemy}
         for index, loc in enumerate(location_list):
             if loc.type in self.skipped_location_types:
                 continue
@@ -440,9 +439,9 @@ class UltrakillWorld(World):
             region.locations.append(location)
 
             if loc.region.short_name in skipped:
-                if self.options.auto_exclude_skipped_locations or loc.type in enemy_types:
+                if self.options.auto_exclude_skipped_locations or isinstance(loc, UKEnemyLocation):
                     self.options.exclude_locations.value.add(loc.name)
-            elif loc.type in enemy_types and loc.applicable_levels is not None:
+            elif isinstance(loc, UKEnemyLocation):
                 if loc.applicable_levels.issubset(skipped):
                     self.options.exclude_locations.value.add(loc.name)
 
