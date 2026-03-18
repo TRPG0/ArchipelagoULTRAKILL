@@ -153,7 +153,8 @@ class UltrakillWorld(World):
         included_levels: int = self.options.goal_requirement.range_end - len(self.options.skipped_levels.value)
 
         if self.options.goal_requirement.value >= included_levels \
-            and self.options.goal_level.value in level_leads_to_secret:
+            and self.options.goal_level.value in level_leads_to_secret \
+            and self.options.secret_mission_unlock_type == "secret_exits":
                 print(f"[ULTRAKILL - '{self.player_name}'] "
                       f"Goal requirement cannot be {self.options.goal_requirement.value} because goal level "
                       f"{self.goal_level.short_name} leads to an inaccessible secret mission. Lowering goal "
@@ -422,7 +423,10 @@ class UltrakillWorld(World):
         for r in Regions.all_regions:
             multiworld.regions += [Region(r.full_name, player, multiworld)]
             if isinstance(r, SecretRegion):
-                multiworld.get_region(r.parent_level.full_name, player).add_exits({r.full_name})
+                if self.options.secret_mission_unlock_type == "secret_exits":
+                    multiworld.get_region(r.parent_level.full_name, player).add_exits({r.full_name})
+                else:
+                    menu.add_exits({r.full_name})
             else:
                 menu.add_exits({r.full_name})
 

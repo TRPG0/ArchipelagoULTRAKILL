@@ -5060,7 +5060,10 @@ class UltrakillRules:
                 try:
                     level = Regions.get_from_short_name(level_name)
                     if isinstance(level, SecretRegion):
-                        add_rule(self.world.get_entrance(f"{level.parent_level.full_name} -> {level.full_name}"), rule, combine)
+                        if self.world.options.secret_mission_unlock_type == "secret_exits":
+                            add_rule(self.world.get_entrance(f"{level.parent_level.full_name} -> {level.full_name}"), rule, combine)
+                        else:
+                            add_rule(self.world.get_entrance(f"Menu -> {level.full_name}"), rule, combine)
                     else:
                         add_rule(self.world.get_entrance(f"Menu -> {level.full_name}"), rule, combine)
                 except KeyError as e:
