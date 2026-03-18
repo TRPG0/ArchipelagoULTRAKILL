@@ -3713,7 +3713,7 @@ class UltrakillRules:
 
             "Boss: Mirror Reaper":
                 lambda state: (
-                    can_reach_level(state, "Enemy: Mirror Reaper", "8-2")
+                    can_reach_level(state, "Boss: Mirror Reaper", "8-2")
                     and grab_item(state)
                     and skull(state, "8-2", "Blue")
                     and jump_general(state, 3)
