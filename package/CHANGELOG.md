@@ -1,3 +1,11 @@
+## 3.4.3
+
+- Fixed incorrect logic for 1-1: Secret Exit. (again)
+- Fixed incorrect logic for Boss: Mirror Reaper. [#42](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/42)
+- Fixed a generation failure during accessibility checks when all levels that an enemy can appear in are skipped. [#42](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/42)
+- Fixed a generation failure if the goal level has a secret exit and too many levels are skipped. [#42](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/42)
+- Fixed a bug where secret missions would still logically require access to the levels you would normally enter them from, when unlocked by finding items instead of using secret exits.
+
 ## 3.4.2
 
 - Fixed incorrect logic for 1-1: Secret Exit.
