@@ -3,6 +3,7 @@ using PluginConfig.API.Decorators;
 using System.Collections;
 using UnityEngine.Networking;
 using plog.Models;
+using UnityEngine;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -31,12 +32,15 @@ namespace ArchipelagoULTRAKILL
                     if (Core.PluginVersion.CompareTo(latest) < 0)
                     {
                         Core.PLogger.Warning($"A new version of Archipelago is available: {latest} | Current version: {Core.PluginVersion}");
-                        new ConfigHeader(ConfigManager.config.rootPanel, "A new version of Archipelago is available!") { textColor = UnityEngine.Color.yellow };
+                        ConfigManager.versionCheck.hidden = false;
+                        ConfigManager.versionCheck.text = "A new version of Archipelago is available!";
+                        ConfigManager.versionCheck.textColor = Color.yellow;
                     }
                     else
                     {
                         Core.PLogger.Info($"The current version ({Core.PluginVersion}) is newer than the latest release. ({latest})");
-                        new ConfigHeader(ConfigManager.config.rootPanel, $"The current version ({Core.PluginVersion}) is newer than the latest release. ({latest}) Have fun! :)") { textSize = 16 };
+                        ConfigManager.versionCheck.hidden = false;
+                        ConfigManager.versionCheck.text = $"The current version ({Core.PluginVersion}) is newer than the latest release. ({latest}) Have fun! :)";
                     }
                 }
                 else

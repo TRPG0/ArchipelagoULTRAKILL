@@ -179,7 +179,7 @@ location_list: List[UKLocation] = [
     UKLocation("4-2: Secret #1", Regions.l17, "17_s1", LocationType.Normal, "@Hell/4-2 GOD DAMN THE SUN/Secret #1"),
     UKLocation("4-2: Secret #2", Regions.l17, "17_s2", LocationType.Normal, "@Hell/4-2 GOD DAMN THE SUN/Secret #2"),
     UKLocation("4-2: Secret #3", Regions.l17, "17_s3", LocationType.Normal, "@Hell/4-2 GOD DAMN THE SUN/Secret #3"),
-    UKLocation("4-2: Secret #4", Regions.l17, "17_s4", LocationType.Normal, "@Hell/4-2 GOD DAMN THE SUN/Secret #3"),
+    UKLocation("4-2: Secret #4", Regions.l17, "17_s4", LocationType.Normal, "@Hell/4-2 GOD DAMN THE SUN/Secret #4"),
     UKLocation("4-2: Secret #5", Regions.l17, "17_s5", LocationType.Normal, "@Hell/4-2 GOD DAMN THE SUN/Secret #5"),
     UKLocation("4-2: Kill the Insurrectionist in under 10 seconds", Regions.l17, "17_c", LocationType.Challenge, "@Hell/4-2 GOD DAMN THE SUN/Kill the Insurrectionist in under 10 seconds"),
     UKLocation("4-2: Perfect Rank", Regions.l17, "17_p", LocationType.PerfectRank, "@Hell/4-2 GOD DAMN THE SUN/P Rank"),

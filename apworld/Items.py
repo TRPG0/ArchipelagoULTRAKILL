@@ -122,7 +122,7 @@ item_list: List[UKItem] = [
     UKItem("Red Skull (7-S)", ItemType.Skull, ["7_s_rskull", "toggle"]),
     UKItem("Blue Skull (7-S)", ItemType.Skull, ["7_s_bskull", "toggle"]),
     UKItem("Blue Skull (8-1)", ItemType.Skull, ["8_1_bskull", "toggle"]),
-    UKItem("Red Skull (8-1)", ItemType.Skull, ["8_1_bskull", "toggle"]),
+    UKItem("Red Skull (8-1)", ItemType.Skull, ["8_1_rskull", "toggle"]),
     UKItem("Blue Skull (8-2)", ItemType.Skull, ["8_2_bskull", "toggle"]),
     UKItem("Red Skull (8-2)", ItemType.Skull, ["8_2_rskull", "toggle"]),
     UKItem("Red Skull (8-3)", ItemType.Skull, ["8_3_rskull", "toggle"]),

@@ -10,7 +10,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix()
         {
-            if (Multiworld.DeathLinkService != null)
+            if (Multiworld.DeathLinkService != null && Core.data.deathLink)
             {
                 bool sendDeathLink = false;
                 if (Core.uim.deathLinkMessage != null && Multiworld.lastDeathLink == null)
@@ -24,6 +24,7 @@ namespace ArchipelagoULTRAKILL.Patches
                             sendDeathLink = true;
                             Multiworld.currentDeathCount = 0;
                         }
+                        ConfigManager.UpdateDeathLinkCount();
                     }
                     else
                     {

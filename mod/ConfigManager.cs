@@ -15,6 +15,8 @@ namespace ArchipelagoULTRAKILL
     {
         public static PluginConfigurator config = null;
 
+        public static ConfigHeader versionCheck;
+
         public static ConfigPanel playerPanel;
         public static ConfigHeader dataInfo;
 
@@ -26,8 +28,6 @@ namespace ArchipelagoULTRAKILL
         public static ButtonField connectButton;
         public static ButtonField disconnectButton;
         public static ConfigHeader connectionInfo;
-        public static ButtonField deathLinkOnButton;
-        public static ButtonField deathLinkOffButton;
         public static StringField chat;
 
         public static StringField start;
@@ -55,8 +55,6 @@ namespace ArchipelagoULTRAKILL
         public static BoolField randomizeViolence;
         public static BoolField musicRandomizer;
         public static BoolField cybergrindHints;
-        public static BoolField deathLink;
-        public static StringField deathLinkAmnesty;
 
         public static ConfigPanel uiPanel;
         public static BoolField showRecentLocations;
@@ -67,6 +65,12 @@ namespace ArchipelagoULTRAKILL
         public static IntField logFontSize;
         public static IntField logOpacity;
         public static ButtonField logClear;
+
+        public static ConfigPanel deathLinkPanel;
+        public static ButtonArrayField deathLinkButtons;
+        public static ConfigHeader deathLinkStatus;
+        public static IntField deathLinkAmnesty;
+        public static ConfigHeader deathLinkCount;
 
         public static ConfigPanel modifierPanel;
         public static BoolField permaRadiance;
@@ -131,8 +135,12 @@ namespace ArchipelagoULTRAKILL
 
             // root
             new ConfigHeader(config.rootPanel, "ARCHIPELAGO");
+            versionCheck = new ConfigHeader(config.rootPanel, "", 16);
+            versionCheck.hidden = true;
+
             playerPanel = new ConfigPanel(config.rootPanel, "PLAYER SETTINGS", "playerPanel");
             dataInfo = new ConfigHeader(config.rootPanel, "", 16);
+            deathLinkPanel = new ConfigPanel(config.rootPanel, "DEATH LINK", "deathLinkPanel");
             modifierPanel = new ConfigPanel(config.rootPanel, "MODIFIERS", "modifierPanel");
             new ConfigHeader(config.rootPanel, "---");
             uiPanel = new ConfigPanel(config.rootPanel, "UI SETTINGS", "uiPanel");
@@ -195,25 +203,6 @@ namespace ArchipelagoULTRAKILL
                 }
             };
 
-            deathLinkOnButton = new ButtonField(playerPanel, "ENABLE DEATH LINK", "deathLinkOnButton");
-            deathLinkOnButton.onClick += () =>
-            {
-                if (Multiworld.Authenticated)
-                {
-                    Core.data.deathLink = true;
-                    Multiworld.EnableDeathLink();
-                }
-            };
-            deathLinkOffButton = new ButtonField(playerPanel, "DISABLE DEATH LINK", "deathLinkOffButton");
-            deathLinkOffButton.onClick += () =>
-            {
-                if (Multiworld.Authenticated)
-                {
-                    Core.data.deathLink = false;
-                    Multiworld.DisableDeathLink();
-                }
-            };
-
             chat = new StringField(playerPanel, "CHAT", "chat", "", true, false) { interactable = false };
             chat.postValueChangeEvent += (string value) =>
             {
@@ -267,8 +256,6 @@ namespace ArchipelagoULTRAKILL
             randomizeViolence = new BoolField(playerPanel, "RANDOMIZE VIOLENCE SWITCHES", "randomizeViolence", false, false) { interactable = false };
             musicRandomizer = new BoolField(playerPanel, "MUSIC RANDOMIZER", "musicRandomizer", false, false) { interactable = false };
             cybergrindHints = new BoolField(playerPanel, "UNLOCK HINTS IN CYBERGRIND", "cybergrindHints", false, false) { interactable = false };
-            deathLink = new BoolField(playerPanel, "DEATH LINK", "deathLink", false, false) { interactable = false };
-            deathLinkAmnesty = new StringField(playerPanel, "DEATH LINK AMNESTY", "deathLinkAmnesty", "1", false, false) { interactable = false };
 
             // ui settings
             new ConfigHeader(uiPanel, "PAUSE MENU");
@@ -325,6 +312,33 @@ namespace ArchipelagoULTRAKILL
                 UIManager.SetLogText("");
                 Multiworld.messages.Clear();
             };
+
+            // death link
+            deathLinkButtons = new ButtonArrayField(deathLinkPanel, "deathLinkButtons", 2, new float[] { 0.5f, 0.5f }, new string[] { "ENABLE", "DISABLE" });
+            deathLinkButtons.OnClickEventHandler(0).onClick += () =>
+            {
+                if (Multiworld.Authenticated)
+                {
+                    Multiworld.EnableDeathLink();
+                }
+            };
+            deathLinkButtons.OnClickEventHandler(1).onClick += () =>
+            {
+                if (Multiworld.Authenticated)
+                {
+                    Multiworld.DisableDeathLink();
+                }
+            };
+            deathLinkStatus = new ConfigHeader(deathLinkPanel, "Not connected.");
+            deathLinkAmnesty = new IntField(deathLinkPanel, "DEATH LINK AMNESTY", "deathLinkAmnesty", 1, 1, 10, true, true);
+            deathLinkAmnesty.postValueChangeEvent += (int value) =>
+            {
+                Core.data.deathLinkAmnesty = value;
+                Multiworld.currentDeathCount = 0;
+                UpdateDeathLinkCount();
+            };
+            new ConfigHeader(deathLinkPanel, "Changing the amnesty value will reset the current death count.", 12);
+            deathLinkCount = new ConfigHeader(deathLinkPanel, "Death count: 0/1");
 
             // modifier settings
             permaRadiance = new BoolField(modifierPanel, "PERMANENT RADIANCE", "permaRadiance", false, true);
@@ -454,7 +468,7 @@ namespace ArchipelagoULTRAKILL
             if (Core.data.secretExitComplete) secretExitComplete.value = SecretExitType.Standard;
             else secretExitComplete.value = SecretExitType.AddRewards;
 
-                string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
+            string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
             locationsChecked.value = $"{Core.data.@checked.Count} / {totalLocations}";
 
             enemyRewards.value = Core.data.enemyRewards;
@@ -475,8 +489,10 @@ namespace ArchipelagoULTRAKILL
             randomizeViolence.value = Core.data.l7switch;
             musicRandomizer.value = Core.data.musicRandomizer;
             cybergrindHints.value = Core.data.cybergrindHints;
-            deathLink.value = Core.data.deathLink;
-            deathLinkAmnesty.value = Core.data.deathLinkAmnesty.ToString();
+
+            deathLinkAmnesty.value = Core.data.deathLinkAmnesty;
+            if (!Multiworld.Authenticated) deathLinkStatus.text = "Not connected.";
+            UpdateDeathLinkCount();
         }
 
         public static void ResetStatsDefaults()
@@ -509,8 +525,15 @@ namespace ArchipelagoULTRAKILL
             randomizeViolence.value = false;
             musicRandomizer.value = false;
             cybergrindHints.value = false;
-            deathLink.value = false;
-            deathLinkAmnesty.value = "1";
+
+            deathLinkStatus.text = "Not connected.";
+            deathLinkCount.text = "";
+        }
+
+        public static void UpdateDeathLinkCount()
+        {
+            if (Core.data.deathLink && Core.data.deathLinkAmnesty > 1) deathLinkCount.text = $"Death count: {Multiworld.currentDeathCount}/{Core.data.deathLinkAmnesty}";
+            else deathLinkCount.text = "";
         }
     }
 }

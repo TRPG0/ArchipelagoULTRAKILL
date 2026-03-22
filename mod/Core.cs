@@ -16,6 +16,7 @@ using UnityEngine.AddressableAssets.ResourceLocators;
 using System.Collections;
 using TMPro;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using Archipelago.MultiClient.Net;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -25,7 +26,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.4.3";
+        public const string PluginVersion = "3.4.4";
 
         public static string workingPath;
         public static string workingDir;
@@ -200,8 +201,11 @@ namespace ArchipelagoULTRAKILL
         {
             Instance = this;
 
+            Logger.LogInfo($"Multiclient version: {typeof(ArchipelagoSession).Assembly.GetName().Version.ToString()}");
+
             Harmony harmony = new Harmony("archipelago");
             harmony.PatchAll();
+            Logger.LogInfo("Harmony patches done");
 
             workingPath = Assembly.GetExecutingAssembly().Location;
             workingDir = Path.GetDirectoryName(workingPath);
@@ -321,7 +325,8 @@ namespace ArchipelagoULTRAKILL
         public static void SaveData()
         {
             string filePath = Path.Combine(GameProgressSaver.BaseSavePath, string.Format("Slot{0}", GameProgressSaver.currentSlot + 1)) + "\\archipelago.json";
-            var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
+            Data save = data;
+            var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(save));
             File.WriteAllBytes(filePath, bytes);
         }
 

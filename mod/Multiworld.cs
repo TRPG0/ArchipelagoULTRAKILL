@@ -408,8 +408,6 @@ namespace ArchipelagoULTRAKILL
                     TryGetSlotDataValue(ref Core.data.deathLinkAmnesty, success.SlotData, "death_link_amnesty", 1);
                 }
 
-                if (Core.data.deathLink) EnableDeathLink();
-
                 PrefsManager.Instance.SetInt("weapon.arm0", 1);
 
                 LocationManager.locations = ((JObject)success.SlotData["locations"]).ToObject<Dictionary<string, long>>();
@@ -422,6 +420,9 @@ namespace ArchipelagoULTRAKILL
                 if (Core.data.completedLevels.Count < Core.data.goalRequirement) UIManager.CreateGoalCounter();
                 string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
                 //UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
+
+                if (Core.data.deathLink) EnableDeathLink();
+                else ConfigManager.deathLinkStatus.text = "Death Link is <color=red>OFF</color>";
 
                 Core.Logger.LogInfo("Scouting shop items");
                 foreach (string weapon in Core.shopPrices.Keys)
@@ -768,13 +769,22 @@ namespace ArchipelagoULTRAKILL
                 DeathLinkService.OnDeathLinkReceived += DeathLinkReceived;
             }
             DeathLinkService.EnableDeathLink();
+            Core.data.deathLink = true;
+            ConfigManager.deathLinkStatus.text = "Death Link is <color=green>ON</color>";
+            ConfigManager.UpdateDeathLinkCount();
             if (Core.IsInLevel && Core.uim.deathLinkMessage == null) Core.uim.CreateDeathLinkMessage();
         }
 
         public static void DisableDeathLink()
         {
             if (DeathLinkService == null) return;
-            else DeathLinkService.DisableDeathLink();
+            else
+            {
+                DeathLinkService.DisableDeathLink();
+                Core.data.deathLink = false;
+                ConfigManager.deathLinkStatus.text = "Death Link is <color=red>OFF</color>";
+                ConfigManager.deathLinkCount.text = "";
+            }
         }
 
         public static void DeathLinkReceived(DeathLink deathLink)

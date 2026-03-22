@@ -1,3 +1,11 @@
+## 3.4.4
+
+- Fixed incorrect logic for Idols and Ferrymen in 8-3.
+- Death Link options have been moved to their own section in the options menu.
+- Death Link amnesty can now be changed during a multiworld.
+- The current death count can now be seen in the options menu.
+- Updated `Archipelago.MultiClient.Net` to `6.7.1`.
+
 ## 3.4.3
 
 - Fixed incorrect logic for 1-1: Secret Exit. (again)
