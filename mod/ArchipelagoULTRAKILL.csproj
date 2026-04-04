@@ -341,6 +341,15 @@
     <Compile Include="Multiworld.cs" />
     <Compile Include="LocationManager.cs" />
     <Compile Include="Components\OptionsMenuState.cs" />
+    <Compile Include="Music\BaseClipMusic.cs" />
+    <Compile Include="Music\BaseMusic.cs" />
+    <Compile Include="Music\MultiClipAndSoundtrackMusic.cs" />
+    <Compile Include="Music\MultiClipMusic.cs" />
+    <Compile Include="Music\MultiPreloadFromManagerMusic.cs" />
+    <Compile Include="Music\MultiSoundtrackMusic.cs" />
+    <Compile Include="Music\MusicRandomizer.cs" />
+    <Compile Include="Music\SingleClipMusic.cs" />
+    <Compile Include="Music\SingleSoundtrackMusic.cs" />
     <Compile Include="Patches\AltPickUp.cs" />
     <Compile Include="Patches\BestiaryData.cs" />
     <Compile Include="Patches\BigDoorOpener.cs" />

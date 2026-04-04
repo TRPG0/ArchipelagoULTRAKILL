@@ -1,3 +1,8 @@
+## 3.4.5
+
+- Fixed generation failing when choosing a secret mission as the goal with the option for secret exits to unlock by finding items.
+- Added a safety check to the save slot menu when Archipelago data fails to load.
+
 ## 3.4.4
 
 - Fixed incorrect logic for Idols and Ferrymen in 8-3.
