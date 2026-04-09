@@ -5082,8 +5082,12 @@ class UltrakillRules:
                           f"No location found for name \"{loc_name}\".")
 
         if isinstance(self.world.goal_level, SecretRegion):
-            add_rule(self.world.get_entrance(f"{self.world.goal_level.parent_level.full_name} -> {self.world.goal_level.full_name}"), \
-                lambda state: state.has("Level Completed", player, options.goal_requirement.value))
+            if self.world.options.secret_mission_unlock_type == "secret_exits":
+                add_rule(self.world.get_entrance(f"{self.world.goal_level.parent_level.full_name} -> {self.world.goal_level.full_name}"), \
+                    lambda state: state.has("Level Completed", player, options.goal_requirement.value))
+            else:
+                add_rule(self.world.get_entrance(f"Menu -> {self.world.goal_level.full_name}"), \
+                    lambda state: state.has("Level Completed", player, options.goal_requirement.value))
         else:
             add_rule(self.world.get_entrance(f"Menu -> {self.world.goal_level.full_name}"), \
                 lambda state: state.has("Level Completed", player, options.goal_requirement.value))

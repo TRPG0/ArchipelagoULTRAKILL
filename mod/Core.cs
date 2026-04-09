@@ -17,6 +17,8 @@ using System.Collections;
 using TMPro;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Archipelago.MultiClient.Net;
+using ArchipelagoULTRAKILL.Music;
+using System;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -244,6 +246,7 @@ namespace ArchipelagoULTRAKILL
                 obj.transform.localPosition = new Vector3(960, 540, 0);
                 uim = obj.AddComponent<UIManager>();
                 mw = obj.AddComponent<Multiworld>();
+                obj.AddComponent<MusicRandomizer>();
             }
 
             uim.StopAllCoroutines();
@@ -268,6 +271,7 @@ namespace ArchipelagoULTRAKILL
 
                 UIManager.FindMenuObjects();
                 mw.SetupServerCheckBlocker();
+                MusicRandomizer.Instance?.ResetPreloadedMusic();
 
                 if (dataExists && GameProgressSaver.GetTutorial() && !firstTimeLoad)
                 {
@@ -466,6 +470,68 @@ namespace ArchipelagoULTRAKILL
                 }
             }
             return list;
+        }
+
+        public static GameObject FindGameObjectFromPathInScene(string path)
+        {
+            if (path.StartsWith("/")) path = path.Substring(1);
+
+            string[] substrings = path.Split('/');
+
+            if (substrings.Length > 1)
+            {
+                Scene scene = SceneManager.GetActiveScene();
+
+                GameObject root = null;
+
+                foreach (GameObject gameObject in scene.GetRootGameObjects())
+                {
+                    if (gameObject.name == substrings[0])
+                    {
+                        root = gameObject;
+                        break;
+                    }
+                }
+
+                if (root == null)
+                {
+                    Logger.LogError($"Could not find root GameObject with name {substrings[0]}");
+                    return null;
+                }
+
+                GameObject final = root;
+
+                for (int i = 1; i < substrings.Length; i++)
+                {
+                    try
+                    {
+                        final = final.transform.Find(substrings[i]).gameObject;
+                    }
+                    catch (NullReferenceException)
+                    {
+                        Logger.LogError($"Could not find child GameObject with name {substrings[i]}");
+                    }
+                }
+
+                return final;
+            }
+            else
+            {
+                Scene scene = SceneManager.GetActiveScene();
+
+                GameObject root = null;
+
+                foreach (GameObject gameObject in scene.GetRootGameObjects())
+                {
+                    if (gameObject.name == substrings[0])
+                    {
+                        root = gameObject;
+                        break;
+                    }
+                }
+
+                return root;
+            }
         }
 
         public static void ValidateArms()

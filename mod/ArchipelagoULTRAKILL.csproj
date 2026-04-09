@@ -341,14 +341,21 @@
     <Compile Include="Multiworld.cs" />
     <Compile Include="LocationManager.cs" />
     <Compile Include="Components\OptionsMenuState.cs" />
+    <Compile Include="Music\AudioSourceSplitTarget.cs" />
+    <Compile Include="Music\AudioSourceTarget.cs" />
     <Compile Include="Music\BaseClipMusic.cs" />
     <Compile Include="Music\BaseMusic.cs" />
+    <Compile Include="Music\BaseTarget.cs" />
+    <Compile Include="Music\MultiPreloadFromChangerMusic.cs" />
+    <Compile Include="Music\MusicChangerTarget.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Music\MultiClipAndSoundtrackMusic.cs" />
     <Compile Include="Music\MultiClipMusic.cs" />
     <Compile Include="Music\MultiPreloadFromManagerMusic.cs" />
     <Compile Include="Music\MultiSoundtrackMusic.cs" />
     <Compile Include="Music\MusicRandomizer.cs" />
     <Compile Include="Music\SingleClipMusic.cs" />
+    <Compile Include="Music\SinglePreloadFromManagerMusic.cs" />
     <Compile Include="Music\SingleSoundtrackMusic.cs" />
     <Compile Include="Patches\AltPickUp.cs" />
     <Compile Include="Patches\BestiaryData.cs" />
@@ -403,6 +410,7 @@
     <Compile Include="Powerups\StaminaPowerup.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="Music\PreloadMusic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -1,15 +1,18 @@
-﻿using System.Collections;
+﻿using HarmonyLib;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.ResourceManagement.ResourceProviders;
 
 namespace ArchipelagoULTRAKILL.Music
 {
-    public static class MusicRandomizer
+    public class MusicRandomizer : MonoBehaviour
     {
+        public static MusicRandomizer Instance;
+
         public static readonly Dictionary<string, BaseMusic> Music = new Dictionary<string, BaseMusic>()
         {
             ["1"] = new MultiClipMusic(
@@ -59,16 +62,15 @@ namespace ArchipelagoULTRAKILL.Music
                 new AssetReferenceT<AudioClip>("Assets/Music/1-1 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/1-1.wav")),
 
-            ["7A"] = new MultiClipMusic(
+            ["7A"] = new SinglePreloadFromManagerMusic(
                 "1-2",
-                "A Complete and Utter Destruction of the Senses (Part A)",
-                new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/1-2 The Burning World.png"),
-                new AssetReferenceT<AudioClip>("Assets/Music/1-2 Dark Clean.wav"),
-                new AssetReferenceT<AudioClip>("Assets/Music/1-2 Dark Battle.wav")),
+                "Level 1-2",
+                "A Thousand Greetings (Alternate)",
+                new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/1-2 The Burning World.png")),
 
             ["7B"] = new MultiClipMusic(
                 "1-2",
-                "A Complete and Utter Destruction of the Senses (Part B)",
+                "A Complete and Utter Destruction of the Senses",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/1-2 The Burning World.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/1-2 Noise Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/1-2 Noise Battle.wav")),
@@ -152,21 +154,21 @@ namespace ArchipelagoULTRAKILL.Music
 
             ["18A"] = new MultiClipMusic(
                 "4-3",
-                "Dancer in the Darkness (Part A)",
+                "Dancer in the Darkness (Phase 1)",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/4-3 A Shot in the Dark.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/4-3 Phase 1 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/4-3 Phase 1.wav")),
 
             ["18B"] = new MultiClipMusic(
                 "4-3",
-                "Dancer in the Darkness (Part B)",
+                "Dancer in the Darkness (Phase 2)",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/4-3 A Shot in the Dark.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/4-3 Phase 2 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/4-3 Phase 2.wav")),
 
             ["18C"] = new SingleClipMusic(
                 "4-3",
-                "Dancer in the Darkness (Part C)",
+                "Dancer in the Darkness (Phase 3)",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/4-3 A Shot in the Dark.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/4-3 Phase 3.wav")),
 
@@ -324,8 +326,12 @@ namespace ArchipelagoULTRAKILL.Music
                 new AssetReferenceT<AudioClip>("Assets/Music/8-3 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-3.wav")),
 
-            /*["32C"] = new MultiClipMusic(
-                ),*/
+            ["32C"] = new MultiPreloadFromChangerMusic(
+                "8-3",
+                "Level 8-3",
+                "Event Horizon (Reach for the Sun and Burn! Burn! Burn!)",
+                new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/8-3 Disintegration Loop.png"),
+                "Musics/Third"),
 
             ["33"] = new SingleSoundtrackMusic(
                 "8-4",
@@ -345,13 +351,7 @@ namespace ArchipelagoULTRAKILL.Music
                 new AssetReferenceT<AudioClip>("Assets/Music/Encores/0-E Hot Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/Encores/0-E Hot.wav")),
 
-            ["101A"] = new SingleClipMusic(
-                "1-E",
-                "An Absence",
-                new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/1-E And Then Fell the Ashes.png"),
-                new AssetReferenceT<AudioClip>("Assets/Music/Encores/1-E Ambiance.wav")),
-
-            ["101B"] = new MultiClipMusic(
+            ["101"] = new MultiClipMusic(
                 "1-E",
                 "A Part Falling",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/1-E And Then Fell the Ashes.png"),
@@ -383,12 +383,77 @@ namespace ArchipelagoULTRAKILL.Music
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Prime Sanctums/War.asset"))
         };
 
-        // missing music:
-        // A Thousand Greetings (Alternate) (1-2)
-        // Deep Blue (5-1)
-        // themeofcancer.wav (5-3, 7-1)
+        public static readonly Dictionary<string, BaseTarget> Targets = new Dictionary<string, BaseTarget>()
+        {
+            ["1"] = null,
+            ["2"] = null,
+            ["3"] = null,
+            ["4"] = null,
+            ["5"] = new AudioSourceTarget(new List<string>() { "4 - Cerberus Arena/4 Contents/Music", "4 - Cerberus Arena/4 Contents(Clone)/Music" }),
+            ["6A"] = null,
+            ["6B"] = new MusicChangerTarget("6 - Waterfall Arena/6 Nonstuff/MusicChanger"),
+            ["7A"] = null,
+            ["7B"] = new MusicChangerTarget("7 - Castle Entrance/7 Nonstuff/MusicActivator"),
+            ["8"] = null,
+            ["9A"] = new AudioSourceTarget("Music - Clair de Lune"),
+            ["9B"] = new AudioSourceTarget("Music - Versus"),
+            ["10"] = new MusicChangerTarget("MusicStart"),
+            ["11"] = null,
+            ["12"] = null,
+            ["13"] = new AudioSourceTarget("4 - Second Encounter/4 Stuff/BossMusic"),
+            ["14A"] = null,
+            ["14B"] = new MusicChangerTarget(new List<string>() { "6 - Stairways/6 Nonstuff/Music Restart", "6S - P Door/6S Nonstuff/Music Restart", "6 - Stairways/6 Nonstuff/MusicChanger" }),
+            ["15A"] = new AudioSourceTarget("Music 2"),
+            ["15B"] = new AudioSourceTarget("Music 3"),
+            ["16"] = null,
+            ["17"] = null,
+            ["18A"] = new MusicChangerTarget("1 - First Chambers/1 Stuff/Torches/GreedTorch/OnLight"),
+            ["18B"] = new MusicChangerTarget(new List<string>() { "2 - Torches Arena/2 Nonstuff/Music Changer", "3 - Traitor Hallway/3B - Tomb of Kings/3B Nonstuff/Hall/Music Changer (Normal)" }),
+            ["18C"] = new MusicChangerTarget("7 - Generator Room/7 Nonstuff/Altar/MusicStopper/Music"),
+            //["18D"] = new MusicChangerTarget("3 - Traitor Hallway/3B - Tomb of Kings/3B Stuff/Hall/Trigger (Fight)"),
+            ["19"] = new AudioSourceTarget("Versus 2"),
+            ["20"] = null,
+            ["22A"] = null,
+            ["22B"] = new MusicChangerTarget(new List<string>() { "Rotated/FogMachine (Sunken)/InstantVer", "Rotated/FogMachine (Sunken)/IntroVerDenier/IntroVer/NormalVer" }),
+            ["24A"] = new MusicChangerTarget("Exteriors/MusicChanger"),
+            ["24B"] = new AudioSourceTarget("ClimaxMusic"),
+            ["25A"] = new AudioSourceTarget("IntroSounds/Filler/Organ"),
+            ["25B"] = new AudioSourceTarget("BossMusic"),
+            ["26A"] = new AudioSourceTarget("IntroMusicFiller/IntroMusic"),
+            ["26B"] = new MusicChangerTarget("LevelMusicStart"),
+            ["26C"] = new AudioSourceTarget("MinotaurPhase1Music"),
+            ["26D"] = new AudioSourceTarget("MinotaurPhase2Music"),
+            ["27A"] = null,
+            ["27B"] = new MusicChangerTarget("Outdoors/Decorations/LevelNameDelay/MusicActivator"),
+            ["28A"] = null,
+            ["28B"] = new MusicChangerTarget("SecondTrackStart"),
+            ["30A"] = null,
+            ["30B"] = new MusicChangerTarget(new List<string>() { "Outside/OnTeleportOutsideMusicChangerParent/OnTeleportOutsideMusicChanger", "Outside/FakeExitOutsideMusicTrigger" }),
+            ["31A"] = new AudioSourceSplitTarget("Intro Music/Intro B", "Intro Music/Intro A"),
+            ["31B"] = new MusicChangerTarget(new List<string>() { "2 - Reception/2 Nonstuff/EnableOnBreak", "Main Music Parent/Main Music" }),
+            ["31C"] = new AudioSourceTarget(new List<string>() { "12 - Island/12 Nonstuff/2/AmbianceZone/Ambiance", "15 - Second Deathcatcher/15 Stuff(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)/Ambiance (Fake Propagation)" }),
+            ["31D"] = new MusicChangerTarget("Main Music Parent/Mall Music", false, true, true),
+            ["31E"] = new AudioSourceTarget("Boss Music"),
+            ["32A"] = new MusicChangerTarget("Musics/First"),
+            ["32B"] = new MusicChangerTarget("Musics/Second"),
+            ["32C"] = new MusicChangerTarget("Musics/Third"),
+            ["33"] = new AudioSourceTarget("Main Music"),
+            ["100A"] = null,
+            ["100B"] = new MusicChangerTarget("9 - Path 1 - Boss Arena/6 Nonstuff/HeatActivation/HeatWarningActivator"),
+            ["101"] = new MusicChangerTarget("Music Changer"),
+            ["666A"] = new AudioSourceTarget("Music 2/Chaos"),
+            ["666B"] = new AudioSourceTarget("Music 3"),
+            ["667A"] = new MusicChangerTarget("Rain/PreBoss Musics/LevelMusicActivator/DelayedMusicActivator"),
+            ["667B"] = new AudioSourceTarget("BossMusics/FleshPrison"),
+            ["667C"] = new AudioSourceTarget("BossMusics/Sisyphus")
+        };
 
-        private static List<object> TestLoadAll()
+        public GameObject preloadParent;
+
+        public bool IsPreloading { get; private set; } = false;
+        public List<AsyncOperationHandle> handles = new List<AsyncOperationHandle>();
+
+        private List<object> TestLoadAll()
         {
             List<object> list = new List<object>();
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -435,28 +500,242 @@ namespace ArchipelagoULTRAKILL.Music
             return list;
         }
 
-        /*
-        public static IEnumerator PreloadFromManager(MultiPreloadFromManagerMusic multiPreloadFromManagerMusic)
+        public void CheckIfPreloadNeededBeforeLevel(string scene, int level)
         {
-            yield return SceneHelper.LoadSceneAsync(multiPreloadFromManagerMusic.scene);
-            yield return new WaitUntil(() => MusicManager.Instance.cleanTheme != null && MusicManager.Instance.battleTheme != null);
+            List<string> preloadKeys = new List<string>();
 
-            GameObject cleanObj = MusicManager.Instance.cleanTheme.gameObject;
-            cleanObj.transform.SetParent(null);
-            cleanObj.hideFlags = HideFlags.HideAndDontSave;
-            //Object.DontDestroyOnLoad(cleanObj);
-            multiPreloadFromManagerMusic.clean = cleanObj.GetComponent<AudioSource>().clip;
+            foreach (string key in GetKeysForLevel(level))
+            {
+                if (Music[key] is PreloadMusic) preloadKeys.Add(key);
+            }
 
-            GameObject battleObj = MusicManager.Instance.battleTheme.gameObject;
-            battleObj.transform.SetParent(null);
-            battleObj.hideFlags = HideFlags.HideAndDontSave;
-            //Object.DontDestroyOnLoad(battleObj);
-            multiPreloadFromManagerMusic.battle = battleObj.GetComponent<AudioSource>().clip;
-
-            multiPreloadFromManagerMusic.Preloaded = true;
-
-            SceneHelper.LoadScene("Main Menu");
+            if (preloadKeys.Count > 0) StartCoroutine(PreloadBeforeLevel(preloadKeys, scene));
+            else SceneHelper.LoadScene(scene);
         }
-        */
+
+        public IEnumerator PreloadBeforeLevel(List<string> preloadKeys, string scene)
+        {
+            IsPreloading = true;
+            SceneHelper.ShowLoadingBlocker();
+            foreach (string key in preloadKeys)
+            {
+                if (Music[key] is SinglePreloadFromManagerMusic spfmm) yield return StartCoroutine(SinglePreloadFromManager(key, spfmm));
+                if (Music[key] is MultiPreloadFromManagerMusic mpfmm) yield return StartCoroutine(MultiPreloadFromManager(key, mpfmm));
+                if (Music[key] is MultiPreloadFromChangerMusic mpfcm) yield return StartCoroutine(MultiPreloadFromChanger(key, mpfcm));
+            }
+            IsPreloading = false;
+            SceneHelper.DismissBlockers();
+
+            yield return SceneHelper.LoadSceneAsync(scene);
+        }
+
+        public void TestPreload(string key, string scene)
+        {
+            if (!Music.ContainsKey(key))
+            {
+                Core.Logger.LogWarning($"Music key {key} is not valid.");
+                return;
+            }
+
+            StartCoroutine(PreloadBeforeLevel(new List<string>() { key }, scene));
+        }
+
+        public IEnumerator SinglePreloadFromManager(string key, SinglePreloadFromManagerMusic spfmm)
+        {
+            if (!spfmm.Preloaded)
+            {
+                Traverse traverse = Traverse.Create(typeof(SceneHelper));
+                traverse.Property<string>("PendingScene").Value = spfmm.scene;
+
+                AsyncOperationHandle handle = Addressables.LoadSceneAsync(spfmm.scene);
+                Addressables.ResourceManager.Acquire(handle);
+
+                traverse.Property<string>("PendingScene").Value = null;
+                traverse.Property<string>("CurrentScene").Value = spfmm.scene;
+
+                while (!handle.IsDone) yield return null;
+                yield return new WaitUntil(() => MusicManager.Instance.cleanTheme != null && MusicManager.Instance.battleTheme != null);
+
+                GameObject keyObj = new GameObject() { name = key };
+                Object.DontDestroyOnLoad(keyObj);
+                keyObj.transform.SetParent(preloadParent.transform);
+                spfmm.gameObjects.Add(keyObj);
+
+                GameObject cleanObj = MusicManager.Instance.cleanTheme.gameObject;
+                cleanObj.transform.SetParent(null);
+                AudioSource cleanSource = cleanObj.GetComponent<AudioSource>();
+                spfmm.audioClip = cleanSource.clip;
+                cleanObj.transform.SetParent(keyObj.transform);
+
+                spfmm.Preloaded = true;
+            }
+        }
+
+        public IEnumerator MultiPreloadFromManager(string key, MultiPreloadFromManagerMusic mpfmm)
+        {
+            if (!mpfmm.Preloaded)
+            {
+                Traverse traverse = Traverse.Create(typeof(SceneHelper));
+                traverse.Property<string>("PendingScene").Value = mpfmm.scene;
+
+                AsyncOperationHandle handle = Addressables.LoadSceneAsync(mpfmm.scene);
+                Addressables.ResourceManager.Acquire(handle);
+
+                traverse.Property<string>("PendingScene").Value = null;
+                traverse.Property<string>("CurrentScene").Value = mpfmm.scene;
+
+                while (!handle.IsDone) yield return null;
+                yield return new WaitUntil(() => MusicManager.Instance.cleanTheme != null && MusicManager.Instance.battleTheme != null);
+
+                GameObject keyObj = new GameObject() { name = key };
+                Object.DontDestroyOnLoad(keyObj);
+                keyObj.transform.SetParent(preloadParent.transform);
+                mpfmm.gameObjects.Add(keyObj);
+
+                GameObject cleanObj = MusicManager.Instance.cleanTheme.gameObject;
+                cleanObj.transform.SetParent(null);
+                AudioSource cleanSource = cleanObj.GetComponent<AudioSource>();
+                mpfmm.clean = cleanSource.clip;
+                cleanObj.transform.SetParent(keyObj.transform);
+
+                GameObject battleObj = MusicManager.Instance.battleTheme.gameObject;
+                battleObj.transform.SetParent(null);
+                AudioSource battleSource = battleObj.GetComponent<AudioSource>();
+                mpfmm.battle = battleSource.clip;
+                battleObj.transform.SetParent(keyObj.transform);
+
+                mpfmm.Preloaded = true;
+            }
+        }
+
+        public IEnumerator MultiPreloadFromChanger(string key, MultiPreloadFromChangerMusic mpfcm)
+        {
+            if (!mpfcm.Preloaded)
+            {
+                Traverse traverse = Traverse.Create(typeof(SceneHelper));
+                traverse.Property<string>("PendingScene").Value = mpfcm.scene;
+
+                AsyncOperationHandle handle = Addressables.LoadSceneAsync(mpfcm.scene);
+                Addressables.ResourceManager.Acquire(handle);
+
+                traverse.Property<string>("PendingScene").Value = null;
+                traverse.Property<string>("CurrentScene").Value = mpfcm.scene;
+
+                while (!handle.IsDone) yield return null;
+
+                GameObject keyObj = new GameObject() { name = key };
+                Object.DontDestroyOnLoad(keyObj);
+                keyObj.transform.SetParent(preloadParent.transform);
+                mpfcm.gameObjects.Add(keyObj);
+
+                GameObject changerObj = Core.FindGameObjectFromPathInScene(mpfcm.changerPath);
+                changerObj.transform.SetParent(null);
+                MusicChanger musicChanger = changerObj.GetComponent<MusicChanger>();
+                mpfcm.clean = musicChanger.clean;
+                mpfcm.battle = musicChanger.battle;
+                changerObj.transform.SetParent(keyObj.transform);
+
+                mpfcm.Preloaded = true;
+            }
+        }
+
+        public void ReleaseAllHandles()
+        {
+            foreach (AsyncOperationHandle handle in handles)
+            {
+                Addressables.Release(handle);
+            }
+            handles.Clear();
+        }
+
+        public void ResetPreloadedMusic()
+        {
+            foreach (BaseMusic music in Music.Values)
+            {
+                if (music is PreloadMusic preloadMusic) preloadMusic.Reset();
+            }
+            ReleaseAllHandles();
+        }
+
+        public void ApplySingleMusicToManager(AudioClip clip)
+        {
+            MusicManager musicManager = MusicManager.Instance;
+            musicManager.cleanTheme.clip = clip;
+            musicManager.battleTheme.clip = clip;
+            musicManager.bossTheme.clip = clip;
+        }
+
+        public void ApplyMultiMusicToManager(AudioClip clean, AudioClip battle)
+        {
+            MusicManager musicManager = MusicManager.Instance;
+            musicManager.cleanTheme.clip = clean;
+            musicManager.battleTheme.clip = battle;
+            musicManager.bossTheme.clip = battle;
+        }
+
+        public void ApplySingleMusicToAudioSource(AudioSourceTarget audioSourceTarget, AudioClip clip)
+        {
+            foreach (string path in audioSourceTarget.gameObjectPaths)
+            {
+                AudioSource audioSource = Core.FindGameObjectFromPathInScene(path).GetComponent<AudioSource>();
+                audioSource.clip = clip;
+            }
+        }
+
+        public void ApplyMultiMusicToAudioSourceSplit(AudioSourceSplitTarget splitTarget, AudioClip clean, AudioClip battle)
+        {
+            Core.FindGameObjectFromPathInScene(splitTarget.cleanTarget).GetComponent<AudioSource>().clip = clean;
+            Core.FindGameObjectFromPathInScene(splitTarget.battleTarget).GetComponent<AudioSource>().clip = battle;
+        }
+
+        public void ApplySingleMusicToChanger(MusicChangerTarget musicChangerTarget, AudioClip clip)
+        {
+            foreach (string path in musicChangerTarget.gameObjectPaths)
+            {
+                MusicChanger musicChanger = Core.FindGameObjectFromPathInScene(path).GetComponent<MusicChanger>();
+                if (musicChangerTarget.clean) musicChanger.clean = clip;
+                if (musicChangerTarget.battle) musicChanger.battle = clip;
+                if (musicChangerTarget.boss) musicChanger.boss = clip;
+            }
+        }
+
+        public void ApplyMultiMusicToChanger(MusicChangerTarget musicChangerTarget, AudioClip clean, AudioClip battle)
+        {
+            foreach (string path in musicChangerTarget.gameObjectPaths)
+            {
+                MusicChanger musicChanger = Core.FindGameObjectFromPathInScene(path).GetComponent<MusicChanger>();
+                if (musicChangerTarget.clean) musicChanger.clean = clean;
+                if (musicChangerTarget.battle) musicChanger.battle = battle;
+                if (musicChangerTarget.boss) musicChanger.boss = battle;
+            }
+        }
+
+        public static List<string> GetKeysForLevel(int level)
+        {
+            List<string> list = new List<string>();
+            string pattern = @"^" + level.ToString() + @"\D?$";
+
+            foreach (string key in Targets.Keys)
+            {
+                if (Regex.IsMatch(key, pattern)) list.Add(key);
+            }
+
+            return list;
+        }
+
+        public void Awake()
+        {
+            if (Instance != null)
+            {
+                DestroyImmediate(this);
+                return;
+            }
+
+            Instance = this;
+
+            preloadParent = new GameObject();
+            preloadParent.transform.SetParent(transform);
+            preloadParent.name = "Music";
+        }
     }
 }

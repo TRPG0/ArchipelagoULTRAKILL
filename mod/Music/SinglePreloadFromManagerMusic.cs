@@ -3,15 +3,14 @@ using UnityEngine.AddressableAssets;
 
 namespace ArchipelagoULTRAKILL.Music
 {
-    public class MultiPreloadFromManagerMusic : PreloadMusic
+    public class SinglePreloadFromManagerMusic : PreloadMusic
     {
-        public override bool Ready => clean && battle;
+        public override bool Ready => audioClip;
 
         public AssetReferenceSprite icon;
-        public AudioClip clean;
-        public AudioClip battle;
+        public AudioClip audioClip;
 
-        public MultiPreloadFromManagerMusic(string levelNames, string scene, string songName, AssetReferenceSprite icon)
+        public SinglePreloadFromManagerMusic(string levelNames, string scene, string songName, AssetReferenceSprite icon)
         {
             this.levelNames = levelNames;
             this.artistName = "Heaven Pierce Her";
@@ -20,7 +19,7 @@ namespace ArchipelagoULTRAKILL.Music
             this.icon = icon;
         }
 
-        public MultiPreloadFromManagerMusic(string levelNames, string artistName, string scene, string songName, AssetReferenceSprite icon)
+        public SinglePreloadFromManagerMusic(string levelNames, string artistName, string scene, string songName, AssetReferenceSprite icon)
         {
             this.levelNames = levelNames;
             this.artistName = artistName;
@@ -32,8 +31,7 @@ namespace ArchipelagoULTRAKILL.Music
         public override void Reset()
         {
             base.Reset();
-            clean = null;
-            battle = null;
+            audioClip = null;
         }
     }
 }
