@@ -21,7 +21,7 @@ namespace ArchipelagoULTRAKILL
 {
     public class Multiworld : MonoBehaviour
     {
-        public static Version apVersion = new Version(0, 6, 6);
+        public static Version apVersion = new Version(0, 6, 7);
         public static DeathLinkService DeathLinkService = null;
         public static DeathLink lastDeathLink = null;
         public static int currentDeathCount = 0;

@@ -33,6 +33,12 @@ namespace ArchipelagoULTRAKILL.Music
             this.soundtrackIndex = soundtrackIndex;
         }
 
+        public override void Reset()
+        {
+            if (audioClip.Asset != null) audioClip.ReleaseAsset();
+            if (soundtrackSong.Asset != null) soundtrackSong.ReleaseAsset();
+        }
+
         public override string ToString()
         {
             return soundtrackSong.AssetGUID;

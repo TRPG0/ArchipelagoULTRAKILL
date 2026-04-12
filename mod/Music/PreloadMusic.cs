@@ -14,7 +14,7 @@ namespace ArchipelagoULTRAKILL
         public string songName;
         public List<GameObject> gameObjects = new List<GameObject>();
 
-        public virtual void Reset()
+        public override void Reset()
         {
             foreach (GameObject gameObject in gameObjects)
             {

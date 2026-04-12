@@ -21,6 +21,11 @@
             this.clipIndex = clipIndex;
         }
 
+        public override void Reset()
+        {
+            if (soundtrackSong.Asset != null) soundtrackSong.ReleaseAsset();
+        }
+
         public override string ToString()
         {
             return soundtrackSong.AssetGUID;

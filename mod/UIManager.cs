@@ -9,6 +9,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using ArchipelagoULTRAKILL.Music;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -403,6 +404,17 @@ namespace ArchipelagoULTRAKILL
                         break;
                     default:
                         break;
+                }
+            }
+
+            if (MusicRandomizer.Instance)
+            {
+                foreach (KeyValuePair<string, GameObject> kvp in levels)
+                {
+                    Button button = kvp.Value.GetComponent<Button>();
+                    LevelSelectPanel levelSelectPanel = kvp.Value.GetComponent<LevelSelectPanel>();
+                    button.onClick.SetPersistentListenerState(0, UnityEngine.Events.UnityEventCallState.Off);
+                    button.onClick.AddListener(delegate { MusicRandomizer.Instance.CheckIfPreloadNeededBeforeLevel($"Level {kvp.Key}", levelSelectPanel.levelNumber); });
                 }
             }
         }

@@ -314,7 +314,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioManager.cs" />
     <Compile Include="ColorRandomizer.cs" />
     <Compile Include="Components\ActStats.cs" />
     <Compile Include="Components\ChapterSelectState.cs" />

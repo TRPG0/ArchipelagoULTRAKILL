@@ -7,14 +7,6 @@
         Prime
     }
 
-    public enum MusicType
-    {
-        Skip,
-        Normal,
-        Special,
-        Special2
-    }
-
     public enum SkullsType
     {
         None,

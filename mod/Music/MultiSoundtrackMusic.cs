@@ -24,6 +24,11 @@
             this.battleIndex = battleIndex;
         }
 
+        public override void Reset()
+        {
+            if (soundtrackSong.Asset != null) soundtrackSong.ReleaseAsset();
+        }
+
         public override string ToString()
         {
             return soundtrackSong.AssetGUID;

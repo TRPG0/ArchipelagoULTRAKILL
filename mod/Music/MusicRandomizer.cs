@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.UI;
 
 namespace ArchipelagoULTRAKILL.Music
 {
@@ -43,11 +45,10 @@ namespace ArchipelagoULTRAKILL.Music
                 new AssetReferenceT<AudioClip>("Assets/Music/0-2 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/0-2.wav")),
 
-            ["5"] = new MultiSoundtrackMusic(
+            ["5"] = new SingleSoundtrackMusic(
                 "0-5",
                 "Cerberus",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 1/Prelude/Cerberus.asset"),
-                0,
                 1),
 
             ["6A"] = new SingleSoundtrackMusic(
@@ -448,10 +449,30 @@ namespace ArchipelagoULTRAKILL.Music
             ["667C"] = new AudioSourceTarget("BossMusics/Sisyphus")
         };
 
-        public GameObject preloadParent;
+        private GameObject preloadParent;
 
         public bool IsPreloading { get; private set; } = false;
-        public List<AsyncOperationHandle> handles = new List<AsyncOperationHandle>();
+        private List<AsyncOperationHandle> handles = new List<AsyncOperationHandle>();
+        public float AllHandlesPercentComplete
+        {
+            get
+            {
+                if (handles.Count == 0) return 1;
+
+                float current = 0;
+                foreach (AsyncOperationHandle handle in handles) if (handle.IsValid()) current += handle.PercentComplete;
+                return current / handles.Count;
+            }
+        }
+        public bool AllHandlesDone
+        {
+            get
+            {
+                if (handles.Count == 0) return true;
+                foreach (AsyncOperationHandle handle in handles) if (handle.IsValid() && !handle.IsDone) return false;
+                return true;
+            }
+        }
 
         private List<object> TestLoadAll()
         {
@@ -502,34 +523,48 @@ namespace ArchipelagoULTRAKILL.Music
 
         public void CheckIfPreloadNeededBeforeLevel(string scene, int level)
         {
-            List<string> preloadKeys = new List<string>();
-
-            foreach (string key in GetKeysForLevel(level))
+            if (Core.DataExists() && Core.data.musicRandomizer)
             {
-                if (Music[key] is PreloadMusic) preloadKeys.Add(key);
-            }
+                List<string> preloadKeys = new List<string>();
 
-            if (preloadKeys.Count > 0) StartCoroutine(PreloadBeforeLevel(preloadKeys, scene));
-            else SceneHelper.LoadScene(scene);
+                foreach (KeyValuePair<string, string> kvp in GetKeysForLevel(level))
+                {
+                    if (Music[kvp.Value] is PreloadMusic pm)
+                    {
+                        if (pm.scene != scene) preloadKeys.Add(kvp.Value);
+                    }
+                }
+
+                if (preloadKeys.Count > 0)
+                {
+                    StartCoroutine(PreloadBeforeLevel(preloadKeys, scene));
+                    return;
+                }
+            }
+            
+            SceneHelper.LoadScene(scene);
         }
 
-        public IEnumerator PreloadBeforeLevel(List<string> preloadKeys, string scene)
+        private IEnumerator PreloadBeforeLevel(List<string> preloadKeys, string scene)
         {
+            Core.Logger.LogInfo($"Begin preloading music ({preloadKeys.Count})");
             IsPreloading = true;
             SceneHelper.ShowLoadingBlocker();
             foreach (string key in preloadKeys)
             {
                 if (Music[key] is SinglePreloadFromManagerMusic spfmm) yield return StartCoroutine(SinglePreloadFromManager(key, spfmm));
-                if (Music[key] is MultiPreloadFromManagerMusic mpfmm) yield return StartCoroutine(MultiPreloadFromManager(key, mpfmm));
-                if (Music[key] is MultiPreloadFromChangerMusic mpfcm) yield return StartCoroutine(MultiPreloadFromChanger(key, mpfcm));
+                else if (Music[key] is MultiPreloadFromManagerMusic mpfmm) yield return StartCoroutine(MultiPreloadFromManager(key, mpfmm));
+                else if (Music[key] is MultiPreloadFromChangerMusic mpfcm) yield return StartCoroutine(MultiPreloadFromChanger(key, mpfcm));
+                Core.Logger.LogInfo($"Preloading {key}");
             }
             IsPreloading = false;
             SceneHelper.DismissBlockers();
+            Core.Logger.LogInfo("Preloading done!");
 
             yield return SceneHelper.LoadSceneAsync(scene);
         }
 
-        public void TestPreload(string key, string scene)
+        private void TestPreload(string key, string scene)
         {
             if (!Music.ContainsKey(key))
             {
@@ -540,7 +575,7 @@ namespace ArchipelagoULTRAKILL.Music
             StartCoroutine(PreloadBeforeLevel(new List<string>() { key }, scene));
         }
 
-        public IEnumerator SinglePreloadFromManager(string key, SinglePreloadFromManagerMusic spfmm)
+        private IEnumerator SinglePreloadFromManager(string key, SinglePreloadFromManagerMusic spfmm)
         {
             if (!spfmm.Preloaded)
             {
@@ -548,6 +583,7 @@ namespace ArchipelagoULTRAKILL.Music
                 traverse.Property<string>("PendingScene").Value = spfmm.scene;
 
                 AsyncOperationHandle handle = Addressables.LoadSceneAsync(spfmm.scene);
+                handles.Add(handle);
                 Addressables.ResourceManager.Acquire(handle);
 
                 traverse.Property<string>("PendingScene").Value = null;
@@ -571,7 +607,26 @@ namespace ArchipelagoULTRAKILL.Music
             }
         }
 
-        public IEnumerator MultiPreloadFromManager(string key, MultiPreloadFromManagerMusic mpfmm)
+        private void GetSinglePreloadFromManagerInCurrentScene(string key, SinglePreloadFromManagerMusic spfmm)
+        {
+            if (!spfmm.Preloaded)
+            {
+                GameObject keyObj = new GameObject() { name = key };
+                Object.DontDestroyOnLoad(keyObj);
+                keyObj.transform.SetParent(preloadParent.transform);
+                spfmm.gameObjects.Add(keyObj);
+
+                GameObject cleanObj = MusicManager.Instance.cleanTheme.gameObject;
+                cleanObj.transform.SetParent(null);
+                AudioSource cleanSource = cleanObj.GetComponent<AudioSource>();
+                spfmm.audioClip = cleanSource.clip;
+                cleanObj.transform.SetParent(keyObj.transform);
+
+                spfmm.Preloaded = true;
+            }
+        }
+
+        private IEnumerator MultiPreloadFromManager(string key, MultiPreloadFromManagerMusic mpfmm)
         {
             if (!mpfmm.Preloaded)
             {
@@ -579,6 +634,7 @@ namespace ArchipelagoULTRAKILL.Music
                 traverse.Property<string>("PendingScene").Value = mpfmm.scene;
 
                 AsyncOperationHandle handle = Addressables.LoadSceneAsync(mpfmm.scene);
+                handles.Add(handle);
                 Addressables.ResourceManager.Acquire(handle);
 
                 traverse.Property<string>("PendingScene").Value = null;
@@ -608,7 +664,32 @@ namespace ArchipelagoULTRAKILL.Music
             }
         }
 
-        public IEnumerator MultiPreloadFromChanger(string key, MultiPreloadFromChangerMusic mpfcm)
+        private void GetMultiPreloadFromManagerInCurrentScene(string key, MultiPreloadFromManagerMusic mpfmm)
+        {
+            if (!mpfmm.Preloaded)
+            {
+                GameObject keyObj = new GameObject() { name = key };
+                Object.DontDestroyOnLoad(keyObj);
+                keyObj.transform.SetParent(preloadParent.transform);
+                mpfmm.gameObjects.Add(keyObj);
+
+                GameObject cleanObj = MusicManager.Instance.cleanTheme.gameObject;
+                cleanObj.transform.SetParent(null);
+                AudioSource cleanSource = cleanObj.GetComponent<AudioSource>();
+                mpfmm.clean = cleanSource.clip;
+                cleanObj.transform.SetParent(keyObj.transform);
+
+                GameObject battleObj = MusicManager.Instance.battleTheme.gameObject;
+                battleObj.transform.SetParent(null);
+                AudioSource battleSource = battleObj.GetComponent<AudioSource>();
+                mpfmm.battle = battleSource.clip;
+                battleObj.transform.SetParent(keyObj.transform);
+
+                mpfmm.Preloaded = true;
+            }
+        }
+
+        private IEnumerator MultiPreloadFromChanger(string key, MultiPreloadFromChangerMusic mpfcm)
         {
             if (!mpfcm.Preloaded)
             {
@@ -616,6 +697,7 @@ namespace ArchipelagoULTRAKILL.Music
                 traverse.Property<string>("PendingScene").Value = mpfcm.scene;
 
                 AsyncOperationHandle handle = Addressables.LoadSceneAsync(mpfcm.scene);
+                handles.Add(handle);
                 Addressables.ResourceManager.Acquire(handle);
 
                 traverse.Property<string>("PendingScene").Value = null;
@@ -639,25 +721,89 @@ namespace ArchipelagoULTRAKILL.Music
             }
         }
 
+        private void GetMultiPreloadFromChangerInCurrentScene(string key, MultiPreloadFromChangerMusic mpfcm)
+        {
+            if (!mpfcm.Preloaded)
+            {
+                GameObject keyObj = new GameObject() { name = key };
+                Object.DontDestroyOnLoad(keyObj);
+                keyObj.transform.SetParent(preloadParent.transform);
+                mpfcm.gameObjects.Add(keyObj);
+
+                GameObject changerObj = Core.FindGameObjectFromPathInScene(mpfcm.changerPath);
+                changerObj.transform.SetParent(null);
+                MusicChanger musicChanger = changerObj.GetComponent<MusicChanger>();
+                mpfcm.clean = musicChanger.clean;
+                mpfcm.battle = musicChanger.battle;
+                changerObj.transform.SetParent(keyObj.transform);
+
+                mpfcm.Preloaded = true;
+            }
+        }
+
         public void ReleaseAllHandles()
         {
             foreach (AsyncOperationHandle handle in handles)
             {
-                Addressables.Release(handle);
+                if (handle.IsValid()) Addressables.Release(handle);
             }
             handles.Clear();
         }
 
-        public void ResetPreloadedMusic()
+        public void ResetAllMusic()
         {
-            foreach (BaseMusic music in Music.Values)
-            {
-                if (music is PreloadMusic preloadMusic) preloadMusic.Reset();
-            }
+            foreach (BaseMusic music in Music.Values) music.Reset();
             ReleaseAllHandles();
         }
 
-        public void ApplySingleMusicToManager(AudioClip clip)
+        private IEnumerator LoadMultiClipMusic(MultiClipMusic mcm)
+        {
+            AsyncOperationHandle handleClean = mcm.audioClipClean.LoadAssetAsync();
+            handles.Add(handleClean);
+            AsyncOperationHandle handleBattle = mcm.audioClipBattle.LoadAssetAsync();
+            handles.Add(handleBattle);
+            AsyncOperationHandle handleIcon = mcm.icon.LoadAssetAsync();
+
+            while (!handleClean.IsDone || !handleBattle.IsDone || !handleIcon.IsDone) yield return null;
+        }
+
+        private IEnumerator LoadMultiSoundtrackMusic(MultiSoundtrackMusic msm)
+        {
+            AsyncOperationHandle handle = msm.soundtrackSong.LoadAssetAsync();
+            handles.Add(handle);
+
+            while (!handle.IsDone) yield return null;
+        }
+
+        private IEnumerator LoadMultiClipAndSoundtrackMusic(MultiClipAndSoundtrackMusic mcasm)
+        {
+            AsyncOperationHandle handleClip = mcasm.audioClip.LoadAssetAsync();
+            handles.Add(handleClip);
+            AsyncOperationHandle handleSoundtrack = mcasm.soundtrackSong.LoadAssetAsync();
+            handles.Add(handleSoundtrack);
+
+            while (!handleClip.IsDone || !handleSoundtrack.IsDone) yield return null;
+        }
+
+        private IEnumerator LoadSingleClipMusic(SingleClipMusic scm)
+        {
+            AsyncOperationHandle handleClip = scm.audioClip.LoadAssetAsync();
+            handles.Add(handleClip);
+            AsyncOperationHandle handleIcon = scm.icon.LoadAssetAsync();
+            handles.Add(handleIcon);
+
+            while (!handleClip.IsDone || !handleIcon.IsDone) yield return null;
+        }
+
+        private IEnumerator LoadSingleSoundtrackMusic(SingleSoundtrackMusic ssm)
+        {
+            AsyncOperationHandle handle = ssm.soundtrackSong.LoadAssetAsync();
+            handles.Add(handle);
+
+            while (!handle.IsDone) yield return null;
+        }
+
+        private void ApplySingleMusicToManager(AudioClip clip)
         {
             MusicManager musicManager = MusicManager.Instance;
             musicManager.cleanTheme.clip = clip;
@@ -665,7 +811,7 @@ namespace ArchipelagoULTRAKILL.Music
             musicManager.bossTheme.clip = clip;
         }
 
-        public void ApplyMultiMusicToManager(AudioClip clean, AudioClip battle)
+        private void ApplyMultiMusicToManager(AudioClip clean, AudioClip battle)
         {
             MusicManager musicManager = MusicManager.Instance;
             musicManager.cleanTheme.clip = clean;
@@ -673,7 +819,7 @@ namespace ArchipelagoULTRAKILL.Music
             musicManager.bossTheme.clip = battle;
         }
 
-        public void ApplySingleMusicToAudioSource(AudioSourceTarget audioSourceTarget, AudioClip clip)
+        private void ApplySingleMusicToAudioSource(AudioSourceTarget audioSourceTarget, AudioClip clip)
         {
             foreach (string path in audioSourceTarget.gameObjectPaths)
             {
@@ -682,13 +828,13 @@ namespace ArchipelagoULTRAKILL.Music
             }
         }
 
-        public void ApplyMultiMusicToAudioSourceSplit(AudioSourceSplitTarget splitTarget, AudioClip clean, AudioClip battle)
+        private void ApplyMultiMusicToAudioSourceSplit(AudioSourceSplitTarget splitTarget, AudioClip clean, AudioClip battle)
         {
             Core.FindGameObjectFromPathInScene(splitTarget.cleanTarget).GetComponent<AudioSource>().clip = clean;
             Core.FindGameObjectFromPathInScene(splitTarget.battleTarget).GetComponent<AudioSource>().clip = battle;
         }
 
-        public void ApplySingleMusicToChanger(MusicChangerTarget musicChangerTarget, AudioClip clip)
+        private void ApplySingleMusicToChanger(MusicChangerTarget musicChangerTarget, AudioClip clip)
         {
             foreach (string path in musicChangerTarget.gameObjectPaths)
             {
@@ -699,7 +845,7 @@ namespace ArchipelagoULTRAKILL.Music
             }
         }
 
-        public void ApplyMultiMusicToChanger(MusicChangerTarget musicChangerTarget, AudioClip clean, AudioClip battle)
+        private void ApplyMultiMusicToChanger(MusicChangerTarget musicChangerTarget, AudioClip clean, AudioClip battle)
         {
             foreach (string path in musicChangerTarget.gameObjectPaths)
             {
@@ -710,20 +856,169 @@ namespace ArchipelagoULTRAKILL.Music
             }
         }
 
-        public static List<string> GetKeysForLevel(int level)
+        public static List<KeyValuePair<string, string>> GetKeysForLevel(int level)
         {
-            List<string> list = new List<string>();
+            List<KeyValuePair<string, string>> list = new List<KeyValuePair<string, string>>();
             string pattern = @"^" + level.ToString() + @"\D?$";
 
             foreach (string key in Targets.Keys)
             {
-                if (Regex.IsMatch(key, pattern)) list.Add(key);
+                if (Regex.IsMatch(key, pattern))
+                {
+                    if (!Core.data.music.ContainsKey(key)) Core.Logger.LogWarning($"Music does not contain key: {key}");
+                    else list.Add(new KeyValuePair<string, string>(key, Core.data.music[key]));
+                }
             }
 
             return list;
         }
 
-        public void Awake()
+        private IEnumerator RandomizeMusic(List<KeyValuePair<string, string>> kvps)
+        {
+            Core.Logger.LogInfo("Begin loading music");
+
+            List<KeyValuePair<string, string>> identicalPairs = new List<KeyValuePair<string, string>>();
+            foreach (KeyValuePair<string, string> kvp in kvps)
+            {
+                if (kvp.Key == kvp.Value)
+                {
+                    Core.Logger.LogInfo($"Music key and value are identical. ({kvp.Key}) Skipping");
+                    continue;
+                }
+
+                BaseMusic music = Music[kvp.Value];
+                if (music is MultiClipMusic mcm) StartCoroutine(LoadMultiClipMusic(mcm));
+                else if (music is MultiSoundtrackMusic msm) StartCoroutine(LoadMultiSoundtrackMusic(msm));
+                else if (music is MultiClipAndSoundtrackMusic mcasm) StartCoroutine(LoadMultiClipAndSoundtrackMusic(mcasm));
+                else if (music is SingleClipMusic scm) StartCoroutine(LoadSingleClipMusic(scm));
+                else if (music is SingleSoundtrackMusic ssm) StartCoroutine(LoadSingleSoundtrackMusic(ssm));
+                else if (music is PreloadMusic pm)
+                {
+                    if (!pm.Ready)
+                    {
+                        if (pm.scene == SceneHelper.CurrentScene)
+                        {
+                            if (pm is MultiPreloadFromManagerMusic mpfmm) GetMultiPreloadFromManagerInCurrentScene(kvp.Value, mpfmm);
+                            else if (pm is MultiPreloadFromChangerMusic mpfcm) GetMultiPreloadFromChangerInCurrentScene(kvp.Value, mpfcm);
+                            else if (pm is SinglePreloadFromManagerMusic spfmm) GetSinglePreloadFromManagerInCurrentScene(kvp.Value, spfmm);
+                        }
+                        else Core.Logger.LogWarning($"Preload music {kvp.Value} is not ready!");
+                    }
+                    continue;
+                }
+
+                Core.Logger.LogInfo($"Loading {kvp.Value}");
+            }
+
+            foreach (KeyValuePair<string, string> kvp in identicalPairs) if (kvps.Contains(kvp)) kvps.Remove(kvp);
+            if (kvps.Count == 0) yield break;
+
+            yield return new WaitUntil(() => AllHandlesDone);
+            Core.Logger.LogInfo("Finished loading music");
+
+            foreach (KeyValuePair<string, string> kvp in kvps)
+            {
+                BaseMusic music = Music[kvp.Value];
+                BaseTarget target = Targets[kvp.Key];
+                
+                if (music.IsMultiMusic)
+                {
+                    AudioClip clean = null;
+                    AudioClip battle = null;
+
+                    if (music is MultiClipMusic mcm)
+                    {
+                        clean = (AudioClip)mcm.audioClipClean.Asset;
+                        battle = (AudioClip)mcm.audioClipBattle.Asset;
+                    }
+                    else if (music is MultiSoundtrackMusic msm)
+                    {
+                        SoundtrackSong soundtrackSong = (SoundtrackSong)msm.soundtrackSong.Asset;
+                        clean = soundtrackSong.clips[msm.cleanIndex];
+                        battle = soundtrackSong.clips[msm.battleIndex];
+                    }
+                    else if (music is MultiClipAndSoundtrackMusic mcasm)
+                    {
+                        SoundtrackSong soundtrackSong = (SoundtrackSong)mcasm.soundtrackSong.Asset;
+
+                        if (mcasm.clipIsClean) clean = (AudioClip)mcasm.audioClip.Asset;
+                        else battle = (AudioClip)mcasm.audioClip.Asset;
+
+                        if (mcasm.soundtrackIsClean) clean = soundtrackSong.clips[mcasm.soundtrackIndex];
+                        else battle = soundtrackSong.clips[mcasm.soundtrackIndex];
+                    }
+                    else if (music is MultiPreloadFromManagerMusic mpfmm)
+                    {
+                        if (mpfmm.Ready)
+                        {
+                            clean = mpfmm.clean;
+                            battle = mpfmm.battle;
+                        }
+                    }
+                    else if (music is MultiPreloadFromChangerMusic mpfcm)
+                    {
+                        if (mpfcm.Ready)
+                        {
+                            clean = mpfcm.clean;
+                            battle = mpfcm.battle;
+                        }
+                    }
+
+                    if (clean == null || battle == null)
+                    {
+                        Core.Logger.LogWarning($"An AudioClip is null. {kvp.Key} {kvp.Value}");
+                        continue;
+                    }
+
+                    if (target == null) ApplyMultiMusicToManager(clean, battle);
+                    else if (target is AudioSourceSplitTarget asst) ApplyMultiMusicToAudioSourceSplit(asst, clean, battle);
+                    else if (target is MusicChangerTarget mct) ApplyMultiMusicToChanger(mct, clean, battle);
+                    Core.Logger.LogInfo($"Set music {kvp.Key} {kvp.Value}");
+                }
+                else
+                {
+                    AudioClip clip = null;
+
+                    if (music is SingleClipMusic scm)
+                    {
+                        clip = (AudioClip)scm.audioClip.Asset;
+                    }
+                    else if (music is SingleSoundtrackMusic ssm)
+                    {
+                        clip = ((SoundtrackSong)ssm.soundtrackSong.Asset).clips[ssm.clipIndex];
+                    }
+                    else if (music is SinglePreloadFromManagerMusic spfmm)
+                    {
+                        if (spfmm.Ready)
+                        {
+                            clip = spfmm.audioClip;
+                        }
+                    }
+
+                    if (clip == null)
+                    {
+                        Core.Logger.LogWarning($"An AudioClip is null. {kvp.Key} {kvp.Value}");
+                        continue;
+                    }
+
+                    if (target == null) ApplySingleMusicToManager(clip);
+                    else if (target is AudioSourceTarget ast) ApplySingleMusicToAudioSource(ast, clip);
+                    else if (target is MusicChangerTarget mct) ApplySingleMusicToChanger(mct, clip);
+                    Core.Logger.LogInfo($"Set music {kvp.Key} {kvp.Value}");
+                }
+            }
+
+            Core.Logger.LogInfo("Music randomizer done!");
+        }
+
+        public void RandomizeMusicForLevel()
+        {
+            int level = StatsManager.Instance.levelNumber;
+            if (level <= 0) return;
+            StartCoroutine(RandomizeMusic(GetKeysForLevel(level)));
+        }
+
+        private void Awake()
         {
             if (Instance != null)
             {
@@ -736,6 +1031,33 @@ namespace ArchipelagoULTRAKILL.Music
             preloadParent = new GameObject();
             preloadParent.transform.SetParent(transform);
             preloadParent.name = "Music";
+        }
+
+        private void CreateNowPlaying()
+        {
+            GameObject npObj = new GameObject();
+            npObj.name = "Now Playing";
+            npObj.transform.SetParent(transform);
+
+            GameObject layoutObj = new GameObject();
+            layoutObj.name = "Layout";
+            layoutObj.transform.SetParent(npObj.transform);
+
+            GameObject iconObj = new GameObject();
+            iconObj.name = "Icon";
+            iconObj.transform.SetParent(layoutObj.transform);
+            iconObj.AddComponent<Image>().preserveAspect = true;
+
+            GameObject textObj = new GameObject();
+            textObj.name = "Text";
+            textObj.transform.SetParent(layoutObj.transform);
+            textObj.AddComponent<TextMeshProUGUI>().font = UIManager.fontMain;
+
+            /*npObj.AddComponent<HorizontalLayoutGroup>().spacing = 75;
+
+            iconObj.AddComponent<LayoutElement>().preferredWidth = 0;
+            iconObj.AddComponent<AspectRatioFitter>().aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
+            iconObj.GetComponent<AspectRatioFitter>().aspectRatio = 2;*/
         }
     }
 }

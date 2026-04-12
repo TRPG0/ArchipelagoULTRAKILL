@@ -25,6 +25,11 @@ namespace ArchipelagoULTRAKILL.Music
             this.audioClip = clip;
         }
 
+        public override void Reset()
+        {
+            if (audioClip.Asset != null) audioClip.ReleaseAsset();
+        }
+
         public override string ToString()
         {
             return audioClip.AssetGUID;
