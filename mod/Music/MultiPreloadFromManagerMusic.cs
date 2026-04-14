@@ -7,7 +7,6 @@ namespace ArchipelagoULTRAKILL.Music
     {
         public override bool Ready => clean && battle;
 
-        public AssetReferenceSprite icon;
         public AudioClip clean;
         public AudioClip battle;
 

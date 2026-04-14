@@ -7,7 +7,6 @@ namespace ArchipelagoULTRAKILL.Music
     {
         public override bool Ready => audioClip;
 
-        public AssetReferenceSprite icon;
         public AudioClip audioClip;
 
         public SinglePreloadFromManagerMusic(string levelNames, string scene, string songName, AssetReferenceSprite icon)

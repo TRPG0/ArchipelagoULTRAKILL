@@ -345,6 +345,7 @@
     <Compile Include="Music\BaseClipMusic.cs" />
     <Compile Include="Music\BaseMusic.cs" />
     <Compile Include="Music\BaseTarget.cs" />
+    <Compile Include="Music\NowPlayingChanger.cs" />
     <Compile Include="Music\MultiPreloadFromChangerMusic.cs" />
     <Compile Include="Music\MusicChangerTarget.cs" />
     <Compile Include="Extensions.cs" />
@@ -353,6 +354,7 @@
     <Compile Include="Music\MultiPreloadFromManagerMusic.cs" />
     <Compile Include="Music\MultiSoundtrackMusic.cs" />
     <Compile Include="Music\MusicRandomizer.cs" />
+    <Compile Include="Music\NowPlaying.cs" />
     <Compile Include="Music\SingleClipMusic.cs" />
     <Compile Include="Music\SinglePreloadFromManagerMusic.cs" />
     <Compile Include="Music\SingleSoundtrackMusic.cs" />
@@ -381,6 +383,8 @@
     <Compile Include="Patches\LevelStats.cs" />
     <Compile Include="Patches\LevelStatsEnabler.cs" />
     <Compile Include="Patches\LimboSwitch.cs" />
+    <Compile Include="Patches\MusicChanger.cs" />
+    <Compile Include="Patches\MusicManager.cs" />
     <Compile Include="Patches\Nailgun.cs" />
     <Compile Include="Patches\NewMovement.cs" />
     <Compile Include="Patches\OptionsManager.cs" />

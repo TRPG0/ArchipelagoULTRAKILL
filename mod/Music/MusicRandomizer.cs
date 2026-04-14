@@ -18,357 +18,357 @@ namespace ArchipelagoULTRAKILL.Music
         public static readonly Dictionary<string, BaseMusic> Music = new Dictionary<string, BaseMusic>()
         {
             ["1"] = new MultiClipMusic(
-                "0-1, 0-3",
+                "0-1: INTO THE FIRE",
                 "Into the Fire",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/0-1 Into the Fire.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/0-1 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/0-1.wav")),
 
             ["2"] = new MultiClipMusic(
-                "0-2, 0-4",
+                "0-2: THE MEATGRINDER",
                 "Unstoppable Force",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/0-2 The Meatgrinder.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/0-2 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/0-2.wav")),
 
             ["3"] = new MultiClipMusic(
-                "0-1, 0-3",
+                "0-3: DOUBLE DOWN",
                 "Into the Fire",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/0-3 Double Down.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/0-1 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/0-1.wav")),
 
             ["4"] = new MultiClipMusic(
-                "0-2, 0-4",
+                "0-4: A ONE-MACHINE ARMY",
                 "Unstoppable Force",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/0-4 A One-Machine Army.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/0-2 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/0-2.wav")),
 
             ["5"] = new SingleSoundtrackMusic(
-                "0-5",
+                "0-5: CERBERUS",
                 "Cerberus",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 1/Prelude/Cerberus.asset"),
                 1),
 
             ["6A"] = new SingleSoundtrackMusic(
-                "1-1",
+                "1-1: HEART OF THE SUNRISE",
                 "A Thousand Greetings",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 1/Limbo/A Thousand Greetings.asset")),
 
             ["6B"] = new MultiClipMusic(
-                "1-1",
+                "1-1: HEART OF THE SUNRISE",
                 "A Shattered Illusion",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/1-1 Heart of the Sunrise.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/1-1 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/1-1.wav")),
 
             ["7A"] = new SinglePreloadFromManagerMusic(
-                "1-2",
+                "1-2: THE BURNING WORLD",
                 "Level 1-2",
                 "A Thousand Greetings (Alternate)",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/1-2 The Burning World.png")),
 
             ["7B"] = new MultiClipMusic(
-                "1-2",
+                "1-2: THE BURNING WORLD",
                 "A Complete and Utter Destruction of the Senses",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/1-2 The Burning World.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/1-2 Noise Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/1-2 Noise Battle.wav")),
 
             ["8"] = new MultiClipMusic(
-                "1-3",
+                "1-3: HALLS OF SACRED REMAINS",
                 "Castle Vein",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/1-3 Halls of Sacred Remains.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/1-3 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/1-3.wav")),
 
             ["9A"] = new SingleSoundtrackMusic(
-                "1-4",
+                "1-4: CLAIR DE LUNE",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 1/Limbo/Clair de Lune.asset")),
 
             ["9B"] = new SingleSoundtrackMusic(
-                "1-4",
+                "1-4: CLAIR DE LUNE",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 1/Limbo/Versus.asset")),
 
             ["10"] = new MultiClipMusic(
-                "2-1",
+                "2-1: BRIDGEBURNER",
                 "Cold Winds",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/2-1 In the Air Tonight.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/2-1 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/2-1.wav")),
 
             ["11"] = new MultiClipMusic(
-                "2-2",
+                "2-2: DEATH AT 20,000 VOLTS",
                 "Requiem",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/2-2 Death at 20,000 Volts.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/2-2 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/2-2.wav")),
 
             ["12"] = new MultiClipMusic(
-                "2-3",
+                "2-3: SHEER HEART ATTACK",
                 "Panic Betrayer",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/2-3 Sheer Heart Attack.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/2-3 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/2-3.wav")),
 
             ["13"] = new SingleSoundtrackMusic(
-                "2-4",
+                "2-4: COURT OF THE CORPSE KING",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 1/Lust/In the Presence of a King.asset"),
                 1),
 
             ["14A"] = new MultiClipMusic(
-                "3-1",
+                "3-1: BELLY OF THE BEAST",
                 "Guts",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/3-1 Belly of the Beast.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/3-1 Guts Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/3-1 Guts.wav")),
 
             ["14B"] = new MultiClipMusic(
-                "3-1",
+                "3-1: BELLY OF THE BEAST",
                 "Glory",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/3-1 Belly of the Beast.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/3-1 Glory Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/3-1 Glory.wav")),
 
             ["15A"] = new SingleSoundtrackMusic(
-                "3-2",
+                "3-2: IN THE FLESH",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 1/Gluttony/Bach BWV 639.asset")),
 
             ["15B"] = new SingleSoundtrackMusic(
-                "3-2",
+                "3-2: IN THE FLESH",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 1/Gluttony/Divine Intervention.asset")),
 
             ["16"] = new MultiClipAndSoundtrackMusic(
-                "4-1",
+                "4-1: SLAVES TO POWER",
                 new AssetReferenceT<AudioClip>("Assets/Music/4-1 Clean.wav"),
                 true,
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 2/Greed/Dune Eternal.asset"),
                 false),
 
             ["17"] = new MultiClipMusic(
-                "4-2",
+                "4-2: GOD DAMN THE SUN",
                 "Sands of Tide",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/4-2 God Damn the Sun.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/4-2 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/4-2.wav")),
 
             ["18A"] = new MultiClipMusic(
-                "4-3",
+                "4-3: A SHOT IN THE DARK",
                 "Dancer in the Darkness (Phase 1)",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/4-3 A Shot in the Dark.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/4-3 Phase 1 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/4-3 Phase 1.wav")),
 
             ["18B"] = new MultiClipMusic(
-                "4-3",
+                "4-3: A SHOT IN THE DARK",
                 "Dancer in the Darkness (Phase 2)",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/4-3 A Shot in the Dark.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/4-3 Phase 2 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/4-3 Phase 2.wav")),
 
             ["18C"] = new SingleClipMusic(
-                "4-3",
+                "4-3: A SHOT IN THE DARK",
                 "Dancer in the Darkness (Phase 3)",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/4-3 A Shot in the Dark.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/4-3 Phase 3.wav")),
 
             ["19"] = new SingleSoundtrackMusic(
-                "4-4",
+                "4-4: CLAIR DE SOLEIL",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 2/Greed/Duel (Versus Reprise).asset")),
 
             ["20"] = new MultiPreloadFromManagerMusic(
-                "5-1",
+                "5-1: IN THE WAKE OF POSEIDON",
                 "Level 5-1",
                 "Deep Blue",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/5-1 In the Wake of Poseidon.png")),
 
             ["22A"] = new MultiClipMusic(
-                "5-3",
+                "5-3: SHIP OF FOOLS",
                 "Death Odyssey",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/5-3 Ship of Fools.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/5-3 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/5-3.wav")),
 
             ["22B"] = new MultiClipMusic(
-                "5-3",
+                "5-3: SHIP OF FOOLS",
                 "Death Odyssey Aftermath",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/5-3 Ship of Fools.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/5-3 Aftermath Clean.wav"),
-                new AssetReferenceT<AudioClip>("Assets/Music/5-3 Clean.wav")),
+                new AssetReferenceT<AudioClip>("Assets/Music/5-3 Aftermath.wav")),
 
             ["24A"] = new MultiClipMusic(
-                "6-1",
+                "6-1: CRY FOR THE WEEPER",
                 "Altars of Apostasy",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/6-1 Cry for the Weeper.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/6-1 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/6-1.wav")),
 
             ["24B"] = new SingleClipMusic(
-                "6-1",
+                "6-1: CRY FOR THE WEEPER",
                 "Hall of Sacreligious Remains",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/6-1 Cry for the Weeper.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/6-1 Hall of Sacreligious Remains.wav")),
 
             ["25A"] = new SingleSoundtrackMusic(
-                "6-2",
+                "6-2: AESTHETICS OF HATE",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 2/Heresy/Fallen Angel.asset")),
 
             ["25B"] = new SingleSoundtrackMusic(
-                "6-2",
+                "6-2: AESTHETICS OF HATE",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 2/Heresy/The Death of Gods Will.asset")),
 
             ["26A"] = new SingleClipMusic(
-                "7-1",
+                "7-1: GARDEN OF FORKING PATHS",
                 "The World Looks White",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/7-1 Garden of Forking Paths.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/7-1 Intro.wav")),
 
             ["26B"] = new MultiClipMusic(
-                "7-1",
+                "7-1: GARDEN OF FORKING PATHS",
                 "The World Looks Red",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/7-1 Garden of Forking Paths.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/7-1 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/7-1.wav")),
 
             ["26C"] = new SingleSoundtrackMusic(
-                "7-1",
+                "7-1: GARDEN OF FORKING PATHS",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 3/Violence/Bull of Hell.asset"),
                 0),
 
             ["26D"] = new SingleSoundtrackMusic(
-                "7-1",
+                "7-1: GARDEN OF FORKING PATHS",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 3/Violence/Bull of Hell.asset"),
                 1),
 
             ["27A"] = new MultiClipMusic(
-                "7-2",
+                "7-2: LIGHT UP THE NIGHT",
                 "Do Robots Dream of Eternal Sleep?",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/7-2 Light Up the Night.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/7-2 Intro Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/7-2 Intro Battle.wav")),
 
             ["27B"] = new MultiClipMusic(
-                "7-2",
+                "7-2: LIGHT UP THE NIGHT",
                 "Hear! The Siren Song Call of Death",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/7-2 Light Up the Night.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/7-2 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/7-2.wav")),
 
             ["28A"] = new SingleClipMusic(
-                "7-3",
+                "7-3: NO SOUND, NO MEMORY",
                 "Suffering Leaves Suffering Leaves",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/7-3 No Sound No Memory.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/7-3 Intro Clean.wav")),
 
             ["28B"] = new MultiClipMusic(
-                "7-3",
+                "7-3: NO SOUND, NO MEMORY",
                 "Danse Macabre",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/7-3 No Sound No Memory.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/7-3 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/7-3.wav")),
 
             ["30A"] = new MultiClipMusic(
-                "8-1",
+                "8-1: HURTBREAK WONDERLAND",
                 "In Absentia Logos",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/8-1 Hurtbreak Wonderland.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-1 Intro Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-1 Intro.wav")),
 
             ["30B"] = new MultiClipAndSoundtrackMusic(
-                "8-1",
+                "8-1: HURTBREAK WONDERLAND",
                 new AssetReferenceT<AudioClip>("Assets/Music/8-1 Clean.wav"),
                 true,
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 3/Fraud/Spiral Out (Keep Going).asset"),
                 false),
 
             ["31A"] = new MultiClipMusic(
-                "8-2",
+                "8-2: THROUGH THE MIRROR",
                 "Never Odd Or Even",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/8-2 Through the Mirror.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-2 Intro B.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-2 Intro A.wav")),
 
             ["31B"] = new MultiClipMusic(
-                "8-2",
+                "8-2: THROUGH THE MIRROR",
                 "No Devil Lived On",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/8-2 Through the Mirror.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-2 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-2.wav")),
 
             ["31C"] = new SingleClipMusic(
-                "8-2",
+                "8-2: THROUGH THE MIRROR",
                 "No Devil Lived On (Ambient)",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/8-2 Through the Mirror.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-2 Ambient.wav")),
 
             ["31D"] = new MultiClipMusic(
-                "8-2",
+                "8-2: THROUGH THE MIRROR",
                 "No Devil Lived On (Shopping)",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/8-2 Through the Mirror.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-2 Shopping Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-2 Shopping.wav")),
 
             ["31E"] = new SingleSoundtrackMusic(
-                "8-2",
+                "8-2: THROUGH THE MIRROR",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 3/Fraud/Mirror Rim.asset")),
 
             ["32A"] = new MultiClipMusic(
-                "8-3",
+                "8-3: DISINTEGRATION LOOP",
                 "The Break (Crimson Glass deComposition)",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/8-3 Disintegration Loop.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-3 Intro Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-3 Intro.wav")),
 
             ["32B"] = new MultiClipMusic(
-                "8-3",
+                "8-3: DISINTEGRATION LOOP",
                 "The Shattering Circle, or: A Charade of Shadeless Ones and Zeroes Rearranged ad Nihilum",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/8-3 Disintegration Loop.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-3 Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/8-3.wav")),
 
             ["32C"] = new MultiPreloadFromChangerMusic(
-                "8-3",
+                "8-3: DISINTEGRATION LOOP",
                 "Level 8-3",
                 "Event Horizon (Reach for the Sun and Burn! Burn! Burn!)",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/8-3 Disintegration Loop.png"),
                 "Musics/Third"),
 
             ["33"] = new SingleSoundtrackMusic(
-                "8-4",
+                "8-4: FINAL FLIGHT",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 3/Fraud/The Fall.asset")),
 
             ["100A"] = new MultiClipMusic(
-                "0-E",
+                "0-E: THIS HEAT, AN EVIL HEAT",
                 "A Heart of Cold",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/0-E This Heat This Evil Heat.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/Encores/0-E Cold Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/Encores/0-E Cold.wav")),
 
             ["100B"] = new MultiClipMusic(
-                "0-E",
+                "0-E: THIS HEAT, AN EVIL HEAT",
                 "Dead Heat Pulse (A Heart of Cold)",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/0-E This Heat This Evil Heat.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/Encores/0-E Hot Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/Encores/0-E Hot.wav")),
 
             ["101"] = new MultiClipMusic(
-                "1-E",
+                "1-E: ...THEN FELL THE ASHES",
                 "A Part Falling",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/1-E And Then Fell the Ashes.png"),
                 new AssetReferenceT<AudioClip>("Assets/Music/Encores/1-E Jazz Clean.wav"),
                 new AssetReferenceT<AudioClip>("Assets/Music/Encores/1-E Jazz.wav")),
 
             ["666A"] = new SingleSoundtrackMusic(
-                "P-1",
+                "P-1: SOUL SURVIVOR",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Prime Sanctums/Chaos.asset")),
 
             ["666B"] = new SingleSoundtrackMusic(
-                "P-1",
+                "P-1: SOUL SURVIVOR",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Prime Sanctums/Order.asset")),
 
             ["667A"] = new MultiClipMusic(
-                "P-2",
+                "P-2: WAIT OF THE WORLD",
                 "Tenebre Rosso Sangue",
                 "KEYGEN CHURCH",
                 new AssetReferenceSprite("Assets/Textures/UI/Level Thumbnails/P-2 Wait of the World.png"),
@@ -376,11 +376,11 @@ namespace ArchipelagoULTRAKILL.Music
                 new AssetReferenceT<AudioClip>("Assets/Music/P-2.wav")),
 
             ["667B"] = new SingleSoundtrackMusic(
-                "P-2",
+                "P-2: WAIT OF THE WORLD",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Prime Sanctums/Pandemonium.asset")),
 
             ["667C"] = new SingleSoundtrackMusic(
-                "P-2",
+                "P-2: WAIT OF THE WORLD",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Prime Sanctums/War.asset"))
         };
 
@@ -604,10 +604,14 @@ namespace ArchipelagoULTRAKILL.Music
                 cleanObj.transform.SetParent(keyObj.transform);
 
                 spfmm.Preloaded = true;
+
+                AsyncOperationHandle iconHandle = spfmm.icon.LoadAssetAsync();
+                handles.Add(iconHandle);
+                while (!iconHandle.IsDone) yield return null; 
             }
         }
 
-        private void GetSinglePreloadFromManagerInCurrentScene(string key, SinglePreloadFromManagerMusic spfmm)
+        private IEnumerator GetSinglePreloadFromManagerInCurrentScene(string key, SinglePreloadFromManagerMusic spfmm)
         {
             if (!spfmm.Preloaded)
             {
@@ -623,6 +627,10 @@ namespace ArchipelagoULTRAKILL.Music
                 cleanObj.transform.SetParent(keyObj.transform);
 
                 spfmm.Preloaded = true;
+
+                AsyncOperationHandle iconHandle = spfmm.icon.LoadAssetAsync();
+                handles.Add(iconHandle);
+                while (!iconHandle.IsDone) yield return null;
             }
         }
 
@@ -661,10 +669,14 @@ namespace ArchipelagoULTRAKILL.Music
                 battleObj.transform.SetParent(keyObj.transform);
 
                 mpfmm.Preloaded = true;
+
+                AsyncOperationHandle iconHandle = mpfmm.icon.LoadAssetAsync();
+                handles.Add(iconHandle);
+                while (!iconHandle.IsDone) yield return null;
             }
         }
 
-        private void GetMultiPreloadFromManagerInCurrentScene(string key, MultiPreloadFromManagerMusic mpfmm)
+        private IEnumerator GetMultiPreloadFromManagerInCurrentScene(string key, MultiPreloadFromManagerMusic mpfmm)
         {
             if (!mpfmm.Preloaded)
             {
@@ -686,6 +698,10 @@ namespace ArchipelagoULTRAKILL.Music
                 battleObj.transform.SetParent(keyObj.transform);
 
                 mpfmm.Preloaded = true;
+
+                AsyncOperationHandle iconHandle = mpfmm.icon.LoadAssetAsync();
+                handles.Add(iconHandle);
+                while (!iconHandle.IsDone) yield return null;
             }
         }
 
@@ -718,10 +734,14 @@ namespace ArchipelagoULTRAKILL.Music
                 changerObj.transform.SetParent(keyObj.transform);
 
                 mpfcm.Preloaded = true;
+
+                AsyncOperationHandle iconHandle = mpfcm.icon.LoadAssetAsync();
+                handles.Add(iconHandle);
+                while (!iconHandle.IsDone) yield return null;
             }
         }
 
-        private void GetMultiPreloadFromChangerInCurrentScene(string key, MultiPreloadFromChangerMusic mpfcm)
+        private IEnumerator GetMultiPreloadFromChangerInCurrentScene(string key, MultiPreloadFromChangerMusic mpfcm)
         {
             if (!mpfcm.Preloaded)
             {
@@ -738,6 +758,10 @@ namespace ArchipelagoULTRAKILL.Music
                 changerObj.transform.SetParent(keyObj.transform);
 
                 mpfcm.Preloaded = true;
+
+                AsyncOperationHandle iconHandle = mpfcm.icon.LoadAssetAsync();
+                handles.Add(iconHandle);
+                while (!iconHandle.IsDone) yield return null;
             }
         }
 
@@ -803,56 +827,96 @@ namespace ArchipelagoULTRAKILL.Music
             while (!handle.IsDone) yield return null;
         }
 
-        private void ApplySingleMusicToManager(AudioClip clip)
+        private void ApplySingleMusicToManager(AudioClip clip, Sprite icon, string text)
         {
             MusicManager musicManager = MusicManager.Instance;
             musicManager.cleanTheme.clip = clip;
             musicManager.battleTheme.clip = clip;
             musicManager.bossTheme.clip = clip;
+            NowPlaying.Instance?.SetIconAndText(icon, text, false);
         }
 
-        private void ApplyMultiMusicToManager(AudioClip clean, AudioClip battle)
+        private void ApplyMultiMusicToManager(AudioClip clean, AudioClip battle, Sprite icon, string text)
         {
             MusicManager musicManager = MusicManager.Instance;
             musicManager.cleanTheme.clip = clean;
             musicManager.battleTheme.clip = battle;
             musicManager.bossTheme.clip = battle;
+            NowPlaying.Instance?.SetIconAndText(icon, text, false);
         }
 
-        private void ApplySingleMusicToAudioSource(AudioSourceTarget audioSourceTarget, AudioClip clip)
+        private void ApplySingleMusicToAudioSource(AudioSourceTarget audioSourceTarget, AudioClip clip, Sprite icon, string text)
         {
+            List<NowPlayingChanger> changers = new List<NowPlayingChanger>();
             foreach (string path in audioSourceTarget.gameObjectPaths)
             {
-                AudioSource audioSource = Core.FindGameObjectFromPathInScene(path).GetComponent<AudioSource>();
+                GameObject gameObject = Core.FindGameObjectFromPathInScene(path);
+                AudioSource audioSource = gameObject.GetComponent<AudioSource>();
                 audioSource.clip = clip;
+                NowPlayingChanger changer = gameObject.AddComponent<NowPlayingChanger>();
+                changer.Init(icon, text, audioSource);
+                changers.Add(changer);
+            }
+            if (changers.Count > 1)
+            {
+                foreach (NowPlayingChanger changer in changers) changer.links = changers;
             }
         }
 
-        private void ApplyMultiMusicToAudioSourceSplit(AudioSourceSplitTarget splitTarget, AudioClip clean, AudioClip battle)
+        private void ApplyMultiMusicToAudioSourceSplit(AudioSourceSplitTarget splitTarget, AudioClip clean, AudioClip battle, Sprite icon, string text)
         {
-            Core.FindGameObjectFromPathInScene(splitTarget.cleanTarget).GetComponent<AudioSource>().clip = clean;
-            Core.FindGameObjectFromPathInScene(splitTarget.battleTarget).GetComponent<AudioSource>().clip = battle;
+            List<NowPlayingChanger> changers = new List<NowPlayingChanger>();
+
+            GameObject cleanTarget = Core.FindGameObjectFromPathInScene(splitTarget.cleanTarget);
+            AudioSource cleanSource = cleanTarget.GetComponent<AudioSource>();
+            cleanSource.clip = clean;
+            NowPlayingChanger cleanChanger = cleanTarget.AddComponent<NowPlayingChanger>();
+            cleanChanger.Init(icon, text, cleanSource);
+            changers.Add(cleanChanger);
+
+            GameObject battleTarget = Core.FindGameObjectFromPathInScene(splitTarget.battleTarget);
+            AudioSource battleSource = battleTarget.GetComponent<AudioSource>();
+            battleSource.clip = battle;
+            NowPlayingChanger battleChanger = battleTarget.AddComponent<NowPlayingChanger>();
+            battleChanger.Init(icon, text, battleSource);
+            changers.Add(battleChanger);
+
+            foreach (NowPlayingChanger changer in changers) changer.links = changers;
         }
 
-        private void ApplySingleMusicToChanger(MusicChangerTarget musicChangerTarget, AudioClip clip)
+        private void ApplySingleMusicToChanger(MusicChangerTarget musicChangerTarget, AudioClip clip, Sprite icon, string text)
         {
+            List<NowPlayingChanger> changers = new List<NowPlayingChanger>();
             foreach (string path in musicChangerTarget.gameObjectPaths)
             {
                 MusicChanger musicChanger = Core.FindGameObjectFromPathInScene(path).GetComponent<MusicChanger>();
                 if (musicChangerTarget.clean) musicChanger.clean = clip;
                 if (musicChangerTarget.battle) musicChanger.battle = clip;
                 if (musicChangerTarget.boss) musicChanger.boss = clip;
+                NowPlayingChanger changer = musicChanger.gameObject.AddComponent<NowPlayingChanger>();
+                changer.Init(icon, text);
+            }
+            if (changers.Count > 1)
+            {
+                foreach (NowPlayingChanger changer in changers) changer.links = changers;
             }
         }
 
-        private void ApplyMultiMusicToChanger(MusicChangerTarget musicChangerTarget, AudioClip clean, AudioClip battle)
+        private void ApplyMultiMusicToChanger(MusicChangerTarget musicChangerTarget, AudioClip clean, AudioClip battle, Sprite icon, string text)
         {
+            List<NowPlayingChanger> changers = new List<NowPlayingChanger>();
             foreach (string path in musicChangerTarget.gameObjectPaths)
             {
                 MusicChanger musicChanger = Core.FindGameObjectFromPathInScene(path).GetComponent<MusicChanger>();
                 if (musicChangerTarget.clean) musicChanger.clean = clean;
                 if (musicChangerTarget.battle) musicChanger.battle = battle;
                 if (musicChangerTarget.boss) musicChanger.boss = battle;
+                NowPlayingChanger changer = musicChanger.gameObject.AddComponent<NowPlayingChanger>();
+                changer.Init(icon, text);
+            }
+            if (changers.Count > 1)
+            {
+                foreach (NowPlayingChanger changer in changers) changer.links = changers;
             }
         }
 
@@ -898,9 +962,9 @@ namespace ArchipelagoULTRAKILL.Music
                     {
                         if (pm.scene == SceneHelper.CurrentScene)
                         {
-                            if (pm is MultiPreloadFromManagerMusic mpfmm) GetMultiPreloadFromManagerInCurrentScene(kvp.Value, mpfmm);
-                            else if (pm is MultiPreloadFromChangerMusic mpfcm) GetMultiPreloadFromChangerInCurrentScene(kvp.Value, mpfcm);
-                            else if (pm is SinglePreloadFromManagerMusic spfmm) GetSinglePreloadFromManagerInCurrentScene(kvp.Value, spfmm);
+                            if (pm is MultiPreloadFromManagerMusic mpfmm) StartCoroutine(GetMultiPreloadFromManagerInCurrentScene(kvp.Value, mpfmm));
+                            else if (pm is MultiPreloadFromChangerMusic mpfcm) StartCoroutine(GetMultiPreloadFromChangerInCurrentScene(kvp.Value, mpfcm));
+                            else if (pm is SinglePreloadFromManagerMusic spfmm) StartCoroutine(GetSinglePreloadFromManagerInCurrentScene(kvp.Value, spfmm));
                         }
                         else Core.Logger.LogWarning($"Preload music {kvp.Value} is not ready!");
                     }
@@ -920,6 +984,9 @@ namespace ArchipelagoULTRAKILL.Music
             {
                 BaseMusic music = Music[kvp.Value];
                 BaseTarget target = Targets[kvp.Key];
+
+                Sprite nowPlayingIcon = null;
+                string nowPlayingText = FormatNowPlayingText(music);
                 
                 if (music.IsMultiMusic)
                 {
@@ -928,18 +995,21 @@ namespace ArchipelagoULTRAKILL.Music
 
                     if (music is MultiClipMusic mcm)
                     {
+                        nowPlayingIcon = (Sprite)mcm.icon.Asset;
                         clean = (AudioClip)mcm.audioClipClean.Asset;
                         battle = (AudioClip)mcm.audioClipBattle.Asset;
                     }
                     else if (music is MultiSoundtrackMusic msm)
                     {
                         SoundtrackSong soundtrackSong = (SoundtrackSong)msm.soundtrackSong.Asset;
+                        nowPlayingIcon = soundtrackSong.icon;
                         clean = soundtrackSong.clips[msm.cleanIndex];
                         battle = soundtrackSong.clips[msm.battleIndex];
                     }
                     else if (music is MultiClipAndSoundtrackMusic mcasm)
                     {
                         SoundtrackSong soundtrackSong = (SoundtrackSong)mcasm.soundtrackSong.Asset;
+                        nowPlayingIcon = soundtrackSong.icon;
 
                         if (mcasm.clipIsClean) clean = (AudioClip)mcasm.audioClip.Asset;
                         else battle = (AudioClip)mcasm.audioClip.Asset;
@@ -949,6 +1019,7 @@ namespace ArchipelagoULTRAKILL.Music
                     }
                     else if (music is MultiPreloadFromManagerMusic mpfmm)
                     {
+                        nowPlayingIcon = (Sprite)mpfmm.icon.Asset;
                         if (mpfmm.Ready)
                         {
                             clean = mpfmm.clean;
@@ -957,6 +1028,7 @@ namespace ArchipelagoULTRAKILL.Music
                     }
                     else if (music is MultiPreloadFromChangerMusic mpfcm)
                     {
+                        nowPlayingIcon = (Sprite)mpfcm.icon.Asset;
                         if (mpfcm.Ready)
                         {
                             clean = mpfcm.clean;
@@ -970,9 +1042,9 @@ namespace ArchipelagoULTRAKILL.Music
                         continue;
                     }
 
-                    if (target == null) ApplyMultiMusicToManager(clean, battle);
-                    else if (target is AudioSourceSplitTarget asst) ApplyMultiMusicToAudioSourceSplit(asst, clean, battle);
-                    else if (target is MusicChangerTarget mct) ApplyMultiMusicToChanger(mct, clean, battle);
+                    if (target == null) ApplyMultiMusicToManager(clean, battle, nowPlayingIcon, nowPlayingText);
+                    else if (target is AudioSourceSplitTarget asst) ApplyMultiMusicToAudioSourceSplit(asst, clean, battle, nowPlayingIcon, nowPlayingText);
+                    else if (target is MusicChangerTarget mct) ApplyMultiMusicToChanger(mct, clean, battle, nowPlayingIcon, nowPlayingText);
                     Core.Logger.LogInfo($"Set music {kvp.Key} {kvp.Value}");
                 }
                 else
@@ -981,14 +1053,18 @@ namespace ArchipelagoULTRAKILL.Music
 
                     if (music is SingleClipMusic scm)
                     {
+                        nowPlayingIcon = (Sprite)scm.icon.Asset;
                         clip = (AudioClip)scm.audioClip.Asset;
                     }
                     else if (music is SingleSoundtrackMusic ssm)
                     {
-                        clip = ((SoundtrackSong)ssm.soundtrackSong.Asset).clips[ssm.clipIndex];
+                        SoundtrackSong soundtrackSong = (SoundtrackSong)ssm.soundtrackSong.Asset;
+                        nowPlayingIcon = soundtrackSong.icon;
+                        clip = soundtrackSong.clips[ssm.clipIndex];
                     }
                     else if (music is SinglePreloadFromManagerMusic spfmm)
                     {
+                        nowPlayingIcon = (Sprite)spfmm.icon.Asset;
                         if (spfmm.Ready)
                         {
                             clip = spfmm.audioClip;
@@ -1001,9 +1077,9 @@ namespace ArchipelagoULTRAKILL.Music
                         continue;
                     }
 
-                    if (target == null) ApplySingleMusicToManager(clip);
-                    else if (target is AudioSourceTarget ast) ApplySingleMusicToAudioSource(ast, clip);
-                    else if (target is MusicChangerTarget mct) ApplySingleMusicToChanger(mct, clip);
+                    if (target == null) ApplySingleMusicToManager(clip, nowPlayingIcon, nowPlayingText);
+                    else if (target is AudioSourceTarget ast) ApplySingleMusicToAudioSource(ast, clip, nowPlayingIcon, nowPlayingText);
+                    else if (target is MusicChangerTarget mct) ApplySingleMusicToChanger(mct, clip, nowPlayingIcon, nowPlayingText);
                     Core.Logger.LogInfo($"Set music {kvp.Key} {kvp.Value}");
                 }
             }
@@ -1016,6 +1092,121 @@ namespace ArchipelagoULTRAKILL.Music
             int level = StatsManager.Instance.levelNumber;
             if (level <= 0) return;
             StartCoroutine(RandomizeMusic(GetKeysForLevel(level)));
+        }
+
+        private IEnumerator CreateNowPlaying()
+        {
+            if (NowPlaying.Instance == null)
+            {
+                GameObject npObj = new GameObject();
+                npObj.name = "Now Playing";
+                npObj.transform.SetParent(null);
+                DontDestroyOnLoad(npObj);
+
+                GameObject layoutObj = new GameObject();
+                layoutObj.name = "Layout";
+                layoutObj.transform.SetParent(npObj.transform);
+
+                GameObject iconObj = new GameObject();
+                iconObj.name = "Icon";
+                iconObj.transform.SetParent(layoutObj.transform);
+                Image image = iconObj.AddComponent<Image>();
+                image.preserveAspect = true;
+
+                GameObject textObj = new GameObject();
+                textObj.name = "Text";
+                textObj.transform.SetParent(layoutObj.transform);
+                TextMeshProUGUI text = textObj.AddComponent<TextMeshProUGUI>();
+                text.font = UIManager.bundle.LoadAsset<TMP_FontAsset>("assets/vcr_osd_mono_1.asset");
+                text.fontMaterial = UIManager.bundle.LoadAsset<Material>("assets/vcr_osd_mono_underlay.mat");
+
+                HorizontalLayoutGroup layout = layoutObj.AddComponent<HorizontalLayoutGroup>();
+                layout.childControlHeight = false;
+                layout.childControlWidth = false;
+                layout.childForceExpandHeight = false;
+                layout.childForceExpandWidth = false;
+                layout.childScaleHeight = false;
+                layout.childScaleWidth = false;
+                layout.spacing = 20;
+                layout.childAlignment = TextAnchor.MiddleCenter;
+
+                AspectRatioFitter arf = iconObj.AddComponent<AspectRatioFitter>();
+                arf.aspectMode = AspectRatioFitter.AspectMode.WidthControlsHeight;
+                arf.aspectRatio = 1.333f;
+                iconObj.GetComponent<RectTransform>().sizeDelta = new Vector2(180, 136);
+
+                ContentSizeFitter csf = textObj.AddComponent<ContentSizeFitter>();
+                csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+                npObj.transform.localPosition = new Vector3(0, 680, 0);
+
+                AsyncOperationHandle<Sprite> handle = Addressables.LoadAssetAsync<Sprite>("Assets/Textures/UI/Level Thumbnails/Locked.png");
+                while (!handle.IsDone) yield return null;
+                image.sprite = handle.Result;
+                text.text = "test\ntest\ntest";
+
+                Canvas canvas = npObj.AddComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvas.sortingOrder = 100;
+
+                CanvasScaler canvasScaler = npObj.AddComponent<CanvasScaler>();
+                canvasScaler.referenceResolution = new Vector2(2560, 1600);
+                canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+
+                npObj.AddComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.MiddleCenter;
+
+                GameObject emptyObj = new GameObject();
+                emptyObj.name = "Empty";
+                emptyObj.transform.SetParent(npObj.transform);
+                LayoutElement empty = emptyObj.AddComponent<LayoutElement>();
+                empty.flexibleHeight = 20;
+
+                npObj.AddComponent<NowPlaying>().Init(layout, empty, image, text);
+                npObj.SetActive(false);
+            }
+        }
+
+        public static string FormatNowPlayingText(BaseMusic baseMusic)
+        {
+            string fail = "Assets did not finish loading!";
+
+            if (baseMusic is MultiClipAndSoundtrackMusic mcasm)
+            {
+                if (mcasm.soundtrackSong.IsDone)
+                {
+                    SoundtrackSong soundtrackSong = (SoundtrackSong)mcasm.soundtrackSong.Asset;
+                    return $"{soundtrackSong.songName}\n{mcasm.levelNames}\n{mcasm.artistName}";
+                }
+                else return fail;
+            }
+            else if (baseMusic is BaseClipMusic bcm)
+            {
+                return $"{bcm.songName}\n{bcm.levelNames}\n{bcm.artistName}";
+            }
+            else if (baseMusic is PreloadMusic pm)
+            {
+                return $"{pm.songName}\n{pm.levelNames}\n{pm.artistName}";
+            }
+            else if (baseMusic is MultiSoundtrackMusic msm)
+            {
+                if (msm.soundtrackSong.IsDone)
+                {
+                    SoundtrackSong soundtrackSong = (SoundtrackSong)msm.soundtrackSong.Asset;
+                    return $"{soundtrackSong.songName}\n{msm.levelNames}\n{msm.artistName}";
+                }
+                else return fail;
+            }
+            else if (baseMusic is SingleSoundtrackMusic ssm)
+            {
+                if (ssm.soundtrackSong.IsDone)
+                {
+                    SoundtrackSong soundtrackSong = (SoundtrackSong)ssm.soundtrackSong.Asset;
+                    return $"{soundtrackSong.songName}\n{ssm.levelNames}\n{ssm.artistName}";
+                }
+                else return fail;
+            }
+            else return "?";
         }
 
         private void Awake()
@@ -1031,33 +1222,8 @@ namespace ArchipelagoULTRAKILL.Music
             preloadParent = new GameObject();
             preloadParent.transform.SetParent(transform);
             preloadParent.name = "Music";
-        }
 
-        private void CreateNowPlaying()
-        {
-            GameObject npObj = new GameObject();
-            npObj.name = "Now Playing";
-            npObj.transform.SetParent(transform);
-
-            GameObject layoutObj = new GameObject();
-            layoutObj.name = "Layout";
-            layoutObj.transform.SetParent(npObj.transform);
-
-            GameObject iconObj = new GameObject();
-            iconObj.name = "Icon";
-            iconObj.transform.SetParent(layoutObj.transform);
-            iconObj.AddComponent<Image>().preserveAspect = true;
-
-            GameObject textObj = new GameObject();
-            textObj.name = "Text";
-            textObj.transform.SetParent(layoutObj.transform);
-            textObj.AddComponent<TextMeshProUGUI>().font = UIManager.fontMain;
-
-            /*npObj.AddComponent<HorizontalLayoutGroup>().spacing = 75;
-
-            iconObj.AddComponent<LayoutElement>().preferredWidth = 0;
-            iconObj.AddComponent<AspectRatioFitter>().aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
-            iconObj.GetComponent<AspectRatioFitter>().aspectRatio = 2;*/
+            StartCoroutine(CreateNowPlaying());
         }
     }
 }

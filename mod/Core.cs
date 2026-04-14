@@ -259,6 +259,8 @@ namespace ArchipelagoULTRAKILL
             uim.deathLinkMessage = null;
             Multiworld.lastDeathLink = null;
 
+            if (NowPlaying.Instance) NowPlaying.Instance.Timer = 0.01f;
+
             LevelManager.skulls.Clear();
 
             ConfigManager.connectionInfo.text = "";
