@@ -367,6 +367,7 @@
     <Compile Include="Music\SinglePreloadFromManagerMusic.cs" />
     <Compile Include="Music\SingleSoundtrackMusic.cs" />
     <Compile Include="Music\SoundChangerTarget.cs" />
+    <Compile Include="Music\ShoppingTarget.cs" />
     <Compile Include="Patches\AltPickUp.cs" />
     <Compile Include="Patches\BestiaryData.cs" />
     <Compile Include="Patches\BigDoorOpener.cs" />

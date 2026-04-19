@@ -77,6 +77,7 @@ namespace ArchipelagoULTRAKILL.Music
 
             ["9A"] = new SingleSoundtrackMusic(
                 "1-4: CLAIR DE LUNE",
+                "Claude Debussy",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 1/Limbo/Clair de Lune.asset")),
 
             ["9B"] = new SingleSoundtrackMusic(
@@ -125,6 +126,7 @@ namespace ArchipelagoULTRAKILL.Music
 
             ["15A"] = new SingleSoundtrackMusic(
                 "3-2: IN THE FLESH",
+                "Johann Sebastian Bach",
                 new AssetReferenceSoundtrackSong("Assets/Data/Soundtrack/Levels/Act 1/Gluttony/Bach BWV 639.asset")),
 
             ["15B"] = new SingleSoundtrackMusic(
@@ -422,12 +424,12 @@ namespace ArchipelagoULTRAKILL.Music
             ["28B"] = new MusicChangerTarget("SecondTrackStart"),
             ["30A"] = null,
             ["30B"] = new MusicChangerTarget(new List<string>() { "Outside/OnTeleportOutsideMusicChangerParent/OnTeleportOutsideMusicChanger", "Outside/FakeExitOutsideMusicTrigger" }),
-            ["31A"] = new AudioSourceSplitTarget("Intro Music/Intro B", "Intro Music/Intro A"),
+            ["31A"] = new AudioSourceSplitTarget("Intro Music/Intro A", "Intro Music/Intro B"),
             ["31B"] = new MusicChangerTarget(new List<string>() { "2 - Reception/2 Nonstuff/EnableOnBreak", "Main Music Parent/Main Music" }),
-            ["31C"] = new AudioSourceTarget(new List<string>() { "12 - Island/12 Nonstuff/1/AmbianceZone/Ambiance", "12 - Island/12 Nonstuff/2/AmbianceZone/Ambiance", "12B - Supermarket Entrance/Ambiance (Fake Propagation)", "Exteriors/4B - Upper Exterior/4B Nonstuff (1)/AmbianceZone (2)/Ambiance", "15 - Second Deathcatcher/15 Stuff/Ambiance (Fake Propagation)" }),
-            ["31D"] = new MusicChangerTarget("Main Music Parent/Mall Music"),
+            ["31C"] = new AudioSourceTarget(new List<string>() { "11B - Parking Garage/11B Nonstuff/AmbianceZone (1)/Ambiance", "12 - Island/12 Nonstuff/1/AmbianceZone/Ambiance", "12 - Island/12 Nonstuff/2/AmbianceZone/Ambiance", "12B - Supermarket Entrance/Ambiance (Fake Propagation)", "Exteriors/4B - Upper Exterior/4B Nonstuff (1)/AmbianceZone (2)/Ambiance", "15 - Second Deathcatcher/15 Stuff/Ambiance (Fake Propagation)" }, new List<string>() { "Exteriors/4B - Upper Exterior/4B Nonstuff (1)/AmbianceZone (2)/Ambiance", "15 - Second Deathcatcher/15 Stuff/Ambiance (Fake Propagation)" }),
+            ["31D"] = new ShoppingTarget("Main Music Parent/Mall Music", new List<string>() { "12B - Supermarket Entrance/12B Nonstuff/Audio Source", "12B - Supermarket Entrance/12B Nonstuff/Audio Source (3)", "13 - Supermarket Escalators/13 Nonstuff/Audio Source (1)", "13 - Supermarket Escalators/13 Nonstuff/Audio Source (2)", "13 - Supermarket Escalators/13 Nonstuff/Audio Source (3)", "16 - Supermarket Shutters/16 Nonstuff/Audio Source (1)", "16 - Supermarket Shutters/16 Nonstuff/Audio Source (2)" }, new List<string>() { "12B - Supermarket Entrance/12B Stuff/MR Trigger", "12C - Fake Sky Room/12C Stuff/Trigger" }, false, true, true),
             ["31E"] = new AudioSourceTarget("Boss Music"),
-            ["32A"] = new MusicChangerTarget("Musics/First"),
+            ["32A"] = null,
             ["32B"] = new MusicChangerTarget("Musics/Second"),
             ["32C"] = new MusicChangerTarget("Musics/Third"),
             ["33"] = new AudioSourceTarget("Main Music"),

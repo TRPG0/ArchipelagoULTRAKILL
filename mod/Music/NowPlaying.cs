@@ -18,7 +18,7 @@ namespace ArchipelagoULTRAKILL.Music
         public TextMeshProUGUI text;
         public bool done = true;
         public float Timer { get; internal set; } = 0f;
-        public const float MaxTime = 7f;
+        public const float MaxTime = 6f;
 
         public static Color transparent = new Color(1, 1, 1, 0);
 
@@ -83,22 +83,30 @@ namespace ArchipelagoULTRAKILL.Music
                 icon.color = color;
                 text.color = color;
 
-                Dictionary<int, BossHealthBarTemplate> bossBars = Traverse.Create(BossBarManager.Instance).Field<Dictionary<int, BossHealthBarTemplate>>("bossBars").Value;
-
-                switch (bossBars.Count)
+                if (HeatResistance.Instance)
                 {
-                    case 0:
-                        emptyElement.flexibleHeight = 20;
-                        break;
-                    case 1:
-                        emptyElement.flexibleHeight = 3.5f;
-                        break;
-                    case 2:
-                        emptyElement.flexibleHeight = 1.5f;
-                        break;
-                    default:
-                        emptyElement.flexibleHeight = -1;
-                        break;
+                    if (HeatResistance.Instance.gameObject.activeSelf) emptyElement.flexibleHeight = 2.2f;
+                    else emptyElement.flexibleHeight = 20;
+                }
+                else
+                {
+                    Dictionary<int, BossHealthBarTemplate> bossBars = Traverse.Create(BossBarManager.Instance).Field<Dictionary<int, BossHealthBarTemplate>>("bossBars").Value;
+
+                    switch (bossBars.Count)
+                    {
+                        case 0:
+                            emptyElement.flexibleHeight = 20;
+                            break;
+                        case 1:
+                            emptyElement.flexibleHeight = 3.5f;
+                            break;
+                        case 2:
+                            emptyElement.flexibleHeight = 1.5f;
+                            break;
+                        default:
+                            emptyElement.flexibleHeight = -1;
+                            break;
+                    }
                 }
             }
             if (Timer < 0f)

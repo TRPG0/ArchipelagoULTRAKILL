@@ -10,15 +10,8 @@ namespace ArchipelagoULTRAKILL.Music
         public bool battle;
         public bool boss;
 
-        public MusicChangerTarget(string gameObjectPath)
-        {
-            this.gameObjectPaths = new List<string>() { gameObjectPath };
-            clean = true;
-            battle = true;
-            boss = true;
-        }
 
-        public MusicChangerTarget(string gameObjectPath, bool clean, bool battle, bool boss)
+        public MusicChangerTarget(string gameObjectPath, bool clean = true, bool battle = true, bool boss = true)
         {
             this.gameObjectPaths = new List<string>() { gameObjectPath };
             this.clean = clean;
@@ -26,15 +19,7 @@ namespace ArchipelagoULTRAKILL.Music
             this.boss = boss;
         }
 
-        public MusicChangerTarget(List<string> gameObjectPaths)
-        {
-            this.gameObjectPaths = gameObjectPaths;
-            clean = true;
-            battle = true;
-            boss = true;
-        }
-
-        public MusicChangerTarget(List<string> gameObjectPaths, bool clean, bool battle, bool boss)
+        public MusicChangerTarget(List<string> gameObjectPaths, bool clean = true, bool battle = true, bool boss = true)
         {
             this.gameObjectPaths = gameObjectPaths;
             this.clean = clean;

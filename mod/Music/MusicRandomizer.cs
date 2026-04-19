@@ -16,7 +16,8 @@ namespace ArchipelagoULTRAKILL.Music
     {
         public static MusicRandomizer Instance;
 
-        public static bool ShouldRandomizeMusic => Core.data.musicRandomizer && Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.RandomMusic && Instance && !Instance.IsPreloading;
+        public static bool ShouldRandomizeMusic => Core.data.musicRandomizer && Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.RandomMusic && Instance && !Instance.IsPreloading && DictIsValid;
+        public static bool DictIsValid { get; private set; } = false;
 
         private GameObject preloadParent;
 
@@ -41,6 +42,86 @@ namespace ArchipelagoULTRAKILL.Music
                 foreach (AsyncOperationHandle handle in handles) if (handle.IsValid() && !handle.IsDone) return false;
                 return true;
             }
+        }
+
+        public static void ValidateMusicDictionary()
+        {
+            List<string> multiLayer = new List<string>();
+            List<string> singleLayer = new List<string>();
+
+            foreach (KeyValuePair<string, BaseMusic> kvp in MusicList.Music)
+            {
+                if (kvp.Value.IsMultiMusic) multiLayer.Add(kvp.Key);
+                else singleLayer.Add(kvp.Key);
+            }
+
+            foreach (KeyValuePair<string, string> kvp in Core.data.music)
+            {
+                if ((multiLayer.Contains(kvp.Key) && singleLayer.Contains(kvp.Value)) 
+                    || (multiLayer.Contains(kvp.Value) && singleLayer.Contains(kvp.Key))
+                    || (!multiLayer.Contains(kvp.Key) && !singleLayer.Contains(kvp.Key)))
+                {
+                    Core.Logger.LogWarning($"Music dictionary is invalid. {kvp.Key} {kvp.Value}");
+                    MusicConfig.invalidMessage.hidden = false;
+                    DictIsValid = false;
+                    return;
+                }
+            }
+            MusicConfig.invalidMessage.hidden = true;
+            DictIsValid = true;
+        }
+
+        public static void RerandomizeMusicDictionary()
+        {
+            List<string> multiLayer1 = new List<string>();
+            List<string> singleLayer1 = new List<string>();
+            List<string> multiLayer2 = new List<string>();
+            List<string> singleLayer2 = new List<string>();
+
+            foreach (KeyValuePair<string, BaseMusic> kvp in MusicList.Music)
+            {
+                if (kvp.Value.IsMultiMusic)
+                {
+                    multiLayer1.Add(kvp.Key);
+                    multiLayer2.Add(kvp.Key);
+                }
+                else
+                {
+                    singleLayer1.Add(kvp.Key);
+                    singleLayer2.Add(kvp.Key);
+                }
+            }
+
+            Dictionary<string, string> temp = new Dictionary<string, string>();
+            Dictionary<string, string> final = new Dictionary<string, string>();
+
+            while (multiLayer1.Count > 0)
+            {
+                string key1 = multiLayer1[Random.Range(0, multiLayer1.Count)];
+                string key2 = multiLayer2[Random.Range(0, multiLayer2.Count)];
+
+                temp[key1] = key2;
+                multiLayer1.Remove(key1);
+                multiLayer2.Remove(key2);
+            }
+
+            while (singleLayer1.Count > 0)
+            {
+                string key1 = singleLayer1[Random.Range(0, singleLayer1.Count)];
+                string key2 = singleLayer2[Random.Range(0, singleLayer2.Count)];
+
+                temp[key1] = key2;
+                singleLayer1.Remove(key1);
+                singleLayer2.Remove(key2);
+            }
+
+            foreach (string key in MusicList.Music.Keys)
+            {
+                final[key] = temp[key];
+            }
+
+            Core.data.music = final;
+            ValidateMusicDictionary();
         }
 
         private List<object> TestLoadAll()
@@ -108,7 +189,7 @@ namespace ArchipelagoULTRAKILL.Music
                 {
                     if (MusicConfig.allowPreload.value)
                     {
-                        StartCoroutine(PreloadBeforeLevel(preloadKeys, scene));
+                        PreloadBeforeLevel(preloadKeys, scene);
                         return;
                     }
                     else Core.Logger.LogWarning($"Preloading is disabled! Skipping preload for {string.Join(", ", preloadKeys)}");
@@ -353,51 +434,33 @@ namespace ArchipelagoULTRAKILL.Music
             ReleaseAllHandles();
         }
 
-        private IEnumerator LoadMultiClipMusic(MultiClipMusic mcm)
+        private void LoadMultiClipMusic(MultiClipMusic mcm)
         {
-            AsyncOperationHandle handleClean = mcm.audioClipClean.LoadAssetAsync();
-            handles.Add(handleClean);
-            AsyncOperationHandle handleBattle = mcm.audioClipBattle.LoadAssetAsync();
-            handles.Add(handleBattle);
-            AsyncOperationHandle handleIcon = mcm.icon.LoadAssetAsync();
-
-            while (!handleClean.IsDone || !handleBattle.IsDone || !handleIcon.IsDone) yield return null;
+            if (!mcm.audioClipClean.IsValid()) handles.Add(mcm.audioClipClean.LoadAssetAsync());
+            if (!mcm.audioClipBattle.IsValid()) handles.Add(mcm.audioClipBattle.LoadAssetAsync());
+            if (!mcm.icon.IsValid()) handles.Add(mcm.icon.LoadAssetAsync());
         }
 
-        private IEnumerator LoadMultiSoundtrackMusic(MultiSoundtrackMusic msm)
+        private void LoadMultiSoundtrackMusic(MultiSoundtrackMusic msm)
         {
-            AsyncOperationHandle handle = msm.soundtrackSong.LoadAssetAsync();
-            handles.Add(handle);
-
-            while (!handle.IsDone) yield return null;
+            if (!msm.soundtrackSong.IsValid()) handles.Add(msm.soundtrackSong.LoadAssetAsync());
         }
 
-        private IEnumerator LoadMultiClipAndSoundtrackMusic(MultiClipAndSoundtrackMusic mcasm)
+        private void LoadMultiClipAndSoundtrackMusic(MultiClipAndSoundtrackMusic mcasm)
         {
-            AsyncOperationHandle handleClip = mcasm.audioClip.LoadAssetAsync();
-            handles.Add(handleClip);
-            AsyncOperationHandle handleSoundtrack = mcasm.soundtrackSong.LoadAssetAsync();
-            handles.Add(handleSoundtrack);
-
-            while (!handleClip.IsDone || !handleSoundtrack.IsDone) yield return null;
+            if (!mcasm.audioClip.IsValid()) handles.Add(mcasm.audioClip.LoadAssetAsync());
+            if (!mcasm.soundtrackSong.IsValid()) handles.Add(mcasm.soundtrackSong.LoadAssetAsync());
         }
 
-        private IEnumerator LoadSingleClipMusic(SingleClipMusic scm)
+        private void LoadSingleClipMusic(SingleClipMusic scm)
         {
-            AsyncOperationHandle handleClip = scm.audioClip.LoadAssetAsync();
-            handles.Add(handleClip);
-            AsyncOperationHandle handleIcon = scm.icon.LoadAssetAsync();
-            handles.Add(handleIcon);
-
-            while (!handleClip.IsDone || !handleIcon.IsDone) yield return null;
+            if (!scm.audioClip.IsValid()) handles.Add(scm.audioClip.LoadAssetAsync());
+            if (!scm.icon.IsValid()) handles.Add(scm.icon.LoadAssetAsync());
         }
 
-        private IEnumerator LoadSingleSoundtrackMusic(SingleSoundtrackMusic ssm)
+        private void LoadSingleSoundtrackMusic(SingleSoundtrackMusic ssm)
         {
-            AsyncOperationHandle handle = ssm.soundtrackSong.LoadAssetAsync();
-            handles.Add(handle);
-
-            while (!handle.IsDone) yield return null;
+            if (!ssm.soundtrackSong.IsValid()) handles.Add(ssm.soundtrackSong.LoadAssetAsync());
         }
 
         private void ApplySingleMusicToManager(AudioClip clip, Sprite icon, string text)
@@ -426,9 +489,12 @@ namespace ArchipelagoULTRAKILL.Music
                 GameObject gameObject = Core.FindGameObjectFromPathInScene(path);
                 AudioSource audioSource = Core.FindGameObjectFromPathInScene(path).GetComponent<AudioSource>();
                 audioSource.clip = clip;
-                NowPlayingChanger changer = gameObject.AddComponent<NowPlayingChanger>();
-                changer.Init(icon, text, audioSource);
-                changers.Add(changer);
+                if (!audioSourceTarget.doNotLink.Contains(path))
+                {
+                    NowPlayingChanger changer = gameObject.AddComponent<NowPlayingChanger>();
+                    changer.Init(icon, text, audioSource);
+                    changers.Add(changer);
+                }
             }
             if (changers.Count > 1)
             {
@@ -495,6 +561,32 @@ namespace ArchipelagoULTRAKILL.Music
             }
         }
 
+        private void ApplyMultiMusicToShoppingTarget(ShoppingTarget shoppingTarget, AudioClip clean, AudioClip battle, Sprite icon, string text)
+        {
+            foreach (string path in shoppingTarget.musicChangerPaths)
+            {
+                MusicChanger musicChanger = Core.FindGameObjectFromPathInScene(path).GetComponent<MusicChanger>();
+                if (shoppingTarget.clean) musicChanger.clean = clean;
+                if (shoppingTarget.battle) musicChanger.battle = battle;
+                if (shoppingTarget.boss) musicChanger.boss = battle;
+            }
+            foreach (string path in shoppingTarget.audioSourcePaths)
+            {
+                AudioSource audioSource = Core.FindGameObjectFromPathInScene(path).GetComponent<AudioSource>();
+                audioSource.clip = clean;
+                audioSource.gameObject.AddComponent<AudioHighPassFilter>().cutoffFrequency = 1500;
+            }
+            List<NowPlayingChanger> changers = new List<NowPlayingChanger>();
+            foreach (string path in shoppingTarget.objectActivatorPaths)
+            {
+                ObjectActivator objectActivator = Core.FindGameObjectFromPathInScene(path).GetComponent<ObjectActivator>();
+                NowPlayingChanger changer = objectActivator.gameObject.AddComponent<NowPlayingChanger>();
+                changer.Init(icon, text, objectActivator);
+                changers.Add(changer);
+            }
+            if (changers.Count > 1) foreach (NowPlayingChanger changer in changers) changer.links = changers;
+        }
+
         private void ApplyMultiMusicToSoundChanger(SoundChangerTarget soundChangerTarget, AudioClip clean, AudioClip battle, Sprite icon, string text)
         {
             List<NowPlayingChanger> changers = new List<NowPlayingChanger>();
@@ -548,11 +640,11 @@ namespace ArchipelagoULTRAKILL.Music
                 }
 
                 BaseMusic music = MusicList.Music[kvp.Value];
-                if (music is MultiClipMusic mcm) StartCoroutine(LoadMultiClipMusic(mcm));
-                else if (music is MultiSoundtrackMusic msm) StartCoroutine(LoadMultiSoundtrackMusic(msm));
-                else if (music is MultiClipAndSoundtrackMusic mcasm) StartCoroutine(LoadMultiClipAndSoundtrackMusic(mcasm));
-                else if (music is SingleClipMusic scm) StartCoroutine(LoadSingleClipMusic(scm));
-                else if (music is SingleSoundtrackMusic ssm) StartCoroutine(LoadSingleSoundtrackMusic(ssm));
+                if (music is MultiClipMusic mcm) LoadMultiClipMusic(mcm);
+                else if (music is MultiSoundtrackMusic msm) LoadMultiSoundtrackMusic(msm);
+                else if (music is MultiClipAndSoundtrackMusic mcasm) LoadMultiClipAndSoundtrackMusic(mcasm);
+                else if (music is SingleClipMusic scm) LoadSingleClipMusic(scm);
+                else if (music is SingleSoundtrackMusic ssm) LoadSingleSoundtrackMusic(ssm);
                 else if (music is PreloadMusic pm)
                 {
                     if (!pm.Ready)
@@ -642,6 +734,8 @@ namespace ArchipelagoULTRAKILL.Music
                     if (target == null) ApplyMultiMusicToManager(clean, battle, nowPlayingIcon, nowPlayingText);
                     else if (target is AudioSourceSplitTarget asst) ApplyMultiMusicToAudioSourceSplit(asst, clean, battle, nowPlayingIcon, nowPlayingText);
                     else if (target is MusicChangerTarget mct) ApplyMultiMusicToMusicChanger(mct, clean, battle, nowPlayingIcon, nowPlayingText);
+                    else if (target is ShoppingTarget st) ApplyMultiMusicToShoppingTarget(st, clean, battle, nowPlayingIcon, nowPlayingText);
+                    else if (target is SoundChangerTarget sct) ApplyMultiMusicToSoundChanger(sct, clean, battle, nowPlayingIcon, nowPlayingText);
                     Core.Logger.LogInfo($"Set music {kvp.Key} {kvp.Value}");
                 }
                 else

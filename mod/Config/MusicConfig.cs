@@ -1,6 +1,9 @@
-﻿using PluginConfig.API;
+﻿using ArchipelagoULTRAKILL.Music;
+using PluginConfig.API;
 using PluginConfig.API.Decorators;
 using PluginConfig.API.Fields;
+using PluginConfig.API.Functionals;
+using UnityEngine;
 
 namespace ArchipelagoULTRAKILL.Config
 {
@@ -9,7 +12,9 @@ namespace ArchipelagoULTRAKILL.Config
         public static bool Done { get; private set; } = false;
 
         public static ConfigPanel musicPanel;
+        public static ConfigHeader invalidMessage;
         public static BoolField enabled;
+        public static ButtonField rerandomizeButton;
         public static BoolField allowPreload;
         public static BoolField showNowPlaying;
         public static IntField nowPlayingMaxOpacity;
@@ -20,9 +25,19 @@ namespace ArchipelagoULTRAKILL.Config
 
             musicPanel = new ConfigPanel(config.rootPanel, "MUSIC", "musicPanel");
 
+            invalidMessage = new ConfigHeader(musicPanel, "Music dictionary is invalid.");
+            invalidMessage.textColor = Color.yellow;
+            invalidMessage.hidden = true;
+
             enabled = new BoolField(musicPanel, "ENABLE RANDOM MUSIC", "musicEnabled", false);
             enabled.onValueChange += (BoolField.BoolValueChangeEvent e) => {
                 Core.data.musicRandomizer = e.value;
+            };
+
+            rerandomizeButton = new ButtonField(musicPanel, "RE-RANDOMIZE", "musicRerandomizeButton");
+            rerandomizeButton.onClick += () =>
+            {
+                MusicRandomizer.RerandomizeMusicDictionary();
             };
             new ConfigHeader(musicPanel, "Level must be reloaded for changes to take effect.", 12);
 
@@ -40,6 +55,7 @@ namespace ArchipelagoULTRAKILL.Config
         public static void LoadStats()
         {
             enabled.value = Core.data.musicRandomizer;
+            MusicRandomizer.ValidateMusicDictionary();
         }
 
         public static void ResetStatsDefaults()
