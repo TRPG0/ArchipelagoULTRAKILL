@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ArchipelagoULTRAKILL.Config;
+using HarmonyLib;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -17,7 +18,7 @@ namespace ArchipelagoULTRAKILL.Music
         public TextMeshProUGUI text;
         public bool done = true;
         public float Timer { get; internal set; } = 0f;
-        public const float MaxTime = 5f;
+        public const float MaxTime = 7f;
 
         public static Color transparent = new Color(1, 1, 1, 0);
 
@@ -50,7 +51,7 @@ namespace ArchipelagoULTRAKILL.Music
 
         public void Show()
         {
-            if (!done)
+            if (!done && MusicConfig.showNowPlaying.value)
             {
                 gameObject.SetActive(true);
                 Timer = MaxTime;
@@ -75,7 +76,7 @@ namespace ArchipelagoULTRAKILL.Music
             {
                 Timer -= Time.deltaTime;
 
-                float maxOpacity = GameStateManager.Instance.IsStateActive("pause") ? 0.5f : 1f;
+                float maxOpacity = GameStateManager.Instance.IsStateActive("pause") ? MusicConfig.nowPlayingMaxOpacity.value / 300f : MusicConfig.nowPlayingMaxOpacity.value / 100f;
                 Color opaque = new Color(1, 1, 1, maxOpacity);
 
                 Color color = Color.Lerp(transparent, opaque, Timer);

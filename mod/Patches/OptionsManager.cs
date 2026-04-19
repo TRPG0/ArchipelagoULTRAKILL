@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ArchipelagoULTRAKILL.Config;
+using HarmonyLib;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
@@ -7,9 +8,9 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Postfix()
         {
-            OptionsManager.forceRadiance = ConfigManager.permaRadiance.value;
-            OptionsManager.radianceTier = ConfigManager.radianceLevel.value;
-            //OptionsManager.forceSand = ConfigManager.permaSand.value;
+            OptionsManager.forceRadiance = ModifierConfig.permaRadiance.value;
+            OptionsManager.radianceTier = ModifierConfig.radianceLevel.value;
+            //OptionsManager.forceSand = ModifierConfig.permaSand.value;
         }
     }
 }

@@ -4,6 +4,7 @@ using ArchipelagoULTRAKILL.Structures;
 using ArchipelagoULTRAKILL.Powerups;
 using ULTRAKILL.Cheats;
 using BepInEx;
+using ArchipelagoULTRAKILL.Config;
 
 namespace ArchipelagoULTRAKILL.Components
 {
@@ -93,8 +94,8 @@ namespace ArchipelagoULTRAKILL.Components
                 Powerup powerup = LocationManager.powerupQueue[0];
                 LocationManager.powerupQueue.RemoveAt(0);
 
-                if (powerup == Powerup.Radiance && ConfigManager.permaRadiance.value
-                    /*|| powerup == Powerup.Sandstorm && ConfigManager.permaSand.value*/)
+                if (powerup == Powerup.Radiance && ModifierConfig.permaRadiance.value
+                    /*|| powerup == Powerup.Sandstorm && ModifierConfig.permaSand.value*/)
                 {
                     Core.Logger.LogInfo($"Skipping {nameof(powerup)} powerup.");
                     return;

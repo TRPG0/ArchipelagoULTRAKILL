@@ -16,6 +16,7 @@ using BepInEx;
 using System.Linq;
 using TMPro;
 using System.Collections;
+using ArchipelagoULTRAKILL.Config;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -280,12 +281,12 @@ namespace ArchipelagoULTRAKILL
                 Core.Logger.LogInfo("Login successful");
                 Authenticated = true;
 
-                ConfigManager.isConnected.value = true;
-                ConfigManager.playerName.interactable = false;
-                ConfigManager.serverAddress.interactable = false;
-                ConfigManager.serverPassword.interactable = false;
-                ConfigManager.hintMode.interactable = false;
-                ConfigManager.chat.interactable = true;
+                PlayerConfig.isConnected.value = true;
+                PlayerConfig.playerName.interactable = false;
+                PlayerConfig.serverAddress.interactable = false;
+                PlayerConfig.serverPassword.interactable = false;
+                PlayerConfig.hintMode.interactable = false;
+                PlayerConfig.chat.interactable = true;
 
                 if (Core.DataExists()) DoServerCheck(Session, success.SlotData);
                 else AllowConnect = true;
@@ -380,10 +381,10 @@ namespace ArchipelagoULTRAKILL
 
                     TryGetSlotDataValue(ref Core.data.cybergrindHints, success.SlotData, "cybergrind_hints", true);
 
-                    try { ConfigManager.uiColorRandomizer.value = (ColorOptions)Enum.Parse(typeof(ColorOptions), success.SlotData["ui_color_randomizer"].ToString()); }
-                    catch (KeyNotFoundException) { ConfigManager.uiColorRandomizer.value = ColorOptions.Off; }
-                    try { ConfigManager.gunColorRandomizer.value = (ColorOptions)Enum.Parse(typeof(ColorOptions), success.SlotData["gun_color_randomizer"].ToString()); }
-                    catch (KeyNotFoundException) { ConfigManager.gunColorRandomizer.value = ColorOptions.Off; }
+                    try { ColorConfig.uiColorRandomizer.value = (ColorOptions)Enum.Parse(typeof(ColorOptions), success.SlotData["ui_color_randomizer"].ToString()); }
+                    catch (KeyNotFoundException) { ColorConfig.uiColorRandomizer.value = ColorOptions.Off; }
+                    try { ColorConfig.gunColorRandomizer.value = (ColorOptions)Enum.Parse(typeof(ColorOptions), success.SlotData["gun_color_randomizer"].ToString()); }
+                    catch (KeyNotFoundException) { ColorConfig.gunColorRandomizer.value = ColorOptions.Off; }
 
                     Core.data.playerCount = Session.Players.Players[0].Count - 1;
 
@@ -401,8 +402,8 @@ namespace ArchipelagoULTRAKILL
                     GameProgressSaver.SetPrime(2, 1);
                     Core.SaveData();
 
-                    if (ConfigManager.uiColorRandomizer.value != ColorOptions.Off) ColorRandomizer.RandomizeUIColors();
-                    if (ConfigManager.gunColorRandomizer.value != ColorOptions.Off) ColorRandomizer.RandomizeGunColors();
+                    if (ColorConfig.uiColorRandomizer.value != ColorOptions.Off) ColorRandomizer.RandomizeUIColors();
+                    if (ColorConfig.gunColorRandomizer.value != ColorOptions.Off) ColorRandomizer.RandomizeGunColors();
 
                     Core.data.deathLink = bool.Parse(success.SlotData["death_link"].ToString());
                     TryGetSlotDataValue(ref Core.data.deathLinkAmnesty, success.SlotData, "death_link_amnesty", 1);
@@ -415,14 +416,14 @@ namespace ArchipelagoULTRAKILL
                 ConfigManager.LoadStats();
                 LocationManager.RegenerateItemDefinitions();
                 Core.Logger.LogInfo("Successfully connected to server as player \"" + Core.data.slot_name + "\".");
-                ConfigManager.connectionInfo.text = "Successfully connected to server as player \"" + Core.data.slot_name + "\".";
+                PlayerConfig.connectionInfo.text = "Successfully connected to server as player \"" + Core.data.slot_name + "\".";
                 UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
                 if (Core.data.completedLevels.Count < Core.data.goalRequirement) UIManager.CreateGoalCounter();
                 string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
                 //UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
 
                 if (Core.data.deathLink) EnableDeathLink();
-                else ConfigManager.deathLinkStatus.text = "Death Link is <color=red>OFF</color>";
+                else DeathLinkConfig.deathLinkStatus.text = "Death Link is <color=red>OFF</color>";
 
                 Core.Logger.LogInfo("Scouting shop items");
                 foreach (string weapon in Core.shopPrices.Keys)
@@ -465,7 +466,7 @@ namespace ArchipelagoULTRAKILL
                 Authenticated = false;
                 //GameConsole.Console.Instance.PrintLine(String.Join("\n", loginFailure.Errors));
                 Core.Logger.LogError(String.Join("\n", failure.Errors));
-                ConfigManager.connectionInfo.text = String.Join("\n", failure.Errors);
+                PlayerConfig.connectionInfo.text = String.Join("\n", failure.Errors);
                 Session.Socket.DisconnectAsync();
                 Session = null;
                 CanGetItems = false;
@@ -503,15 +504,15 @@ namespace ArchipelagoULTRAKILL
                 Authenticated = true;
                 HintMode = true;
 
-                ConfigManager.isConnected.value = true;
-                ConfigManager.playerName.interactable = false;
-                ConfigManager.serverAddress.interactable = false;
-                ConfigManager.serverPassword.interactable = false;
-                ConfigManager.hintMode.interactable = false;
-                ConfigManager.chat.interactable = true;
+                PlayerConfig.isConnected.value = true;
+                PlayerConfig.playerName.interactable = false;
+                PlayerConfig.serverAddress.interactable = false;
+                PlayerConfig.serverPassword.interactable = false;
+                PlayerConfig.hintMode.interactable = false;
+                PlayerConfig.chat.interactable = true;
 
                 Core.Logger.LogInfo("Successfully connected to server in hint mode as player \"" + Core.data.slot_name + "\".");
-                ConfigManager.connectionInfo.text = "Successfully connected to server in hint mode as player \"" + Core.data.slot_name + "\".";
+                PlayerConfig.connectionInfo.text = "Successfully connected to server in hint mode as player \"" + Core.data.slot_name + "\".";
                 UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
                 //UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n<color=yellow>Hint Mode</color>";
             }
@@ -521,7 +522,7 @@ namespace ArchipelagoULTRAKILL
                 HintMode = false;
                 //GameConsole.Console.Instance.PrintLine(String.Join("\n", loginFailure.Errors));
                 Core.Logger.LogError(String.Join("\n", failure.Errors));
-                ConfigManager.connectionInfo.text = String.Join("\n", failure.Errors);
+                PlayerConfig.connectionInfo.text = String.Join("\n", failure.Errors);
                 Session.Socket.DisconnectAsync();
                 Session = null;
                 UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
@@ -531,12 +532,12 @@ namespace ArchipelagoULTRAKILL
 
         public static void Disconnect()
         {
-            ConfigManager.isConnected.value = false;
-            ConfigManager.playerName.interactable = true;
-            ConfigManager.serverAddress.interactable = true;
-            ConfigManager.serverPassword.interactable = true;
-            ConfigManager.hintMode.interactable = true;
-            ConfigManager.chat.interactable = false;
+            PlayerConfig.isConnected.value = false;
+            PlayerConfig.playerName.interactable = true;
+            PlayerConfig.serverAddress.interactable = true;
+            PlayerConfig.serverPassword.interactable = true;
+            PlayerConfig.hintMode.interactable = true;
+            PlayerConfig.chat.interactable = false;
             if (Session != null && Session.Socket != null) Session.Socket.DisconnectAsync();
             if (SceneHelper.CurrentScene == "Main Menu") UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
             //GameConsole.Console.Instance.PrintLine("Disconnected from Archipelago server.");
@@ -770,8 +771,8 @@ namespace ArchipelagoULTRAKILL
             }
             DeathLinkService.EnableDeathLink();
             Core.data.deathLink = true;
-            ConfigManager.deathLinkStatus.text = "Death Link is <color=green>ON</color>";
-            ConfigManager.UpdateDeathLinkCount();
+            DeathLinkConfig.deathLinkStatus.text = "Death Link is <color=green>ON</color>";
+            DeathLinkConfig.UpdateDeathLinkCount();
             if (Core.IsInLevel && Core.uim.deathLinkMessage == null) Core.uim.CreateDeathLinkMessage();
         }
 
@@ -782,8 +783,8 @@ namespace ArchipelagoULTRAKILL
             {
                 DeathLinkService.DisableDeathLink();
                 Core.data.deathLink = false;
-                ConfigManager.deathLinkStatus.text = "Death Link is <color=red>OFF</color>";
-                ConfigManager.deathLinkCount.text = "";
+                DeathLinkConfig.deathLinkStatus.text = "Death Link is <color=red>OFF</color>";
+                DeathLinkConfig.deathLinkCount.text = "";
             }
         }
 

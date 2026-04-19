@@ -1,5 +1,6 @@
 ﻿using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using ArchipelagoULTRAKILL.Components;
+using ArchipelagoULTRAKILL.Config;
 using HarmonyLib;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ namespace ArchipelagoULTRAKILL.Patches
                             sendDeathLink = true;
                             Multiworld.currentDeathCount = 0;
                         }
-                        ConfigManager.UpdateDeathLinkCount();
+                        DeathLinkConfig.UpdateDeathLinkCount();
                     }
                     else
                     {

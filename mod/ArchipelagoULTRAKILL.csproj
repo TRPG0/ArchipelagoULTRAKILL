@@ -335,7 +335,14 @@
     <Compile Include="Components\SkullIcon.cs" />
     <Compile Include="Components\SwitchIcon.cs" />
     <Compile Include="Components\VariationOnEnable.cs" />
-    <Compile Include="ConfigManager.cs" />
+    <Compile Include="Config\ColorConfig.cs" />
+    <Compile Include="Config\ConfigManager.cs" />
+    <Compile Include="Config\DeathLinkConfig.cs" />
+    <Compile Include="Config\LinksConfig.cs" />
+    <Compile Include="Config\ModifierConfig.cs" />
+    <Compile Include="Config\MusicConfig.cs" />
+    <Compile Include="Config\PlayerConfig.cs" />
+    <Compile Include="Config\UIConfig.cs" />
     <Compile Include="LevelManager.cs" />
     <Compile Include="Multiworld.cs" />
     <Compile Include="LocationManager.cs" />
@@ -345,6 +352,7 @@
     <Compile Include="Music\BaseClipMusic.cs" />
     <Compile Include="Music\BaseMusic.cs" />
     <Compile Include="Music\BaseTarget.cs" />
+    <Compile Include="Music\MusicList.cs" />
     <Compile Include="Music\NowPlayingChanger.cs" />
     <Compile Include="Music\MultiPreloadFromChangerMusic.cs" />
     <Compile Include="Music\MusicChangerTarget.cs" />
@@ -358,6 +366,7 @@
     <Compile Include="Music\SingleClipMusic.cs" />
     <Compile Include="Music\SinglePreloadFromManagerMusic.cs" />
     <Compile Include="Music\SingleSoundtrackMusic.cs" />
+    <Compile Include="Music\SoundChangerTarget.cs" />
     <Compile Include="Patches\AltPickUp.cs" />
     <Compile Include="Patches\BestiaryData.cs" />
     <Compile Include="Patches\BigDoorOpener.cs" />

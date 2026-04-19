@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using ArchipelagoULTRAKILL.Music;
+using ArchipelagoULTRAKILL.Config;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -66,7 +67,7 @@ namespace ArchipelagoULTRAKILL
         {
             StartCoroutine(VersionChecker.CheckVersion());
 
-            lines = ConfigManager.logLines.value;
+            lines = UIConfig.logLines.value;
 
             GameConsole.Console.Instance.RegisterCommand(new Commands.Connect());
             GameConsole.Console.Instance.RegisterCommand(new Commands.Disconnect());
@@ -81,10 +82,10 @@ namespace ArchipelagoULTRAKILL
             Core.obj.GetComponent<Canvas>().sortingOrder = 256;
 
             log = go.AddComponent<TextMeshProUGUI>();
-            log.fontSize = ConfigManager.logFontSize.value;
+            log.fontSize = UIConfig.logFontSize.value;
             log.alignment = TextAlignmentOptions.BottomGeoAligned;
             log.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 10, Screen.height - 10);
-            SetLogFont(ConfigManager.logFont.value);
+            SetLogFont(UIConfig.logFont.value);
         }
 
         public static void SetLogFont(LogFont font, bool reset = false)
@@ -98,7 +99,7 @@ namespace ArchipelagoULTRAKILL
                 fontMat = bundle.LoadAsset<Material>("assets/fs-tahoma-8px_underlay.mat");
                 if (reset)
                 {
-                    ConfigManager.logFontSize.value = 20;
+                    UIConfig.logFontSize.value = 20;
                     log.fontSize = 20;
                 }
             }
@@ -108,7 +109,7 @@ namespace ArchipelagoULTRAKILL
                 fontMat = bundle.LoadAsset<Material>("assets/vcr_osd_mono_underlay.mat");
                 if (reset)
                 {
-                    ConfigManager.logFontSize.value = 16;
+                    UIConfig.logFontSize.value = 16;
                     log.fontSize = 16;
                 }
             }
@@ -118,7 +119,7 @@ namespace ArchipelagoULTRAKILL
                 fontMat = bundle.LoadAsset<Material>("assets/roboto-regular_underlay.mat");
                 if (reset)
                 {
-                    ConfigManager.logFontSize.value = 14;
+                    UIConfig.logFontSize.value = 14;
                     log.fontSize = 14;
                 }
             }
@@ -748,7 +749,7 @@ namespace ArchipelagoULTRAKILL
                         offlineText.SetActive(false);
                     }
                 }
-                if (!ConfigManager.showRecentLocations.value) recentLocationContainer.SetActive(false);
+                if (!UIConfig.showRecentLocations.value) recentLocationContainer.SetActive(false);
             }
             if (recentItemContainer == null)
             {
@@ -831,7 +832,7 @@ namespace ArchipelagoULTRAKILL
                         offlineText.SetActive(false);
                     }
                 }
-                if (!ConfigManager.showRecentItems.value) recentItemContainer.SetActive(false);
+                if (!UIConfig.showRecentItems.value) recentItemContainer.SetActive(false);
             }
         }
 

@@ -19,6 +19,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using Archipelago.MultiClient.Net;
 using ArchipelagoULTRAKILL.Music;
 using System;
+using ArchipelagoULTRAKILL.Config;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -263,9 +264,9 @@ namespace ArchipelagoULTRAKILL
 
             LevelManager.skulls.Clear();
 
-            ConfigManager.connectionInfo.text = "";
-            if (ConfigManager.uiColorRandomizer.value == ColorOptions.EveryLoad) ColorRandomizer.RandomizeUIColors();
-            if (ConfigManager.gunColorRandomizer.value == ColorOptions.EveryLoad) ColorRandomizer.RandomizeGunColors();
+            PlayerConfig.connectionInfo.text = "";
+            if (ColorConfig.uiColorRandomizer.value == ColorOptions.EveryLoad) ColorRandomizer.RandomizeUIColors();
+            if (ColorConfig.gunColorRandomizer.value == ColorOptions.EveryLoad) ColorRandomizer.RandomizeGunColors();
 
             if (SceneHelper.CurrentScene == "Main Menu")
             {
@@ -301,7 +302,7 @@ namespace ArchipelagoULTRAKILL
             else if (IsInLevel && DataExists())
             {
                 UIManager.CreateMessageUI();
-                if (data.musicRandomizer && CurrentLevelHasInfo && CurrentLevelInfo.RandomMusic && MusicRandomizer.Instance && !MusicRandomizer.Instance.IsPreloading) MusicRandomizer.Instance.RandomizeMusicForLevel();
+                if (MusicRandomizer.ShouldRandomizeMusic) MusicRandomizer.Instance.RandomizeMusicForLevel();
             }
             else if (SceneHelper.CurrentScene == "Endless" && Multiworld.HintMode) UIManager.CreateMessageUI();
             if (!IsInIntro) OptionsManager.Instance.optionsMenu.gameObject.AddComponent<OptionsMenuState>();

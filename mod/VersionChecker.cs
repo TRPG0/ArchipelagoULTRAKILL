@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
-using PluginConfig.API.Decorators;
 using System.Collections;
 using UnityEngine.Networking;
-using plog.Models;
 using UnityEngine;
+using ArchipelagoULTRAKILL.Config;
 
 namespace ArchipelagoULTRAKILL
 {
