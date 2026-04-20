@@ -189,7 +189,7 @@ namespace ArchipelagoULTRAKILL.Music
                 {
                     if (MusicConfig.allowPreload.value)
                     {
-                        PreloadBeforeLevel(preloadKeys, scene);
+                        StartCoroutine(PreloadBeforeLevel(preloadKeys, scene));
                         return;
                     }
                     else Core.Logger.LogWarning($"Preloading is disabled! Skipping preload for {string.Join(", ", preloadKeys)}");
