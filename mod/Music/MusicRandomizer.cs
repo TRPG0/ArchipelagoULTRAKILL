@@ -1,4 +1,5 @@
 ﻿using ArchipelagoULTRAKILL.Config;
+using ArchipelagoULTRAKILL.Structures;
 using HarmonyLib;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace ArchipelagoULTRAKILL.Music
     {
         public static MusicRandomizer Instance;
 
-        public static bool ShouldRandomizeMusic => Core.data.musicRandomizer && Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.RandomMusic && Instance && !Instance.IsPreloading && DictIsValid;
+        public static bool ShouldRandomizeMusic => Core.data.musicRandomizer && Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.Flags.HasFlag(InfoFlags.HasRandomMusic) && Instance && !Instance.IsPreloading && DictIsValid;
         public static bool DictIsValid { get; private set; } = false;
 
         private GameObject preloadParent;
@@ -595,7 +596,7 @@ namespace ArchipelagoULTRAKILL.Music
                 AudioSource audioSource = Core.FindGameObjectFromPathInScene(path).GetComponent<AudioSource>();
                 audioSource.clip = clean;
                 NowPlayingChanger changer = audioSource.gameObject.AddComponent<NowPlayingChanger>();
-                changer.Init(icon, text);
+                changer.Init(icon, text, audioSource);
                 changers.Add(changer);
             }
             foreach (string path in soundChangerTarget.soundChangerPaths)

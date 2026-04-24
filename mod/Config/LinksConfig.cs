@@ -24,8 +24,8 @@ namespace ArchipelagoULTRAKILL.Config
             thunderstoreButton.onClick += () => { Application.OpenURL("https://thunderstore.io/c/ultrakill/p/TRPG/Archipelago/"); };
             githubButton = new ButtonField(linksPanel, "GITHUB", "githubButton");
             githubButton.onClick += () => { Application.OpenURL("https://github.com/TRPG0/ArchipelagoULTRAKILL"); };
-            discordButton = new ButtonField(linksPanel, "AP AFTER DARK DISCORD", "discordButton");
-            discordButton.onClick += () => { Application.OpenURL("https://discord.gg/Sbhy4ykUKn"); };
+            discordButton = new ButtonField(linksPanel, "ARCHIPELAGO DISCORD", "discordButton");
+            discordButton.onClick += () => { Application.OpenURL("https://discord.gg/archipelago"); };
             poptrackerButton = new ButtonField(linksPanel, "POPTRACKER PACK", "poptrackerButton");
             poptrackerButton.onClick += () => { Application.OpenURL("https://github.com/BowserCrusher/UltrakillPoptracker/releases/"); };
 

@@ -6,6 +6,7 @@ multilayer_music: Dict[str, str] = {
     "2": "Unstoppable Force",
     "3": "Into the Fire",
     "4": "Unstoppable Force",
+    "5": "Cerberus",
     "6B": "A Shattered Illusion",
     "7B": "A Complete and Utter Destruction of the Senses",
     "8": "Castle Vein",
@@ -18,7 +19,6 @@ multilayer_music: Dict[str, str] = {
     "17": "Sands of Tide",
     "18A": "Dancer in the Darkness (Phase 1)",
     "18B": "Dancer in the Darkness (Phase 2)",
-    "18C": "Dancer in the Darkness (Phase 3)",
     "20": "Deep Blue",
     "22A": "Death Odyssey",
     "22B": "Death Odyssey Aftermath",
@@ -42,7 +42,6 @@ multilayer_music: Dict[str, str] = {
 }
 
 singlelayer_music: Dict[str, str] = {
-    "5": "Cerberus",
     "6A": "A Thousand Greetings",
     "7A": "A Thousand Greetings (Alternate)",
     "9A": "Clair de Lune",
@@ -50,6 +49,7 @@ singlelayer_music: Dict[str, str] = {
     "13": "In the Presence of a King",
     "15A": "Bach: BWV 639 \"I call to you, Lord Jesus Christ\"",
     "15B": "Divine Intervention",
+    "18C": "Dancer in the Darkness (Phase 3)",
     "19": "Duel (Versus Reprise)",
     "24B": "Hall of Sacreligious Remains",
     "25A": "Fallen Angel",

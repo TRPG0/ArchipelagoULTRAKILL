@@ -527,7 +527,7 @@ namespace ArchipelagoULTRAKILL
                 int xPos = 74;
                 int xOffset = 33;
                 int yPos = 65;
-                if (info.Skulls == SkullsType.Normal)
+                if (info.Flags.HasFlag(InfoFlags.HasSkullsNormal))
                 {
                     if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}.");
                     bool reposition = true;
@@ -593,7 +593,7 @@ namespace ArchipelagoULTRAKILL
 
             foreach (LevelInfo info in Core.secretMissionInfos)
             {
-                if (info.Skulls == SkullsType.Normal)
+                if (info.Flags.HasFlag(InfoFlags.HasSkullsNormal))
                 {
                     if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}.");
 
@@ -873,7 +873,7 @@ namespace ArchipelagoULTRAKILL
                 float xPos = 0;
                 float yPos = 1;
                 if (Core.CurrentLevelHasSkulls && Core.CurrentLevelHasSwitches) yPos = 21;
-                if (info.Skulls == SkullsType.Normal)
+                if (info.Flags.HasFlag(InfoFlags.HasSkullsNormal))
                 {
                     if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}");
                     if (info.SkullsList.Count > 1)

@@ -1,4 +1,5 @@
 ﻿using ArchipelagoULTRAKILL.Components;
+using ArchipelagoULTRAKILL.Structures;
 using HarmonyLib;
 
 namespace ArchipelagoULTRAKILL.Patches
@@ -25,7 +26,7 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (Core.DataExists())
             {
-                if (Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.HasSecretExit)
+                if (Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.Flags.HasFlag(InfoFlags.HasSecretExit))
                 {
                     if (!SceneHelper.CurrentScene.Contains("-S") && __instance.GetComponent<SecretMissionPit>() && !Core.data.secretExitComplete) PlayerHelper.IsSecretExiting = true;
                 }

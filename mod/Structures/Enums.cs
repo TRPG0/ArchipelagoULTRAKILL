@@ -1,17 +1,19 @@
-﻿namespace ArchipelagoULTRAKILL.Structures
-{
-    public enum LevelType
-    {
-        Normal,
-        Secret,
-        Prime
-    }
+﻿using System;
 
-    public enum SkullsType
+namespace ArchipelagoULTRAKILL.Structures
+{
+    [Flags]
+    public enum InfoFlags
     {
-        None,
-        Normal,
-        Special
+        None = 0,
+        HasSecrets = 1 << 0,
+        HasSecretExit = 1 << 1,
+        HasWeapon = 1 << 2,
+        HasSecretWeapon = 1 << 3,
+        HasRandomMusic = 1 << 4,
+        HasSkullsNormal = 1 << 5,
+        HasSkullsSpecial = 1 << 6,
+        HasAnySkulls = HasSkullsNormal | HasSkullsSpecial
     }
 
     public enum UKType

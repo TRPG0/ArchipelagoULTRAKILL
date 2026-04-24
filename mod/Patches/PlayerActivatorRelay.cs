@@ -36,7 +36,7 @@ namespace ArchipelagoULTRAKILL.Patches
 
                 if (SceneHelper.CurrentScene == "Level 5-S") LevelManager.ForceBlueArm();
 
-                if (Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.Skulls >= SkullsType.Normal && Core.data.randomizeSkulls)
+                if (Core.CurrentLevelHasInfo && (Core.CurrentLevelInfo.Flags & InfoFlags.HasAnySkulls) != 0 && Core.data.randomizeSkulls)
                     LevelManager.FindSkulls();
 
                 if (Core.data.deathLink && Core.uim.deathLinkMessage == null) Core.uim.CreateDeathLinkMessage();

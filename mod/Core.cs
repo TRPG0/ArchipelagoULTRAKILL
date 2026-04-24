@@ -55,53 +55,53 @@ namespace ArchipelagoULTRAKILL
 
         public static readonly List<LevelInfo> levelInfos = new List<LevelInfo>()
         {
-            new LevelInfo("0-1", 1, 0, true, false, true, SkullsType.None),
-            new LevelInfo("0-2", 2, 0, true, true, true, SkullsType.Normal, new List<string>() { "2_b" }),
-            new LevelInfo("0-3", 3, 0, true, false, true, SkullsType.None),
-            new LevelInfo("0-4", 4, 0, true, false, true, SkullsType.None),
-            new LevelInfo("0-5", 5, 0, false, false, true, SkullsType.None),
-            new LevelInfo("1-1", 6, 1, true, true, true, SkullsType.Normal, new List<string>() { "6_b", "6_r" }),
-            new LevelInfo("1-2", 7, 1, true, false, true, SkullsType.Normal, new List<string>() { "7_r", "7_b" }),
-            new LevelInfo("1-3", 8, 1, true, false, true, SkullsType.Normal, new List<string>() { "8_r", "8_b" }),
-            new LevelInfo("1-4", 9, 1, false, false, true, SkullsType.Special),
-            new LevelInfo("2-1", 10, 2, true, false, true, SkullsType.None),
-            new LevelInfo("2-2", 11, 2, true, false, true, SkullsType.None),
-            new LevelInfo("2-3", 12, 2, true, true, true, SkullsType.Normal, new List<string>() { "12_r", "12_b" }),
-            new LevelInfo("2-4", 13, 2, false, false, true, SkullsType.Normal, new List<string>() { "13_r", "13_b" }),
-            new LevelInfo("3-1", 14, 3, true, false, true, SkullsType.None),
-            new LevelInfo("3-2", 15, 3, false, false, true, SkullsType.None),
-            new LevelInfo("4-1", 16, 4, true, false, true, SkullsType.None),
-            new LevelInfo("4-2", 17, 4, true, true, true, SkullsType.Normal, new List<string>() { "17_r", "17_b" }),
-            new LevelInfo("4-3", 18, 4, true, false, true, SkullsType.Normal, new List<string>() { "18_b" }),
-            new LevelInfo("4-4", 19, 4, false, false, true, SkullsType.Normal, new List<string>() { "19_b" }),
-            new LevelInfo("5-1", 20, 5, true, true, true, SkullsType.Special),
-            new LevelInfo("5-2", 21, 5, true, false, false, SkullsType.Normal, new List<string>() { "21_r", "21_b" }),
-            new LevelInfo("5-3", 22, 5, true, false, true, SkullsType.Normal, new List<string>() { "22_r", "22_b" }),
-            new LevelInfo("5-4", 23, 5, false, false, false, SkullsType.None),
-            new LevelInfo("6-1", 24, 6, true, false, true, SkullsType.Normal, new List<string>() { "24_r" }),
-            new LevelInfo("6-2", 25, 6, false, false, true, SkullsType.None),
-            new LevelInfo("7-1", 26, 7, true, false, true, SkullsType.Normal, new List<string>() { "26_b", "26_r" }),
-            new LevelInfo("7-2", 27, 7, true, false, true, SkullsType.Normal, new List<string>() { "27_r" }),
-            new LevelInfo("7-3", 28, 7, true, true, true, SkullsType.None),
-            new LevelInfo("7-4", 29, 7, false, false, false, SkullsType.None),
-            new LevelInfo("8-1", 30, 8, true, false, true, SkullsType.Normal, new List<string>() { "30_r", "30_b" }),
-            new LevelInfo("8-2", 31, 8, true, false, true, SkullsType.Normal, new List<string>() { "31_r", "31_b" }),
-            new LevelInfo("8-3", 32, 8, true, false, true, SkullsType.Normal, new List<string>() { "32_b", "32_r" }),
-            new LevelInfo("8-4", 33, 8, false, false, true, SkullsType.Normal, new List<string>() { "33_r", "33_b" }),
-            new LevelInfo("0-E", 100, 0, false, false, true, SkullsType.Normal, new List<string>() { "100_r", "100_b"}),
-            new LevelInfo("1-E", 101, 1, false, false, true, SkullsType.Normal, new List<string>() { "101_b", "101_r"}),
-            new LevelInfo("P-1", 666, 3, false, false, true, SkullsType.None),
-            new LevelInfo("P-2", 667, 6, false, false, true, SkullsType.Normal, new List<string> { "667_b" })
+            new LevelInfo("0-1", 1, 0, (InfoFlags)0b0010101),
+            new LevelInfo("0-2", 2, 0, (InfoFlags)0b0110011, new List<string>() { "2_b" }),
+            new LevelInfo("0-3", 3, 0, (InfoFlags)0b0010101),
+            new LevelInfo("0-4", 4, 0, (InfoFlags)0b0010001),
+            new LevelInfo("0-5", 5, 0, (InfoFlags)0b0010000),
+            new LevelInfo("1-1", 6, 1, (InfoFlags)0b0110111, new List<string>() { "6_b", "6_r" }),
+            new LevelInfo("1-2", 7, 1, (InfoFlags)0b0110001, new List<string>() { "7_r", "7_b" }),
+            new LevelInfo("1-3", 8, 1, (InfoFlags)0b0110001, new List<string>() { "8_r", "8_b" }),
+            new LevelInfo("1-4", 9, 1, (InfoFlags)0b1011100),
+            new LevelInfo("2-1", 10, 2, (InfoFlags)0b0010001),
+            new LevelInfo("2-2", 11, 2, (InfoFlags)0b0010101),
+            new LevelInfo("2-3", 12, 2, (InfoFlags)0b0110011, new List<string>() { "12_r", "12_b" }),
+            new LevelInfo("2-4", 13, 2, (InfoFlags)0b0110000, new List<string>() { "13_r", "13_b" }),
+            new LevelInfo("3-1", 14, 3, (InfoFlags)0b0010001),
+            new LevelInfo("3-2", 15, 3, (InfoFlags)0b0010000),
+            new LevelInfo("4-1", 16, 4, (InfoFlags)0b0010001),
+            new LevelInfo("4-2", 17, 4, (InfoFlags)0b0110011, new List<string>() { "17_r", "17_b" }),
+            new LevelInfo("4-3", 18, 4, (InfoFlags)0b0110001, new List<string>() { "18_b" }),
+            new LevelInfo("4-4", 19, 4, (InfoFlags)0b0111100, new List<string>() { "19_b" }),
+            new LevelInfo("5-1", 20, 5, (InfoFlags)0b1010011),
+            new LevelInfo("5-2", 21, 5, (InfoFlags)0b0100001, new List<string>() { "21_r", "21_b" }),
+            new LevelInfo("5-3", 22, 5, (InfoFlags)0b0110101, new List<string>() { "22_r", "22_b" }),
+            new LevelInfo("5-4", 23, 5, (InfoFlags)0b0000000),
+            new LevelInfo("6-1", 24, 6, (InfoFlags)0b0110001, new List<string>() { "24_r" }),
+            new LevelInfo("6-2", 25, 6, (InfoFlags)0b0010000),
+            new LevelInfo("7-1", 26, 7, (InfoFlags)0b0110001, new List<string>() { "26_b", "26_r" }),
+            new LevelInfo("7-2", 27, 7, (InfoFlags)0b0111001, new List<string>() { "27_r" }),
+            new LevelInfo("7-3", 28, 7, (InfoFlags)0b0010011),
+            new LevelInfo("7-4", 29, 7, (InfoFlags)0b0000000),
+            new LevelInfo("8-1", 30, 8, (InfoFlags)0b0110001, new List<string>() { "30_r", "30_b" }),
+            new LevelInfo("8-2", 31, 8, (InfoFlags)0b0110001, new List<string>() { "31_r", "31_b" }),
+            new LevelInfo("8-3", 32, 8, (InfoFlags)0b0110001, new List<string>() { "32_b", "32_r" }),
+            new LevelInfo("8-4", 33, 8, (InfoFlags)0b0110000, new List<string>() { "33_r", "33_b" }),
+            new LevelInfo("0-E", 100, 0, (InfoFlags)0b0110000, new List<string>() { "100_r", "100_b"}),
+            new LevelInfo("1-E", 101, 1, (InfoFlags)0b0110000, new List<string>() { "101_b", "101_r"}),
+            new LevelInfo("P-1", 666, 3, (InfoFlags)0b0010000),
+            new LevelInfo("P-2", 667, 6, (InfoFlags)0b0010000, new List<string> { "667_b" })
         };
 
         public static readonly List<LevelInfo> secretMissionInfos = new List<LevelInfo>()
         {
-            new LevelInfo("0-S", 0, 0, false, false, false, SkullsType.Normal, new List<string> { "0S_r", "0S_b" }),
-            new LevelInfo("1-S", 0, 1, false, false, false, SkullsType.None),
-            new LevelInfo("2-S", 0, 2, false, false, false, SkullsType.None),
-            new LevelInfo("4-S", 0, 4, false, false, false, SkullsType.None),
-            new LevelInfo("5-S", 0, 5, false, false, false, SkullsType.None),
-            new LevelInfo("7-S", 0, 7, false, false, false, SkullsType.Normal, new List<string> { "7S_b", "7S_r" })
+            new LevelInfo("0-S", 0, 0, (InfoFlags)0b0100000, new List<string> { "0S_r", "0S_b" }),
+            new LevelInfo("1-S", 0, 1, (InfoFlags)0b0000000),
+            new LevelInfo("2-S", 0, 2, (InfoFlags)0b0000000),
+            new LevelInfo("4-S", 0, 4, (InfoFlags)0b0000000),
+            new LevelInfo("5-S", 0, 5, (InfoFlags)0b0000000),
+            new LevelInfo("7-S", 0, 7, (InfoFlags)0b0100000, new List<string> { "7S_b", "7S_r" })
         };
 
         public static List<string> AllLevels
@@ -141,7 +141,7 @@ namespace ArchipelagoULTRAKILL
             }
         }
 
-        public static bool CurrentLevelHasSkulls => CurrentLevelInfo?.Skulls > SkullsType.None && data.randomizeSkulls;
+        public static bool CurrentLevelHasSkulls => CurrentLevelHasInfo && (CurrentLevelInfo.Flags & InfoFlags.HasAnySkulls) != 0 && data.randomizeSkulls;
         public static bool CurrentLevelHasSwitches => (CurrentLevelInfo?.Id == 9 && data.l1switch) || (CurrentLevelInfo?.Id == 27 && data.l7switch);
 
         public static LevelInfo GetLevelInfo(int id)
@@ -259,6 +259,7 @@ namespace ArchipelagoULTRAKILL
             UIManager.createdSwitchIcons = false;
             uim.deathLinkMessage = null;
             Multiworld.lastDeathLink = null;
+            ActStats.All.Clear();
 
             if (NowPlaying.Instance) NowPlaying.Instance.Timer = 0.01f;
 
@@ -513,6 +514,7 @@ namespace ArchipelagoULTRAKILL
                     catch (NullReferenceException)
                     {
                         Logger.LogError($"Could not find child GameObject with name {substrings[i]}");
+                        break;
                     }
                 }
 
@@ -531,6 +533,12 @@ namespace ArchipelagoULTRAKILL
                         root = gameObject;
                         break;
                     }
+                }
+
+                if (root == null)
+                {
+                    Logger.LogError($"Could not find root GameObject with name {substrings[0]}");
+                    return null;
                 }
 
                 return root;

@@ -1,3 +1,10 @@
+## 3.5.0
+
+- Re-added random music.
+- Random music can now be re-randomized or toggled off while playing.
+- When random music is enabled, a popup will appear when a new randomized song starts playing. This can be disabled in the options.
+- Added counts for weapons and secret weapons to the act summary.
+
 ## 3.4.5
 
 - Fixed generation failing when choosing a secret mission as the goal with the option for secret exits to unlock by finding items.

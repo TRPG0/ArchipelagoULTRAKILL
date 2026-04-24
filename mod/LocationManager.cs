@@ -626,6 +626,7 @@ namespace ArchipelagoULTRAKILL
                 }
             }
             if (save) Core.SaveData();
+            ActStats.SetAllDirty();
         }
 
         public static void GetRandomHint()

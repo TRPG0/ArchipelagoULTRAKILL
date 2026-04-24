@@ -17,6 +17,7 @@ using System.Linq;
 using TMPro;
 using System.Collections;
 using ArchipelagoULTRAKILL.Config;
+using ArchipelagoULTRAKILL.Music;
 
 namespace ArchipelagoULTRAKILL
 {

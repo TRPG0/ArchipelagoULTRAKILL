@@ -1,4 +1,5 @@
 ﻿using ArchipelagoULTRAKILL.Structures;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -6,16 +7,32 @@ namespace ArchipelagoULTRAKILL.Components
 {
     public class ActStats : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler
     {
+        public static List<ActStats> All { get; private set; } = new List<ActStats>();
+
         public int StartLevelId { get; private set; }
         public int EndLevelId { get; private set; }
 
         public bool Special { get; private set; }
+
+        private bool dirty = true;
+        private string result = "";
+
+        public static void SetAllDirty()
+        {
+            foreach (ActStats actStats in All) actStats.dirty = true;
+        }
 
         public void Init(int start, int end, bool special = false)
         {
             StartLevelId = start;
             EndLevelId = end;
             Special = special;
+            All.Add(this);
+        }
+
+        public void OnDestroy()
+        {
+            All.Remove(this);
         }
 
         public bool ActIncludes(int id)
@@ -102,6 +119,10 @@ namespace ArchipelagoULTRAKILL.Components
             int secretsTotal = 0;
             int challenges = 0;
             int perfects = 0;
+            int weapons = 0;
+            int weaponsTotal = 0;
+            int secretWeapons = 0;
+            int secretWeaponsTotal = 0;
 
             for (int i = StartLevelId; i <= EndLevelId; i++)
             {
@@ -127,7 +148,7 @@ namespace ArchipelagoULTRAKILL.Components
 
                 LevelInfo levelInfo = Core.GetLevelInfo(i);
 
-                if (levelInfo.HasSecrets)
+                if (levelInfo.Flags.HasFlag(InfoFlags.HasSecrets))
                 {
                     foreach (bool found in rank.secretsFound)
                     {
@@ -142,10 +163,22 @@ namespace ArchipelagoULTRAKILL.Components
                     missionsTotal++;
                 }
 
-                if (levelInfo.HasSecretExit)
+                if (levelInfo.Flags.HasFlag(InfoFlags.HasSecretExit))
                 {
                     if (Core.data.@checked.Contains($"se_{levelInfo.Layer}")) exitsCompleted++;
                     exitsTotal++;
+                }
+
+                if (levelInfo.Flags.HasFlag(InfoFlags.HasWeapon))
+                {
+                    if (Core.data.@checked.Contains($"{levelInfo.Id}_w1")) weapons++;
+                    weaponsTotal++;
+                }
+
+                if (levelInfo.Flags.HasFlag(InfoFlags.HasSecretWeapon))
+                {
+                    if (Core.data.@checked.Contains($"{levelInfo.Id}_w2")) secretWeapons++;
+                    secretWeaponsTotal++;
                 }
 
                 if (rank.challenge) challenges++;
@@ -157,6 +190,8 @@ namespace ArchipelagoULTRAKILL.Components
             result += BuildString("\nSecret missions", missionsCompleted, missionsTotal);
             if (!Core.data.secretExitComplete) result += BuildString("\nSecret exits", exitsCompleted, exitsTotal);
             result += BuildString("\nSecrets", secretsFound, secretsTotal);
+            if (weaponsTotal > 0) result += BuildString("\nWeapons", weapons, weaponsTotal);
+            if (secretWeaponsTotal > 0) result += BuildString("\nSecret weapons", secretWeapons, secretWeaponsTotal);
             if (Core.data.challengeRewards) result += BuildString("\nChallenges", challenges, total);
             if (Core.data.pRankRewards) result += BuildString("\nPerfect Ranks", perfects, total);
             if (ActIncludes(9) && Core.data.l1switch) result += BuildString("\nSwitches pressed", LimboSwitchesPressed(), 4);
@@ -166,6 +201,7 @@ namespace ArchipelagoULTRAKILL.Components
             if (ActIncludes(20) && Core.data.fishRewards) result += BuildString("\nFish", FishCaught(), 12);
             if (ActIncludes(28) && Core.data.cleanRewards) result += BuildString("\nRooms cleaned", RoomsCleaned(), 5);
 
+            dirty = false;
             return result;
         }
 
@@ -204,6 +240,7 @@ namespace ArchipelagoULTRAKILL.Components
             result += BuildString("\nLevels completed", completed, total);
             if (Core.data.pRankRewards) result += BuildString("\nPerfect Ranks", perfects, total);
 
+            dirty = false;
             return result;
         }
 
@@ -294,8 +331,13 @@ namespace ArchipelagoULTRAKILL.Components
             Vector3 actPos = transform.position;
             UIManager.actStats.transform.position = new Vector3(UIManager.actStats.transform.position.x, actPos.y - UIManager.actStats.fontSize, UIManager.actStats.transform.position.z);
 
-            if (Special) UIManager.actStats.text = GetSpecialStats();
-            else UIManager.actStats.text = GetActStats();
+            if (dirty)
+            {
+                if (Special) result = GetSpecialStats();
+                else result = GetActStats();
+            }
+
+            UIManager.actStats.text = result;
 
             UIManager.actStats.gameObject.SetActive(true);
         }
