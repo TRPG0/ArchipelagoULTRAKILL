@@ -91,4 +91,4 @@ Maybe later. I would like to make a standalone version of the randomizer eventua
 
 # Something's not working!
 
-If you have trouble setting up ULTRAKILL randomizer or have found any bugs that need fixing, feel free to join the [AP After Dark](https://discord.gg/Sbhy4ykUKn) Discord server and ask about it in the `#ultrakill` channel.
+If you have trouble setting up ULTRAKILL randomizer or have found any bugs that need fixing, feel free to join the [Archipelago](https://discord.gg/archipelago) Discord server and ask about it in the `#ultrakill` channel.
