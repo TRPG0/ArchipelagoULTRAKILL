@@ -1,3 +1,10 @@
+## 3.5.1
+
+- Fixed 1-4: V2's Arm not having any logic.
+- Added coins back to glass breaking logic, and screwdriver to glass and wall breaking logic.
+- The intro in 0-1 will now be skipped if the level has been completed, instead of checking for if the player has the Piercer revolver.
+- Re-added tutorial prompt when clicking 0-1 in level select.
+
 ## 3.5.0
 
 - Re-added random music.

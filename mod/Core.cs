@@ -29,7 +29,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.5.0";
+        public const string PluginVersion = "3.5.1";
 
         public static string workingPath;
         public static string workingDir;

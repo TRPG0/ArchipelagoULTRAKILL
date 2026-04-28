@@ -410,8 +410,13 @@ namespace ArchipelagoULTRAKILL
 
             if (MusicRandomizer.Instance)
             {
+                Button l1Button = Core.FindGameObjectFromPathInScene("Canvas/Level Select (Prelude)/FullIntroPopup/Panel/Button").GetComponent<Button>();
+                l1Button.onClick.SetPersistentListenerState(0, UnityEngine.Events.UnityEventCallState.Off);
+                l1Button.onClick.AddListener(delegate { MusicRandomizer.Instance.CheckIfPreloadNeededBeforeLevel("Level 0-1", 1); });
+
                 foreach (KeyValuePair<string, GameObject> kvp in levels)
                 {
+                    if (kvp.Key == "0-1") continue;
                     Button button = kvp.Value.GetComponent<Button>();
                     LevelSelectPanel levelSelectPanel = kvp.Value.GetComponent<LevelSelectPanel>();
                     button.onClick.SetPersistentListenerState(0, UnityEngine.Events.UnityEventCallState.Off);
