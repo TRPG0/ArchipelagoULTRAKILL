@@ -1,5 +1,6 @@
 ﻿using ArchipelagoULTRAKILL.Components;
 using ArchipelagoULTRAKILL.Structures;
+using System;
 using UnityEngine;
 
 namespace ArchipelagoULTRAKILL.Powerups
@@ -47,7 +48,8 @@ namespace ArchipelagoULTRAKILL.Powerups
             OptionsManager.forceRadiance = false;
             foreach (EnemyIdentifier ei in FindObjectsOfType<EnemyIdentifier>())
             {
-                ei.UpdateBuffs(false);
+                try { ei.UpdateBuffs(false); }
+                catch (NullReferenceException) { }
             }
             PlayerHelper.Instance.EndPowerup();
             Destroy(gameObject);

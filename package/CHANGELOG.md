@@ -1,3 +1,11 @@
+## 3.5.2
+
+- Added a counter for enemies killed in each level, with a full list when hovering over the counter.
+- Added enemies killed to the act summary.
+- Added recent locations and items to the act select menu.
+- Fixed Core Eject and Pump Charge secondary fire being usable while locked.
+- Fixed incorrect logic for 4-1: Secret 4.
+
 ## 3.5.1
 
 - Fixed 1-4: V2's Arm not having any logic.

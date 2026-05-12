@@ -11,6 +11,7 @@ using TMPro;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using ArchipelagoULTRAKILL.Music;
 using ArchipelagoULTRAKILL.Config;
+using System.Linq;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -20,6 +21,7 @@ namespace ArchipelagoULTRAKILL
 
         public static Sprite menuSprite1;
         public static Sprite menuSprite2;
+        public static Texture2D killsTexture;
 
         public static TMP_FontAsset fontMain;
         public static TMP_FontAsset fontSecondary;
@@ -39,6 +41,7 @@ namespace ArchipelagoULTRAKILL
         public static TextMeshProUGUI goalCount;
 
         public static GameObject pauseContainer;
+        public static bool createdMenuIcons = false;
         public static bool createdSkullIcons = false;
         public static bool createdSwitchIcons = false;
 
@@ -181,7 +184,7 @@ namespace ArchipelagoULTRAKILL
 
             actStats = GameObject.Instantiate(chapterSelect.transform.Find("Prelude").Find("Name"), chapterSelect.transform.parent).GetComponent<TextMeshProUGUI>();
             Vector3 rankPos = chapterSelect.transform.Find("Prelude").Find("RankPanel").transform.position;
-            actStats.transform.position = new Vector3(rankPos.x + 77, rankPos.y, rankPos.z);
+            actStats.transform.position = new Vector3(rankPos.x + 97, rankPos.y, rankPos.z);
             actStats.overflowMode = TextOverflowModes.Overflow;
             actStats.alignment = TextAlignmentOptions.TopLeft;
             actStats.lineSpacing = 1.2f;
@@ -522,79 +525,102 @@ namespace ArchipelagoULTRAKILL
             Addressables.Release(asyncHandle);
         }
 
-        public static void CreateMenuSkullIcons()
+        public static void CreateMenuIcons()
         {
-            Sprite skullb = bundle.LoadAsset<Sprite>("assets/skullb.png");
-            Sprite skullr = bundle.LoadAsset<Sprite>("assets/skullr.png");
-
             foreach (LevelInfo info in Core.levelInfos)
             {
-                int xPos = 74;
-                int xOffset = 33;
-                int yPos = 65;
-                if (info.Flags.HasFlag(InfoFlags.HasSkullsNormal))
-                {
-                    if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}.");
-                    bool reposition = true;
-                    if (info.Name.Contains("P-"))
-                    {
-                        reposition = false;
-                        xPos = 140;
-                        yPos = 112;
-                    }
-                    if (info.Name.Contains("-E"))
-                    {
-                        reposition = false;
-                        yPos = 140;
-                    }
+                Vector3 containerPos = new Vector3(90, -2, 0);
+                Vector3 containerScale = new Vector3(0.225f, 0.225f, 1);
+                Vector3 enemyPos = new Vector3(-90, -136, 0);
+                Vector3 enemyScale = new Vector3(0.5f, 0.5f, 1);
 
-                    foreach (string skull in info.SkullsList)
-                    {
-                        GameObject go = new GameObject();
-                        go.name = skull;
-                        go.transform.SetParent(levels[info.Name].transform);
-                        go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
-                        go.layer = 5;
-                        if (skull.Contains("b")) go.AddComponent<Image>().sprite = skullb;
-                        else go.AddComponent<Image>().sprite = skullr;
-                        go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        go.transform.localPosition = new Vector3(xPos - (xOffset * info.SkullsList.FindIndex(a => a == skull)), yPos, 0);
-                        go.AddComponent<SkullIcon>().SetId(skull, reposition);
-                    }
-                }
-                else if (info.Name == "1-4")
+                if (info.Id >= 666)
                 {
-                    for (int i = 0; i < 4; i++)
-                    {
-                        string skull = "9_b" + (i + 1);
-                        GameObject go = new GameObject();
-                        go.name = skull;
-                        go.transform.SetParent(levels[info.Name].transform);
-                        go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
-                        go.layer = 5;
-                        go.AddComponent<Image>().sprite = skullb;
-                        go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        go.transform.localPosition = new Vector3(xPos - (xOffset * i), yPos, 0);
-                        go.AddComponent<SkullIcon>().SetId(skull);
-                    }
+                    containerPos = new Vector3(156, -2, 0);
+                    containerScale = new Vector3(0.35f, 0.35f, 1);
+                    enemyPos = new Vector3(-158, -239, 0);
+                    enemyScale = new Vector3(0.7f, 0.7f, 1);
                 }
-                else if (info.Name == "5-1")
+
+                //Core.Logger.LogInfo(info.Name);
+                GameObject parent = new GameObject();
+                parent.name = "AP Icons";
+                parent.transform.SetParent(levels[info.Name].transform.Find("Image"));
+                parent.transform.localPosition = Vector3.zero;
+                parent.transform.localScale = Vector3.one;
+
+                GameObject container = new GameObject();
+                container.name = "Container";
+                container.transform.SetParent(parent.transform);
+                container.transform.localPosition = containerPos;
+                container.transform.localScale = containerScale;
+                VerticalLayoutGroup containerLayoutGroup = container.AddComponent<VerticalLayoutGroup>();
+                containerLayoutGroup.spacing = 10;
+                containerLayoutGroup.reverseArrangement = true;
+                container.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                container.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                container.GetComponent<RectTransform>().pivot = new Vector2(1, 1);
+
+                if (Core.data.enemyRewards > EnemyOptions.Disabled && info.Enemies.Count > 0)
                 {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        string skull = "20_b" + (i + 1);
-                        GameObject go = new GameObject();
-                        go.name = skull;
-                        go.transform.SetParent(levels[info.Name].transform);
-                        go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
-                        go.layer = 5;
-                        go.AddComponent<Image>().sprite = skullb;
-                        go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                        go.transform.localPosition = new Vector3(xPos - (xOffset * i), yPos, 0);
-                        go.AddComponent<SkullIcon>().SetId(skull);
-                    }
+                    EnemyList enemyList = CreateMenuEnemyList(info, levels[info.Name]);
+                    GameObject enemies = new GameObject();
+                    enemies.name = "Enemies";
+                    enemies.transform.SetParent(parent.transform);
+                    enemies.transform.localPosition = enemyPos;
+                    enemies.transform.localScale = enemyScale;
+                    HorizontalLayoutGroup enemiesLayoutGroup = enemies.AddComponent<HorizontalLayoutGroup>();
+                    enemiesLayoutGroup.childControlWidth = false;
+                    enemiesLayoutGroup.childForceExpandWidth = false;
+                    enemiesLayoutGroup.spacing = 4;
+                    ContentSizeFitter enemiesFitter = enemies.AddComponent<ContentSizeFitter>();
+                    enemiesFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    enemiesFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    CreateMenuEnemyCounter(info, enemies, enemyList);
+                    enemies.GetComponent<RectTransform>().pivot = new Vector2(0, 0);
+                }
+
+                if (Core.data.randomizeSkulls && (info.Flags & InfoFlags.HasAnySkulls) != 0)
+                {
+                    GameObject skulls = new GameObject();
+                    skulls.name = "Skulls";
+                    skulls.transform.SetParent(container.transform);
+                    skulls.transform.localPosition = Vector3.zero;
+                    skulls.transform.localScale = Vector3.one;
+                    HorizontalLayoutGroup skullLayoutGroup = skulls.AddComponent<HorizontalLayoutGroup>();
+                    skullLayoutGroup.childAlignment = TextAnchor.MiddleCenter;
+                    skullLayoutGroup.childScaleHeight = true;
+                    skullLayoutGroup.childScaleWidth = true;
+                    skullLayoutGroup.spacing = -24;
+                    skullLayoutGroup.padding.right = -20;
+                    skulls.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    skulls.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    CreateMenuSkullIcons(info, skulls);
+
+                    skulls.GetComponent<RectTransform>().pivot = new Vector2(1, 0.5f);
+                }
+
+                if (info.Flags.HasFlag(InfoFlags.HasSwitches))
+                {
+                    GameObject switches = new GameObject();
+                    switches.name = "Switches";
+                    switches.transform.SetParent(container.transform);
+                    switches.transform.localPosition = Vector3.zero;
+                    switches.transform.localScale = Vector3.one;
+                    HorizontalLayoutGroup switchLayoutGroup = switches.AddComponent<HorizontalLayoutGroup>();
+                    switchLayoutGroup.childAlignment = TextAnchor.MiddleCenter;
+                    switchLayoutGroup.childScaleHeight = true;
+                    switchLayoutGroup.childScaleWidth = true;
+                    switchLayoutGroup.reverseArrangement = true;
+                    switchLayoutGroup.spacing = 8;
+                    switches.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    switches.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    CreateMenuSwitchIcons(info, switches);
                 }
             }
+
+            Sprite skullb = bundle.LoadAsset<Sprite>("assets/skullb.png");
+            Sprite skullr = bundle.LoadAsset<Sprite>("assets/skullr.png");
 
             foreach (LevelInfo info in Core.secretMissionInfos)
             {
@@ -623,50 +649,377 @@ namespace ArchipelagoULTRAKILL
                         else go.AddComponent<Image>().sprite = skullr;
                         go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
                         go.transform.localPosition = new Vector3(xPos - (xOffset * info.SkullsList.FindIndex(a => a == skull)), yPos, 0);
-                        go.AddComponent<SkullIcon>().SetId(skull, false);
+                        go.AddComponent<SkullIcon>().SetId(skull);
                     }
+                }
+            }
+
+            createdMenuIcons = true;
+        }
+
+        public static void CreateMenuEnemyCounter(LevelInfo info, GameObject gameObject, EnemyList enemyList)
+        {
+            Sprite sprite = Sprite.Create(killsTexture, new Rect(0, 0, 64, 64), new Vector2());
+
+            GameObject icon = new GameObject();
+            icon.name = "Icon";
+            icon.transform.SetParent(gameObject.transform);
+            icon.transform.localScale = Vector3.one;
+            Image image = icon.AddComponent<Image>();
+            image.sprite = sprite;
+            icon.AddComponent<AspectRatioFitter>().aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
+            icon.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
+
+            GameObject textObj = new GameObject();
+            textObj.name = "Text";
+            textObj.transform.SetParent(gameObject.transform);
+            textObj.transform.localScale = Vector3.one;
+            TextMeshProUGUI text = textObj.AddComponent<TextMeshProUGUI>();
+            text.font = bundle.LoadAsset<TMP_FontAsset>("assets/vcr_osd_mono_1.asset");
+            text.fontMaterial = bundle.LoadAsset<Material>("assets/vcr_osd_mono_underlay.mat");
+            text.fontSize = 64;
+            textObj.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            textObj.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            int count = 0;
+            int total = 0;
+
+            foreach (EnemyType enemyType in info.Enemies)
+            {
+                if ((Core.data.enemyRewards == EnemyOptions.Bosses && Core.enemyBoss.Contains(enemyType))
+                    || (Core.data.enemyRewards == EnemyOptions.Extra && (Core.enemyBoss.Contains(enemyType) || Core.enemyExt.Contains(enemyType)))
+                    || Core.data.enemyRewards == EnemyOptions.All)
+                {
+                    if (Core.data.@checked.Contains("e_" + enemyType.ToString().ToLower())) count++;
+                    total++;
+                }
+            }
+
+            if (count >= total)
+            {
+                image.color = Colors.ActComplete;
+                text.color = Colors.ActComplete;
+            }
+            else
+            {
+                image.color = Colors.ActHighlight;
+                text.color = Colors.ActHighlight;
+            }
+
+            text.GetComponent<TextMeshProUGUI>().text = $"{count}/{total}";
+            gameObject.AddComponent<EnemyCountPointerHandler>().enemyList = enemyList;
+            levels[info.Name].AddComponent<EnemyCountGamepadHandler>().enemyList = enemyList;
+        }
+
+        public static EnemyList CreateMenuEnemyList(LevelInfo info, GameObject gameObject)
+        {
+            GameObject list = new GameObject();
+            list.name = "Enemy List";
+            list.transform.SetParent(gameObject.transform);
+            list.transform.localPosition = Vector3.zero;
+            list.transform.localScale = Vector3.one;
+            Image image = list.AddComponent<Image>();
+            image.sprite = menuSprite1;
+            image.pixelsPerUnitMultiplier = 4;
+            image.type = Image.Type.Sliced;
+            image.color = new Color(0, 0, 0, 0.8f);
+            Canvas canvas = list.AddComponent<Canvas>();
+            canvas.additionalShaderChannels = AdditionalCanvasShaderChannels.TexCoord1;
+
+            GameObject layout = new GameObject();
+            layout.name = "Layout";
+            layout.transform.SetParent(list.transform);
+            layout.transform.localPosition = Vector3.zero;
+            layout.transform.localScale = Vector3.one;
+            VerticalLayoutGroup verticalLayoutGroup = layout.AddComponent<VerticalLayoutGroup>();
+            verticalLayoutGroup.childControlWidth = false;
+            verticalLayoutGroup.padding = new RectOffset(5, 5, 5, 5);
+            verticalLayoutGroup.spacing = 1;
+            ContentSizeFitter fitter = layout.AddComponent<ContentSizeFitter>();
+            fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            foreach (EnemyType enemyType in info.Enemies)
+            {
+                if ((Core.data.enemyRewards == EnemyOptions.Bosses && Core.enemyBoss.Contains(enemyType))
+                    || (Core.data.enemyRewards == EnemyOptions.Extra && (Core.enemyBoss.Contains(enemyType) || Core.enemyExt.Contains(enemyType)))
+                    || Core.data.enemyRewards == EnemyOptions.All)
+                {
+                    GameObject go = new GameObject();
+                    go.name = enemyType.ToString();
+                    go.transform.SetParent(layout.transform);
+                    go.transform.localScale = Vector3.one;
+                    TextMeshProUGUI text = go.AddComponent<TextMeshProUGUI>();
+                    text.font = fontMain;
+                    text.fontSize = 16;
+                    if (enemyType == EnemyType.Minotaur) text.fontStyle = FontStyles.Strikethrough;
+
+                    if (Core.data.@checked.Contains("e_" + enemyType.ToString().ToLower()))
+                    {
+                        text.text = "X " + enemyType.ToReadableName();
+                        text.color = Colors.ActHighlight;
+                    }
+                    else
+                    {
+                        text.text = "- " + enemyType.ToReadableName();
+                    }
+                    ContentSizeFitter csf = go.AddComponent<ContentSizeFitter>();
+                    csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                }
+            }
+
+            EnemyList enemyList = list.AddComponent<EnemyList>();
+            enemyList.childRect = layout.GetComponent<RectTransform>();
+            enemyList.listCanvas = canvas;
+            enemyList.id = info.Id;
+            return enemyList;
+        }
+
+        public static void CreateMenuSkullIcons(LevelInfo info, GameObject gameObject)
+        {
+            Sprite skullb = bundle.LoadAsset<Sprite>("assets/skullb.png");
+            Sprite skullr = bundle.LoadAsset<Sprite>("assets/skullr.png");
+
+            if (info.Flags.HasFlag(InfoFlags.HasSkullsNormal))
+            {
+                if (info.SkullsList == null) throw new Exception($"Skull list is null for level {info.Name}.");
+
+                foreach (string skull in info.SkullsList)
+                {
+                    GameObject go = new GameObject();
+                    go.name = skull;
+                    go.transform.SetParent(gameObject.transform);
+                    go.transform.localScale = Vector3.one;
+                    go.layer = 5;
+                    if (skull.Contains("b")) go.AddComponent<Image>().sprite = skullb;
+                    else go.AddComponent<Image>().sprite = skullr;
+                    go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
+                    go.AddComponent<SkullIcon>().SetId(skull);
+                    go.AddComponent<AspectRatioFitter>().aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
+                }
+            }
+            else if (info.Name == "1-4")
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    string skull = "9_b" + (i + 1);
+                    GameObject go = new GameObject();
+                    go.name = skull;
+                    go.transform.SetParent(gameObject.transform);
+                    go.transform.localScale = Vector3.one;
+                    go.layer = 5;
+                    go.AddComponent<Image>().sprite = skullb;
+                    go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
+                    go.AddComponent<SkullIcon>().SetId(skull);
+                    go.AddComponent<AspectRatioFitter>().aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
+                }
+            }
+            else if (info.Name == "5-1")
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    string skull = "20_b" + (i + 1);
+                    GameObject go = new GameObject();
+                    go.name = skull;
+                    go.transform.SetParent(gameObject.transform);
+                    go.transform.localScale = Vector3.one;
+                    go.layer = 5;
+                    go.AddComponent<Image>().sprite = skullb;
+                    go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
+                    go.AddComponent<SkullIcon>().SetId(skull);
+                    go.AddComponent<AspectRatioFitter>().aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
                 }
             }
             createdSkullIcons = true;
         }
 
-        public static void CreateMenuSwitchIcons()
+        public static void CreateMenuSwitchIcons(LevelInfo info, GameObject gameObject)
         {
-            int xPos = 70;
-            int xOffset = 40;
-            if (Core.data.l1switch)
+            if (Core.data.l1switch && info.Id == 9)
             {
                 for (int i = 4; i > 0; i--)
                 {
                     Sprite sprite = bundle.LoadAsset<Sprite>($"assets/switch{i}.png");
                     GameObject go = new GameObject();
                     go.name = i.ToString();
-                    go.transform.SetParent(levels["1-4"].transform);
-                    go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
+                    go.transform.SetParent(gameObject.transform);
+                    go.transform.localScale = Vector3.one;
                     go.layer = 5;
                     go.AddComponent<Image>().sprite = sprite;
                     go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                    go.transform.localPosition = new Vector3(xPos - (xOffset * (4 - i)), -32, 0);
-                    go.AddComponent<SwitchIcon>().SetId(i - 1, true, true);
+                    go.AddComponent<SwitchIcon>().SetId(i - 1, true);
+                    go.AddComponent<AspectRatioFitter>().aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
                 }
             }
-            if (Core.data.l7switch)
+            if (Core.data.l7switch && info.Id == 27)
             {
                 for (int i = 3; i > 0; i--)
                 {
                     Sprite sprite = bundle.LoadAsset<Sprite>($"assets/switch{i}.png");
                     GameObject go = new GameObject();
                     go.name = i.ToString();
-                    go.transform.SetParent(levels["7-2"].transform);
-                    go.transform.localScale = new Vector3(0.35f, 0.35f, 1);
+                    go.transform.SetParent(gameObject.transform);
+                    go.transform.localScale = Vector3.one;
                     go.layer = 5;
                     go.AddComponent<Image>().sprite = sprite;
                     go.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
-                    go.transform.localPosition = new Vector3(xPos - (xOffset * (3 - i)), -32, 0);
-                    go.AddComponent<SwitchIcon>().SetId(i - 1, false, true);
+                    go.AddComponent<SwitchIcon>().SetId(i - 1, false);
+                    go.AddComponent<AspectRatioFitter>().aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
                 }
             }
             createdSwitchIcons = true;
+        }
+
+        public static void CreateChapterRecents(GameObject chapterSelect)
+        {
+            GameObject container = new GameObject();
+            container.name = "Recent Stuff";
+            container.transform.SetParent(chapterSelect.transform);
+            container.transform.localPosition = new Vector3(-330, 50, 0);
+            container.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+
+            chapterSelect.GetComponent<ObjectActivateInSequence>().objectsToActivate = chapterSelect.GetComponent<ObjectActivateInSequence>().objectsToActivate.AddItem(container).ToArray();
+
+            if (recentLocationContainer == null)
+            {
+                recentLocationContainer = new GameObject();
+                recentLocationContainer.name = "Locations";
+                recentLocationContainer.transform.SetParent(container.transform);
+                if (UIConfig.showRecentLocationsChapter.value) recentLocationContainer.transform.localPosition = new Vector3(0, 190, 0);
+                else recentLocationContainer.transform.localPosition = Vector3.zero;
+                recentLocationContainer.transform.localScale = Vector3.one;
+                recentLocationContainer.AddComponent<RectTransform>().sizeDelta = new Vector2(250, 400);
+
+                GameObject locationHeader = new GameObject();
+                locationHeader.name = "Text";
+                locationHeader.transform.SetParent(recentLocationContainer.transform);
+                locationHeader.transform.localPosition = new Vector3(0, 160, 0);
+                locationHeader.transform.localScale = Vector3.one;
+                TextMeshProUGUI locationHeaderText = locationHeader.AddComponent<TextMeshProUGUI>();
+                locationHeaderText.font = fontMain;
+                locationHeaderText.fontSize = 28;
+                locationHeaderText.alignment = TextAlignmentOptions.Center;
+                locationHeaderText.text = "RECENT\nLOCATIONS";
+
+                GameObject locationContainer1 = new GameObject();
+                locationContainer1.name = "Container 1";
+                locationContainer1.transform.SetParent(recentLocationContainer.transform);
+                locationContainer1.transform.localPosition = new Vector3(0, 90, 0);
+                locationContainer1.transform.localScale = Vector3.one;
+                GameObject locationContainer1Image = new GameObject();
+                locationContainer1Image.name = "Image";
+                locationContainer1Image.transform.SetParent(locationContainer1.transform);
+                locationContainer1Image.transform.localPosition = new Vector3(90, 0, 0);
+                locationContainer1Image.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
+                locationContainer1Image.transform.localRotation = Quaternion.identity;
+                Image locationContainer1ImageC = locationContainer1Image.AddComponent<Image>();
+                GameObject locationContainer1Text = new GameObject();
+                locationContainer1Text.name = "Text";
+                locationContainer1Text.transform.SetParent(locationContainer1.transform);
+                locationContainer1Text.transform.localPosition = new Vector3(-30, 0, 0);
+                locationContainer1Text.transform.localScale = Vector3.one;
+                locationContainer1Text.transform.localRotation = Quaternion.identity;
+                locationContainer1Text.AddComponent<RectTransform>().sizeDelta = new Vector2(175, 55);
+                TextMeshProUGUI locationContainer1TextC = locationContainer1Text.AddComponent<TextMeshProUGUI>();
+                locationContainer1TextC.font = fontSecondary;
+                locationContainer1TextC.enableAutoSizing = true;
+                locationContainer1TextC.margin = new Vector4(0, 0, 5, 0);
+                locationContainer1TextC.alignment = TextAlignmentOptions.Right;
+                locationContainer1.AddComponent<RecentContainer>().Init(0, RecentType.Location, locationContainer1ImageC, locationContainer1TextC);
+
+                for (int i = 1; i < 5; i++)
+                {
+                    GameObject locationContainerI = GameObject.Instantiate(locationContainer1, recentLocationContainer.transform);
+                    locationContainerI.name = $"Container {i + 1}";
+                    locationContainerI.transform.localPosition = new Vector3(0, (90 - (60 * i)), 0);
+                    locationContainerI.GetComponent<RecentContainer>().id = i;
+
+                    if (i == 2)
+                    {
+                        GameObject offlineText = new GameObject();
+                        offlineText.name = "Offline Text";
+                        offlineText.transform.SetParent(locationContainerI.transform);
+                        offlineText.transform.localPosition = Vector3.zero;
+                        offlineText.transform.localScale = Vector3.one;
+                        TextMeshProUGUI offlineTextC = offlineText.AddComponent<TextMeshProUGUI>();
+                        offlineTextC.font = fontMain;
+                        offlineTextC.fontSize = 28;
+                        offlineTextC.alignment = TextAlignmentOptions.Center;
+                        offlineTextC.text = "OFFLINE";
+                        offlineTextC.color = new Color(0.5f, 0.5f, 0.5f);
+                        offlineText.SetActive(false);
+                    }
+                }
+                if (!UIConfig.showRecentLocationsChapter.value) recentLocationContainer.SetActive(false);
+            }
+
+            if (recentItemContainer == null)
+            {
+                recentItemContainer = new GameObject();
+                recentItemContainer.name = "Items";
+                recentItemContainer.transform.SetParent(container.transform);
+                if (UIConfig.showRecentItemsChapter.value) recentItemContainer.transform.localPosition = new Vector3(0, -190, 0);
+                else recentItemContainer.transform.localPosition = Vector3.zero;
+                recentItemContainer.transform.localScale = Vector3.one;
+                recentItemContainer.AddComponent<RectTransform>().sizeDelta = new Vector2(250, 400);
+
+                GameObject itemHeader = new GameObject();
+                itemHeader.name = "Text";
+                itemHeader.transform.SetParent(recentItemContainer.transform);
+                itemHeader.transform.localPosition = new Vector3(0, 160, 0);
+                itemHeader.transform.localScale = Vector3.one;
+                TextMeshProUGUI itemHeaderText = itemHeader.AddComponent<TextMeshProUGUI>();
+                itemHeaderText.font = fontMain;
+                itemHeaderText.fontSize = 28;
+                itemHeaderText.alignment = TextAlignmentOptions.Center;
+                itemHeaderText.text = "RECENT\nITEMS";
+
+                GameObject itemContainer1 = new GameObject() { name = "Container 1" };
+                itemContainer1.transform.SetParent(recentItemContainer.transform);
+                itemContainer1.transform.localPosition = new Vector3(0, 90, 0);
+                itemContainer1.transform.localScale = Vector3.one;
+                GameObject itemContainer1Image = new GameObject() { name = "Image" };
+                itemContainer1Image.transform.SetParent(itemContainer1.transform);
+                itemContainer1Image.transform.localPosition = new Vector3(90, 0, 0);
+                itemContainer1Image.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
+                Image itemContainer1ImageC = itemContainer1Image.AddComponent<Image>();
+                GameObject itemContainer1Text = new GameObject() { name = "Text" };
+                itemContainer1Text.transform.SetParent(itemContainer1.transform);
+                itemContainer1Text.transform.localPosition = new Vector3(-30, 0, 0);
+                itemContainer1Text.transform.localScale = Vector3.one;
+                itemContainer1Text.AddComponent<RectTransform>().sizeDelta = new Vector2(175, 55);
+                TextMeshProUGUI itemContainer1TextC = itemContainer1Text.AddComponent<TextMeshProUGUI>();
+                itemContainer1TextC.font = fontSecondary;
+                itemContainer1TextC.enableAutoSizing = true;
+                itemContainer1TextC.margin = new Vector4(5, 0, 0, 0);
+                itemContainer1TextC.alignment = TextAlignmentOptions.Right;
+                itemContainer1.AddComponent<RecentContainer>().Init(0, RecentType.Item, itemContainer1ImageC, itemContainer1TextC);
+
+                for (int i = 1; i < 5; i++)
+                {
+                    GameObject itemContainerI = GameObject.Instantiate(itemContainer1, recentItemContainer.transform);
+                    itemContainerI.name = $"Container {i + 1}";
+                    itemContainerI.transform.localPosition = new Vector3(0, (90 - (60 * i)), 0);
+                    itemContainerI.GetComponent<RecentContainer>().id = i;
+
+                    if (i == 2)
+                    {
+                        GameObject offlineText = new GameObject() { name = "Offline Text" };
+                        offlineText.transform.SetParent(itemContainerI.transform);
+                        offlineText.transform.localPosition = Vector3.zero;
+                        offlineText.transform.localScale = Vector3.one;
+                        TextMeshProUGUI offlineTextC = offlineText.AddComponent<TextMeshProUGUI>();
+                        offlineTextC.font = fontMain;
+                        offlineTextC.fontSize = 28;
+                        offlineTextC.alignment = TextAlignmentOptions.Center;
+                        offlineTextC.text = "OFFLINE";
+                        offlineTextC.color = new Color(0.5f, 0.5f, 0.5f);
+                        offlineText.SetActive(false);
+                    }
+                }
+                if (!UIConfig.showRecentItemsChapter.value) recentItemContainer.SetActive(false);
+            }
         }
 
         public static void CreatePauseRecents(GameObject pauseMenu)
@@ -754,7 +1107,7 @@ namespace ArchipelagoULTRAKILL
                         offlineText.SetActive(false);
                     }
                 }
-                if (!UIConfig.showRecentLocations.value) recentLocationContainer.SetActive(false);
+                if (!UIConfig.showRecentLocationsPause.value) recentLocationContainer.SetActive(false);
             }
             if (recentItemContainer == null)
             {
@@ -837,7 +1190,7 @@ namespace ArchipelagoULTRAKILL
                         offlineText.SetActive(false);
                     }
                 }
-                if (!UIConfig.showRecentItems.value) recentItemContainer.SetActive(false);
+                if (!UIConfig.showRecentItemsPause.value) recentItemContainer.SetActive(false);
             }
         }
 
@@ -899,7 +1252,7 @@ namespace ArchipelagoULTRAKILL
                         if (skull.Contains("b")) go.AddComponent<Image>().sprite = skullb;
                         else go.AddComponent<Image>().sprite = skullr;
                         go.transform.localPosition = new Vector3(xPos - (xOffset * info.SkullsList.FindIndex(a => a == skull)), yPos, 0);
-                        go.AddComponent<SkullIcon>().SetId(skull, false);
+                        go.AddComponent<SkullIcon>().SetId(skull);
                     }
                 }
                 else if (info.Name == "1-4")
@@ -917,7 +1270,7 @@ namespace ArchipelagoULTRAKILL
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = skullb;
                         go.transform.localPosition = new Vector3(-xPos + (xOffset * i), yPos, 0);
-                        go.AddComponent<SkullIcon>().SetId(skull, false);
+                        go.AddComponent<SkullIcon>().SetId(skull);
                     }
                 }
                 else if (info.Name == "5-1")
@@ -935,7 +1288,7 @@ namespace ArchipelagoULTRAKILL
                         go.layer = 5;
                         go.AddComponent<Image>().sprite = skullb;
                         go.transform.localPosition = new Vector3(-xPos + (xOffset * i), yPos, 0);
-                        go.AddComponent<SkullIcon>().SetId(skull, false);
+                        go.AddComponent<SkullIcon>().SetId(skull);
                     }
                 }
                 createdSkullIcons = true;

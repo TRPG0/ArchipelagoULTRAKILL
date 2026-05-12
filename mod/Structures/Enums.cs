@@ -13,6 +13,7 @@ namespace ArchipelagoULTRAKILL.Structures
         HasRandomMusic = 1 << 4,
         HasSkullsNormal = 1 << 5,
         HasSkullsSpecial = 1 << 6,
+        HasSwitches = 1 << 7,
         HasAnySkulls = HasSkullsNormal | HasSkullsSpecial
     }
 

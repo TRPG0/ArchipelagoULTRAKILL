@@ -42,8 +42,12 @@ namespace ArchipelagoULTRAKILL.Components
                 text.gameObject.SetActive(false);
 
                 if (id == 2) transform.Find("Offline Text").gameObject.SetActive(true);
+                return;
             }
-            else if (type == RecentType.Location)
+
+            if (id == 2) transform.Find("Offline Text").gameObject.SetActive(false);
+
+            if (type == RecentType.Location)
             {
                 try
                 {

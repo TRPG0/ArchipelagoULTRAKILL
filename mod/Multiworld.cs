@@ -328,8 +328,11 @@ namespace ArchipelagoULTRAKILL
                 TryGetSlotDataValue(ref Core.data.l1switch, success.SlotData, "randomize_limbo_switches", false);
                 TryGetSlotDataValue(ref Core.data.l7switch, success.SlotData, "randomize_violence_switches", false);
 
-                if (Core.data.randomizeSkulls && !UIManager.createdSkullIcons) UIManager.CreateMenuSkullIcons();
-                if ((Core.data.l1switch || Core.data.l7switch) && !UIManager.createdSwitchIcons) UIManager.CreateMenuSwitchIcons();
+                if (!UIManager.createdMenuIcons)
+                {
+                    UIManager.CreateMenuIcons();
+                    UIManager.CreateChapterRecents(UIManager.chapterSelect);
+                }
 
                 if (!Core.DataExists())
                 {

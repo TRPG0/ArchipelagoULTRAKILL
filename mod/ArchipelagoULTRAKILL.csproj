@@ -320,6 +320,9 @@
     <Compile Include="Commands\Say.cs" />
     <Compile Include="Commands\Disconnect.cs" />
     <Compile Include="Commands\Connect.cs" />
+    <Compile Include="Components\EnemyCountGamepadHandler.cs" />
+    <Compile Include="Components\EnemyCountPointerHandler.cs" />
+    <Compile Include="Components\EnemyList.cs" />
     <Compile Include="Components\RecentContainer.cs" />
     <Compile Include="Components\DeathLinkMessage.cs" />
     <Compile Include="Components\Fire2HUD.cs" />
@@ -408,6 +411,8 @@
     <Compile Include="Patches\ShopButton.cs" />
     <Compile Include="Patches\ShopCategory.cs" />
     <Compile Include="Patches\ShopZone.cs" />
+    <Compile Include="Patches\Shotgun.cs" />
+    <Compile Include="Patches\ShotgunHammer.cs" />
     <Compile Include="Patches\StatsManager.cs" />
     <Compile Include="Patches\VariationInfo.cs" />
     <Compile Include="Patches\WallCheck.cs" />

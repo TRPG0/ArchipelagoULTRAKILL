@@ -29,7 +29,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.5.1";
+        public const string PluginVersion = "3.5.2";
 
         public static string workingPath;
         public static string workingDir;
@@ -55,53 +55,203 @@ namespace ArchipelagoULTRAKILL
 
         public static readonly List<LevelInfo> levelInfos = new List<LevelInfo>()
         {
-            new LevelInfo("0-1", 1, 0, (InfoFlags)0b0010101),
-            new LevelInfo("0-2", 2, 0, (InfoFlags)0b0110011, new List<string>() { "2_b" }),
-            new LevelInfo("0-3", 3, 0, (InfoFlags)0b0010101),
-            new LevelInfo("0-4", 4, 0, (InfoFlags)0b0010001),
-            new LevelInfo("0-5", 5, 0, (InfoFlags)0b0010000),
-            new LevelInfo("1-1", 6, 1, (InfoFlags)0b0110111, new List<string>() { "6_b", "6_r" }),
-            new LevelInfo("1-2", 7, 1, (InfoFlags)0b0110001, new List<string>() { "7_r", "7_b" }),
-            new LevelInfo("1-3", 8, 1, (InfoFlags)0b0110001, new List<string>() { "8_r", "8_b" }),
-            new LevelInfo("1-4", 9, 1, (InfoFlags)0b1011100),
-            new LevelInfo("2-1", 10, 2, (InfoFlags)0b0010001),
-            new LevelInfo("2-2", 11, 2, (InfoFlags)0b0010101),
-            new LevelInfo("2-3", 12, 2, (InfoFlags)0b0110011, new List<string>() { "12_r", "12_b" }),
-            new LevelInfo("2-4", 13, 2, (InfoFlags)0b0110000, new List<string>() { "13_r", "13_b" }),
-            new LevelInfo("3-1", 14, 3, (InfoFlags)0b0010001),
-            new LevelInfo("3-2", 15, 3, (InfoFlags)0b0010000),
-            new LevelInfo("4-1", 16, 4, (InfoFlags)0b0010001),
-            new LevelInfo("4-2", 17, 4, (InfoFlags)0b0110011, new List<string>() { "17_r", "17_b" }),
-            new LevelInfo("4-3", 18, 4, (InfoFlags)0b0110001, new List<string>() { "18_b" }),
-            new LevelInfo("4-4", 19, 4, (InfoFlags)0b0111100, new List<string>() { "19_b" }),
-            new LevelInfo("5-1", 20, 5, (InfoFlags)0b1010011),
-            new LevelInfo("5-2", 21, 5, (InfoFlags)0b0100001, new List<string>() { "21_r", "21_b" }),
-            new LevelInfo("5-3", 22, 5, (InfoFlags)0b0110101, new List<string>() { "22_r", "22_b" }),
-            new LevelInfo("5-4", 23, 5, (InfoFlags)0b0000000),
-            new LevelInfo("6-1", 24, 6, (InfoFlags)0b0110001, new List<string>() { "24_r" }),
-            new LevelInfo("6-2", 25, 6, (InfoFlags)0b0010000),
-            new LevelInfo("7-1", 26, 7, (InfoFlags)0b0110001, new List<string>() { "26_b", "26_r" }),
-            new LevelInfo("7-2", 27, 7, (InfoFlags)0b0111001, new List<string>() { "27_r" }),
-            new LevelInfo("7-3", 28, 7, (InfoFlags)0b0010011),
-            new LevelInfo("7-4", 29, 7, (InfoFlags)0b0000000),
-            new LevelInfo("8-1", 30, 8, (InfoFlags)0b0110001, new List<string>() { "30_r", "30_b" }),
-            new LevelInfo("8-2", 31, 8, (InfoFlags)0b0110001, new List<string>() { "31_r", "31_b" }),
-            new LevelInfo("8-3", 32, 8, (InfoFlags)0b0110001, new List<string>() { "32_b", "32_r" }),
-            new LevelInfo("8-4", 33, 8, (InfoFlags)0b0110000, new List<string>() { "33_r", "33_b" }),
-            new LevelInfo("0-E", 100, 0, (InfoFlags)0b0110000, new List<string>() { "100_r", "100_b"}),
-            new LevelInfo("1-E", 101, 1, (InfoFlags)0b0110000, new List<string>() { "101_b", "101_r"}),
-            new LevelInfo("P-1", 666, 3, (InfoFlags)0b0010000),
-            new LevelInfo("P-2", 667, 6, (InfoFlags)0b0010000, new List<string> { "667_b" })
+            new LevelInfo("0-1", 1, 0,
+                InfoFlags.HasSecrets | InfoFlags.HasWeapon | InfoFlags.HasRandomMusic,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.MaliciousFace }),
+
+            new LevelInfo("0-2", 2, 0,
+                InfoFlags.HasSecrets | InfoFlags.HasSecretExit | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Swordsmachine },
+                new List<string>() { "2_b" }),
+
+            new LevelInfo("0-3", 3, 0,
+                InfoFlags.HasSecrets | InfoFlags.HasWeapon | InfoFlags.HasRandomMusic,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Swordsmachine }),
+
+            new LevelInfo("0-4", 4, 0,
+                InfoFlags.HasSecrets | InfoFlags.HasRandomMusic,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.MaliciousFace }),
+
+            new LevelInfo("0-5", 5, 0,
+                InfoFlags.HasRandomMusic,
+                new List<EnemyType>() { EnemyType.Cerberus }),
+
+            new LevelInfo("1-1", 6, 1,
+                InfoFlags.HasSecrets | InfoFlags.HasSecretExit | InfoFlags.HasWeapon | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Drone, EnemyType.MaliciousFace },
+                new List<string>() { "6_b", "6_r" }),
+
+            new LevelInfo("1-2", 7, 1,
+                InfoFlags.HasSecrets | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.Cerberus, EnemyType.VeryCancerousRodent },
+                new List<string>() { "7_r", "7_b" }),
+
+            new LevelInfo("1-3", 8, 1,
+                InfoFlags.HasSecrets | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Swordsmachine, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.HideousMass },
+                new List<string>() { "8_r", "8_b" }),
+
+            new LevelInfo("1-4", 9, 1,
+                InfoFlags.HasWeapon | InfoFlags.HasSecretWeapon | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsSpecial | InfoFlags.HasSwitches,
+                new List<EnemyType>() { EnemyType.V2 }),
+
+            new LevelInfo("2-1", 10, 2,
+                InfoFlags.HasSecrets | InfoFlags.HasRandomMusic,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.MaliciousFace, EnemyType.Cerberus }),
+
+            new LevelInfo("2-2", 11, 2,
+                InfoFlags.HasSecrets | InfoFlags.HasWeapon | InfoFlags.HasRandomMusic,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.MaliciousFace, EnemyType.Cerberus }),
+
+            new LevelInfo("2-3", 12, 2,
+                InfoFlags.HasSecrets | InfoFlags.HasSecretExit | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.Mindflayer, EnemyType.MaliciousFace },
+                new List<string>() { "12_r", "12_b" }),
+
+            new LevelInfo("2-4", 13, 2,
+                InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Minos },
+                new List<string>() { "13_r", "13_b" }),
+
+            new LevelInfo("3-1", 14, 3,
+                InfoFlags.HasSecrets | InfoFlags.HasRandomMusic,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.Mindflayer, EnemyType.MaliciousFace, EnemyType.Cerberus }),
+
+            new LevelInfo("3-2", 15, 3,
+                InfoFlags.HasRandomMusic,
+                new List<EnemyType>() { EnemyType.Gabriel }),
+
+            new LevelInfo("4-1", 16, 4,
+                InfoFlags.HasSecrets | InfoFlags.HasRandomMusic,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.Virtue }),
+
+            new LevelInfo("4-2", 17, 4,
+                InfoFlags.HasSecrets | InfoFlags.HasSecretExit | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Stalker, EnemyType.Sisyphus, EnemyType.Drone, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.Virtue },
+                new List<string>() { "17_r", "17_b" }),
+
+            new LevelInfo("4-3", 18, 4,
+                InfoFlags.HasSecrets | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Stalker, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.Virtue, EnemyType.Mandalore },
+                new List<string>() { "18_b" }),
+
+            new LevelInfo("4-4", 19, 4,
+                InfoFlags.HasWeapon | InfoFlags.HasSecretWeapon | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.V2Second },
+                new List<string>() { "19_b" }),
+
+            new LevelInfo("5-1", 20, 5,
+                InfoFlags.HasSecrets | InfoFlags.HasSecretExit | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsSpecial,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.Mindflayer, EnemyType.Turret, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.Virtue }),
+
+            new LevelInfo("5-2", 21, 5,
+                InfoFlags.HasSecrets | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Stalker, EnemyType.Ferryman, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.Turret, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.Idol, EnemyType.Virtue },
+                new List<string>() { "21_r", "21_b" }),
+
+            new LevelInfo("5-3", 22, 5,
+                InfoFlags.HasSecrets | InfoFlags.HasWeapon | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.Mindflayer, EnemyType.Turret, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.Idol, EnemyType.Virtue },
+                new List<string>() { "22_r", "22_b" }),
+
+            new LevelInfo("5-4", 23, 5,
+                InfoFlags.None,
+                new List<EnemyType>() { EnemyType.Leviathan }),
+
+            new LevelInfo("6-1", 24, 6,
+                InfoFlags.HasSecrets | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Sisyphus, EnemyType.Swordsmachine, EnemyType.Streetcleaner, EnemyType.Mindflayer, EnemyType.Turret, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.HideousMass, EnemyType.Idol, EnemyType.Virtue },
+                new List<string>() { "24_r" }),
+
+            new LevelInfo("6-2", 25, 6,
+                InfoFlags.HasRandomMusic,
+                new List<EnemyType>() { EnemyType.GabrielSecond }),
+
+            new LevelInfo("7-1", 26, 7,
+                InfoFlags.HasSecrets | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.Mindflayer, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.Mannequin, EnemyType.Minotaur, EnemyType.Virtue },
+                new List<string>() { "26_b", "26_r" }),
+
+            new LevelInfo("7-2", 27, 7,
+                InfoFlags.HasSecrets | InfoFlags.HasSecretWeapon | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal | InfoFlags.HasSwitches,
+                new List<EnemyType>() { EnemyType.Soldier, EnemyType.Stalker, EnemyType.Sisyphus, EnemyType.Swordsmachine, EnemyType.Turret, EnemyType.Gutterman, EnemyType.Guttertank, EnemyType.Cerberus, EnemyType.Mannequin },
+                new List<string>() { "27_r" }),
+
+            new LevelInfo("7-3", 28, 7,
+                InfoFlags.HasSecrets | InfoFlags.HasSecretExit | InfoFlags.HasRandomMusic,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Swordsmachine, EnemyType.Streetcleaner, EnemyType.Mindflayer, EnemyType.Turret, EnemyType.Gutterman, EnemyType.Guttertank, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.HideousMass, EnemyType.Mannequin, EnemyType.Virtue }),
+
+            new LevelInfo("7-4", 29, 7,
+                InfoFlags.None,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Streetcleaner, EnemyType.Turret, EnemyType.Gutterman, EnemyType.Guttertank, EnemyType.MaliciousFace, EnemyType.Centaur, EnemyType.Idol, EnemyType.Mannequin, }),
+
+            new LevelInfo("8-1", 30, 8,
+                InfoFlags.HasSecrets | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Schism, EnemyType.Soldier, EnemyType.Sisyphus, EnemyType.Swordsmachine, EnemyType.Drone, EnemyType.Turret, EnemyType.Gutterman, EnemyType.Guttertank, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.Mannequin, EnemyType.Virtue, EnemyType.Providence },
+                new List<string>() { "30_r", "30_b" }),
+
+            new LevelInfo("8-2", 31, 8,
+                InfoFlags.HasSecrets | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Sisyphus, EnemyType.MirrorReaper, EnemyType.Swordsmachine, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.Mindflayer, EnemyType.Turret, EnemyType.Gutterman, EnemyType.Guttertank, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.Mannequin, EnemyType.Deathcatcher, EnemyType.Virtue, EnemyType.Providence },
+                new List<string>() { "31_r", "31_b" }),
+
+            new LevelInfo("8-3", 32, 8,
+                InfoFlags.HasSecrets | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Stalker, EnemyType.Ferryman, EnemyType.Swordsmachine, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.Turret, EnemyType.Gutterman, EnemyType.Guttertank, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.HideousMass, EnemyType.Idol, EnemyType.Mannequin, EnemyType.Deathcatcher, EnemyType.Virtue, EnemyType.Providence, EnemyType.Power },
+                new List<string>() { "32_b", "32_r" }),
+
+            new LevelInfo("8-4", 33, 8,
+                InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Geryon, EnemyType.Virtue, EnemyType.Providence },
+                new List<string>() { "33_r", "33_b" }),
+
+            new LevelInfo("0-E", 100, 0,
+                InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Schism, EnemyType.Soldier, EnemyType.Stalker, EnemyType.Swordsmachine, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.Mindflayer, EnemyType.Turret, EnemyType.Gutterman, EnemyType.Guttertank, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.Idol, EnemyType.Mannequin, EnemyType.Virtue },
+                new List<string>() { "100_r", "100_b"}),
+
+            new LevelInfo("1-E", 101, 1,
+                InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Schism, EnemyType.Stalker, EnemyType.Swordsmachine, EnemyType.Drone, EnemyType.Streetcleaner, EnemyType.Mindflayer, EnemyType.Turret, EnemyType.Gutterman, EnemyType.Guttertank, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.HideousMass, EnemyType.Idol, EnemyType.Mannequin, EnemyType.Virtue },
+                new List<string>() { "101_b", "101_r"}),
+
+            new LevelInfo("P-1", 666, 3,
+                InfoFlags.HasRandomMusic,
+                new List<EnemyType>() { EnemyType.FleshPrison, EnemyType.MinosPrime }),
+
+            new LevelInfo("P-2", 667, 6,
+                InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Schism, EnemyType.Stalker, EnemyType.Sisyphus, EnemyType.Ferryman, EnemyType.Swordsmachine, EnemyType.Streetcleaner, EnemyType.Mindflayer, EnemyType.Turret, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.HideousMass, EnemyType.Idol, EnemyType.Virtue, EnemyType.FleshPanopticon, EnemyType.SisyphusPrime },
+                new List<string> { "667_b" })
         };
 
         public static readonly List<LevelInfo> secretMissionInfos = new List<LevelInfo>()
         {
-            new LevelInfo("0-S", 0, 0, (InfoFlags)0b0100000, new List<string> { "0S_r", "0S_b" }),
-            new LevelInfo("1-S", 0, 1, (InfoFlags)0b0000000),
-            new LevelInfo("2-S", 0, 2, (InfoFlags)0b0000000),
-            new LevelInfo("4-S", 0, 4, (InfoFlags)0b0000000),
-            new LevelInfo("5-S", 0, 5, (InfoFlags)0b0000000),
-            new LevelInfo("7-S", 0, 7, (InfoFlags)0b0100000, new List<string> { "7S_b", "7S_r" })
+            new LevelInfo("0-S", 0, 0,
+                InfoFlags.HasSkullsNormal,
+                new List<EnemyType>(),
+                new List<string> { "0S_r", "0S_b" }),
+
+            new LevelInfo("1-S", 0, 1,
+                InfoFlags.None,
+                new List<EnemyType>()),
+
+            new LevelInfo("2-S", 0, 2,
+                InfoFlags.None,
+                new List<EnemyType>()),
+
+            new LevelInfo("4-S", 0, 4,
+                InfoFlags.None,
+                new List<EnemyType>()),
+
+            new LevelInfo("5-S", 0, 5,
+                InfoFlags.None,
+                new List<EnemyType>()),
+
+            new LevelInfo("7-S", 0, 7,
+                InfoFlags.HasSkullsNormal,
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Swordsmachine, EnemyType.Drone, EnemyType.Mindflayer, EnemyType.Turret, EnemyType.Gutterman, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.HideousMass, EnemyType.Idol, EnemyType.Mannequin, EnemyType.Virtue },
+                new List<string> { "7S_b", "7S_r" })
         };
 
         public static List<string> AllLevels
@@ -200,6 +350,32 @@ namespace ArchipelagoULTRAKILL
             ["rock2"] = 75000
         };
 
+        public static readonly List<EnemyType> enemyBoss = new List<EnemyType>()
+        {
+            EnemyType.Minos,
+            EnemyType.V2,
+            EnemyType.V2Second,
+            EnemyType.Centaur,
+            EnemyType.Leviathan,
+            EnemyType.Geryon,
+            EnemyType.Gabriel,
+            EnemyType.GabrielSecond,
+            EnemyType.FleshPrison,
+            EnemyType.FleshPanopticon,
+            EnemyType.MinosPrime,
+            EnemyType.SisyphusPrime
+        };
+
+        public static readonly List<EnemyType> enemyExt = new List<EnemyType>()
+        {
+            EnemyType.Ferryman,
+            EnemyType.MirrorReaper,
+            EnemyType.HideousMass,
+            EnemyType.Minotaur,
+            EnemyType.VeryCancerousRodent,
+            EnemyType.Mandalore
+        };
+
         public void Awake()
         {
             Instance = this;
@@ -231,6 +407,10 @@ namespace ArchipelagoULTRAKILL
             AsyncOperationHandle<TMP_FontAsset> asyncHandle3 = Addressables.LoadAssetAsync<TMP_FontAsset>("Assets/Fonts/Terminal/fs-tahoma-8px-v2 SDF.asset");
             UIManager.fontSecondary = asyncHandle3.WaitForCompletion();
             Addressables.Release(asyncHandle3);
+
+            AsyncOperationHandle<Texture2D> asyncHandle4 = Addressables.LoadAssetAsync<Texture2D>("Assets/Textures/UI/NoPass3Skull.png");
+            UIManager.killsTexture = asyncHandle4.WaitForCompletion();
+            Addressables.Release(asyncHandle4);
         }
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -255,6 +435,7 @@ namespace ArchipelagoULTRAKILL
             UIManager.displayingMessage = false;
             UIManager.levels.Clear();
             UIManager.secrets.Clear();
+            UIManager.createdMenuIcons = false;
             UIManager.createdSkullIcons = false;
             UIManager.createdSwitchIcons = false;
             uim.deathLinkMessage = null;
@@ -291,8 +472,13 @@ namespace ArchipelagoULTRAKILL
                 else if (dataExists && !Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
                 if (UIManager.log == null) uim.CreateLogObject();
 
-                if (dataExists && data.randomizeSkulls) UIManager.CreateMenuSkullIcons();
-                if (dataExists && (data.l1switch || data.l7switch)) UIManager.CreateMenuSwitchIcons();
+                if (dataExists)
+                {
+                    UIManager.CreateMenuIcons();
+                    UIManager.CreateChapterRecents(UIManager.chapterSelect);
+                }
+                //if (dataExists && data.randomizeSkulls) UIManager.CreateMenuSkullIcons();
+                //if (dataExists && (data.l1switch || data.l7switch)) UIManager.CreateMenuSwitchIcons();
 
                 if (data.completedLevels.Count >= data.goalRequirement)
                 {

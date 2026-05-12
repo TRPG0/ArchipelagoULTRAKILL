@@ -10,16 +10,10 @@ namespace ArchipelagoULTRAKILL.Components
 
         public bool Limbo { get; private set; }
 
-        public bool Reposition { get; private set; }
-
-        public const int yLeaderboard = 38;
-        public const int yNormal = -32;
-
-        public void SetId(int id, bool limbo = true, bool reposition = false)
+        public void SetId(int id, bool limbo = true)
         {
             Id = id;
             Limbo = limbo;
-            Reposition = reposition;
         }
 
         public void Start()
@@ -33,11 +27,6 @@ namespace ArchipelagoULTRAKILL.Components
 
         public void OnEnable()
         {
-            if (Reposition)
-            {
-                if (LeaderboardController.ShowLevelLeaderboards) transform.localPosition = new Vector3(transform.localPosition.x, yLeaderboard, transform.localPosition.z);
-                else transform.localPosition = new Vector3(transform.localPosition.x, yNormal, transform.localPosition.z);
-            }
             CheckSwitch();
         }
 

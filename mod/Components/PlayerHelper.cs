@@ -232,13 +232,6 @@ namespace ArchipelagoULTRAKILL.Components
                     WeaponCharges.Instance.rev2charge = 0;
                 }
 
-                // core eject || pump charge
-                if (((!Core.data.unlockedFire2.Contains("sho0") || CurrentPowerup == Powerup.EmptyAmmo) && GetHeldWeapon() == "sho0") 
-                    || ((!Core.data.unlockedFire2.Contains("sho1") || CurrentPowerup == Powerup.EmptyAmmo) && GetHeldWeapon() == "sho1"))
-                {
-                    Traverse.Create(InputManager.Instance.InputSource.Fire2).Property("IsPressed").SetValue(false);
-                }
-
                 // sawed-on
                 if (!Core.data.unlockedFire2.Contains("sho2") || CurrentPowerup == Powerup.EmptyAmmo)
                 {

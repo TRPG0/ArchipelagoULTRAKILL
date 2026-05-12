@@ -117,6 +117,9 @@ namespace ArchipelagoULTRAKILL.Components
             int exitsTotal = 0;
             int secretsFound = 0;
             int secretsTotal = 0;
+            HashSet<EnemyType> enemies = new HashSet<EnemyType>();
+            int enemyCount = 0;
+            int enemyTotal = 0;
             int challenges = 0;
             int perfects = 0;
             int weapons = 0;
@@ -147,6 +150,8 @@ namespace ArchipelagoULTRAKILL.Components
                 }
 
                 LevelInfo levelInfo = Core.GetLevelInfo(i);
+
+                foreach (EnemyType enemyType in levelInfo.Enemies) enemies.Add(enemyType);
 
                 if (levelInfo.Flags.HasFlag(InfoFlags.HasSecrets))
                 {
@@ -184,12 +189,24 @@ namespace ArchipelagoULTRAKILL.Components
                 if (rank.challenge) challenges++;
             }
 
+            foreach (EnemyType enemyType in enemies)
+            {
+                if (((Core.data.enemyRewards == EnemyOptions.Bosses && Core.enemyBoss.Contains(enemyType))
+                    || (Core.data.enemyRewards == EnemyOptions.Extra && (Core.enemyBoss.Contains(enemyType) || Core.enemyExt.Contains(enemyType)))
+                    || Core.data.enemyRewards == EnemyOptions.All))
+                {
+                    if (Core.data.@checked.Contains("e_" + enemyType.ToString().ToLower())) enemyCount++;
+                    enemyTotal++;
+                }
+            }
+
             string result = BuildStringGoal(Core.data.goal, Core.data.completedLevels.Count, Core.data.goalRequirement);
             result += BuildString("Levels unlocked", unlocked, total);
             result += BuildString("\nLevels completed", completed, total);
             result += BuildString("\nSecret missions", missionsCompleted, missionsTotal);
             if (!Core.data.secretExitComplete) result += BuildString("\nSecret exits", exitsCompleted, exitsTotal);
             result += BuildString("\nSecrets", secretsFound, secretsTotal);
+            if (enemyTotal > 0) result += BuildString("\nEnemies", enemyCount, enemyTotal);
             if (weaponsTotal > 0) result += BuildString("\nWeapons", weapons, weaponsTotal);
             if (secretWeaponsTotal > 0) result += BuildString("\nSecret weapons", secretWeapons, secretWeaponsTotal);
             if (Core.data.challengeRewards) result += BuildString("\nChallenges", challenges, total);
@@ -211,6 +228,9 @@ namespace ArchipelagoULTRAKILL.Components
             int unlocked = 0;
             int completed = 0;
             int perfects = 0;
+            HashSet<EnemyType> enemies = new HashSet<EnemyType>();
+            int enemyCount = 0;
+            int enemyTotal = 0;
 
             for (int i = StartLevelId; i <= EndLevelId; i++)
             {
@@ -233,11 +253,25 @@ namespace ArchipelagoULTRAKILL.Components
                         isPerfect = true;
                     }
                 }
+
+                foreach (EnemyType enemyType in Core.GetLevelInfo(i).Enemies) enemies.Add(enemyType);
+            }
+
+            foreach (EnemyType enemyType in enemies)
+            {
+                if (((Core.data.enemyRewards == EnemyOptions.Bosses && Core.enemyBoss.Contains(enemyType))
+                    || (Core.data.enemyRewards == EnemyOptions.Extra && (Core.enemyBoss.Contains(enemyType) || Core.enemyExt.Contains(enemyType)))
+                    || Core.data.enemyRewards == EnemyOptions.All))
+                {
+                    if (Core.data.@checked.Contains("e_" + enemyType.ToString().ToLower())) enemyCount++;
+                    enemyTotal++;
+                }
             }
 
             string result = BuildStringGoal(Core.data.goal, Core.data.completedLevels.Count, Core.data.goalRequirement);
             result += BuildString("Levels unlocked", unlocked, total);
             result += BuildString("\nLevels completed", completed, total);
+            if (enemyTotal > 0) result += BuildString("\nEnemies", enemyCount, enemyTotal);
             if (Core.data.pRankRewards) result += BuildString("\nPerfect Ranks", perfects, total);
 
             dirty = false;

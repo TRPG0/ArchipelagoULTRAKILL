@@ -12,8 +12,10 @@ namespace ArchipelagoULTRAKILL.Config
         public static bool Done { get; private set; } = false;
 
         public static ConfigPanel uiPanel;
-        public static BoolField showRecentLocations;
-        public static BoolField showRecentItems;
+        public static BoolField showRecentLocationsChapter;
+        public static BoolField showRecentItemsChapter;
+        public static BoolField showRecentLocationsPause;
+        public static BoolField showRecentItemsPause;
         public static BoolField showLog;
         public static EnumField<LogFont> logFont;
         public static IntField logLines;
@@ -27,17 +29,46 @@ namespace ArchipelagoULTRAKILL.Config
 
             uiPanel = new ConfigPanel(config.rootPanel, "UI SETTINGS", "uiPanel");
 
-            new ConfigHeader(uiPanel, "PAUSE MENU");
-            showRecentLocations = new BoolField(uiPanel, "SHOW RECENT LOCATIONS", "showRecentLocations", true);
-            showRecentLocations.onValueChange += (BoolField.BoolValueChangeEvent e) =>
+            showRecentLocationsChapter = new BoolField(uiPanel, "RECENT LOCATIONS IN ACT SELECT", "showRecentLocationsChapter", true);
+            showRecentLocationsChapter.onValueChange += (BoolField.BoolValueChangeEvent e) =>
             {
-                UIManager.recentLocationContainer?.SetActive(e.value);
+                if (SceneHelper.CurrentScene == "Main Menu")
+                {
+                    if (UIManager.recentLocationContainer && UIManager.recentItemContainer)
+                    {
+                        UIManager.recentLocationContainer.SetActive(e.value);
+
+                        if (UIManager.recentLocationContainer.activeSelf) UIManager.recentItemContainer.transform.localPosition = new Vector3(0, -190, 0);
+                        else UIManager.recentItemContainer.transform.localPosition = Vector3.zero;
+                    }
+                }
             };
 
-            showRecentItems = new BoolField(uiPanel, "SHOW RECENT ITEMS", "showRecentItems", true);
-            showRecentItems.onValueChange += (BoolField.BoolValueChangeEvent e) =>
+            showRecentItemsChapter = new BoolField(uiPanel, "RECENT ITEMS IN ACT SELECT", "showRecentItemsChapter", true);
+            showRecentItemsChapter.onValueChange += (BoolField.BoolValueChangeEvent e) =>
             {
-                UIManager.recentItemContainer?.SetActive(e.value);
+                if (SceneHelper.CurrentScene == "Main Menu")
+                {
+                    if (UIManager.recentLocationContainer && UIManager.recentItemContainer)
+                    {
+                        UIManager.recentItemContainer.SetActive(e.value);
+
+                        if (UIManager.recentItemContainer.activeSelf) UIManager.recentLocationContainer.transform.localPosition = new Vector3(0, 190, 0);
+                        else UIManager.recentLocationContainer.transform.localPosition = Vector3.zero;
+                    }
+                }
+            };
+            
+            showRecentLocationsPause = new BoolField(uiPanel, "RECENT LOCATIONS IN PAUSE MENU", "showRecentLocationsPause", true);
+            showRecentLocationsPause.onValueChange += (BoolField.BoolValueChangeEvent e) =>
+            {
+                if (SceneHelper.CurrentScene != "Main Menu") UIManager.recentLocationContainer?.SetActive(e.value);
+            };
+
+            showRecentItemsPause = new BoolField(uiPanel, "RECENT ITEMS IN PAUSE MENU", "showRecentItemsPause", true);
+            showRecentItemsPause.onValueChange += (BoolField.BoolValueChangeEvent e) =>
+            {
+                if (SceneHelper.CurrentScene != "Main Menu") UIManager.recentItemContainer?.SetActive(e.value);
             };
 
             new ConfigHeader(uiPanel, "LOG");

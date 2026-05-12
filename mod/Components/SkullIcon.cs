@@ -8,15 +8,10 @@ namespace ArchipelagoULTRAKILL.Components
     public class SkullIcon : MonoBehaviour
     {
         public string Id { get; private set; }
-        public bool Reposition { get; private set; }
 
-        public const int yLeaderboard = 140;
-        public const int yNormal = 65;
-
-        public void SetId(string id, bool reposition = true)
+        public void SetId(string id)
         {
             Id = id;
-            Reposition = reposition;
         }
 
         public void Start()
@@ -30,11 +25,6 @@ namespace ArchipelagoULTRAKILL.Components
 
         public void OnEnable()
         {
-            if (Reposition)
-            {
-                if (LeaderboardController.ShowLevelLeaderboards) transform.localPosition = new Vector3(transform.localPosition.x, yLeaderboard, transform.localPosition.z);
-                else transform.localPosition = new Vector3(transform.localPosition.x, yNormal, transform.localPosition.z);
-            }
             CheckSkull();
         }
 

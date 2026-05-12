@@ -1894,7 +1894,7 @@ class UltrakillRules:
             "4-1: Secret #4":
                 lambda state: (
                     slam_storage(state)
-                    or can_rocket_ride(state)
+                    or rock_any(state)
                     or shoalt0_fire2(state)
                     or shostd1_fire2(state)
                     or rai2(state)
