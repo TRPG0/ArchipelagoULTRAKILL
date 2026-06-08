@@ -4783,6 +4783,10 @@ class UltrakillRules:
                         )
                         or (
                             can_reach_level(state, "Enemy: Deathcatcher", "8-3")
+                            and (
+                                arm2(state)
+                                or slide(state)
+                            )
                             and good_weapon(state)
                             and (
                                 stamina(state, 1)
