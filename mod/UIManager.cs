@@ -563,21 +563,38 @@ namespace ArchipelagoULTRAKILL
 
                 if (Core.data.enemyRewards > EnemyOptions.Disabled && info.Enemies.Count > 0)
                 {
-                    EnemyList enemyList = CreateMenuEnemyList(info, levels[info.Name]);
-                    GameObject enemies = new GameObject();
-                    enemies.name = "Enemies";
-                    enemies.transform.SetParent(parent.transform);
-                    enemies.transform.localPosition = enemyPos;
-                    enemies.transform.localScale = enemyScale;
-                    HorizontalLayoutGroup enemiesLayoutGroup = enemies.AddComponent<HorizontalLayoutGroup>();
-                    enemiesLayoutGroup.childControlWidth = false;
-                    enemiesLayoutGroup.childForceExpandWidth = false;
-                    enemiesLayoutGroup.spacing = 4;
-                    ContentSizeFitter enemiesFitter = enemies.AddComponent<ContentSizeFitter>();
-                    enemiesFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-                    enemiesFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-                    CreateMenuEnemyCounter(info, enemies, enemyList);
-                    enemies.GetComponent<RectTransform>().pivot = new Vector2(0, 0);
+                    int count = 0;
+                    int total = 0;
+
+                    foreach (EnemyType enemyType in info.Enemies)
+                    {
+                        if ((Core.data.enemyRewards == EnemyOptions.Bosses && Core.enemyBoss.Contains(enemyType))
+                            || (Core.data.enemyRewards == EnemyOptions.Extra && (Core.enemyBoss.Contains(enemyType) || Core.enemyExt.Contains(enemyType)))
+                            || Core.data.enemyRewards == EnemyOptions.All)
+                        {
+                            if (Core.data.@checked.Contains("e_" + enemyType.ToString().ToLower())) count++;
+                            total++;
+                        }
+                    }
+
+                    if (total > 0)
+                    {
+                        EnemyList enemyList = CreateMenuEnemyList(info, levels[info.Name]);
+                        GameObject enemies = new GameObject();
+                        enemies.name = "Enemies";
+                        enemies.transform.SetParent(parent.transform);
+                        enemies.transform.localPosition = enemyPos;
+                        enemies.transform.localScale = enemyScale;
+                        HorizontalLayoutGroup enemiesLayoutGroup = enemies.AddComponent<HorizontalLayoutGroup>();
+                        enemiesLayoutGroup.childControlWidth = false;
+                        enemiesLayoutGroup.childForceExpandWidth = false;
+                        enemiesLayoutGroup.spacing = 4;
+                        ContentSizeFitter enemiesFitter = enemies.AddComponent<ContentSizeFitter>();
+                        enemiesFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                        enemiesFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                        CreateMenuEnemyCounter(info, enemies, enemyList, count, total);
+                        enemies.GetComponent<RectTransform>().pivot = new Vector2(0, 0);
+                    }
                 }
 
                 if (Core.data.randomizeSkulls && (info.Flags & InfoFlags.HasAnySkulls) != 0)
@@ -657,7 +674,7 @@ namespace ArchipelagoULTRAKILL
             createdMenuIcons = true;
         }
 
-        public static void CreateMenuEnemyCounter(LevelInfo info, GameObject gameObject, EnemyList enemyList)
+        public static void CreateMenuEnemyCounter(LevelInfo info, GameObject gameObject, EnemyList enemyList, int count, int total)
         {
             Sprite sprite = Sprite.Create(killsTexture, new Rect(0, 0, 64, 64), new Vector2());
 
@@ -680,20 +697,6 @@ namespace ArchipelagoULTRAKILL
             text.fontSize = 64;
             textObj.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             textObj.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-            int count = 0;
-            int total = 0;
-
-            foreach (EnemyType enemyType in info.Enemies)
-            {
-                if ((Core.data.enemyRewards == EnemyOptions.Bosses && Core.enemyBoss.Contains(enemyType))
-                    || (Core.data.enemyRewards == EnemyOptions.Extra && (Core.enemyBoss.Contains(enemyType) || Core.enemyExt.Contains(enemyType)))
-                    || Core.data.enemyRewards == EnemyOptions.All)
-                {
-                    if (Core.data.@checked.Contains("e_" + enemyType.ToString().ToLower())) count++;
-                    total++;
-                }
-            }
 
             if (count >= total)
             {

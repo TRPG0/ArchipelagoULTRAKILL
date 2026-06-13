@@ -27,9 +27,13 @@ namespace ArchipelagoULTRAKILL.Patches
     [HarmonyPatch(typeof(Shotgun), "Pump")]
     public class Shotgun_Pump_Patch
     {
-        public static bool Prefix()
+        public static bool Prefix(Shotgun __instance)
         {
-            if (Core.DataExists() && !Core.IsFire2Unlocked("sho1")) return false;
+            if (Core.DataExists() && !Core.IsFire2Unlocked("sho1"))
+            {
+                __instance.ReadyGun();
+                return false;
+            }
             return true;
         }
     }

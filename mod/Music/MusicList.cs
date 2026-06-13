@@ -429,7 +429,7 @@ namespace ArchipelagoULTRAKILL.Music
             ["31C"] = new AudioSourceTarget(new List<string>() { "11B - Parking Garage/11B Nonstuff/AmbianceZone (1)/Ambiance", "12 - Island/12 Nonstuff/1/AmbianceZone/Ambiance", "12 - Island/12 Nonstuff/2/AmbianceZone/Ambiance", "12B - Supermarket Entrance/Ambiance (Fake Propagation)", "Exteriors/4B - Upper Exterior/4B Nonstuff (1)/AmbianceZone (2)/Ambiance", "15 - Second Deathcatcher/15 Stuff/Ambiance (Fake Propagation)" }, new List<string>() { "Exteriors/4B - Upper Exterior/4B Nonstuff (1)/AmbianceZone (2)/Ambiance", "15 - Second Deathcatcher/15 Stuff/Ambiance (Fake Propagation)" }),
             ["31D"] = new ShoppingTarget("Main Music Parent/Mall Music", new List<string>() { "12B - Supermarket Entrance/12B Nonstuff/Audio Source", "12B - Supermarket Entrance/12B Nonstuff/Audio Source (3)", "13 - Supermarket Escalators/13 Nonstuff/Audio Source (1)", "13 - Supermarket Escalators/13 Nonstuff/Audio Source (2)", "13 - Supermarket Escalators/13 Nonstuff/Audio Source (3)", "16 - Supermarket Shutters/16 Nonstuff/Audio Source (1)", "16 - Supermarket Shutters/16 Nonstuff/Audio Source (2)" }, new List<string>() { "12B - Supermarket Entrance/12B Stuff/MR Trigger", "12C - Fake Sky Room/12C Stuff/Trigger" }, false, true, true),
             ["31E"] = new AudioSourceTarget("Boss Music"),
-            ["32A"] = null,
+            ["32A"] = new MusicChangerTarget("Musics/First", true, true, true, true),
             ["32B"] = new MusicChangerTarget("Musics/Second"),
             ["32C"] = new MusicChangerTarget("Musics/Third"),
             ["33"] = new AudioSourceTarget("Main Music"),

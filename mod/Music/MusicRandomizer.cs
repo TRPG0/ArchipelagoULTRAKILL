@@ -60,7 +60,7 @@ namespace ArchipelagoULTRAKILL.Music
             {
                 if ((multiLayer.Contains(kvp.Key) && singleLayer.Contains(kvp.Value)) 
                     || (multiLayer.Contains(kvp.Value) && singleLayer.Contains(kvp.Key))
-                    || (!multiLayer.Contains(kvp.Key) && !singleLayer.Contains(kvp.Key)))
+                    || (!MusicList.Music.ContainsKey(kvp.Key) || !MusicList.Music.ContainsKey(kvp.Value)))
                 {
                     Core.Logger.LogWarning($"Music dictionary is invalid. {kvp.Key} {kvp.Value}");
                     MusicConfig.invalidMessage.hidden = false;
@@ -552,14 +552,18 @@ namespace ArchipelagoULTRAKILL.Music
                 if (musicChangerTarget.clean) musicChanger.clean = clean;
                 if (musicChangerTarget.battle) musicChanger.battle = battle;
                 if (musicChangerTarget.boss) musicChanger.boss = battle;
-                NowPlayingChanger changer = musicChanger.gameObject.AddComponent<NowPlayingChanger>();
-                changer.Init(icon, text);
-                changers.Add(changer);
+                if (!musicChangerTarget.alsoTargetManager)
+                {
+                    NowPlayingChanger changer = musicChanger.gameObject.AddComponent<NowPlayingChanger>();
+                    changer.Init(icon, text);
+                    changers.Add(changer);
+                }
             }
             if (changers.Count > 1)
             {
                 foreach (NowPlayingChanger changer in changers) changer.links = changers;
             }
+            if (musicChangerTarget.alsoTargetManager) ApplyMultiMusicToManager(clean, battle, icon, text);
         }
 
         private void ApplyMultiMusicToShoppingTarget(ShoppingTarget shoppingTarget, AudioClip clean, AudioClip battle, Sprite icon, string text)

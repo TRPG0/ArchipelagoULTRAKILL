@@ -1,6 +1,7 @@
 ﻿using ArchipelagoULTRAKILL.Components;
 using ArchipelagoULTRAKILL.Structures;
 using HarmonyLib;
+using System.Collections.Generic;
 
 namespace ArchipelagoULTRAKILL.Patches
 {
@@ -22,13 +23,28 @@ namespace ArchipelagoULTRAKILL.Patches
     [HarmonyPatch(typeof(FinalPit), "SendInfo")]
     class FinalPit_SendInfo_Patch
     {
+        static Dictionary<int, string> secretExits = new Dictionary<int, string>()
+        {
+            [2] = "5B - Secret Arena/5B Nonstuff/Pit (2)/Cube (1)",
+            [6] = "1 - First Field/1 Nonstuff/FinalRoom SecretEntrance/Pit/Cube (1)",
+            [12] = "2 - Sewer Arena/2 Nonstuff/Secret Level Entrance/FinalRoom SecretEntrance/Pit/Cube (1)",
+            [17] = "FakeMoon/FinalRoom SecretEntrance/Pit/Cube (1)",
+            [20] = "2 - Elevator/2B Secret/FinalRoom SecretEntrance/Pit/Cube (1)",
+            [28] = "2 - Garden Maze/Secret/FinalRoom SecretEntrance/Pit/Cube (1)"
+        };
+
         public static void Prefix(FinalPit __instance)
         {
             if (Core.DataExists())
             {
                 if (Core.CurrentLevelHasInfo && Core.CurrentLevelInfo.Flags.HasFlag(InfoFlags.HasSecretExit))
                 {
-                    if (!SceneHelper.CurrentScene.Contains("-S") && __instance.GetComponent<SecretMissionPit>() && !Core.data.secretExitComplete) PlayerHelper.IsSecretExiting = true;
+                    int level = StatsManager.Instance.levelNumber;
+                    if (FinalPit_SendInfo_Patch.secretExits.ContainsKey(level))
+                    {
+                        string fullPath = __instance.gameObject.GetFullPath();
+                        if (!SceneHelper.CurrentScene.Contains("-S") && !Core.data.secretExitComplete && fullPath == FinalPit_SendInfo_Patch.secretExits[level]) PlayerHelper.IsSecretExiting = true;
+                    }
                 }
 
                 if (PlayerHelper.Instance)

@@ -105,7 +105,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static void Prefix()
         {
-            if (Core.DataExists() && PlayerHelper.IsSecretExiting)
+            if (Core.DataExists() && (AssistController.Instance.cheatsEnabled || PlayerHelper.IsSecretExiting))
             {
                 StatsManager.Instance.rankScore = -1;
             }

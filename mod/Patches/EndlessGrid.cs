@@ -9,7 +9,7 @@ namespace ArchipelagoULTRAKILL.Patches
         {
             if (((Core.DataExists() && Multiworld.Authenticated && Core.data.cybergrindHints) || (Multiworld.Authenticated && Multiworld.HintMode)) && !AssistController.Instance.cheatsEnabled)
             {
-                if (__instance.currentWave != 0 && __instance.currentWave % 5 == 0) LocationManager.GetRandomHint();
+                if (__instance.currentWave > __instance.startWave && __instance.currentWave % 5 == 0) LocationManager.GetRandomHint();
             }
         }
     }

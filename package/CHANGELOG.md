@@ -1,3 +1,18 @@
+## 3.5.3
+
+- Reworked how secret exits are checked.
+- Fixed the Pump Charge shotgun being unable to primary fire if attempting to use the secondary fire while it is not unlocked.
+- Fixed random music validation not working properly, which could sometimes cause certain levels to be impossible to load into.
+	- This is usually caused by playing a multiworld that was generated with an old version of the apworld (3.4.5 or older). Don't forget to update the apworld!
+- Fixed P Rank locations being added to the goal level.
+- Added an option to automatically exclude locations in the goal level.
+- Fixed 8-3 theme #1 random music reverting back to the original music after restarting from a checkpoint.
+- Fixed incorrect logic for Deathcatchers in 8-3. [#48](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/48)
+- Fixed instantly unlocking a hint in The Cyber Grind when starting on a wave higher than 1.
+- Final ranks for levels are now not saved if cheats are enabled.
+- Enemy counters will not be added to levels if the total number of enemies is zero.
+- Added YAML-less support for Universal Tracker.
+
 ## 3.5.2
 
 - Added a counter for enemies killed in each level, with a full list when hovering over the counter.
