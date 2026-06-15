@@ -1,6 +1,6 @@
 import typing, random
 from dataclasses import dataclass
-from Options import T, Choice, Range, OptionSet, Toggle, DefaultOnToggle, ItemDict, DeathLink, PerGameCommonOptions, StartInventoryPool, Removed, Visibility
+from Options import T, Choice, Range, OptionSet, Toggle, DefaultOnToggle, ItemDict, DeathLink, PerGameCommonOptions, StartInventoryPool, Removed, OptionGroup, Visibility
 from .Regions import Regions
 from .Items import item_groups
 
@@ -32,9 +32,9 @@ class UKLevelChoice(Choice):
 class ItemWeights(ItemDict):
     def __init__(self, value: typing.Dict[str, int]):
         if any(item_count < 0 for item_count in value.values()):
-            raise Exception("Cannot have negative item counts.")
+            raise Exception("Cannot have item counts less than zero.")
         if all(item_count == 0 for item_count in value.values()):
-            raise Exception("At least one item count must be positive.")
+            raise Exception("At least one item count must be greater than zero.")
         super(ItemDict, self).__init__(value)
 
 
@@ -149,6 +149,13 @@ class AutoExcludeGoal(DefaultOnToggle):
     display_name = "Auto Exclude Goal Level Locations"
 
 
+class SpeedrunLogic(Toggle):
+    """
+    Enables various speedrunning tricks in logic, such as gliches and out-of-bounds exploits. (Work in progress)
+    """
+    display_name = "Speedrunner Logic"
+
+
 class UnlockType(Choice):
     """
     Choose if levels will be unlocked one at a time, or whole layers at once.
@@ -208,7 +215,7 @@ class TrapWeights(ItemWeights):
 
 class EnemyRewards(Choice):
     """
-    Adds rewards for defeating enemies and unlocking terminal entries.
+    Adds location checks for defeating enemies and unlocking terminal entries.
 
     Bosses: Only includes bosses at the end of each act and in Prime Sanctums.
 
@@ -226,21 +233,21 @@ class EnemyRewards(Choice):
 
 class Challenges(Toggle):
     """
-    Adds rewards for completing each level's challenge, except for the goal.
+    Adds location checks for completing each level's challenge, except for the goal.
     """
     display_name = "Challenge Rewards"
 
 
 class PRanks(Toggle):
     """
-    Adds rewards for completing each level with a Perfect Rank, except for the goal.
+    Adds location checks for completing each level with a Perfect Rank, except for the goal.
     """
     display_name = "P Rank Rewards"
 
 
 class HankRewards(Toggle):
     """
-    Adds rewards for giving Hank and Hank Jr. a head in 1-4 and 5-3.
+    Adds location checks for giving Hank and Hank Jr. a head in 1-4 and 5-3.
     """
     display_name = "Hank Rewards"
 
@@ -254,28 +261,28 @@ class ClashReward(Toggle):
 
 class FishRewards(Toggle):
     """
-    Adds rewards for catching each fish in 5-S.
+    Adds location checks for catching each fish in 5-S.
     """
     display_name = "Fish Rewards"
 
 
 class CleanRewards(Toggle):
     """
-    Adds rewards for cleaning every room in 7-S.
+    Adds location checks for cleaning every room in 7-S.
     """
     display_name = "Cleaning Rewards"
 
 
 class ChessReward(Toggle):
     """
-    Adds a reward for winning chess against a bot in the Developer Museum.
+    Adds a location check for winning chess against a bot in the Developer Museum.
     """
     display_name = "Chess Reward"
 
 
 class RocketRaceReward(Toggle):
     """
-    Adds a reward for winning the rocket race in the Developer Museum.
+    Adds a location check for winning the rocket race in the Developer Museum.
     """
     display_name = "Rocket Race Reward"
 
@@ -498,6 +505,7 @@ class UltrakillOptions(PerGameCommonOptions):
     skipped_levels: SkipLevels
     auto_exclude_skipped_locations: AutoExcludeSkip
     auto_exclude_goal_locations: AutoExcludeGoal
+    speedrunner_logic: SpeedrunLogic
     unlock_type: UnlockType
     secret_mission_unlock_type: SecretUnlockType
     secret_exit_behavior: SecretExitType
@@ -540,3 +548,62 @@ class UltrakillOptions(PerGameCommonOptions):
     include_secret_mission_completion: Removed
     boss_rewards: Removed
     starting_weapon: Removed
+
+
+option_groups: typing.List[OptionGroup] = [
+    OptionGroup("Levels", [
+        StartLevel,
+        GoalLevel,
+        GoalRequirement,
+        PerfectGoal,
+        SkipLevels,
+        AutoExcludeSkip,
+        AutoExcludeGoal,
+        SpeedrunLogic,
+        UnlockType,
+        SecretUnlockType,
+        SecretExitType,
+        RandomizeSkulls,
+        LimboSwitch,
+        ViolenceSwitch
+    ]),
+    OptionGroup("Filler / Trap Items", [
+        TrapPercent,
+        FillerWeights,
+        TrapWeights
+    ]),
+    OptionGroup("Extra Location Checks", [
+        EnemyRewards,
+        Challenges,
+        PRanks,
+        ClashReward,
+        FishRewards,
+        CleanRewards,
+        HankRewards,
+        ChessReward,
+        RocketRaceReward
+    ]),
+    OptionGroup("Weapons", [
+        StartingWeaponPool,
+        RandomizeFire2,
+        StartWithArm,
+        RevForm,
+        ShoForm,
+        NaiForm
+    ]),
+    OptionGroup("Movement", [
+        StartingStamina,
+        StartingWalljumps,
+        StartWithSlide,
+        StartWithSlam
+    ]),
+    OptionGroup("Miscellaneous", [
+        PointMultiplier,
+        UIColorRando,
+        GunColorRando,
+        MusicRando,
+        CybergrindHints,
+        UltrakillDeathLink,
+        DeathLinkAmnesty
+    ])
+]
