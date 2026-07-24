@@ -144,14 +144,23 @@ class AutoExcludeSkip(DefaultOnToggle):
 
 class AutoExcludeGoal(DefaultOnToggle):
     """
-    Choose if the goal level shoudl automatically have all of its locations excluded.
+    Choose if the goal level should automatically have all of its locations excluded.
     """
     display_name = "Auto Exclude Goal Level Locations"
 
 
+class RequireShieldBreak(DefaultOnToggle):
+    """
+    Forces a way to break Guttermen shields (Knuckleblaster or any Alternate Shotgun) to be required in logic.
+    """
+    display_name = "Require Gutterman Shield Break"
+
+
 class SpeedrunLogic(Toggle):
     """
-    Enables various speedrunning tricks in logic, such as gliches and out-of-bounds exploits. (Work in progress)
+    Enables various speedrunning tech in logic, such as glitches, out-of-bounds exploits, and other difficult tricks. 
+    
+    (Work in progress! Only implemented until the end of Layer 3)
     """
     display_name = "Speedrunner Logic"
 
@@ -463,6 +472,8 @@ class MusicRando(Toggle):
     """
     Randomizes the music that plays during the game.
 
+    Music can be re-randomized, or toggled on or off later.
+
     Some music is never randomized.
     """
     display_name = "Music Randomizer"
@@ -505,6 +516,7 @@ class UltrakillOptions(PerGameCommonOptions):
     skipped_levels: SkipLevels
     auto_exclude_skipped_locations: AutoExcludeSkip
     auto_exclude_goal_locations: AutoExcludeGoal
+    require_gutterman_shield_break: RequireShieldBreak
     speedrunner_logic: SpeedrunLogic
     unlock_type: UnlockType
     secret_mission_unlock_type: SecretUnlockType
@@ -559,13 +571,16 @@ option_groups: typing.List[OptionGroup] = [
         SkipLevels,
         AutoExcludeSkip,
         AutoExcludeGoal,
-        SpeedrunLogic,
         UnlockType,
         SecretUnlockType,
         SecretExitType,
         RandomizeSkulls,
         LimboSwitch,
         ViolenceSwitch
+    ]),
+    OptionGroup("Logic", [
+        RequireShieldBreak,
+        SpeedrunLogic
     ]),
     OptionGroup("Filler / Trap Items", [
         TrapPercent,

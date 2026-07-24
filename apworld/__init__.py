@@ -108,6 +108,7 @@ class UltrakillWorld(World):
             self.options.goal_requirement.value = slot_data.get("goal_requirement", self.options.goal_requirement.default)
             self.options.perfect_goal.value = slot_data.get("perfect_goal", self.options.perfect_goal.default)
             self.options.skipped_levels.value = slot_data.get("skipped_levels", self.options.skipped_levels.default)
+            self.options.require_gutterman_shield_break.value = slot_data.get("require_gutterman_shield_break", self.options.require_gutterman_shield_break.default)
             self.options.speedrunner_logic.value = slot_data.get("speedrunner_logic", self.options.speedrunner_logic.default)
             self.options.secret_mission_unlock_type.value = slot_data.get("secret_mission_unlock_type", self.options.secret_mission_unlock_type.default)
             self.options.secret_exit_behavior.value = slot_data.get("secret_exit_behavior", self.options.secret_exit_behavior.default)
@@ -526,6 +527,7 @@ class UltrakillWorld(World):
             "secret_mission_unlock_type": bool(self.options.secret_mission_unlock_type.value),
             "secret_exit_behavior": bool(self.options.secret_exit_behavior.value),
             "skipped_levels": self.options.skipped_levels.value,
+            "require_gutterman_shield_break": bool(self.options.require_gutterman_shield_break),
             "speedrunner_logic": bool(self.options.speedrunner_logic),
             "enemy_rewards": self.options.enemy_rewards.value,
             "challenge_rewards": bool(self.options.challenge_rewards),

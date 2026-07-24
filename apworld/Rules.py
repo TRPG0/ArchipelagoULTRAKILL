@@ -666,6 +666,9 @@ class UltrakillRules:
         
         def can_break_idol_or_deathcatcher(state: CollectionState) -> bool:
             return can_punch(state) or shoalt_any(state) or slam(state)
+
+        def can_break_gutterman_shield(state: CollectionState) -> bool:
+            return state.has("Knuckleblaster", player) or shoalt_any(state) if options.require_gutterman_shield_break else True
         
         def grab_item(state: CollectionState) -> bool:
             return arm0(state) or arm1(state) or arm2(state)
@@ -803,6 +806,16 @@ class UltrakillRules:
                 or shoalt_any(state)
                 or can_proj_boost(state)
                 or rai2(state)
+            )
+        
+        def player_boost(state: CollectionState) -> bool:
+            return (
+                rock_any(state)
+                or shoany0_fire2(state)
+                or shostd1_fire2(state)
+                or shoalt_any(state)
+                or rai2(state)
+                or can_proj_boost(state)
             )
 
         def windstate_wallbounce(state: CollectionState) -> bool:
@@ -1801,7 +1814,10 @@ class UltrakillRules:
                 lambda state: (
                     grab_item(state)
                     and skull(state, "1-2", "Blue")
-                    and skull(state, "1-2", "Red")
+                    and (
+                        skull(state, "1-2", "Red")
+                        or can_zap(state)
+                    )
                     and good_weapon(state)
                 ),
 
@@ -1909,14 +1925,21 @@ class UltrakillRules:
 
             # 2-1
             "2-1: Secret #1":
-                can_break_walls,
+                lambda state: (
+                    options.speedrunner_logic
+                    or can_break_walls(state)
+                ),
 
             "2-1: Secret #2":
-                l10_exit,
+                lambda state: (
+                    options.speedrunner_logic
+                    or l10_exit(state)
+                ),
 
             "2-1: Secret #3":
                 lambda state: (
-                    l10_exit(state)
+                    options.speedrunner_logic
+                    or l10_exit(state)
                     and (
                         shoalt0_fire2(state)
                         or shostd1_fire2(state)
@@ -1926,27 +1949,43 @@ class UltrakillRules:
                 ),
 
             "2-1: Secret #4":
-                l10_exit,
+                lambda state: (
+                    options.speedrunner_logic
+                    or l10_exit(state)
+                ),
 
             "2-1: Secret #5":
-                l10_tower,
+                lambda state: (
+                    options.speedrunner_logic
+                    or l10_tower(state)
+                ),
 
             "Cleared 2-1":
-                l10_tower,
+                lambda state: (
+                    options.speedrunner_logic
+                    or l10_tower(state)
+                ),
 
             "2-1: Don't open any normal doors":
-                l10_challenge,
+                lambda state: (
+                    options.speedrunner_logic
+                    and can_break_walls(state)
+                    or l10_challenge(state)
+                ),
 
             "2-1: Perfect Rank":
                 lambda state: (
-                    l10_tower(state)
+                    options.speedrunner_logic
+                    and good_weapon(state)
+                    or l10_tower(state)
                     and good_weapon(state)
                 ),
 
             # 2-2
             "2-2: Secret #1":
                 lambda state: (
-                    rev_any(state)
+                    options.speedrunner_logic
+                    or rev_any(state)
                     or sho_any(state)
                     or nai_any(state)
                     or rai0(state)
@@ -1957,19 +1996,42 @@ class UltrakillRules:
                 ),
 
             "2-2: Secret #2":
-                lambda state: jump_general(state, 1),
+                lambda state: (
+                    options.speedrunner_logic
+                    or jump_general(state, 1)
+                ),
 
             "2-2: Secret #3":
-                lambda state: jump_general(state, 2),
+                lambda state: (
+                    options.speedrunner_logic
+                    and (
+                        player_boost(state)
+                        or slam(state)
+                        or arm2(state)
+                    )
+                    or jump_general(state, 2)
+                ),
 
             "2-2: Secret #4":
-                slide,
+                lambda state: (
+                    options.speedrunner_logic
+                    and rock0_fire2(state)
+                    or slide(state)
+                ),
 
             "2-2: Secret #5":
                 can_break_walls,
 
             "2-2: Beat the level in under 60 seconds":
-                l11_challenge,
+                lambda state: (
+                    options.speedrunner_logic
+                    and (
+                        slide(state)
+                        or stamina(state, 1)
+                        or player_boost(state)
+                    )
+                    or l11_challenge(state)
+                ),
 
             "2-2: Perfect Rank":
                 good_weapon,
@@ -1980,23 +2042,38 @@ class UltrakillRules:
 
             "2-3: Secret #3":
                 lambda state: (
-                    grab_item(state)
+                    options.speedrunner_logic
+                    and slide(state)
+                    and rock0_fire2(state)
+                    or grab_item(state)
                     and skull(state, "2-3", "Blue")
                     and l12_s3(state)
                 ),
 
             "2-3: Secret #4":
                 lambda state: (
-                    grab_item(state)
+                    options.speedrunner_logic
+                    and slide(state)
+                    and rock0_fire2(state)
+                    or grab_item(state)
                     and skull(state, "2-3", "Blue")
                 ),
 
             "2-3: Secret #5":
-                slide,
+                lambda state: (
+                    options.speedrunner_logic
+                    and rock0_fire2(state)
+                    or slide(state)
+                ),
 
             "Cleared 2-3":
                 lambda state: (
-                    grab_item(state)
+                    options.speedrunner_logic
+                    and (
+                        slide(state)
+                        and rock0_fire2(state)
+                    )
+                    or grab_item(state)
                     and (
                         (
                             options.secret_exit_behavior == "standard"
@@ -2030,7 +2107,16 @@ class UltrakillRules:
 
             "2-3: Secret Exit":
                 lambda state: (
-                    grab_item(state)
+                    options.speedrunner_logic
+                    and (
+                        (
+                            grab_item(state)
+                            and skull(state, "2-3", "Red")
+                            and slide(state)
+                            and rock0_fire2(state)
+                        )
+                    )
+                    or grab_item(state)
                     and l12_s3(state)
                     and skull(state, "2-3", "Blue")
                     and slide(state)
@@ -2039,14 +2125,33 @@ class UltrakillRules:
             # 2-4
             "Cleared 2-4":
                 lambda state: (
-                    grab_item(state)
+                    options.speedrunner_logic
+                    and (
+                        grab_item(state)
+                        and (
+                            skull(state, "2-4", "Blue")
+                            or slide(state)
+                            and player_boost(state)
+                        )
+                    )
+                    or grab_item(state)
                     and skull(state, "2-4", "Blue")
                     and skull(state, "2-4", "Red")
                 ),
 
             "2-4: Parry a punch":
                 lambda state: (
-                    grab_item(state)
+                    options.speedrunner_logic
+                    and (
+                        grab_item(state)
+                        and (
+                            skull(state, "2-4", "Blue")
+                            or slide(state)
+                            and player_boost(state)
+                        )
+                        and arm0(state)
+                    )
+                    or grab_item(state)
                     and skull(state, "2-4", "Blue")
                     and skull(state, "2-4", "Red")
                     and arm0(state)
@@ -2054,7 +2159,16 @@ class UltrakillRules:
 
             "2-4: Perfect Rank":
                 lambda state: (
-                    grab_item(state)
+                    options.speedrunner_logic
+                    and (
+                        grab_item(state)
+                        and (
+                            skull(state, "2-4", "Blue")
+                            or slide(state)
+                            and player_boost(state)
+                        )
+                    )
+                    or grab_item(state)
                     and skull(state, "2-4", "Blue")
                     and skull(state, "2-4", "Red")
                     and good_weapon(state)
@@ -2062,7 +2176,11 @@ class UltrakillRules:
 
             # 3-1
             "3-1: Secret #4":
-                slide,
+                lambda state: (
+                    options.speedrunner_logic
+                    and rock0_fire2(state)
+                    or slide(state)
+                ),
 
             "3-1: Perfect Rank":
                 good_weapon,
@@ -2801,16 +2919,23 @@ class UltrakillRules:
                     and good_weapon(state)
                     and grab_item(state)
                     and skull(state, "7-2", "Red")
+                    and can_break_gutterman_shield(state)
                 ),
 
             # 7-3
             "7-3: Perfect Rank":
-                good_weapon,
+                lambda state: (
+                    good_weapon(state)
+                    and can_break_gutterman_shield(state)
+                ),
 
             "Cleared 7-3":
                 lambda state: (
                     options.secret_exit_behavior == "standard"
-                    or good_weapon(state)
+                    or (
+                        good_weapon(state)
+                        and can_break_gutterman_shield(state)
+                    )
                 ),
 
             # 7-S
@@ -2819,6 +2944,7 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "7-S", "Red")
                     and skull(state, "7-S", "Blue")
+                    and can_break_gutterman_shield(state)
                 ),
 
             "7-S: Cleaned Courtyard":
@@ -2826,6 +2952,7 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "7-S", "Red")
                     and skull(state, "7-S", "Blue")
+                    and can_break_gutterman_shield(state)
                 ),
 
             "7-S: Cleaned Library":
@@ -2833,6 +2960,7 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "7-S", "Red")
                     and skull(state, "7-S", "Blue")
+                    and can_break_gutterman_shield(state)
                 ),
 
             "7-S: Cleaned Lobby":
@@ -2840,6 +2968,7 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "7-S", "Red")
                     and skull(state, "7-S", "Blue")
+                    and can_break_gutterman_shield(state)
                 ),
 
             "7-S: Cleaned Lounge":
@@ -2847,6 +2976,7 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "7-S", "Red")
                     and skull(state, "7-S", "Blue")
+                    and can_break_gutterman_shield(state)
                 ),
 
             "7-S: Cleaned Side Room":
@@ -2854,6 +2984,7 @@ class UltrakillRules:
                     grab_item(state)
                     and skull(state, "7-S", "Red")
                     and skull(state, "7-S", "Blue")
+                    and can_break_gutterman_shield(state)
                 ),
 
             # 7-4
@@ -2870,6 +3001,7 @@ class UltrakillRules:
                         or shoalt_any(state)
                     )
                     and good_weapon(state)
+                    and can_break_gutterman_shield(state)
                 ),
 
             "7-4: Don't fight the security system":
@@ -2886,6 +3018,7 @@ class UltrakillRules:
                     )
                     and good_weapon(state)
                     and can_zap(state)
+                    and can_break_gutterman_shield(state)
                 ),
 
             "7-4: Perfect Rank":
@@ -2897,6 +3030,7 @@ class UltrakillRules:
                         or shoalt_any(state)
                     )
                     and good_weapon(state)
+                    and can_break_gutterman_shield(state)
                 ),
 
             # 8-1
@@ -3056,6 +3190,7 @@ class UltrakillRules:
                             and stamina(state, 1)
                         )
                     )
+                    and can_break_gutterman_shield(state)
                 ),
 
             # 8-2
@@ -3092,6 +3227,7 @@ class UltrakillRules:
                     and good_weapon(state)
                     and can_break_idol_or_deathcatcher(state)
                     and skull(state, "8-2", "Red")
+                    and can_break_gutterman_shield(state)
                 ),
 
             "Cleared 8-2":
@@ -3107,6 +3243,7 @@ class UltrakillRules:
                     and can_break_idol_or_deathcatcher(state)
                     and skull(state, "8-2", "Red")
                     and can_break_glass(state)
+                    and can_break_gutterman_shield(state)
                 ),
 
             "8-2: Finish the level upside down":
@@ -3143,6 +3280,7 @@ class UltrakillRules:
                     )
                     and skull(state, "8-2", "Red")
                     and can_break_glass(state)
+                    and can_break_gutterman_shield(state)
                 ),
 
             "8-2: Perfect Rank":
@@ -3158,6 +3296,7 @@ class UltrakillRules:
                     and can_break_idol_or_deathcatcher(state)
                     and skull(state, "8-2", "Red")
                     and can_break_glass(state)
+                    and can_break_gutterman_shield(state)
                 ),
 
             # 8-3
@@ -3165,15 +3304,20 @@ class UltrakillRules:
                 lambda state: (
                     good_weapon(state)
                     and slide(state)
+                    and can_break_gutterman_shield(state)
                 ),
 
             "8-3: Secret #3":
-                good_weapon,
+                lambda state: (
+                    good_weapon(state)
+                    and can_break_gutterman_shield(state)
+                ),
 
             "8-3: Secret #4":
                 lambda state: (
                     good_weapon(state)
                     and slide(state)
+                    and can_break_gutterman_shield(state)
                 ),
 
             "8-3: Secret #5":
@@ -3192,6 +3336,7 @@ class UltrakillRules:
                         and arm2(state)
                         and skull(state, "8-3", "Blue")
                     )
+                    and can_break_gutterman_shield(state)
                 ),
 
             "Cleared 8-3":
@@ -3210,6 +3355,7 @@ class UltrakillRules:
                         and arm2(state)
                         and skull(state, "8-3", "Blue")
                     )
+                    and can_break_gutterman_shield(state)
                 ),
 
             "8-3: Kill a Power with terminal velocity":
@@ -3229,6 +3375,7 @@ class UltrakillRules:
                         and arm2(state)
                         and skull(state, "8-3", "Blue")
                     )
+                    and can_break_gutterman_shield(state)
                 ),
 
             "8-3: Perfect Rank":
@@ -3245,6 +3392,7 @@ class UltrakillRules:
                     )
                     and arm2(state)
                     and skull(state, "8-3", "Blue")
+                    and can_break_gutterman_shield(state)
                 ),
 
             # 8-4
@@ -3323,6 +3471,7 @@ class UltrakillRules:
                     and stamina(state, 2)
                     and skull(state, "0-E", "Blue")
                     and skull(state, "0-E", "Red")
+                    and can_break_gutterman_shield(state)
                 ),
 
             "0-E: Perfect Rank":
@@ -3336,6 +3485,7 @@ class UltrakillRules:
                     and stamina(state, 3)
                     and skull(state, "0-E", "Blue")
                     and skull(state, "0-E", "Red")
+                    and can_break_gutterman_shield(state)
                 ),
 
             "Cleared 1-E":
@@ -3349,6 +3499,7 @@ class UltrakillRules:
                     and stamina(state, 2)
                     and skull(state, "1-E", "Blue")
                     and skull(state, "1-E", "Red")
+                    and can_break_gutterman_shield(state)
                 ),
 
             "1-E: Perfect Rank":
@@ -3362,6 +3513,7 @@ class UltrakillRules:
                     and stamina(state, 3)
                     and skull(state, "1-E", "Blue")
                     and skull(state, "1-E", "Red")
+                    and can_break_gutterman_shield(state)
                 ),
 
             # Primes
@@ -4394,7 +4546,10 @@ class UltrakillRules:
                         can_reach_level(state, "Enemy: Gutterman", "7-2")
                         and arm2(state)
                     )
-                    or can_reach_level(state, "Enemy: Gutterman", "7-3")
+                    or (
+                        can_reach_level(state, "Enemy: Gutterman", "7-3")
+                        and can_break_gutterman_shield(state)
+                    )
                     or (
                         can_reach_level(state, "Enemy: Gutterman", "7-S")
                         and (
@@ -4413,6 +4568,7 @@ class UltrakillRules:
                         and grab_item(state)
                         and skull(state, "7-S", "Red")
                         and can_break_idol_or_deathcatcher(state)
+                        and can_break_gutterman_shield(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Gutterman", "7-4")
@@ -4422,6 +4578,7 @@ class UltrakillRules:
                             or slam_storage(state)
                             or can_rocket_ride(state)
                         )
+                        and can_break_gutterman_shield(state)
                     )
                     or can_reach_level(state, "Enemy: Gutterman", "8-1")
                     or (
@@ -4435,10 +4592,12 @@ class UltrakillRules:
                         )
                         and good_weapon(state)
                         and can_break_idol_or_deathcatcher(state)
+                        and can_break_gutterman_shield(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Gutterman", "8-3")
                         and good_weapon(state)
+                        and can_break_gutterman_shield(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Gutterman", "0-E")
@@ -4447,6 +4606,7 @@ class UltrakillRules:
                         and arm2(state)
                         and has_weapon_types(state, 3)
                         and can_break_glass(state)
+                        and can_break_gutterman_shield(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Gutterman", "1-E")
@@ -4454,6 +4614,7 @@ class UltrakillRules:
                         and arm1(state)
                         and arm2(state)
                         and has_weapon_types(state, 3)
+                        and can_break_gutterman_shield(state)
                     )
                 ),
 
