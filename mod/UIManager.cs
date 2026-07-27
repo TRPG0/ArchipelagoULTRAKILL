@@ -1,17 +1,17 @@
-﻿using ArchipelagoULTRAKILL.Structures;
-using ArchipelagoULTRAKILL.Components;
+﻿using ArchipelagoULTRAKILL.Components;
+using ArchipelagoULTRAKILL.Config;
+using ArchipelagoULTRAKILL.Music;
+using ArchipelagoULTRAKILL.Structures;
 using HarmonyLib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.UI;
-using TMPro;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using ArchipelagoULTRAKILL.Music;
-using ArchipelagoULTRAKILL.Config;
-using System.Linq;
+using UnityEngine.UI;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -633,6 +633,27 @@ namespace ArchipelagoULTRAKILL
                     switches.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
                     switches.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
                     CreateMenuSwitchIcons(info, switches);
+                }
+
+                if (!Core.data.secretExitComplete && info.Flags.HasFlag(InfoFlags.HasSecretExit))
+                {
+                    GameObject exit = new GameObject();
+                    exit.name = "Secret Exit Icon";
+                    exit.transform.SetParent(parent.transform);
+                    exit.transform.localPosition = new Vector3(-73.5f, -15, 0);
+                    exit.transform.localScale = new Vector3(0.325f, 0.325f, 1);
+                    Image image = exit.AddComponent<Image>();
+                    if (Core.data.@checked.Contains($"se_{info.Layer}"))
+                    {
+                        image.sprite = bundle.LoadAsset<Sprite>("assets/exit2.png");
+                        image.color = Colors.Green;
+                    }
+                    else
+                    {
+                        image.sprite = bundle.LoadAsset<Sprite>("assets/exit1.png");
+                        image.color = Colors.Gray;
+                    }
+                    exit.AddComponent<Shadow>().effectDistance = new Vector2(2, -2);
                 }
             }
 

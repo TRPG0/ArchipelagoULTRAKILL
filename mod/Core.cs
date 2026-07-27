@@ -20,6 +20,7 @@ using Archipelago.MultiClient.Net;
 using ArchipelagoULTRAKILL.Music;
 using System;
 using ArchipelagoULTRAKILL.Config;
+using ULTRAKILL.Cheats;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -29,7 +30,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.5.3";
+        public const string PluginVersion = "3.5.4";
 
         public static string workingPath;
         public static string workingDir;
@@ -127,7 +128,7 @@ namespace ArchipelagoULTRAKILL
 
             new LevelInfo("4-2", 17, 4,
                 InfoFlags.HasSecrets | InfoFlags.HasSecretExit | InfoFlags.HasRandomMusic | InfoFlags.HasSkullsNormal,
-                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Stalker, EnemyType.Sisyphus, EnemyType.Drone, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.Virtue },
+                new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Streetcleaner, EnemyType.Stalker, EnemyType.Sisyphus, EnemyType.Drone, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.Virtue },
                 new List<string>() { "17_r", "17_b" }),
 
             new LevelInfo("4-3", 18, 4,
@@ -155,7 +156,7 @@ namespace ArchipelagoULTRAKILL
                 new List<string>() { "22_r", "22_b" }),
 
             new LevelInfo("5-4", 23, 5,
-                InfoFlags.None,
+                InfoFlags.HasFixedLoadout,
                 new List<EnemyType>() { EnemyType.Leviathan }),
 
             new LevelInfo("6-1", 24, 6,
@@ -182,7 +183,7 @@ namespace ArchipelagoULTRAKILL
                 new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Swordsmachine, EnemyType.Streetcleaner, EnemyType.Mindflayer, EnemyType.Turret, EnemyType.Gutterman, EnemyType.Guttertank, EnemyType.MaliciousFace, EnemyType.Cerberus, EnemyType.HideousMass, EnemyType.Mannequin, EnemyType.Virtue }),
 
             new LevelInfo("7-4", 29, 7,
-                InfoFlags.None,
+                InfoFlags.HasFixedLoadout,
                 new List<EnemyType>() { EnemyType.Filth, EnemyType.Stray, EnemyType.Schism, EnemyType.Soldier, EnemyType.Streetcleaner, EnemyType.Turret, EnemyType.Gutterman, EnemyType.Guttertank, EnemyType.MaliciousFace, EnemyType.Centaur, EnemyType.Idol, EnemyType.Mannequin, }),
 
             new LevelInfo("8-1", 30, 8,
@@ -228,24 +229,24 @@ namespace ArchipelagoULTRAKILL
         public static readonly List<LevelInfo> secretMissionInfos = new List<LevelInfo>()
         {
             new LevelInfo("0-S", 0, 0,
-                InfoFlags.HasSkullsNormal,
+                InfoFlags.HasSkullsNormal | InfoFlags.HasFixedLoadout,
                 new List<EnemyType>(),
                 new List<string> { "0S_r", "0S_b" }),
 
             new LevelInfo("1-S", 0, 1,
-                InfoFlags.None,
+                InfoFlags.HasFixedLoadout,
                 new List<EnemyType>()),
 
             new LevelInfo("2-S", 0, 2,
-                InfoFlags.None,
+                InfoFlags.HasFixedLoadout,
                 new List<EnemyType>()),
 
             new LevelInfo("4-S", 0, 4,
-                InfoFlags.None,
+                InfoFlags.HasFixedLoadout,
                 new List<EnemyType>()),
 
             new LevelInfo("5-S", 0, 5,
-                InfoFlags.None,
+                InfoFlags.HasFixedLoadout,
                 new List<EnemyType>()),
 
             new LevelInfo("7-S", 0, 7,
@@ -391,6 +392,7 @@ namespace ArchipelagoULTRAKILL
             //logger.LogInfo($"Working Path: {workingPath}, Working Dir: {workingDir}");
 
             ConfigManager.Initialize();
+            VersionChecker.CheckPluginIncompatibilities();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -468,7 +470,11 @@ namespace ArchipelagoULTRAKILL
                 else if (!dataExists) ConfigManager.ResetStatsDefaults();
 
                 UIManager.CreateMenuUI();
-                if (dataExists && Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
+                if (dataExists && Multiworld.Authenticated)
+                {
+                    UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
+                    Multiworld.CheckCompletedLevels();
+                }
                 else if (dataExists && !Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
                 if (UIManager.log == null) uim.CreateLogObject();
 
@@ -477,8 +483,6 @@ namespace ArchipelagoULTRAKILL
                     UIManager.CreateMenuIcons();
                     UIManager.CreateChapterRecents(UIManager.chapterSelect);
                 }
-                //if (dataExists && data.randomizeSkulls) UIManager.CreateMenuSkullIcons();
-                //if (dataExists && (data.l1switch || data.l7switch)) UIManager.CreateMenuSwitchIcons();
 
                 if (data.completedLevels.Count >= data.goalRequirement)
                 {
@@ -578,6 +582,9 @@ namespace ArchipelagoULTRAKILL
         public static bool IsFire2Unlocked(string weapon)
         {
             if (data.randomizeFire2 == Fire2Options.Disabled) return true;
+            if (NoWeaponCooldown.NoCooldown) return true;
+            if (PlayerHelper.CurrentPowerup == Powerup.EmptyAmmo) return false;
+            if (PlayerHelper.CurrentPowerup == Powerup.QuickCharge) return true;
             return data.unlockedFire2.Contains(weapon);
         }
 

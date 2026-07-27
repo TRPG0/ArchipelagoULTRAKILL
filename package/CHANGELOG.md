@@ -1,3 +1,18 @@
+## 3.5.4
+
+- Added a new option to require a way to break Guttermen shields in logic.
+- Added a new option to enable speedrunner tech in logic, including glitches, out-of-bounds exploits, and other difficult tricks.
+	- Work in progress! Only implemented until the end of Layer 3
+- Options have been sorted into categories.
+- Completed levels are now synchronized to and from the server.
+- Individual levels will now be listed in the act summary when unlocked or completed.
+- Added icons for secret exits in the level select.
+- All secondary fires are now unlocked while a Quick Charge powerup is active.
+- All secondary fires are now locked while a Weapon Malfunction trap is active.
+- Fixed incorrect logic for Streetcleaners in 4-2.
+- Fixed logic for 4-3: Don't pick up the torch not including the Firestarter.
+- Fixed the Piercer's secondary fire sometimes becoming usable while locked if a Dual Wield powerup is active.
+
 ## 3.5.3
 
 - Reworked how secret exits are checked.

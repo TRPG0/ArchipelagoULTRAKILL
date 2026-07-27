@@ -81,7 +81,7 @@ namespace ArchipelagoULTRAKILL.Config
                 }
                 else if ((GameProgressSaver.GetTutorial() || GameProgressSaver.GetIntro()) && !Core.DataExists() && !hintMode.value)
                 {
-                    connectionInfo.text = "No Archipelago data found. Start a new save file before connecting.";
+                    connectionInfo.text = "No Archipelago data found. Select a new save file before connecting.";
                 }
                 else if (Core.DataExists() && hintMode.value)
                 {

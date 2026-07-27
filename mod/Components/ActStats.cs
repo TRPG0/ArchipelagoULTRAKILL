@@ -1,4 +1,5 @@
 ﻿using ArchipelagoULTRAKILL.Structures;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -109,9 +110,9 @@ namespace ArchipelagoULTRAKILL.Components
         public string GetActStats()
         {
             int total = EndLevelId - (StartLevelId - 1);
-            int unlocked = 0;
-            int completed = 0;
-            int missionsCompleted = 0;
+            List<string> unlocked = new List<string>();
+            List<string> completed = new List<string>();
+            List<string> missionsCompleted = new List<string>();
             int missionsTotal = 0;
             int exitsCompleted = 0;
             int exitsTotal = 0;
@@ -130,18 +131,21 @@ namespace ArchipelagoULTRAKILL.Components
             for (int i = StartLevelId; i <= EndLevelId; i++)
             {
                 RankData rank = GameProgressSaver.GetRank(i);
-                bool isUnlocked = Core.data.unlockedLevels.Contains(Core.GetLevelNameFromId(i));
-                if (isUnlocked) unlocked++;
+                string levelName = Core.GetLevelNameFromId(i);
+                bool isUnlocked = Core.data.unlockedLevels.Contains(levelName);
+                if (isUnlocked) unlocked.Add(levelName);
+                bool isCompleted = Core.data.completedLevels.Contains(levelName);
+                if (isCompleted) completed.Add(levelName);
 
-                bool isCompleted = false;
+                //bool isCompleted = false;
                 bool isPerfect = false;
                 foreach (int grade in rank.ranks)
                 {
-                    if (grade >= 0)
+                    /*if (grade >= 0)
                     {
                         if (!isCompleted) completed++;
                         isCompleted = true;
-                    }
+                    }*/
                     if (grade >= 12)
                     {
                         if (!isPerfect) perfects++;
@@ -164,7 +168,7 @@ namespace ArchipelagoULTRAKILL.Components
 
                 if (SecretMissionCompleted(i).HasValue)
                 {
-                    missionsCompleted += SecretMissionCompleted(i).Value;
+                    if (SecretMissionCompleted(i).Value > 0) missionsCompleted.Add($"{levelInfo.Layer}-S");
                     missionsTotal++;
                 }
 
@@ -201,9 +205,12 @@ namespace ArchipelagoULTRAKILL.Components
             }
 
             string result = BuildStringGoal(Core.data.goal, Core.data.completedLevels.Count, Core.data.goalRequirement);
-            result += BuildString("Levels unlocked", unlocked, total);
-            result += BuildString("\nLevels completed", completed, total);
-            result += BuildString("\nSecret missions", missionsCompleted, missionsTotal);
+            result += BuildString("Levels unlocked", unlocked.Count, total);
+            result += BuildLevelsString(unlocked, (StartLevelId == 1 && EndLevelId >= 5) ? 5 : 4);
+            result += BuildString("\nLevels completed", completed.Count, total);
+            result += BuildLevelsString(completed, (StartLevelId == 1 && EndLevelId >= 5) ? 5 : 4);
+            result += BuildString("\nSecret missions", missionsCompleted.Count, missionsTotal);
+            result += BuildLevelsString(missionsCompleted, (StartLevelId == 1 && EndLevelId >= 5) ? 5 : 4);
             if (!Core.data.secretExitComplete) result += BuildString("\nSecret exits", exitsCompleted, exitsTotal);
             result += BuildString("\nSecrets", secretsFound, secretsTotal);
             if (enemyTotal > 0) result += BuildString("\nEnemies", enemyCount, enemyTotal);
@@ -225,8 +232,8 @@ namespace ArchipelagoULTRAKILL.Components
         public string GetSpecialStats()
         {
             int total = EndLevelId - (StartLevelId - 1);
-            int unlocked = 0;
-            int completed = 0;
+            List<string> unlocked = new List<string>();
+            List<string> completed = new List<string>();
             int perfects = 0;
             HashSet<EnemyType> enemies = new HashSet<EnemyType>();
             int enemyCount = 0;
@@ -235,8 +242,9 @@ namespace ArchipelagoULTRAKILL.Components
             for (int i = StartLevelId; i <= EndLevelId; i++)
             {
                 RankData rank = GameProgressSaver.GetRank(i);
-                bool isUnlocked = Core.data.unlockedLevels.Contains(Core.GetLevelNameFromId(i));
-                if (isUnlocked) unlocked++;
+                string levelName = Core.GetLevelNameFromId(i);
+                bool isUnlocked = Core.data.unlockedLevels.Contains(levelName);
+                if (isUnlocked) unlocked.Add(levelName);
 
                 bool isCompleted = false;
                 bool isPerfect = false;
@@ -244,7 +252,7 @@ namespace ArchipelagoULTRAKILL.Components
                 {
                     if (grade >= 0)
                     {
-                        if (!isCompleted) completed++;
+                        if (!isCompleted) completed.Add(levelName);
                         isCompleted = true;
                     }
                     if (grade >= 12)
@@ -269,8 +277,10 @@ namespace ArchipelagoULTRAKILL.Components
             }
 
             string result = BuildStringGoal(Core.data.goal, Core.data.completedLevels.Count, Core.data.goalRequirement);
-            result += BuildString("Levels unlocked", unlocked, total);
-            result += BuildString("\nLevels completed", completed, total);
+            result += BuildString("Levels unlocked", unlocked.Count, total);
+            result += BuildLevelsString(unlocked, 5);
+            result += BuildString("\nLevels completed", completed.Count, total);
+            result += BuildLevelsString(completed, 5);
             if (enemyTotal > 0) result += BuildString("\nEnemies", enemyCount, enemyTotal);
             if (Core.data.pRankRewards) result += BuildString("\nPerfect Ranks", perfects, total);
 
@@ -284,6 +294,28 @@ namespace ArchipelagoULTRAKILL.Components
             if (value >= total) color = "#" + ColorUtility.ToHtmlStringRGBA(Colors.ActComplete);
 
             return $"{part}: <color={color}>{value}/{total}</color>";
+        }
+
+        public string BuildLevelsString(List<string> levels, int listCount)
+        {
+            if (levels.Count == 0) return "";
+
+            List<List<string>> lists = new List<List<string>>();
+
+            for (int i = 0; i < levels.Count; i += listCount)
+            {
+                lists.Add(levels.GetRange(i, Math.Min(listCount, levels.Count - i)));
+            }
+
+            string output = "";
+
+            foreach (List<string> list in lists)
+            {
+                if (output != "") output += "\n";
+                output += String.Join(", ", list);
+            }
+
+            return $"\n<color=#{ColorUtility.ToHtmlStringRGBA(Color.gray)}>{output}</color>";
         }
 
         public string BuildStringGoal(string goal, int value, int total)

@@ -2336,6 +2336,7 @@ class UltrakillRules:
                             rock0_fire2(state)
                             and rev_any(state)
                         )
+                        or rock2_fire2(state)
                     )
                 ),
 
@@ -4275,6 +4276,7 @@ class UltrakillRules:
                     or can_reach_level(state, "Enemy: Streetcleaner", "2-3")
                     or can_reach_level(state, "Enemy: Streetcleaner", "3-1")
                     or can_reach_level(state, "Enemy: Streetcleaner", "4-1")
+                    or can_reach_level(state, "Enemy: Streetcleaner", "4-2")
                     or (
                         can_reach_level(state, "Enemy: Streetcleaner", "4-3")
                         and l18_general(state)

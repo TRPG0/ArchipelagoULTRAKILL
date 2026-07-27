@@ -46,5 +46,22 @@ namespace ArchipelagoULTRAKILL.Structures
         public static Color DoubleJump => ColorConfig.doublejumpColor.value;
         public static Color Confusion => ColorConfig.confusionColor.value;
         public static Color Trap => ColorConfig.trapColor.value;
+
+        public static Color GetLayerColor(int layer)
+        {
+            switch (layer)
+            {
+                case 0: return Colors.Layer0;
+                case 1: return Colors.Layer1;
+                case 2: return Colors.Layer2;
+                case 3: return Colors.Layer3;
+                case 4: return Colors.Layer4;
+                case 5: return Colors.Layer5;
+                case 6: return Colors.Layer6;
+                case 7: return Colors.Layer7;
+                case 8: return Colors.Layer8;
+                default: return Color.white;
+            }
+        }
     }
 }

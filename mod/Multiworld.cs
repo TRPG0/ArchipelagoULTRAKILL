@@ -18,6 +18,7 @@ using TMPro;
 using System.Collections;
 using ArchipelagoULTRAKILL.Config;
 using ArchipelagoULTRAKILL.Music;
+using System.Threading.Tasks;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -455,6 +456,7 @@ namespace ArchipelagoULTRAKILL
                         });
                     }
                 }
+                CheckCompletedLevels();
 
                 foreach (string loc in Core.data.@checked)
                 {
@@ -804,11 +806,66 @@ namespace ArchipelagoULTRAKILL
             Session?.SetGoalAchieved();
         }
 
-        public static void UpdateCompletedLevels()
+        public static async Task UpdateCompletedLevels()
         {
             if (Session != null)
             {
-                Session.DataStorage[Scope.Slot, "completedLevels"] = Core.data.completedLevels.ToArray();
+                Core.Logger.LogInfo("Updating completed levels...");
+                string[] storedLevels = await Session.DataStorage[Scope.Slot, "completedLevels"].GetAsync<string[]>();
+                if (storedLevels == null)
+                {
+                    Core.Logger.LogInfo($"No levels saved in data storage. Adding {Core.data.completedLevels.Count}");
+                    Session.DataStorage[Scope.Slot, "completedLevels"] = Core.data.completedLevels.ToArray();
+                    return;
+                }
+
+                HashSet<string> storedLevelsSet = storedLevels.ToHashSet();
+                HashSet<string> difference = Core.data.completedLevels.Except(storedLevelsSet).ToHashSet();
+                if (difference.Count > 0)
+                {
+                    foreach (string level in difference) storedLevelsSet.Add(level);
+                    Session.DataStorage[Scope.Slot, "completedLevels"] = storedLevelsSet.ToArray();
+                    Core.Logger.LogInfo($"Added {difference.Count} {(difference.Count > 1 ? "levels" : "level")} to data storage.");
+
+                }
+                else Core.Logger.LogInfo("No new levels added to data storage.");
+            }
+        }
+
+        public static async Task CheckCompletedLevels()
+        {
+            if (Session != null)
+            {
+                Core.Logger.LogInfo("Checking data storage for completed levels...");
+                string[] storedLevels = await Session.DataStorage[Scope.Slot, "completedLevels"].GetAsync<string[]>();
+                if (storedLevels == null)
+                {
+                    Core.Logger.LogInfo("No levels saved in data storage.");
+                    return;
+                }
+
+                HashSet<string> storedLevelsSet = storedLevels.ToHashSet();
+                HashSet<string> difference = storedLevelsSet.Except(Core.data.completedLevels).ToHashSet();
+                if (difference.Count > 0)
+                {
+                    Core.Logger.LogWarning($"Data storage has more completed levels than local save! {String.Join(", ", difference)}");
+                    foreach (string level in difference) Core.data.completedLevels.Add(level);
+                    Core.Logger.LogWarning($"Synchronized completed levels with data storage: {String.Join(", ", Core.data.completedLevels)}");
+                }
+                else Core.Logger.LogInfo("Data storage level count is less than or equal to local save.");
+            }
+        }
+
+        public static void TestHints(int slot)
+        {
+            if (Session != null)
+            {
+                Hint[] hints = Session.Hints.GetHints(slot);
+                Core.Logger.LogInfo(hints.Length);
+                foreach (Hint hint in hints)
+                {
+                    Core.Logger.LogInfo($"ReceivingPlayer: {hint.ReceivingPlayer} | ItemId: {hint.ItemId} | LocationId: {hint.LocationId} | FindingPlayer: {hint.FindingPlayer} | Entrance: {hint.Entrance} | Status: {hint.Status}");
+                }
             }
         }
 

@@ -10,8 +10,7 @@ namespace ArchipelagoULTRAKILL.Patches
     {
         public static bool Prefix()
         {
-            if (Core.DataExists() && (Core.data.randomizeFire2 > Fire2Options.Disabled && !Core.data.unlockedFire2.Contains("rock0") || PlayerHelper.CurrentPowerup == Powerup.EmptyAmmo) 
-                && !CheatsManager.Instance.GetCheatState("ultrakill.no-weapon-cooldown"))
+            if (Core.DataExists() && Core.data.randomizeFire2 > Fire2Options.Disabled && !Core.IsFire2Unlocked("rock0"))
             {
                 //Debug.Log("Attempted to freeze rockets. Locked");
                 return false;

@@ -42,7 +42,7 @@ namespace ArchipelagoULTRAKILL.Commands
                 }
                 else if ((GameProgressSaver.GetTutorial() || GameProgressSaver.GetIntro()) && !Core.DataExists())
                 {
-                    Core.PLogger.Info("No Archipelago data found. Please start a new save file before connecting.");
+                    Core.PLogger.Info("No Archipelago data found. Please select a new save file before connecting.");
                     return;
                 }
                 else

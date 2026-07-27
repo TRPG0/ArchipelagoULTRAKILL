@@ -1,12 +1,14 @@
 ﻿using PluginConfig.API;
 using PluginConfig.API.Decorators;
 using System.IO;
+using UnityEngine;
 
 namespace ArchipelagoULTRAKILL.Config
 {
     public static class ConfigManager
     {
         public static PluginConfigurator config;
+        public static ConfigHeader incompatibilityCheck;
         public static ConfigHeader versionCheck;
 
         public static void Initialize()
@@ -18,6 +20,9 @@ namespace ArchipelagoULTRAKILL.Config
             if (File.Exists(iconPath)) config.SetIconWithURL(iconPath);
 
             new ConfigHeader(config.rootPanel, "ARCHIPELAGO");
+            incompatibilityCheck = new ConfigHeader(config.rootPanel, "");
+            incompatibilityCheck.textColor = Color.yellow;
+            incompatibilityCheck.hidden = true;
             versionCheck = new ConfigHeader(config.rootPanel, "", 16);
             versionCheck.hidden = true;
 

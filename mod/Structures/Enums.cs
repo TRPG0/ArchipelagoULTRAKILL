@@ -13,8 +13,9 @@ namespace ArchipelagoULTRAKILL.Structures
         HasRandomMusic = 1 << 4,
         HasSkullsNormal = 1 << 5,
         HasSkullsSpecial = 1 << 6,
+        HasAnySkulls = HasSkullsNormal | HasSkullsSpecial,
         HasSwitches = 1 << 7,
-        HasAnySkulls = HasSkullsNormal | HasSkullsSpecial
+        HasFixedLoadout = 1 << 8
     }
 
     public enum UKType

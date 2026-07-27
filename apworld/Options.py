@@ -160,7 +160,8 @@ class SpeedrunLogic(Toggle):
     """
     Enables various speedrunning tech in logic, such as glitches, out-of-bounds exploits, and other difficult tricks. 
     
-    (Work in progress! Only implemented until the end of Layer 3)
+    Work in progress! Only implemented until the end of Layer 3.
+    May contain mistakes or errors! If you choose to test this, please report any issues in the Archipelago Discord server!
     """
     display_name = "Speedrunner Logic"
 

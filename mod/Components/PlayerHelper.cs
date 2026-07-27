@@ -199,53 +199,37 @@ namespace ArchipelagoULTRAKILL.Components
             if (!NoWeaponCooldown.NoCooldown && Core.data.randomizeFire2 > Fire2Options.Disabled)
             {
                 // piercer
-                if ((!Core.data.unlockedFire2.Contains("rev0") || CurrentPowerup == Powerup.EmptyAmmo) && GetHeldWeapon() == "rev0")
+                if ((!Core.IsFire2Unlocked("rev0")) && GetHeldWeapon() == "rev0")
                 {
-                    if (GameProgressSaver.GetGeneralProgress().rev0 == 1)
-                    {
-                        Traverse.Create(GunControl.Instance.currentWeapon.GetComponent<Revolver>()).Field<bool>("pierceReady").Value = false;
-                        GunControl.Instance.currentWeapon.GetComponent<Revolver>().pierceCharge = 0;
-                        GunControl.Instance.currentWeapon.GetComponent<Revolver>().pierceShotCharge = 0;
-
-                        if (CurrentPowerup == Powerup.DualWield)
-                        {
-                            foreach (DualWield dw in GunControl.Instance.gameObject.GetComponentsInChildren<DualWield>())
-                            {
-                                Traverse.Create(dw.gameObject.transform.GetChild(0).GetComponent<Revolver>()).Field<bool>("pierceReady").Value = false;
-                                dw.gameObject.transform.GetChild(0).GetComponent<Revolver>().pierceCharge = 0;
-                                dw.gameObject.transform.GetChild(0).GetComponent<Revolver>().pierceShotCharge = 0;
-                            }
-                        }
-                    }
                     WeaponCharges.Instance.rev0charge = 0;
                 }
 
                 // marksman
-                if (!Core.data.unlockedFire2.Contains("rev2") || CurrentPowerup == Powerup.EmptyAmmo)
+                if (!Core.IsFire2Unlocked("rev2"))
                 {
                     WeaponCharges.Instance.rev1charge = 0;
                 }
 
                 // sharpshooter
-                if (!Core.data.unlockedFire2.Contains("rev1") || CurrentPowerup == Powerup.EmptyAmmo)
+                if (!Core.IsFire2Unlocked("rev1"))
                 {
                     WeaponCharges.Instance.rev2charge = 0;
                 }
 
                 // sawed-on
-                if (!Core.data.unlockedFire2.Contains("sho2") || CurrentPowerup == Powerup.EmptyAmmo)
+                if (!Core.IsFire2Unlocked("sho2"))
                 {
                     WeaponCharges.Instance.shoSawCharge = 0;
                 }
 
                 // attractor
-                if (!Core.data.unlockedFire2.Contains("nai0") || CurrentPowerup == Powerup.EmptyAmmo)
+                if (!Core.IsFire2Unlocked("nai0"))
                 {
                     WeaponCharges.Instance.naiMagnetCharge = 0;
                 }
 
                 // overheat
-                if ((!Core.data.unlockedFire2.Contains("nai1") || CurrentPowerup == Powerup.EmptyAmmo) && GetHeldWeapon() == "nai1")
+                if ((!Core.IsFire2Unlocked("nai1")) && GetHeldWeapon() == "nai1")
                 {
                     Traverse.Create(GunControl.Instance.currentWeapon.GetComponent<Nailgun>()).Field<float>("heatSinks").Value = 0;
                     WeaponCharges.Instance.naiHeatsinks = 0;
@@ -253,13 +237,13 @@ namespace ArchipelagoULTRAKILL.Components
                 }
 
                 // s.r.s. cannon
-                if (!Core.data.unlockedFire2.Contains("rock1") || CurrentPowerup == Powerup.EmptyAmmo)
+                if (!Core.IsFire2Unlocked("rock1"))
                 {
                     WeaponCharges.Instance.rocketCannonballCharge = 0;
                 }
 
                 // firestarter
-                if (!Core.data.unlockedFire2.Contains("rock2") || CurrentPowerup == Powerup.EmptyAmmo)
+                if (!Core.IsFire2Unlocked("rock2"))
                 {
                     WeaponCharges.Instance.rocketNapalmFuel = 0;
                 }

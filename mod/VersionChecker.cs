@@ -3,6 +3,10 @@ using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine;
 using ArchipelagoULTRAKILL.Config;
+using System.Collections.Generic;
+using BepInEx.Bootstrap;
+using BepInEx;
+using System;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -47,6 +51,32 @@ namespace ArchipelagoULTRAKILL
                     Core.PLogger.Info("Archipelago is up to date.");
                 }
                 yield break;
+            }
+        }
+
+        public static void CheckPluginIncompatibilities()
+        {
+            List<string> incompatibleGUIDs = new List<string>()
+            {
+                "duviz.UltraNet",
+                "xzxADIxzx.Jaket",
+                "com.d1g1tal.polarite",
+                "waffle.ultrakill.ultratweaker"
+            };
+
+            List<string> incompatibleNames = new List<string>();
+
+            foreach (PluginInfo plugin in Chainloader.PluginInfos.Values)
+            {
+                if (incompatibleGUIDs.Contains(plugin.Metadata.GUID)) incompatibleNames.Add(plugin.Metadata.Name);
+            }
+
+            if (incompatibleNames.Count > 0)
+            {
+                string message = $"{incompatibleNames.Count} mod{(incompatibleNames.Count > 1 ? "s are" : " is")} installed that {(incompatibleNames.Count > 1 ? "are" : "is")} known to cause issues while playing Archipelago:";
+                Core.Logger.LogWarning($"{message} {String.Join(", ", incompatibleNames)}");
+                ConfigManager.incompatibilityCheck.text = $"{message}\n{String.Join(", ", incompatibleNames)}";
+                ConfigManager.incompatibilityCheck.hidden = false;
             }
         }
     }

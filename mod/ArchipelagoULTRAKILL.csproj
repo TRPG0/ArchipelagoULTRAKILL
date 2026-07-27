@@ -402,9 +402,11 @@
     <Compile Include="Patches\NewMovement.cs" />
     <Compile Include="Patches\OptionsManager.cs" />
     <Compile Include="Patches\OptionsMenuToManager.cs" />
+    <Compile Include="Patches\PlayerActivator.cs" />
     <Compile Include="Patches\PlayerActivatorRelay.cs" />
     <Compile Include="Patches\Punch.cs" />
     <Compile Include="Patches\RaceRingTracker.cs" />
+    <Compile Include="Patches\Revolver.cs" />
     <Compile Include="Patches\RocketLauncher.cs" />
     <Compile Include="Patches\SaveSlotMenu.cs" />
     <Compile Include="Patches\SecretMissionPit.cs" />

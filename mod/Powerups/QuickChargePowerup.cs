@@ -20,6 +20,7 @@ namespace ArchipelagoULTRAKILL.Powerups
             }
             meter.powerUpColor = ColorBlindSettings.Instance.staminaColor;
             juiceGiven = true;
+            Fire2HUD.Instance?.UpdateCurrentWeapon();
         }
 
         private void Update()
@@ -34,6 +35,7 @@ namespace ArchipelagoULTRAKILL.Powerups
         public void EndPowerUp()
         {
             PlayerHelper.Instance.EndPowerup();
+            Fire2HUD.Instance?.UpdateCurrentWeapon();
             Destroy(gameObject);
         }
     }
