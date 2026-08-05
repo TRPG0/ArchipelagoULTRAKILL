@@ -26,6 +26,7 @@ namespace ArchipelagoULTRAKILL
         public string goal = "6-2";
         public int goalRequirement = 20;
         public bool perfectGoal = false;
+        public bool speedrunLogic = false;
         public bool secretExitUnlock = true;
         public bool secretExitComplete = true;
         public EnemyOptions enemyRewards = EnemyOptions.Disabled;
@@ -84,5 +85,7 @@ namespace ArchipelagoULTRAKILL
                     : $"Slot {GameProgressSaver.currentSlot + 1} | {slot_name} | {@checked.Count} locations checked.";
             return "No data for current slot.";
         }
+
+        public bool IsTestMode() => seed.IsNullOrWhiteSpace() && version.IsNullOrWhiteSpace() && serverVersion.IsNullOrWhiteSpace() && host_name.IsNullOrWhiteSpace() && slot_name.IsNullOrWhiteSpace();
     }
 }

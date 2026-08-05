@@ -30,7 +30,7 @@ namespace ArchipelagoULTRAKILL
     {
         public const string PluginGUID = "trpg.archipelagoultrakill";
         public const string PluginName = "Archipelago";
-        public const string PluginVersion = "3.5.4";
+        public const string PluginVersion = "3.5.5";
 
         public static string workingPath;
         public static string workingDir;
@@ -52,6 +52,7 @@ namespace ArchipelagoULTRAKILL
         public static bool HasNoArms => !data.hasArm && GameProgressSaver.GetGeneralProgress().arm1 < 1;
 
         public static Data data = new Data();
+        public static bool? TestMode { get; internal set; } = false;
         public static bool firstTimeLoad = false;
 
         public static readonly List<LevelInfo> levelInfos = new List<LevelInfo>()
@@ -465,9 +466,14 @@ namespace ArchipelagoULTRAKILL
                     LoadData();
                     ConfigManager.LoadConnectionInfo();
                     ConfigManager.LoadStats();
+                    ActStats.SetAllDirty();
                     firstTimeLoad = true;
                 }
-                else if (!dataExists) ConfigManager.ResetStatsDefaults();
+                else if (!dataExists)
+                {
+                    ConfigManager.ResetStatsDefaults();
+                    TestConfig.SetTestModeActive(null);
+                }
 
                 UIManager.CreateMenuUI();
                 if (dataExists && Multiworld.Authenticated)
@@ -475,10 +481,11 @@ namespace ArchipelagoULTRAKILL
                     UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
                     Multiworld.CheckCompletedLevels();
                 }
+                else if (dataExists && (TestMode ?? false)) UIManager.menuIcon.GetComponent<Image>().color = Color.magenta;
                 else if (dataExists && !Multiworld.Authenticated) UIManager.menuIcon.GetComponent<Image>().color = Colors.Red;
                 if (UIManager.log == null) uim.CreateLogObject();
 
-                if (dataExists)
+                if (dataExists && !(TestMode ?? false))
                 {
                     UIManager.CreateMenuIcons();
                     UIManager.CreateChapterRecents(UIManager.chapterSelect);
@@ -537,7 +544,16 @@ namespace ArchipelagoULTRAKILL
                 {
                     data = JsonConvert.DeserializeObject<Data>(reader.ReadToEnd());
                 }
-                Logger.LogInfo("Loaded Archipelago data for slot " + (GameProgressSaver.currentSlot + 1) + ".");
+                if (data.IsTestMode())
+                {
+                    Logger.LogInfo("Loaded test mode data for slot " + (GameProgressSaver.currentSlot + 1) + ".");
+                    TestConfig.SetTestModeActive(true);
+                }
+                else
+                {
+                    Logger.LogInfo("Loaded Archipelago data for slot " + (GameProgressSaver.currentSlot + 1) + ".");
+                    TestConfig.SetTestModeActive(false);
+                }
                 LocationManager.RegenerateItemDefinitions();
             }
             else

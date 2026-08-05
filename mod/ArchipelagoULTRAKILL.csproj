@@ -315,6 +315,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorRandomizer.cs" />
+    <Compile Include="Commands\Dashes.cs" />
+    <Compile Include="Commands\Slam.cs" />
+    <Compile Include="Commands\Slide.cs" />
+    <Compile Include="Commands\Walljumps.cs" />
     <Compile Include="Components\ActStats.cs" />
     <Compile Include="Components\ChapterSelectState.cs" />
     <Compile Include="Commands\Say.cs" />
@@ -345,6 +349,7 @@
     <Compile Include="Config\ModifierConfig.cs" />
     <Compile Include="Config\MusicConfig.cs" />
     <Compile Include="Config\PlayerConfig.cs" />
+    <Compile Include="Config\TestConfig.cs" />
     <Compile Include="Config\UIConfig.cs" />
     <Compile Include="LevelManager.cs" />
     <Compile Include="Multiworld.cs" />

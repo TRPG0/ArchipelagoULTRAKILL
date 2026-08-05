@@ -29,6 +29,7 @@ namespace ArchipelagoULTRAKILL.Config
         public static StringField goal;
         public static StringField goalProgress;
         public static BoolField perfectGoal;
+        public static BoolField speedrunLogic;
         public static EnumField<SecretUnlockType> secretExitUnlock;
         public static EnumField<SecretExitType> secretExitComplete;
         public static StringField locationsChecked;
@@ -74,6 +75,10 @@ namespace ArchipelagoULTRAKILL.Config
                 if (Multiworld.Authenticated)
                 {
                     connectionInfo.text = "Already connected to server.";
+                }
+                else if (Core.TestMode ?? false)
+                {
+                    connectionInfo.text = "Can't connect to a server using a save file in test mode.";
                 }
                 else if (SceneHelper.CurrentScene != "Main Menu")
                 {
@@ -127,6 +132,7 @@ namespace ArchipelagoULTRAKILL.Config
             goal = new StringField(playerPanel, "GOAL LEVEL", "goal", "?", false, false) { interactable = false };
             goalProgress = new StringField(playerPanel, "LEVELS COMPLETED", "goalProgress", "?", false, false) { interactable = false };
             perfectGoal = new BoolField(playerPanel, "PERFECT GOAL", "perfectGoal", false) { interactable = false };
+            speedrunLogic = new BoolField(playerPanel, "SPEEDRUNNER LOGIC", "speedrunLogic", false) { interactable = false };
             secretExitUnlock = new EnumField<SecretUnlockType>(playerPanel, "SECRET MISSION UNLOCK TYPE", "secretExitUnlock", SecretUnlockType.SecretExits, false) { interactable = false };
             secretExitUnlock.SetEnumDisplayName(SecretUnlockType.SecretExits, "SECRET EXITS");
             secretExitUnlock.SetEnumDisplayName(SecretUnlockType.Items, "ITEMS");
@@ -183,6 +189,7 @@ namespace ArchipelagoULTRAKILL.Config
             goal.value = Core.data.goal;
             goalProgress.value = $"{Core.data.completedLevels.Count} / {Core.data.goalRequirement}";
             perfectGoal.value = Core.data.perfectGoal;
+            speedrunLogic.value = Core.data.speedrunLogic;
 
             if (Core.data.secretExitUnlock) secretExitUnlock.value = SecretUnlockType.SecretExits;
             else secretExitUnlock.value = SecretUnlockType.Items;
@@ -221,6 +228,7 @@ namespace ArchipelagoULTRAKILL.Config
             goal.value = "?";
             goalProgress.value = "?";
             perfectGoal.value = false;
+            speedrunLogic.value = false;
             secretExitUnlock.value = SecretUnlockType.SecretExits;
             secretExitComplete.value = SecretExitType.Standard;
             locationsChecked.value = "?";

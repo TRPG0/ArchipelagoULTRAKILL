@@ -230,7 +230,8 @@ namespace ArchipelagoULTRAKILL
 
         public static void AddGlassComponents()
         {
-            if (!Core.CurrentLevelHasInfo || Core.CurrentLevelInfo.Id != 1) return;
+            if (!Core.CurrentLevelHasInfo || Core.CurrentLevelInfo.Id != 1
+                || (Core.data.start != "0-1" && Multiworld.ServerVersionIsAtLeast("3.5.5")) || Core.data.speedrunLogic) return;
 
             foreach (Glass glass in Resources.FindObjectsOfTypeAll<Glass>())
             {

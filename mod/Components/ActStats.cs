@@ -16,11 +16,21 @@ namespace ArchipelagoULTRAKILL.Components
         public bool Special { get; private set; }
 
         private bool dirty = true;
+        private bool dataExists = false;
         private string result = "";
 
         public static void SetAllDirty()
         {
-            foreach (ActStats actStats in All) actStats.dirty = true;
+            foreach (ActStats actStats in All)
+            {
+                actStats.dirty = true;
+                actStats.CheckDataExists();
+            }
+        }
+
+        public void CheckDataExists()
+        {
+            dataExists = Core.DataExists() && !(Core.TestMode ?? false);
         }
 
         public void Init(int start, int end, bool special = false)
@@ -421,25 +431,25 @@ namespace ArchipelagoULTRAKILL.Components
 
         public void OnSelect(BaseEventData baseEventData)
         {
-            if (Core.DataExists()) ShowStats();
+            if (dataExists) ShowStats();
             //Core.logger.LogInfo("OnSelect");
         }
 
         public void OnDeselect(BaseEventData baseEventData)
         {
-            if (Core.DataExists()) HideStats();
+            if (dataExists) HideStats();
             //Core.logger.LogInfo("OnDeselect");
         }
 
         public void OnPointerEnter(PointerEventData pointerEventData)
         {
-            if (Core.DataExists()) ShowStats();
+            if (dataExists) ShowStats();
             //Core.logger.LogInfo("OnPointerEnter");
         }
 
         public void OnPointerExit(PointerEventData pointerEventData)
         {
-            if (Core.DataExists()) HideStats();
+            if (dataExists) HideStats();
             //Core.logger.LogInfo("OnPointerExit");
         }
     }

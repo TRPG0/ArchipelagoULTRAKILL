@@ -1,3 +1,10 @@
+## 3.5.5
+
+- Fixed various logic issues in 0-1, 0-2, 1-1, 1-3, 2-4, and 3-2 while speedrunner logic is enabled.
+- Fixed a logic issue in 8-1 while Gutterman shield logic is enabled.
+- Glass is no longer removed in 0-1 if it is not the start level, or if speedrunner logic is enabled.
+- Added a new Test Mode which can be used to easily change the player's abilities for testing new strategies.
+
 ## 3.5.4
 
 - Added a new option to require a way to break Guttermen shields in logic.

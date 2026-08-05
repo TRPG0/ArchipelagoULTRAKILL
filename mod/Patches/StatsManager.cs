@@ -6,14 +6,18 @@ namespace ArchipelagoULTRAKILL.Patches
     [HarmonyPatch(typeof(StatsManager), "SecretFound")]
     class StatsManager_SecretFound_Patch
     {
-        public static bool Prefix(int i)
+        public static bool Prefix(StatsManager __instance, int i)
         {
-            if (!AssistController.Instance.cheatsEnabled)
+            if (!((Core.TestMode ?? false) || AssistController.Instance.cheatsEnabled))
             {
                 if (Core.DataExists()) LocationManager.CheckLocation(StatsManager.Instance.levelNumber.ToString() + "_s" + (i + 1));
                 return true;
             }
-            else return false;
+            else
+            {
+                __instance.newSecrets.Add(i);
+                return false;
+            }
         }
     }
 }

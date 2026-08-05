@@ -34,6 +34,7 @@ namespace ArchipelagoULTRAKILL.Config
             UIConfig.Initialize(config);
             ColorConfig.Initialize(config);
             LinksConfig.Initialize(config);
+            TestConfig.Initialize(config);
         }
 
         public static void LoadConnectionInfo()

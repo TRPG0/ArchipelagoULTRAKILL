@@ -19,6 +19,7 @@ using System.Collections;
 using ArchipelagoULTRAKILL.Config;
 using ArchipelagoULTRAKILL.Music;
 using System.Threading.Tasks;
+using ArchipelagoULTRAKILL.Components;
 
 namespace ArchipelagoULTRAKILL
 {
@@ -310,6 +311,7 @@ namespace ArchipelagoULTRAKILL
 
                 TryGetSlotDataValue(ref Core.data.goalRequirement, success.SlotData, "goal_requirement", 15);
                 TryGetSlotDataValue(ref Core.data.perfectGoal, success.SlotData, "perfect_goal", false);
+                TryGetSlotDataValue(ref Core.data.speedrunLogic, success.SlotData, "speedrunner_logic", false);
                 TryGetSlotDataValue(ref Core.data.secretExitUnlock, success.SlotData, "secret_mission_unlock_type", true);
                 TryGetSlotDataValue(ref Core.data.secretExitComplete, success.SlotData, "secret_exit_behavior", true);
                 TryGetEnemyOption(ref Core.data.enemyRewards, success.SlotData, "enemy_rewards", EnemyOptions.Disabled);
@@ -419,13 +421,14 @@ namespace ArchipelagoULTRAKILL
                 LocationManager.locations = ((JObject)success.SlotData["locations"]).ToObject<Dictionary<string, long>>();
 
                 ConfigManager.LoadStats();
+                TestConfig.SetTestModeActive(false);
+                ActStats.SetAllDirty();
                 LocationManager.RegenerateItemDefinitions();
                 Core.Logger.LogInfo("Successfully connected to server as player \"" + Core.data.slot_name + "\".");
                 PlayerConfig.connectionInfo.text = "Successfully connected to server as player \"" + Core.data.slot_name + "\".";
                 UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
                 if (Core.data.completedLevels.Count < Core.data.goalRequirement) UIManager.CreateGoalCounter();
                 string totalLocations = (LocationManager.locations.Count == 0) ? "?" : LocationManager.locations.Count.ToString();
-                //UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n" + Core.data.@checked.Count + "/" + totalLocations;
 
                 if (Core.data.deathLink) EnableDeathLink();
                 else DeathLinkConfig.deathLinkStatus.text = "Death Link is <color=red>OFF</color>";
@@ -519,8 +522,7 @@ namespace ArchipelagoULTRAKILL
 
                 Core.Logger.LogInfo("Successfully connected to server in hint mode as player \"" + Core.data.slot_name + "\".");
                 PlayerConfig.connectionInfo.text = "Successfully connected to server in hint mode as player \"" + Core.data.slot_name + "\".";
-                UIManager.menuIcon.GetComponent<Image>().color = Colors.Green;
-                //UIManager.menuText.text = "Archipelago\n" + Core.PluginVersion + "\nSlot " + (GameProgressSaver.currentSlot + 1) + "\n<color=yellow>Hint Mode</color>";
+                UIManager.menuIcon.GetComponent<Image>().color = Color.yellow;
             }
             else if (loginResult is LoginFailure failure)
             {
@@ -851,6 +853,7 @@ namespace ArchipelagoULTRAKILL
                     Core.Logger.LogWarning($"Data storage has more completed levels than local save! {String.Join(", ", difference)}");
                     foreach (string level in difference) Core.data.completedLevels.Add(level);
                     Core.Logger.LogWarning($"Synchronized completed levels with data storage: {String.Join(", ", Core.data.completedLevels)}");
+                    ActStats.SetAllDirty();
                 }
                 else Core.Logger.LogInfo("Data storage level count is less than or equal to local save.");
             }

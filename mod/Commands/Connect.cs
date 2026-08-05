@@ -40,6 +40,10 @@ namespace ArchipelagoULTRAKILL.Commands
                     Core.PLogger.Info("Can't do that right now. Can only connect to an Archipelago server on the main menu.");
                     return;
                 }
+                else if (Core.TestMode ?? false)
+                {
+                    Core.PLogger.Info("Can't connect to a server using a save file in test mode.");
+                }
                 else if ((GameProgressSaver.GetTutorial() || GameProgressSaver.GetIntro()) && !Core.DataExists())
                 {
                     Core.PLogger.Info("No Archipelago data found. Please select a new save file before connecting.");

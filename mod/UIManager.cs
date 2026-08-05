@@ -75,6 +75,10 @@ namespace ArchipelagoULTRAKILL
             GameConsole.Console.Instance.RegisterCommand(new Commands.Connect());
             GameConsole.Console.Instance.RegisterCommand(new Commands.Disconnect());
             GameConsole.Console.Instance.RegisterCommand(new Commands.Say());
+            GameConsole.Console.Instance.RegisterCommand(new Commands.Dashes());
+            GameConsole.Console.Instance.RegisterCommand(new Commands.Walljumps());
+            GameConsole.Console.Instance.RegisterCommand(new Commands.Slide());
+            GameConsole.Console.Instance.RegisterCommand(new Commands.Slam());
 
             GameObject go = new GameObject();
             go.name = "Log";
@@ -436,7 +440,11 @@ namespace ArchipelagoULTRAKILL
             menuText = canvas.transform.Find("Main Menu (1)/LeftSide/Text (3)").gameObject;
             fontMain = menuText.GetComponent<TextMeshProUGUI>().font;
             string line2 = "NO DATA.";
-            if (Core.DataExists()) line2 = $"{Core.data.slot_name.ToUpper()} - {Core.data.@checked.Count} / {totalLocations}";
+            if (Core.DataExists())
+            {
+                if (Core.data.IsTestMode()) line2 = "TEST MODE";
+                else line2 = $"{Core.data.slot_name.ToUpper()} - {Core.data.@checked.Count} / {totalLocations}";
+            }
             else if (Multiworld.HintMode) line2 = $"{Core.data.slot_name.ToUpper()} - HINT MODE ({Multiworld.Session.ConnectionInfo.Game.ToUpper()})";
             string full = $" - ARCHIPELAGO {Core.PluginVersion} - SLOT {GameProgressSaver.currentSlot + 1}\n{line2}";
             menuText.GetComponent<TextMeshProUGUI>().text = menuText.GetComponent<TextMeshProUGUI>().text + full;
@@ -460,7 +468,9 @@ namespace ArchipelagoULTRAKILL
             menuIcon.gameObject.name = "Archipelago Logo";
             menuIcon.transform.SetParent(menuText.transform.parent.gameObject.transform);
             menuIcon.AddComponent<Image>().sprite = bundle.LoadAsset<Sprite>("assets/newlogo1.png");
-            menuIcon.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 1);
+            if (Core.TestMode ?? false) menuIcon.GetComponent<Image>().color = Color.magenta;
+            else if (Multiworld.HintMode) menuIcon.GetComponent<Image>().color = Color.yellow;
+            else menuIcon.GetComponent<Image>().color = Color.gray;
             menuIcon.transform.localPosition = new Vector3(637.5f, -48, 0);
             menuIcon.transform.localScale = new Vector3(0.96f, 0.96f, 0.96f);
 
