@@ -3074,7 +3074,6 @@ class UltrakillRules:
                         or shoalt_any(state)
                     )
                     and good_weapon(state)
-                    and can_break_gutterman_shield(state)
                 ),
 
             "7-4: Don't fight the security system":
@@ -3091,7 +3090,6 @@ class UltrakillRules:
                     )
                     and good_weapon(state)
                     and can_zap(state)
-                    and can_break_gutterman_shield(state)
                 ),
 
             "7-4: Perfect Rank":
@@ -4628,6 +4626,7 @@ class UltrakillRules:
                     (
                         can_reach_level(state, "Enemy: Gutterman", "7-2")
                         and arm2(state)
+                        and can_break_gutterman_shield(state)
                     )
                     or (
                         can_reach_level(state, "Enemy: Gutterman", "7-3")
@@ -4663,7 +4662,10 @@ class UltrakillRules:
                         )
                         and can_break_gutterman_shield(state)
                     )
-                    or can_reach_level(state, "Enemy: Gutterman", "8-1")
+                    or (
+                        can_reach_level(state, "Enemy: Gutterman", "8-1")
+                        and can_break_gutterman_shield(state)
+                    )
                     or (
                         can_reach_level(state, "Enemy: Gutterman", "8-2")
                         and grab_item(state)
