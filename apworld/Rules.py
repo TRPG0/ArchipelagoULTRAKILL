@@ -1491,10 +1491,10 @@ class UltrakillRules:
                                 and stamina(state, 1)
                             )
                             or walljumps(state, 2)
+                            or stamina(state, 3)
                             or slam_storage(state)
                         )
                     )
-                    or stamina(state, 3)
                 ),
 
             "0-2: Secret #4":
