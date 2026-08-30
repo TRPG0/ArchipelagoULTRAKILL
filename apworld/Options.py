@@ -378,6 +378,8 @@ class RevForm(Choice):
     """
     Choose whether the revolver should be in its standard or alternate form initially.
 
+    The Piercer, Marksman, or Sharpshooter revolver still need to be found before the revolver can be used.
+    
     The other form must be unlocked.
     """
     display_name = "Revolver Form"
@@ -390,6 +392,8 @@ class ShoForm(Choice):
     """
     Choose whether the shotgun should be in its standard or alternate form initially.
 
+    The Core Eject, Pump Charge, or Sawed-On shotgun still need to be found before the shotgun can be used.
+
     The other form must be unlocked.
     """
     display_name = "Shotgun Form"
@@ -401,6 +405,8 @@ class ShoForm(Choice):
 class NaiForm(Choice):
     """
     Choose whether the nailgun should be in its standard or alternate form initially.
+
+    The Attractor, Overheat, or JumpStart nailgun still need to be found before the nailgun can be used.
 
     The other form must be unlocked.
     """

@@ -33,7 +33,7 @@ namespace ArchipelagoULTRAKILL
                     }
                     else if (SceneHelper.CurrentScene == "Level 7-S")
                     {
-                        if (item.itemType == ItemType.SkullBlue && !item.transform.parent.parent.parent) continue;
+                        if (item.itemType == ItemType.SkullBlue && item.gameObject.GetFullPath() != "Altar (Blue Skull) Variant/Cube/SkullBlue") continue;
                         else if (item.itemType == ItemType.SkullRed && item.transform.parent.parent.parent.name != "Interactives") continue;
                     }
                     else if (SceneHelper.CurrentScene == "Level 8-1")

@@ -3072,6 +3072,10 @@ class UltrakillRules:
                     and (
                         can_punch(state)
                         or shoalt_any(state)
+                        or (
+                            slide(state)
+                            and slam(state)
+                        )
                     )
                     and good_weapon(state)
                 ),
@@ -3087,6 +3091,10 @@ class UltrakillRules:
                     and (
                         can_punch(state)
                         or shoalt_any(state)
+                        or (
+                            slide(state)
+                            and slam(state)
+                        )
                     )
                     and good_weapon(state)
                     and can_zap(state)
@@ -3099,6 +3107,10 @@ class UltrakillRules:
                     and (
                         can_punch(state)
                         or shoalt_any(state)
+                        or (
+                            slide(state)
+                            and slam(state)
+                        )
                     )
                     and good_weapon(state)
                     and can_break_gutterman_shield(state)

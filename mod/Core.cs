@@ -382,6 +382,13 @@ namespace ArchipelagoULTRAKILL
         {
             Instance = this;
 
+            Logger.LogInfo($"Application version: {Application.version}");
+            if (Application.version != "4.1")
+            {
+                Logger.LogWarning($"Application version does not match expected version! (4.1)");
+                Logger.LogWarning($"Some things may not work as expected!");
+            }
+
             Logger.LogInfo($"Multiclient version: {typeof(ArchipelagoSession).Assembly.GetName().Version.ToString()}");
 
             Harmony harmony = new Harmony("archipelago");
