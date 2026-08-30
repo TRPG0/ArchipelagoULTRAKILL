@@ -1,3 +1,10 @@
+## 3.5.6
+
+- Fixed a logic issue for 0-2: Secret 3. [#49](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/49)
+- Fixed some issues with Gutterman shield logic. [#50](https://github.com/TRPG0/ArchipelagoULTRAKILL/pull/50)
+- Fixed the Blue Skull appearing in 7-S without having the item.
+- Adjusted logic for killing Idols in 7-4.
+
 ## 3.5.5
 
 - Fixed various logic issues in 0-1, 0-2, 1-1, 1-3, 2-4, and 3-2 while speedrunner logic is enabled.
