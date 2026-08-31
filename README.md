@@ -30,7 +30,7 @@ Because there are far fewer items than locations in ULTRAKILL, there are many fi
 - Overheal: Sets the player's health to 200.
 - Dual Wield: Gain an additional copy of the currently held weapon for 15 seconds.
 - Infinite Stamina: Dash around infinitely with no cooldown for 15 seconds.
-- Air Jump: Use your wall jumps as additional midair jumps for 15 seconds.
+- Air Jump: Use your wall jumps as additional midair jumps for 15 seconds. Temporarily gives 3 wall jumps if they are randomized.
 - Soap: Spawns soap in the player's hand, or on the ground at the player's position if already holding something.
 - Hard Damage: Instantly take 75 hard damage.
 - Stamina Limiter: Removes all dashes for 15 seconds.
@@ -38,7 +38,7 @@ Because there are far fewer items than locations in ULTRAKILL, there are many fi
 - Weapon Malfunction: Removes all weapon ammo and prevents cooldowns, such as marksman coins, nailgun ammo, and railcannon charge for 15 seconds.
 - Radiant Aura: All enemies are radiant for 15 seconds.
 - Confusing Aura: All enemies will ignore the player and attack each other for 15 seconds.
-- Quick Charge: Weapon ammo and cooldowns recharge at 3x speed for 15 seconds.
+- Quick Charge: Weapon ammo and cooldowns recharge at 3x speed for 15 seconds. All secondary fires are temporarily unlocked if they are randomized.
 - Hands-Free Mode: All arms cannot be used for 15 seconds.
 
 # Setup
