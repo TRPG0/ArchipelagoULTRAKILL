@@ -3738,6 +3738,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Filth", "8-1")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                     )
                     or (
@@ -3810,7 +3811,10 @@ class UltrakillRules:
                         and skull(state, "7-1", "Red")
                         and skull(state, "7-1", "Blue")
                     )
-                    or can_reach_level(state, "Enemy: Stray", "7-3")
+                    or (
+                        can_reach_level(state, "Enemy: Stray", "7-3")
+                        and can_break_gutterman_shield(state)
+                    )
                     or (
                         can_reach_level(state, "Enemy: Stray", "7-4")
                         and slide(state)
@@ -3884,6 +3888,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Schism", "8-1")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                     )
                     or (
@@ -3971,6 +3976,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Soldier", "8-1")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                     )
                     or (
@@ -4024,6 +4030,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Stalker", "8-3")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                         and slide(state)
                     )
@@ -4079,6 +4086,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Insurrectionist", "8-1")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                         and grab_item(state)
                         and skull(state, "8-1", "Blue")
@@ -4145,6 +4153,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Boss: Ferryman", "8-3")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                         and grab_item(state)
                         and slide(state)
@@ -4181,6 +4190,7 @@ class UltrakillRules:
                     )
                     and good_weapon(state)
                     and can_break_idol_or_deathcatcher(state)
+                    and can_break_gutterman_shield(state)
                     and skull(state, "8-2", "Red")
                     and can_break_glass(state)
                 ),
@@ -4216,6 +4226,7 @@ class UltrakillRules:
                     or can_reach_level(state, "Enemy: Swordsmachine", "7-S")
                     or (
                         can_reach_level(state, "Enemy: Swordsmachine", "8-1")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                     )
                     or (
@@ -4231,6 +4242,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Swordsmachine", "8-3")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                     )
                     or (
@@ -4313,6 +4325,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Drone", "8-1")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                         and grab_item(state)
                         and skull(state, "8-1", "Blue")
@@ -4475,7 +4488,10 @@ class UltrakillRules:
                         and skull(state, "7-1", "Red")
                         and skull(state, "7-1", "Blue")
                     )
-                    or can_reach_level(state, "Enemy: Mindflayer", "7-3")
+                    or (
+                        can_reach_level(state, "Enemy: Mindflayer", "7-3")
+                        and can_break_gutterman_shield(state)
+                    )
                     or (
                         can_reach_level(state, "Enemy: Mindflayer", "7-S")
                         and (
@@ -4589,6 +4605,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Sentry", "8-1")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                     )
                     or (
@@ -4733,6 +4750,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Guttertank", "8-1")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                     )
                     or (
@@ -4848,7 +4866,10 @@ class UltrakillRules:
                             or can_rocket_ride(state)
                         )
                     )
-                    or can_reach_level(state, "Enemy: Malicious Face", "8-1")
+                    or (
+                        can_reach_level(state, "Enemy: Malicious Face", "8-1")
+                        and can_break_gutterman_shield(state)
+                    )
                     or (
                         can_reach_level(state, "Enemy: Malicious Face", "8-2")
                         and grab_item(state)
@@ -4944,6 +4965,7 @@ class UltrakillRules:
                     or (
                         can_reach_level(state, "Enemy: Cerberus", "7-2")
                         and arm2(state)
+                        and can_break_gutterman_shield(state)
                     )
                     or can_reach_level(state, "Enemy: Cerberus", "7-3")
                     or (
@@ -4952,6 +4974,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Cerberus", "8-1")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                     )
                     or (
@@ -4967,6 +4990,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Cerberus", "8-3")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                     )
                     or can_reach_level(state, "Enemy: Cerberus", "0-E")
@@ -5029,6 +5053,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Boss: Hideous Mass", "8-3")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                     )
                     or (
@@ -5111,6 +5136,7 @@ class UltrakillRules:
                         )
                         or (
                             can_reach_level(state, "Enemy: Idol", "8-3")
+                            and can_break_gutterman_shield(state)
                             and good_weapon(state)
                             and grab_item(state)
                             and (
@@ -5189,6 +5215,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Mannequin", "8-1")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                         and grab_item(state)
                         and skull(state, "8-1", "Blue")
@@ -5210,6 +5237,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Mannequin", "8-3")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                     )
                     or (
@@ -5256,6 +5284,7 @@ class UltrakillRules:
                         )
                         or (
                             can_reach_level(state, "Enemy: Deathcatcher", "8-3")
+                            and can_break_gutterman_shield(state)
                             and good_weapon(state)
                             and (
                                 slide(state)
@@ -5348,6 +5377,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Virtue", "8-1")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                     )
                     or (
@@ -5364,6 +5394,7 @@ class UltrakillRules:
                     )
                     or (
                         can_reach_level(state, "Enemy: Virtue", "8-3")
+                        and can_break_gutterman_shield(state)
                         and good_weapon(state)
                         and slide(state)
                     )
@@ -5461,6 +5492,7 @@ class UltrakillRules:
             "Enemy: Power":
                 lambda state: (
                     can_reach_level(state, "Enemy: Power", "8-3")
+                    and can_break_gutterman_shield(state)
                     and good_weapon(state)
                 ),
 
