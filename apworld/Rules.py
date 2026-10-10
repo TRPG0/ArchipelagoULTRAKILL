@@ -5169,8 +5169,11 @@ class UltrakillRules:
                 lambda state: (
                     (
                         can_reach_level(state, "Enemy: Mannequin", "7-1")
-                        and grab_item(state)
-                        and skull(state, "7-1", "Red")
+                        and (
+                            grab_item(state)
+                            and skull(state, "7-1", "Red")
+                        )
+                        or not skull(state, "7-1", "Red")
                     )
                     or (
                         can_reach_level(state, "Enemy: Mannequin", "7-2")
